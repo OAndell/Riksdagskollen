@@ -35,8 +35,8 @@ public class RiksdagenAPIManager {
     }
 
 
-    public void getDocumentsForParty(Party party, final PartyDocumentCallback callback){
-        String subURL = baseQueryURL + "&parti="+party.getID();
+    public void getDocumentsForParty(Party party,int page, final PartyDocumentCallback callback){
+        String subURL = baseQueryURL + "&parti="+party.getID()+"&p="+page;
         requestManager.doGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
