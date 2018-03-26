@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setItemIconTintList(null);
+
         ListView exampleListView = (ListView) findViewById(R.id.example_view);
 
         final ArrayAdapter<PartyDocument> adapter = new ArrayAdapter<PartyDocument>(this,R.layout.party_view,R.id.doc_title);
@@ -69,8 +71,6 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-
-
 
 
     }
@@ -113,17 +113,31 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.news_nav) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.votes_nav) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.dec_nav) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.prot_nav) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.s_nav) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.m_nav) {
+
+        } else if (id == R.id.sd_nav) {
+
+        } else if (id == R.id.mp_nav) {
+
+        } else if (id == R.id.c_nav) {
+
+        } else if (id == R.id.v_nav) {
+
+        } else if (id == R.id.l_nav) {
+
+        } else if (id == R.id.kd_nav) {
+
+        } else if (id == R.id.about_nav) {
 
         }
 

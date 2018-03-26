@@ -84,7 +84,6 @@ public class RequestManager {
                 callback.onRequestFail(error);
             }
         });
-        System.out.println(url);
         requestQueue.add(jsonObjectRequest);
     }
 

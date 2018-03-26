@@ -1,35 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
-    </group>
-
-    <item android:title="Communicate">
+    <item android:title="@string/in_gov">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/news_nav"
+                android:icon="@drawable/rlogo"
+                android:title="@string/news" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/votes_nav"
+                android:icon="@drawable/votlogo"
+                android:title="@string/votes" />
+            <item
+                android:id="@+id/dec_nav"
+                android:icon="@drawable/betlogo"
+                android:title="@string/decisions"/>
+
+            <item
+                android:id="@+id/prot_nav"
+                android:icon="@drawable/protlogo"
+                android:title="@string/prot"/>
+
+        </menu>
+
+    </item>
+
+    <item android:title="@string/parties" android:checkableBehavior="single">
+        <menu>
+            <item
+                android:id="@+id/s_nav"
+                android:icon="@drawable/slogo"
+                android:title="@string/party_s" />
+            <item
+                android:id="@+id/m_nav"
+                android:icon="@drawable/mlogo"
+                android:title="@string/party_m" />
+            <item
+                android:id="@+id/sd_nav"
+                android:icon="@drawable/sdlogo"
+                android:title="@string/party_sd" />
+            <item
+                android:id="@+id/mp_nav"
+                android:icon="@drawable/mplogo"
+                android:title="@string/party_mp" />
+            <item
+                android:id="@+id/c_nav"
+                android:icon="@drawable/clogo"
+                android:title="@string/party_c"
+                />
+            <item
+                android:id="@+id/v_nav"
+                android:icon="@drawable/vlogo"
+                android:title="@string/party_v"
+                />
+            <item
+                android:id="@+id/l_nav"
+                android:icon="@drawable/llogo"
+                android:title="@string/party_l"
+                />
+            <item
+                android:id="@+id/kd_nav"
+                android:icon="@drawable/kdlogo"
+                android:title="@string/party_kd"
+                />
+        </menu>
+    </item>
+
+
+    <item android:title="@string/misc">
+        <menu>
+            <item
+                android:id="@+id/about_nav"
+                android:icon="@drawable/abouticon"
+                android:title="@string/about" />
         </menu>
     </item>
 

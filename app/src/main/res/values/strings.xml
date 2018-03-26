@@ -5,4 +5,23 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="party_sd">Sverigedemokraterna</string>
+    <string name="party_m">Moderaterna</string>
+    <string name="party_s">Socialdemokraterna</string>
+    <string name="party_c">Centerpartiet</string>
+    <string name="party_v">Vänsterpartiet</string>
+    <string name="party_l">Liberalerna</string>
+    <string name="party_mp">Miljöpartiet</string>
+    <string name="party_kd">Kristdemokraterna</string>
+    <string name="parties">Partier</string>
+    <string name="misc">Övrigt</string>
+    <string name="in_gov">I Riksdagen</string>
+    <string name="decisions">Riksdagsbeslut</string>
+    <string name="news">Aktuellt</string>
+    <string name="votes">Voteringar</string>
+    <string name="about">Om appen</string>
+    <string name="prot">Kammarprotokoll</string>
+
+
+
 </resources>
