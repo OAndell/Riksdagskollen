@@ -1,7 +1,6 @@
 package oscar.riksdagskollen;
 
 import android.os.Bundle;
-import android.provider.Telephony;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -13,19 +12,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import com.android.volley.VolleyError;
-
-import java.util.List;
-
-import oscar.riksdagskollen.Utilities.Callbacks.PartyDocumentCallback;
+import oscar.riksdagskollen.Fragments.PartyListFragment;
 import oscar.riksdagskollen.Utilities.JSONModels.Party;
-import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+
+    PartyListFragment sPartyFragment;
+    PartyListFragment mPartyFragment;
+    PartyListFragment sdPartyFragment;
+    PartyListFragment mpPartyFragment;
+    PartyListFragment cPartyFragment;
+    PartyListFragment vPartyFragment;
+    PartyListFragment lPartyFragment;
+    PartyListFragment kdPartyFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,26 +54,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
-
-        ListView exampleListView = (ListView) findViewById(R.id.example_view);
-
-        final ArrayAdapter<PartyDocument> adapter = new ArrayAdapter<PartyDocument>(this,R.layout.party_view,R.id.doc_title);
-        exampleListView.setAdapter(adapter);
-
-        Party testParty = new Party("Sverigedemokraterna", "SD");
-        RikdagskollenApp.getInstance().getRiksdagenAPIManager().getDocumentsForParty(testParty, new PartyDocumentCallback() {
-            @Override
-            public void onDocumentsFetched(List<PartyDocument> documents) {
-                adapter.addAll(documents);
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFail(VolleyError error) {
-
-            }
-        });
-
+        navigationView.getMenu().getItem(0).setChecked(true);
+        onNavigationItemSelected(navigationView.getMenu().getItem(0));
+        initPartyFragments();
 
     }
 
@@ -110,39 +95,62 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.news_nav) {
-            // Handle the camera action
-        } else if (id == R.id.votes_nav) {
+        switch (id){
+            case R.id.news_nav:
 
-        } else if (id == R.id.dec_nav) {
+                break;
+            case R.id.votes_nav:
 
-        } else if (id == R.id.prot_nav) {
+                break;
+            case R.id.dec_nav:
 
-        } else if (id == R.id.s_nav) {
+                break;
+            case R.id.prot_nav:
 
-        } else if (id == R.id.m_nav) {
-
-        } else if (id == R.id.sd_nav) {
-
-        } else if (id == R.id.mp_nav) {
-
-        } else if (id == R.id.c_nav) {
-
-        } else if (id == R.id.v_nav) {
-
-        } else if (id == R.id.l_nav) {
-
-        } else if (id == R.id.kd_nav) {
-
-        } else if (id == R.id.about_nav) {
+                break;
+            case R.id.s_nav:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,sPartyFragment).commit();
+                break;
+            case R.id.m_nav:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,mPartyFragment).commit();
+                break;
+            case R.id.sd_nav:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,sdPartyFragment).commit();
+                break;
+            case R.id.mp_nav:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,mpPartyFragment).commit();
+                break;
+            case R.id.c_nav:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,cPartyFragment).commit();
+                break;
+            case R.id.v_nav:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,vPartyFragment).commit();
+                break;
+            case R.id.l_nav:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,lPartyFragment).commit();
+                break;
+            case R.id.kd_nav:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,kdPartyFragment).commit();
+                break;
+            case R.id.about_nav:
 
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void initPartyFragments(){
+        mPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_m),"m"));
+        sPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_s),"s"));
+        sdPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_sd),"sd"));
+        kdPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_kd),"kd"));
+        vPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_v),"v"));
+        cPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_c),"c"));
+        mpPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_mp),"mp"));
+        lPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_l),"l"));
     }
 }
