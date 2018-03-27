@@ -6,11 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -20,14 +18,12 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 
-import oscar.riksdagskollen.Managers.RiksdagenAPIManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.Callbacks.PartyDocumentCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.Party;
 import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
-import oscar.riksdagskollen.Utilities.PartyListAdapter;
-import oscar.riksdagskollen.Viewholder.Document;
+import oscar.riksdagskollen.Utilities.PartyListViewholderAdapter;
 
 /**
  * Created by gustavaaro on 2018-03-26.
@@ -45,7 +41,7 @@ public class PartyListFragment extends Fragment {
 
     private List<PartyDocument> documentList = new ArrayList<>();
     private RecyclerView recyclerView;
-    private PartyListAdapter partyListAdapter;
+    private PartyListViewholderAdapter partyListAdapter;
 
     public static PartyListFragment newIntance(Party party){
         Bundle args = new Bundle();
@@ -73,7 +69,7 @@ public class PartyListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_party_list,null);
-        partyListAdapter = new PartyListAdapter(getContext(), documentList);
+        partyListAdapter = new PartyListViewholderAdapter(getContext(), documentList);
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(partyListAdapter);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
