@@ -26,7 +26,7 @@ import oscar.riksdagskollen.Utilities.Callbacks.JSONRequestCallback;
 
 public class RequestManager {
 
-    private final static String baseUrl = "http://data.riksdagen.se/dokumentlista/";
+    private final static String baseUrl = "http://data.riksdagen.se";
 
     private final static int POST = 1;
     private final static int GET = 0;
@@ -67,10 +67,12 @@ public class RequestManager {
 
     private void doJsonRequest(int method, JSONObject jsonRequest, String subURL, JSONRequestCallback callback){
         String url = baseUrl + subURL;
-        queueRequest(jsonRequest,url,method,callback);
+        HashMap<String, String> authHeader = new HashMap<>();
+        queueRequest(jsonRequest,url,method,authHeader,callback);
     }
 
-    private void queueRequest(final JSONObject jsonRequest, final String url, final int method, final JSONRequestCallback callback){
+    private void queueRequest(final JSONObject jsonRequest, final String url, final int method, final HashMap<String, String> headers, final JSONRequestCallback callback){
+        System.out.println("Making request to: " + url);
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(method, url, jsonRequest, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
