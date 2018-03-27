@@ -20,6 +20,8 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_gravity="center"
             android:text="Användningen av ordet särskola i gymnasiet"
             android:layout_weight="7"/>
 
