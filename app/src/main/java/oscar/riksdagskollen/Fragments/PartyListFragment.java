@@ -59,7 +59,7 @@ public class PartyListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_party_list,null);
-        listView = (ListView) view.findViewById(R.id.party_new_listview);
+        listView = view.findViewById(R.id.party_new_listview);
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {

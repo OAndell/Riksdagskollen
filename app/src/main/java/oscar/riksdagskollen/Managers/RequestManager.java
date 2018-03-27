@@ -67,11 +67,10 @@ public class RequestManager {
 
     private void doJsonRequest(int method, JSONObject jsonRequest, String subURL, JSONRequestCallback callback){
         String url = baseUrl + subURL;
-        HashMap<String, String> authHeader = new HashMap<>();
-        queueRequest(jsonRequest,url,method,authHeader,callback);
+        queueRequest(jsonRequest,url,method,callback);
     }
 
-    private void queueRequest(final JSONObject jsonRequest, final String url, final int method, final HashMap<String, String> headers, final JSONRequestCallback callback){
+    private void queueRequest(final JSONObject jsonRequest, final String url, final int method, final JSONRequestCallback callback){
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(method, url, jsonRequest, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
