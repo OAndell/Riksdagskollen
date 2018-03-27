@@ -9,6 +9,7 @@ import java.io.Console;
 import oscar.riksdagskollen.Managers.RequestManager;
 import oscar.riksdagskollen.Managers.RiksdagenAPIManager;
 import oscar.riksdagskollen.Utilities.Callbacks.RepresentativeCallback;
+import oscar.riksdagskollen.Utilities.JSONModels.Representative;
 
 /**
  * Created by gustavaaro on 2018-03-25.

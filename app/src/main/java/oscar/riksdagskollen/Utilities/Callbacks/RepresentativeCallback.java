@@ -2,6 +2,9 @@ package oscar.riksdagskollen.Utilities.Callbacks;
 
 import com.android.volley.VolleyError;
 
+import java.util.List;
+
+import oscar.riksdagskollen.Utilities.JSONModels.Representative;
 
 
 /**
@@ -10,7 +13,7 @@ import com.android.volley.VolleyError;
 
 public interface RepresentativeCallback {
 
-    void onPersonFetched();
+    void onPersonFetched(Representative representative);
 
     void onFail(VolleyError error);
 }

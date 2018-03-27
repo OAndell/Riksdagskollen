@@ -21,6 +21,7 @@ import oscar.riksdagskollen.Utilities.Callbacks.RepresentativeCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.Party;
 import oscar.riksdagskollen.Utilities.Callbacks.JSONRequestCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
+import oscar.riksdagskollen.Utilities.JSONModels.Representative;
 
 /**
  * Created by gustavaaro on 2018-03-25.
@@ -46,6 +47,7 @@ public class RiksdagenAPIManager {
             public void onRequestSuccess(JSONObject response) {
                 try {
                     JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
+                    System.out.println(jsonDocuments);
                     PartyDocument[] documents = gson.fromJson(jsonDocuments.toString(),PartyDocument[].class);
                     callback.onDocumentsFetched(Arrays.asList(documents));
                 }catch (JSONException e){
@@ -67,8 +69,9 @@ public class RiksdagenAPIManager {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
-                    response.getJSONObject("personlista");
-                    callback.onPersonFetched();
+                    JSONObject jsonDocuments = response.getJSONObject("personlista").getJSONObject("person");
+                    Representative representative = gson.fromJson(jsonDocuments.toString(),Representative.class);
+                    callback.onPersonFetched(representative);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     callback.onFail(new VolleyError("Failed to parse JSON"));
