@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +17,17 @@ import android.widget.ProgressBar;
 
 import com.android.volley.VolleyError;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import oscar.riksdagskollen.Managers.RiksdagenAPIManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.Callbacks.PartyDocumentCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.Party;
 import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
+import oscar.riksdagskollen.Utilities.PartyListAdapter;
+import oscar.riksdagskollen.Viewholder.Document;
 
 /**
  * Created by gustavaaro on 2018-03-26.
@@ -36,6 +42,10 @@ public class PartyListFragment extends Fragment {
     private boolean loading = false;
     private ArrayAdapter listAdapter;
     private ProgressBar loadingView;
+
+    private List<PartyDocument> documentList = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private PartyListAdapter partyListAdapter;
 
     public static PartyListFragment newIntance(Party party){
         Bundle args = new Bundle();
@@ -53,66 +63,37 @@ public class PartyListFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(party.getName());
 
     }
+    private void getDocumentsFromRiksdagen(){
+
+    }
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_party_list,null);
-        listView = view.findViewById(R.id.party_new_listview);
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
+        partyListAdapter = new PartyListAdapter(getContext(), documentList);
+        recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView.setAdapter(partyListAdapter);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
 
-            }
-
-            @Override
-            public void onScroll(AbsListView lw, final int firstVisibleItem, final int visibleItemCount, final int totalItemCount) {
-                final int lastItem = firstVisibleItem + visibleItemCount;
-
-                if(lastItem == totalItemCount)
-                {
-                    if(preLast!=lastItem && !loading)
-                    {
-                       loadMoreItems();
-                    }
-                }
-            }
-        });
-
-        listAdapter= new ArrayAdapter<>(getContext(),R.layout.party_view,R.id.doc_title);
-        listView.setAdapter(listAdapter);
-        getNextPage();
-
-        return view;
-    }
-
-    private void loadMoreItems(){
-        loading = true;
-        listView.addFooterView(loadingView);
-        getNextPage();
-    }
-
-
-    private void getNextPage(){
-        loading = true;
-        RikdagskollenApp.getInstance().getRiksdagenAPIManager().getDocumentsForParty(party, pageToLoad, new PartyDocumentCallback() {
+        RikdagskollenApp.getInstance().getRiksdagenAPIManager().getDocumentsForParty(party, 1, new PartyDocumentCallback() {
             @Override
             public void onDocumentsFetched(List<PartyDocument> documents) {
-                listAdapter.addAll(documents);
-                listAdapter.notifyDataSetChanged();
-                listView.removeFooterView(loadingView);
-                pageToLoad++;
-                loading = false;
+                documentList.addAll(documents);
+                partyListAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onFail(VolleyError error) {
-                loading = false;
-                listView.removeFooterView(loadingView);
+
             }
         });
+        return view;
     }
+
 
 
 }
