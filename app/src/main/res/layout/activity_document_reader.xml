@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,21 +13,66 @@
         android:weightSum="10">
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/act_doc_reader_portrait_image_view"
             android:layout_weight="3"
-            android:layout_width="0dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@android:drawable/sym_def_app_icon" />
 
-        <TextView
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:layout_gravity="center"
-            android:text="Användningen av ordet särskola i gymnasiet"
-            android:layout_weight="7"/>
+            android:orientation="vertical"
+            android:layout_marginLeft="16dp"
+            android:gravity="center"
+            android:layout_weight="7">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:id="@+id/act_doc_reader_title"
+                android:textColor="@color/secondaryTextColor"
+                android:textSize="16sp"
+                android:layout_gravity="center"
+                android:text="Användningen av ordet särskola i gymnasiet"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/act_doc_reader_author"
+                android:textColor="@color/secondaryTextColor"
+                android:layout_gravity="center"
+                android:text="av Agneta Sjödin (S)"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/act_doc_reader_recipient"
+                android:textColor="@color/secondaryTextColor"
+                android:layout_gravity="center"
+                android:text="till statsrådet Anna Ekström"/>
+
+        </LinearLayout>
+
 
     </LinearLayout>
+
+    <view
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/primaryColor"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+
+    </view>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/secondaryTextColor"
+        android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."/>
 
 
 </LinearLayout>

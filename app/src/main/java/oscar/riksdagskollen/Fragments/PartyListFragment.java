@@ -33,8 +33,7 @@ public class PartyListFragment extends Fragment {
 
     Party party;
     int pageToLoad = 1;
-    private int preLast;
-    private ListView listView;
+    private int pastVisiblesItems;
     private boolean loading = false;
     private ArrayAdapter listAdapter;
     private ProgressBar loadingView;
@@ -57,12 +56,7 @@ public class PartyListFragment extends Fragment {
         this.party = getArguments().getParcelable("party");
         loadingView = new ProgressBar(getContext());
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(party.getName());
-
     }
-    private void getDocumentsFromRiksdagen(){
-
-    }
-
 
     @Nullable
     @Override
@@ -72,22 +66,48 @@ public class PartyListFragment extends Fragment {
         partyListAdapter = new PartyListViewholderAdapter(getContext(), documentList);
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(partyListAdapter);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setNestedScrollingEnabled(true);
+        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+             @Override
+             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                 if (dy > 0) //check for scroll down
+                 {
+                     int visibleItemCount = mLayoutManager.getChildCount();
+                     int totalItemCount = mLayoutManager.getItemCount();
+                     pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition();
 
-        RikdagskollenApp.getInstance().getRiksdagenAPIManager().getDocumentsForParty(party, 1, new PartyDocumentCallback() {
+                     if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                         if(!loading) loadNextPage();
+                     }
+
+                 }
+             }
+         });
+
+        loadNextPage();
+        return view;
+    }
+
+
+    private void loadNextPage(){
+        loading = true;
+
+        RikdagskollenApp.getInstance().getRiksdagenAPIManager().getDocumentsForParty(party, pageToLoad, new PartyDocumentCallback() {
             @Override
             public void onDocumentsFetched(List<PartyDocument> documents) {
+                loading = false;
                 documentList.addAll(documents);
                 partyListAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onFail(VolleyError error) {
-
+                loading = false;
             }
         });
-        return view;
+        pageToLoad++;
     }
 
 
