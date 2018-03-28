@@ -1,5 +1,6 @@
 package oscar.riksdagskollen.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,10 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.android.volley.VolleyError;
@@ -18,6 +19,7 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 
+import oscar.riksdagskollen.Activities.DocumentReaderActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.Callbacks.PartyDocumentCallback;
@@ -35,12 +37,11 @@ public class PartyListFragment extends Fragment {
     int pageToLoad = 1;
     private int pastVisiblesItems;
     private boolean loading = false;
-    private ArrayAdapter listAdapter;
-    private ProgressBar loadingView;
 
     private List<PartyDocument> documentList = new ArrayList<>();
     private RecyclerView recyclerView;
     private PartyListViewholderAdapter partyListAdapter;
+
 
     public static PartyListFragment newIntance(Party party){
         Bundle args = new Bundle();
@@ -54,7 +55,6 @@ public class PartyListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.party = getArguments().getParcelable("party");
-        loadingView = new ProgressBar(getContext());
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(party.getName());
     }
 
@@ -63,7 +63,14 @@ public class PartyListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_party_list,null);
-        partyListAdapter = new PartyListViewholderAdapter(getContext(), documentList);
+        partyListAdapter = new PartyListViewholderAdapter(documentList, new PartyListViewholderAdapter.OnPartyDocumentClickListener() {
+            @Override
+            public void onPartyDocumentClickListener(PartyDocument document) {
+                Intent intent = new Intent(getContext(), DocumentReaderActivity.class);
+                intent.putExtra("document",document);
+                startActivity(intent);
+            }
+        });
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(partyListAdapter);
         recyclerView.setNestedScrollingEnabled(true);
@@ -85,6 +92,23 @@ public class PartyListFragment extends Fragment {
                  }
              }
          });
+
+        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
 
         loadNextPage();
         return view;

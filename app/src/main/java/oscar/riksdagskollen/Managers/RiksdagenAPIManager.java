@@ -22,6 +22,7 @@ import oscar.riksdagskollen.Utilities.JSONModels.Party;
 import oscar.riksdagskollen.Utilities.Callbacks.JSONRequestCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
 import oscar.riksdagskollen.Utilities.JSONModels.Representative;
+import oscar.riksdagskollen.Utilities.JSONModels.StringRequestCallback;
 
 /**
  * Created by gustavaaro on 2018-03-25.
@@ -85,5 +86,8 @@ public class RiksdagenAPIManager {
         });
     }
 
+    public void getDocumentBody(PartyDocument document, StringRequestCallback callback){
+        requestManager.doStringGetRequest("http:" + document.getDokument_url_text(),callback);
+    }
 
 }

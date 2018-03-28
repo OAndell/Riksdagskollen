@@ -1,78 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    >
+    android:fitsSystemWindows="true"
+    tools:context=".Activities.DocumentReaderActivity">
 
-    <LinearLayout
+    <include layout="@layout/riksdagen_toolbar"></include>
+
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="10">
-
-        <ImageView
-            android:id="@+id/act_doc_reader_portrait_image_view"
-            android:layout_weight="3"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/sym_def_app_icon" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="16dp"
-            android:gravity="center"
-            android:layout_weight="7">
+            android:padding="16dp">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:id="@+id/act_doc_reader_title"
-                android:textColor="@color/secondaryTextColor"
-                android:textSize="16sp"
-                android:layout_gravity="center"
-                android:text="Användningen av ordet särskola i gymnasiet"/>
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:weightSum="10">
+
+                <com.android.volley.toolbox.NetworkImageView
+                    android:id="@+id/act_doc_reader_portrait_image_view"
+                    android:layout_width="100dp"
+                    android:scaleType="fitCenter"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_weight="7"
+                    android:id="@+id/doc_title_layout"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/act_doc_reader_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Användningen av ordet särskola i gymnasiet"
+                        android:textColor="@color/primaryColor"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/act_doc_reader_author"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="av Agneta Sjödin (S)"
+                        android:textColor="@color/primaryColor" />
+
+                    <TextView
+                        android:id="@+id/act_doc_reader_recipient"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="till statsrådet Anna Ekström"
+                        android:textColor="@color/primaryColor" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/secondaryTextColor">
+
+            </View>
+
 
             <TextView
+                android:id="@+id/act_doc_reader_body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/act_doc_reader_author"
-                android:textColor="@color/secondaryTextColor"
-                android:layout_gravity="center"
-                android:text="av Agneta Sjödin (S)"/>
+                android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                android:textColor="@color/secondaryTextColor" />
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/read_answer_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/act_doc_reader_recipient"
-                android:textColor="@color/secondaryTextColor"
-                android:layout_gravity="center"
-                android:text="till statsrådet Anna Ekström"/>
+                android:gravity="start"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Visa svar"
+                    android:textColor="@color/primaryColor" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
 
-    </LinearLayout>
-
-    <view
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/primaryColor"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
-
-    </view>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/secondaryTextColor"
-        android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."/>
+    </ScrollView>
 
 
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
