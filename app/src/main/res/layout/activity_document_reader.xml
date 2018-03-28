@@ -25,21 +25,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="8dp"
                 android:weightSum="10">
 
-                <com.android.volley.toolbox.NetworkImageView
-                    android:id="@+id/act_doc_reader_portrait_image_view"
-                    android:layout_width="100dp"
-                    android:scaleType="fitCenter"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="2" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
                     android:layout_weight="7"
                     android:id="@+id/doc_title_layout"
                     android:gravity="center"
@@ -112,7 +103,35 @@
 
             </LinearLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Undertecknare"
+                android:layout_marginTop="16dp"
+                android:textStyle="bold"
+                android:textColor="@color/primaryColor"
+                android:textSize="16sp"/>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/act_doc_reader_portrait_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+
+            </HorizontalScrollView>
+
+
+
         </LinearLayout>
+
+
 
 
     </ScrollView>

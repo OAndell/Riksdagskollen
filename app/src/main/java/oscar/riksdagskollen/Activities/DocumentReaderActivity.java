@@ -5,7 +5,10 @@ import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -30,6 +33,7 @@ public class DocumentReaderActivity extends AppCompatActivity{
     PartyDocument document;
     private String docBody;
     private RikdagskollenApp app;
+    private LinearLayout portaitContainer;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,11 +72,21 @@ public class DocumentReaderActivity extends AppCompatActivity{
         TextView authorTV = findViewById(R.id.act_doc_reader_author);
         final TextView recipientTV  = findViewById(R.id.act_doc_reader_recipient);
         TextView body = findViewById(R.id.act_doc_reader_body);
-        final NetworkImageView portrait = findViewById(R.id.act_doc_reader_portrait_image_view);
-        portrait.setDefaultImageResId(android.R.drawable.sym_def_app_icon);
+        portaitContainer = findViewById(R.id.act_doc_reader_portrait_container);
+
 
         for (Intressent i : document.getDokintressent().getIntressenter()){
+            final View portraitView;
+            TextView nameTv;
+
             if(i.getRoll().equals("undertecknare")){
+                portraitView = LayoutInflater.from(this).inflate(R.layout.intressent_layout,null);
+                final NetworkImageView portrait = portraitView.findViewById(R.id.intressent_portait);
+                portrait.setDefaultImageResId(R.mipmap.ic_default_person);
+                nameTv = portraitView.findViewById(R.id.intressent_name);
+                nameTv.setText(i.getNamn() + " (" + i.getPartibet() + ")");
+
+
                 app.getRiksdagenAPIManager().getRepresentative(i.getIntressent_id(), new RepresentativeCallback() {
                     @Override
                     public void onPersonFetched(Representative representative) {
@@ -84,7 +98,7 @@ public class DocumentReaderActivity extends AppCompatActivity{
 
                     }
                 });
-                break;
+                portaitContainer.addView(portraitView);
             }
 
         }
