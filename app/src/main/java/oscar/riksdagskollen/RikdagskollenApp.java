@@ -30,6 +30,20 @@ public class RikdagskollenApp extends Application {
         instance = this;
         requestManager = new RequestManager();
         riksdagenAPIManager = new RiksdagenAPIManager(this);
+        riksdagenAPIManager.getCurrentNews(new CurrentNewsCallback() {
+            @Override
+            public void onNewsFetched(List<CurrentNews> currentNews) {
+                for (int i = 0; i <currentNews.size() ; i++) {
+                    System.out.println(currentNews.get(i).getTitel());
+
+                }
+            }
+
+            @Override
+            public void onFail(VolleyError error) {
+
+            }
+        });
     }
 
     public static RikdagskollenApp getInstance() {

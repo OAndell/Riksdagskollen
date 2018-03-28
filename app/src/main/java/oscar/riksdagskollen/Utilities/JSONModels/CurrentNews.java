@@ -9,6 +9,7 @@ import org.json.JSONObject;
 public class CurrentNews {
     private String id;
     private String titel;
+    private String publicerad;
     private String summary;
     private String img_url;
     private String img_text;

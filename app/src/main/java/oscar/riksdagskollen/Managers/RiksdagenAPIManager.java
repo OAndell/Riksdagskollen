@@ -70,7 +70,7 @@ public class RiksdagenAPIManager {
      * @param callback callback which a List of currentNews is returned
      */
     public void  getCurrentNews(final CurrentNewsCallback callback){
-        String subURL = "/dokumentlista/?avd=aktuellt&sort=datum&sortorder=desc&lang=sv&cmskategori=startsida&utformat=json&p=2";
+        String subURL = "/dokumentlista/?avd=aktuellt&sort=datum&sortorder=desc&lang=sv&cmskategori=startsida&utformat=json&p=1";
         requestManager.doGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
