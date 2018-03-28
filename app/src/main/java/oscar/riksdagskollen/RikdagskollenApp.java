@@ -5,10 +5,13 @@ import android.app.Application;
 import com.android.volley.VolleyError;
 
 import java.io.Console;
+import java.util.List;
 
 import oscar.riksdagskollen.Managers.RequestManager;
 import oscar.riksdagskollen.Managers.RiksdagenAPIManager;
+import oscar.riksdagskollen.Utilities.Callbacks.CurrentNewsCallback;
 import oscar.riksdagskollen.Utilities.Callbacks.RepresentativeCallback;
+import oscar.riksdagskollen.Utilities.JSONModels.CurrentNews;
 import oscar.riksdagskollen.Utilities.JSONModels.Representative;
 
 /**

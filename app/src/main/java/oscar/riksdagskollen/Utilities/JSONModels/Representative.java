@@ -2,9 +2,11 @@ package oscar.riksdagskollen.Utilities.JSONModels;
 
 /**
  * Created by oscar on 2018-03-27.
+ * Hold useful information about a Representative (Ledamot)
  */
-
 public class Representative  {
+
+    //TODO Add more info! Because why not
     private String intressent_id;
     private String hangar_id;
     private String fodd_ar;
