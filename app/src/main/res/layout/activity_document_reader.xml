@@ -5,9 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/secondaryColor"
     tools:context=".Activities.DocumentReaderActivity">
 
     <include layout="@layout/riksdagen_toolbar"></include>
+
+    <include layout="@layout/loading_view"></include>
 
 
     <ScrollView
@@ -16,6 +19,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
+            android:id="@+id/act_doc_reader_content_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -43,7 +47,7 @@
                         android:layout_gravity="center"
                         android:text="Användningen av ordet särskola i gymnasiet"
                         android:textColor="@color/primaryColor"
-                        android:textSize="15sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView

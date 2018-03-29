@@ -1,5 +1,6 @@
 package oscar.riksdagskollen.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -41,7 +42,13 @@ public class PartyListFragment extends Fragment {
     private List<PartyDocument> documentList = new ArrayList<>();
     private RecyclerView recyclerView;
     private PartyListViewholderAdapter partyListAdapter;
+    private ViewGroup loadingView;
 
+    /**
+     *
+     * @param party the party object that the fragment will display feed for
+     * @return a new instance of this fragment with the Party object in its arguments
+     */
 
     public static PartyListFragment newIntance(Party party){
         Bundle args = new Bundle();
@@ -63,6 +70,10 @@ public class PartyListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_party_list,null);
+
+        loadingView = view.findViewById(R.id.loading_view);
+
+
         partyListAdapter = new PartyListViewholderAdapter(documentList, new PartyListViewholderAdapter.OnPartyDocumentClickListener() {
             @Override
             public void onPartyDocumentClickListener(PartyDocument document) {
@@ -76,6 +87,8 @@ public class PartyListFragment extends Fragment {
         recyclerView.setNestedScrollingEnabled(true);
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
+
+        // Listener to determine when the scollview has reached the bottom. Then we load the next page
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
              @Override
              public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -114,13 +127,25 @@ public class PartyListFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // If we already have content in the adapter, do not show the loading view
+        if(partyListAdapter.getItemCount() > 0) loadingView.setVisibility(View.GONE);
+    }
 
+
+    /**
+     * Load the next page and add it to the adapter when downloaded and parsed.
+     * Hides the loading view.
+     */
     private void loadNextPage(){
         loading = true;
 
         RikdagskollenApp.getInstance().getRiksdagenAPIManager().getDocumentsForParty(party, pageToLoad, new PartyDocumentCallback() {
             @Override
             public void onDocumentsFetched(List<PartyDocument> documents) {
+                loadingView.setVisibility(View.GONE);
                 loading = false;
                 documentList.addAll(documents);
                 partyListAdapter.notifyDataSetChanged();

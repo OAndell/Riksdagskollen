@@ -45,19 +45,18 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
-        navigationView.getMenu().getItem(0).setChecked(true);
-        onNavigationItemSelected(navigationView.getMenu().getItem(0));
         initPartyFragments();
 
-
+        // Mark News-fragment as selected at startup
+        onNavigationItemSelected(navigationView.getMenu().getItem(0).getSubMenu().getItem(0).setChecked(true));
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -103,8 +102,6 @@ public class MainActivity extends AppCompatActivity
 
                 break;
             case R.id.prot_nav:
-                Intent i = new Intent(this, DocumentReaderActivity.class);
-                startActivity(i);
                 break;
             case R.id.s_nav:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,sPartyFragment).commit();
@@ -134,11 +131,12 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    // Create all of the PartyFragments with new Party objects
     private void initPartyFragments(){
         mPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_m),"m"));
         sPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_s),"s"));
