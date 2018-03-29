@@ -2,9 +2,6 @@ package oscar.riksdagskollen;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,12 +12,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import oscar.riksdagskollen.Activities.DocumentReaderActivity;
+import oscar.riksdagskollen.Fragments.CurrentNewsListFragment;
 import oscar.riksdagskollen.Fragments.PartyListFragment;
 import oscar.riksdagskollen.Utilities.JSONModels.Party;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    CurrentNewsListFragment currNewsFragment;
 
     PartyListFragment sPartyFragment;
     PartyListFragment mPartyFragment;
@@ -30,6 +29,7 @@ public class MainActivity extends AppCompatActivity
     PartyListFragment vPartyFragment;
     PartyListFragment lPartyFragment;
     PartyListFragment kdPartyFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setItemIconTintList(null);
         navigationView.getMenu().getItem(0).setChecked(true);
         onNavigationItemSelected(navigationView.getMenu().getItem(0));
+
+        initMenuOptions();
         initPartyFragments();
 
 
@@ -94,7 +96,7 @@ public class MainActivity extends AppCompatActivity
 
         switch (id){
             case R.id.news_nav:
-
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,currNewsFragment).commit();
                 break;
             case R.id.votes_nav:
 
@@ -137,6 +139,10 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void initMenuOptions(){
+        currNewsFragment = CurrentNewsListFragment.newInstance();
     }
 
     private void initPartyFragments(){
