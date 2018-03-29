@@ -38,6 +38,7 @@ public class PartyListFragment extends Fragment {
     int pageToLoad = 1;
     private int pastVisiblesItems;
     private boolean loading = false;
+    private ProgressBar itemsLoadingView;
 
     private List<PartyDocument> documentList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -106,22 +107,9 @@ public class PartyListFragment extends Fragment {
              }
          });
 
-        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-            }
-        });
+        itemsLoadingView = new ProgressBar(getContext());
+        itemsLoadingView.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.primaryColor),
+                android.graphics.PorterDuff.Mode.MULTIPLY);
 
         loadNextPage();
         return view;
@@ -131,7 +119,7 @@ public class PartyListFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // If we already have content in the adapter, do not show the loading view
-        if(partyListAdapter.getItemCount() > 0) loadingView.setVisibility(View.GONE);
+        if(partyListAdapter.getDocumentCount() > 0) loadingView.setVisibility(View.GONE);
     }
 
 
@@ -140,23 +128,43 @@ public class PartyListFragment extends Fragment {
      * Hides the loading view.
      */
     private void loadNextPage(){
-        loading = true;
-
+        setLoading(true);
         RikdagskollenApp.getInstance().getRiksdagenAPIManager().getDocumentsForParty(party, pageToLoad, new PartyDocumentCallback() {
             @Override
             public void onDocumentsFetched(List<PartyDocument> documents) {
                 loadingView.setVisibility(View.GONE);
-                loading = false;
                 documentList.addAll(documents);
                 partyListAdapter.notifyDataSetChanged();
+                setLoading(false);
             }
 
             @Override
             public void onFail(VolleyError error) {
-                loading = false;
+                setLoading(false);
             }
         });
         pageToLoad++;
+    }
+
+
+    private void setLoading(Boolean loading){
+        this.loading = loading;
+
+        // The runnables are apparently needed to avoid long warnings
+        if(loading && pageToLoad > 1){
+            recyclerView.post(new Runnable() {
+                public void run() {
+                    partyListAdapter.addFooter(itemsLoadingView);
+                }
+            });
+        } else {
+            recyclerView.post(new Runnable() {
+                public void run() {
+                    partyListAdapter.removeFooter(itemsLoadingView);
+                }
+            });
+        }
+
     }
 
 
