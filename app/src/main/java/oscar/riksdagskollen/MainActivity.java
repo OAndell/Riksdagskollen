@@ -15,13 +15,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import oscar.riksdagskollen.Activities.DocumentReaderActivity;
+import oscar.riksdagskollen.Fragments.CurrentNewsListFragment;
 import oscar.riksdagskollen.Fragments.PartyListFragment;
 import oscar.riksdagskollen.Utilities.JSONModels.Party;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
+    CurrentNewsListFragment currentNewsListFragment;
     PartyListFragment sPartyFragment;
     PartyListFragment mPartyFragment;
     PartyListFragment sdPartyFragment;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
         initPartyFragments();
+        initMenuOptions();
 
         // Mark News-fragment as selected at startup
         navigationView.getMenu().getItem(0).getSubMenu().getItem(0).setChecked(true);
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity
 
         switch (id){
             case R.id.news_nav:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,currNewsFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,currentNewsListFragment).commit();
                 break;
             case R.id.votes_nav:
 
@@ -138,6 +140,10 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void initMenuOptions(){
+        currentNewsListFragment = CurrentNewsListFragment.newInstance();
     }
 
     // Create all of the PartyFragments with new Party objects
