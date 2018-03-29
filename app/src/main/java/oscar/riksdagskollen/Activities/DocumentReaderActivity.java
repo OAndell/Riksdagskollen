@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,20 +35,33 @@ public class DocumentReaderActivity extends AppCompatActivity{
     private String docBody;
     private RikdagskollenApp app;
     private LinearLayout portaitContainer;
+    private ViewGroup loadingView;
+    private LinearLayout contentView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_document_reader);
+
         document = getIntent().getParcelableExtra("document");
 
-        setContentView(R.layout.loading_view);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(document.getDokumentnamn());
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        loadingView = findViewById(R.id.loading_view);
+        contentView = findViewById(R.id.act_doc_reader_content_container);
+        contentView.setVisibility(View.GONE);
         app = RikdagskollenApp.getInstance();
 
+        // Fetch the document body from the API
         app.getRiksdagenAPIManager().getDocumentBody(document, new StringRequestCallback() {
             @Override
             public void onResponse(String response) {
                 docBody = response;
+                loadingView.setVisibility(View.GONE);
+                contentView.setVisibility(View.VISIBLE);
                 populateViewWithDocumentInformation();
             }
 
@@ -60,14 +74,12 @@ public class DocumentReaderActivity extends AppCompatActivity{
 
     }
 
+
+    /**
+     * Fills contentview with content as soon as it has been fethced from the server
+     */
+
     private void populateViewWithDocumentInformation(){
-        setContentView(R.layout.activity_document_reader);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(document.getDokumentnamn());
-        setSupportActionBar(toolbar);;
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         TextView titleTV = findViewById(R.id.act_doc_reader_title);
         TextView authorTV = findViewById(R.id.act_doc_reader_author);
         final TextView recipientTV  = findViewById(R.id.act_doc_reader_recipient);
@@ -105,9 +117,12 @@ public class DocumentReaderActivity extends AppCompatActivity{
 
         titleTV.setText(document.getTitel());
         authorTV.setText(String.format("av %s", document.getUndertitel()));
+
+        //TODO: ta ut den riktiga mottagaren ur texten och sätt den här
         recipientTV.setText("Till en person");
         body.setText(docBody);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

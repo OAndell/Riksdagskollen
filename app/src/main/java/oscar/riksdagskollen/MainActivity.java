@@ -2,6 +2,9 @@ package oscar.riksdagskollen;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,14 +15,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import oscar.riksdagskollen.Activities.DocumentReaderActivity;
-import oscar.riksdagskollen.Fragments.CurrentNewsListFragment;
 import oscar.riksdagskollen.Fragments.PartyListFragment;
 import oscar.riksdagskollen.Utilities.JSONModels.Party;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    CurrentNewsListFragment currNewsFragment;
 
     PartyListFragment sPartyFragment;
     PartyListFragment mPartyFragment;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity
     PartyListFragment vPartyFragment;
     PartyListFragment lPartyFragment;
     PartyListFragment kdPartyFragment;
+    NavigationView navigationView;
 
 
     @Override
@@ -45,21 +47,18 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
-        navigationView.getMenu().getItem(0).setChecked(true);
-        onNavigationItemSelected(navigationView.getMenu().getItem(0));
-
-        initMenuOptions();
         initPartyFragments();
 
-
+        // Mark News-fragment as selected at startup
+        navigationView.getMenu().getItem(0).getSubMenu().getItem(0).setChecked(true);
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -93,6 +92,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
+        // Ugly hack to prevent News menu item to be checked forever
+        navigationView.getMenu().getItem(0).getSubMenu().getItem(0).setChecked(false);
 
         switch (id){
             case R.id.news_nav:
@@ -105,8 +106,6 @@ public class MainActivity extends AppCompatActivity
 
                 break;
             case R.id.prot_nav:
-                Intent i = new Intent(this, DocumentReaderActivity.class);
-                startActivity(i);
                 break;
             case R.id.s_nav:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,sPartyFragment).commit();
@@ -136,15 +135,12 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void initMenuOptions(){
-        currNewsFragment = CurrentNewsListFragment.newInstance();
-    }
-
+    // Create all of the PartyFragments with new Party objects
     private void initPartyFragments(){
         mPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_m),"m"));
         sPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_s),"s"));

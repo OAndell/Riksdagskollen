@@ -1,5 +1,6 @@
 package oscar.riksdagskollen.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -37,11 +38,18 @@ public class PartyListFragment extends Fragment {
     int pageToLoad = 1;
     private int pastVisiblesItems;
     private boolean loading = false;
+    private ProgressBar itemsLoadingView;
 
     private List<PartyDocument> documentList = new ArrayList<>();
     private RecyclerView recyclerView;
     private PartyListViewholderAdapter partyListAdapter;
+    private ViewGroup loadingView;
 
+    /**
+     *
+     * @param party the party object that the fragment will display feed for
+     * @return a new instance of this fragment with the Party object in its arguments
+     */
 
     public static PartyListFragment newIntance(Party party){
         Bundle args = new Bundle();
@@ -63,6 +71,10 @@ public class PartyListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_party_list,null);
+
+        loadingView = view.findViewById(R.id.loading_view);
+
+
         partyListAdapter = new PartyListViewholderAdapter(documentList, new PartyListViewholderAdapter.OnPartyDocumentClickListener() {
             @Override
             public void onPartyDocumentClickListener(PartyDocument document) {
@@ -76,6 +88,8 @@ public class PartyListFragment extends Fragment {
         recyclerView.setNestedScrollingEnabled(true);
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
+
+        // Listener to determine when the scollview has reached the bottom. Then we load the next page
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
              @Override
              public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -93,45 +107,64 @@ public class PartyListFragment extends Fragment {
              }
          });
 
-        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-            }
-        });
+        itemsLoadingView = new ProgressBar(getContext());
+        itemsLoadingView.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.primaryColor),
+                android.graphics.PorterDuff.Mode.MULTIPLY);
 
         loadNextPage();
         return view;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // If we already have content in the adapter, do not show the loading view
+        if(partyListAdapter.getDocumentCount() > 0) loadingView.setVisibility(View.GONE);
+    }
 
+
+    /**
+     * Load the next page and add it to the adapter when downloaded and parsed.
+     * Hides the loading view.
+     */
     private void loadNextPage(){
-        loading = true;
-
+        setLoading(true);
         RikdagskollenApp.getInstance().getRiksdagenAPIManager().getDocumentsForParty(party, pageToLoad, new PartyDocumentCallback() {
             @Override
             public void onDocumentsFetched(List<PartyDocument> documents) {
-                loading = false;
+                loadingView.setVisibility(View.GONE);
                 documentList.addAll(documents);
                 partyListAdapter.notifyDataSetChanged();
+                setLoading(false);
             }
 
             @Override
             public void onFail(VolleyError error) {
-                loading = false;
+                setLoading(false);
             }
         });
         pageToLoad++;
+    }
+
+
+    private void setLoading(Boolean loading){
+        this.loading = loading;
+
+        // The runnables are apparently needed to avoid long warnings
+        if(loading && pageToLoad > 1){
+            recyclerView.post(new Runnable() {
+                public void run() {
+                    partyListAdapter.addFooter(itemsLoadingView);
+                }
+            });
+        } else {
+            recyclerView.post(new Runnable() {
+                public void run() {
+                    partyListAdapter.removeFooter(itemsLoadingView);
+                }
+            });
+        }
+
     }
 
 
