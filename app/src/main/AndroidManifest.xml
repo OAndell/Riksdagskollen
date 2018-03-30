@@ -26,6 +26,8 @@
         <activity
             android:name=".Activities.DocumentReaderActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".Activities.MotionActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

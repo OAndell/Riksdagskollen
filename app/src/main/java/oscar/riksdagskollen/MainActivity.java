@@ -16,6 +16,7 @@ import android.view.MenuItem;
 
 import oscar.riksdagskollen.Activities.DocumentReaderActivity;
 import oscar.riksdagskollen.Fragments.CurrentNewsListFragment;
+import oscar.riksdagskollen.Activities.MotionActivity;
 import oscar.riksdagskollen.Fragments.PartyListFragment;
 import oscar.riksdagskollen.Utilities.JSONModels.Party;
 
@@ -102,7 +103,8 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,currentNewsListFragment).commit();
                 break;
             case R.id.votes_nav:
-
+                Intent i = new Intent(this, MotionActivity.class);
+                startActivity(i);
                 break;
             case R.id.dec_nav:
 

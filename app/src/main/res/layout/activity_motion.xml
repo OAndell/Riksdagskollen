@@ -1,30 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:background="@color/secondaryColor"
-    tools:context=".Activities.DocumentReaderActivity">
+    android:background="@color/secondaryColor">
 
     <include layout="@layout/riksdagen_toolbar"></include>
+
 
     <include layout="@layout/loading_view"></include>
 
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/act_doc_reader_content_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -39,6 +32,7 @@
                     android:layout_weight="7"
                     android:id="@+id/doc_title_layout"
                     android:gravity="center"
+                    android:padding="16dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -59,14 +53,6 @@
                         android:text="av Agneta Sjödin (S)"
                         android:textColor="@color/primaryColor" />
 
-                    <TextView
-                        android:id="@+id/act_doc_reader_recipient"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="till statsrådet Anna Ekström"
-                        android:textColor="@color/primaryColor" />
-
                 </LinearLayout>
 
 
@@ -75,39 +61,19 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_marginTop="10dp"
-                android:background="@color/secondaryTextColor">
+                android:background="@color/primaryColor">
 
             </View>
 
 
-            <TextView
-                android:id="@+id/act_doc_reader_body"
+            <WebView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor" />
-
-
-
-            <LinearLayout
-                android:id="@+id/read_answer_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="Visa svar"
-                    android:textColor="@color/primaryColor" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
+                android:layout_height="match_parent"
+                android:id="@+id/webview">
+            </WebView>
 
             <TextView
                 android:layout_width="match_parent"
@@ -115,6 +81,8 @@
                 android:text="Undertecknare"
                 android:layout_marginTop="16dp"
                 android:textStyle="bold"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
                 android:textColor="@color/primaryColor"
                 android:textSize="16sp"/>
 
@@ -126,21 +94,18 @@
                     android:id="@+id/act_doc_reader_portrait_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="16dp"
                     android:orientation="horizontal">
 
                 </LinearLayout>
 
-
             </HorizontalScrollView>
-
 
 
         </LinearLayout>
 
 
-
-
     </ScrollView>
 
 
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

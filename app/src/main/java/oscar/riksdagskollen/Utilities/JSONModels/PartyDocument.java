@@ -70,6 +70,10 @@ public class PartyDocument implements Parcelable {
         return dokumentnamn;
     }
 
+    public boolean isMotion(){
+        return dokumentnamn.equalsIgnoreCase("motion");
+    }
+
     @Override
     public String toString() {
         return getTitel();

@@ -119,7 +119,15 @@ public class RiksdagenAPIManager {
     }
 
     public void getDocumentBody(PartyDocument document, StringRequestCallback callback){
-        requestManager.doStringGetRequest("http:" + document.getDokument_url_text(),callback);
+        if(document == null){
+            //Test för motioner
+            requestManager.doStringGetRequest("http://data.riksdagen.se/dokument/H502225.html",callback);
+        }else if(document.isMotion()){
+            requestManager.doStringGetRequest("http:" + document.getDokument_url_html(), callback);
+        } else {
+            requestManager.doStringGetRequest("http:" + document.getDokument_url_text(),callback);
+        }
     }
+
 
 }

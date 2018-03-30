@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import oscar.riksdagskollen.Activities.DocumentReaderActivity;
+import oscar.riksdagskollen.Activities.MotionActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.Callbacks.PartyDocumentCallback;
@@ -78,7 +79,12 @@ public class PartyListFragment extends Fragment {
         partyListAdapter = new PartyListViewholderAdapter(documentList, new PartyListViewholderAdapter.OnPartyDocumentClickListener() {
             @Override
             public void onPartyDocumentClickListener(PartyDocument document) {
-                Intent intent = new Intent(getContext(), DocumentReaderActivity.class);
+                Intent intent;
+                if(document.isMotion()){
+                    intent = new Intent(getContext(), MotionActivity.class);
+                } else {
+                    intent = new Intent(getContext(), DocumentReaderActivity.class);
+                }
                 intent.putExtra("document",document);
                 startActivity(intent);
             }
