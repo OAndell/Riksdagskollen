@@ -103,8 +103,6 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,currentNewsListFragment).commit();
                 break;
             case R.id.votes_nav:
-                Intent i = new Intent(this, MotionActivity.class);
-                startActivity(i);
                 break;
             case R.id.dec_nav:
 

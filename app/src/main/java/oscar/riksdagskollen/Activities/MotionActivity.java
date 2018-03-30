@@ -85,7 +85,6 @@ public class MotionActivity extends AppCompatActivity {
                 //Clear default styling
                 String result  = doc.toString().replaceAll("class=\\\"[A-Öa-ö0-9]+\\\"","");
                 result = result.replaceAll("style=\"[A-Öa-ö-_:;\\s0-9.%']+\"","");
-                System.out.println(result);
                 webView.loadDataWithBaseURL("file:///android_asset/", result, "text/html", "UTF-8", null);
                 loadingView.setVisibility(View.GONE);
             }
