@@ -85,7 +85,7 @@ public class MotionActivity extends AppCompatActivity {
             public void onProgressChanged(WebView view, final int newProgress) {
                 if(newProgress == 100){
                     loadingView.setVisibility(View.GONE);
-                }
+                    }
             }
         });
         webView.setWebViewClient(webViewClient);

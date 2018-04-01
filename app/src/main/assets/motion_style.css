@@ -61,6 +61,8 @@ table {
         display: block;
         overflow-x: auto;
         white-space: nowrap;
+        border-spacing: 10px;
+        border-collapse: separate;
     }
 
 @media screen and (max-width:200px) {
