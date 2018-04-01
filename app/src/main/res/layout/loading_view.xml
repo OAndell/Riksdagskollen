@@ -25,9 +25,10 @@
             <ProgressBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/progress_bar"
                 android:layout_gravity="center"
                 android:indeterminate="true"
-                android:maxWidth="50dp"
+                android:maxWidth="100dp"
                 android:minWidth="60dp" />
 
             <TextView

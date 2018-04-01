@@ -3,16 +3,12 @@ package oscar.riksdagskollen.Managers;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 
-import junit.framework.Test;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
 
-
-import javax.security.auth.callback.Callback;
 
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.Callbacks.CurrentNewsCallback;
@@ -120,10 +116,10 @@ public class RiksdagenAPIManager {
 
     public void getDocumentBody(PartyDocument document, StringRequestCallback callback){
         if(document == null){
-            //Test för motioner
-            requestManager.doStringGetRequest("http://data.riksdagen.se/dokument/H502225.html",callback);
+            // Very long motion, used for testing by sending null as an argument
+            requestManager.downloadHtmlPage("http://data.riksdagen.se/dokument/H5023752.html",callback);
         }else if(document.isMotion()){
-            requestManager.doStringGetRequest("http:" + document.getDokument_url_html(), callback);
+            requestManager.downloadHtmlPage("http:" + document.getDokument_url_html(), callback);
         } else {
             requestManager.doStringGetRequest("http:" + document.getDokument_url_text(),callback);
         }

@@ -8,6 +8,17 @@ h2 {
     color: #1b506f;
 }
 
+h3 {
+    font-size: 1.1em;
+    color: #1b506f;
+}
+
+h4 {
+    font-size: 1.1em;
+    color: #1b506f;
+}
+
+
 li {
     font-size: 1.0em;
     font-family: 'Sans-serif';
@@ -27,5 +38,36 @@ body {
     margin-left: 20px;
     margin-right: 20px;
     margin-top -10px;
+    overflow-x:hidden;
+}
 
+a:link {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:visited {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+@media screen and (max-width:200px) {
+    body {
+        overflow-x:auto;
+    }
+    table {
+        width:200px;
+    }
 }

@@ -1,8 +1,10 @@
 package oscar.riksdagskollen.Managers;
 
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.support.v4.util.LruCache;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import com.android.volley.Cache;
 import com.android.volley.Network;
@@ -19,7 +21,16 @@ import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
+import java.util.List;
 
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.Callbacks.JSONRequestCallback;
@@ -129,6 +140,61 @@ public class RequestManager {
         });
 
         requestQueue.add(request);
+    }
+
+    public void downloadHtmlPage(String url, StringRequestCallback callback){
+        HtmlDownloader task = new HtmlDownloader(url,callback);
+        task.execute();
+    }
+
+    class HtmlDownloader extends AsyncTask<String, String, String> {
+
+        private String url;
+
+        private StringRequestCallback callback;
+
+        HtmlDownloader(String url, StringRequestCallback callback){
+            this.url = url;
+            this.callback = callback;
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String result;
+            String inputLine;
+            try {
+                URL myUrl = new URL(url);
+                //Create a connection
+                HttpURLConnection connection = (HttpURLConnection) myUrl.openConnection();
+                connection.connect();
+
+                InputStreamReader streamReader = new
+                        InputStreamReader(connection.getInputStream());
+                BufferedReader reader = new BufferedReader(streamReader);
+
+                StringBuilder stringBuilder = new StringBuilder();
+                while((inputLine = reader.readLine()) != null){
+                    stringBuilder.append(inputLine);
+                }
+                reader.close();
+                streamReader.close();
+                //Set our result equal to our stringBuilder
+                result = stringBuilder.toString();
+            }
+            catch(IOException e){
+                e.printStackTrace();
+                result = null;
+            }
+            return result;
+
+        }
+
+        @Override
+        protected void onPostExecute(String result){
+            callback.onResponse(result);
+        }
+
+
     }
 
 

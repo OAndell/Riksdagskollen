@@ -1,17 +1,30 @@
 package oscar.riksdagskollen.Activities;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
@@ -40,6 +53,8 @@ public class MotionActivity extends AppCompatActivity {
 
     PartyDocument document;
     ViewGroup loadingView;
+    ProgressBar progress;
+    Context context;
 
 
     @Override
@@ -51,6 +66,7 @@ public class MotionActivity extends AppCompatActivity {
         TextView titleTV = findViewById(R.id.act_doc_reader_title);
         TextView authorTV = findViewById(R.id.act_doc_reader_author);
         loadingView = findViewById(R.id.loading_view);
+        context = this;
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Motion");
@@ -61,41 +77,24 @@ public class MotionActivity extends AppCompatActivity {
         titleTV.setText(document.getTitel());
         authorTV.setText(document.getUndertitel());
 
-        WebChromeClient webChromeClient = new WebChromeClient();
+        WebViewClient webViewClient = new CustomWebViewClient();
+
         final WebView webView = findViewById(R.id.webview);
-        webView.setWebChromeClient(webChromeClient);
-
-        final RikdagskollenApp app = RikdagskollenApp.getInstance();
-
-        app.getRiksdagenAPIManager().getDocumentBody(document, new StringRequestCallback() {
+        webView.setWebChromeClient(new WebChromeClient(){
             @Override
-            public void onResponse(String response) {
-                Document doc = Jsoup.parse(response);
-                //Remove title
-                doc.head().append("<meta name=\"viewport\" content='width=device-width, initial-scale=1.0,text/html, charset='utf-8'>\n");
-                doc.head().appendElement("link").attr("rel", "stylesheet").attr("type", "text/css").attr("href", "motion_style.css");
-                doc.select("div>span.sidhuvud_publikation").remove();
-                doc.select("div>span.sidhuvud_beteckning").remove();
-                doc.select("div>span.MotionarLista").remove();
-                doc.select("div.pconf>h1").remove();
-                doc.select("div>hr.sidhuvud_linje").remove();
-                doc.select("head>style").remove();
-                doc.select("body>div>br").remove();
-
-                //Clear default styling
-                String result  = doc.toString().replaceAll("class=\\\"[A-Öa-ö0-9]+\\\"","");
-                result = result.replaceAll("style=\"[A-Öa-ö-_:;\\s0-9.%']+\"","");
-                webView.loadDataWithBaseURL("file:///android_asset/", result, "text/html", "UTF-8", null);
-                loadingView.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onFail(VolleyError error) {
-
+            public void onProgressChanged(WebView view, final int newProgress) {
+                if(newProgress == 100){
+                    loadingView.setVisibility(View.GONE);
+                }
             }
         });
+        webView.setWebViewClient(webViewClient);
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setUseWideViewPort(true);
+        webView.getSettings().setJavaScriptEnabled(true);
+
         webView.setInitialScale(1);
 
         //Disable text-select to make consistent with rest of app
@@ -107,13 +106,44 @@ public class MotionActivity extends AppCompatActivity {
             }
         });
 
+
+        final RikdagskollenApp app = RikdagskollenApp.getInstance();
+        app.getRiksdagenAPIManager().getDocumentBody( document, new StringRequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                Document doc = Jsoup.parse(response);
+                //Remove title
+                doc.head().append("<meta name=\"viewport\" content='width=device-width, initial-scale=2.0,text/html, charset='utf-8'>\n");
+                doc.head().appendElement("link").attr("rel", "stylesheet").attr("type", "text/css").attr("href", "motion_style.css");
+                doc.select("div>span.sidhuvud_publikation").remove();
+                doc.select("div>span.sidhuvud_beteckning").remove();
+                doc.select("div>span.MotionarLista").remove();
+                doc.select("div.pconf>h1").remove();
+                doc.select("div>hr.sidhuvud_linje").remove();
+                doc.select("head>style").remove();
+                doc.select("body>div>br").remove();
+
+
+                //Clear default styling
+                String result  = doc.toString().replaceAll("class=\\\"[A-Öa-ö0-9]+\\\"","");
+                result = result.replaceAll("style=\"[A-Öa-ö-_:;\\s0-9.%']+\"","");
+                webView.loadDataWithBaseURL("file:///android_asset/", result, "text/html", "UTF-8", null);
+                System.out.println(result);
+            }
+
+            @Override
+            public void onFail(VolleyError error) {
+
+            }
+        });    
+
+
         LinearLayout portaitContainer = findViewById(R.id.act_doc_reader_portrait_container);
 
 
         for (Intressent i : document.getDokintressent().getIntressenter()){
             final View portraitView;
             TextView nameTv;
-            System.out.println(i.getNamn());
             if(i.getRoll().equals("undertecknare")){
                 portraitView = LayoutInflater.from(this).inflate(R.layout.intressent_layout,null);
                 final NetworkImageView portrait = portraitView.findViewById(R.id.intressent_portait);
@@ -140,6 +170,15 @@ public class MotionActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.motion_activity_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -148,8 +187,39 @@ public class MotionActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 break;
+            case R.id.open_in_web:
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse("http:"+document.getDokument_url_html()));
+                startActivity(i);
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    class CustomWebViewClient extends WebViewClient{
+
+        @Override
+        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+            super.onReceivedError(view, request, error);
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Kunde inte hämta motionen");
+            builder.setMessage("Motionen kunde inte hämtas. Vill du öppna i webbläsaren istället?");
+            builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse("http:"+document.getDokument_url_html()));
+                    startActivity(i);
+                }
+            });
+            builder.setNegativeButton("Nej", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ((MotionActivity) context).finish();
+                }
+            });
+            builder.show();
+        }
     }
 
 }
