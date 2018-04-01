@@ -39,6 +39,7 @@ public class CurrentNewsListFragment extends Fragment {
     private RecyclerView recyclerView;
     private int pastVisiblesItems;
     private CurrentNewsListAdapter currentNewsListAdapter;
+    private ViewGroup loadingView;
 
 
     public static CurrentNewsListFragment newInstance(){
@@ -78,10 +79,17 @@ public class CurrentNewsListFragment extends Fragment {
                 }
             }
         });
+        loadingView = view.findViewById(R.id.loading_view);
         loadNextPage();
         return view;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        // If we already have content in the adapter, do not show the loading view
+        if(currentNewsListAdapter.getItemCount() > 0) loadingView.setVisibility(View.GONE);
+        super.onViewCreated(view, savedInstanceState);
+    }
 
     private void loadNextPage(){
         loading = true;
@@ -91,6 +99,7 @@ public class CurrentNewsListFragment extends Fragment {
             @Override
             public void onNewsFetched(List<CurrentNews> currentNews) {
                 loading = false;
+                loadingView.setVisibility(View.GONE);
                 newsList.addAll(currentNews);
                 System.out.println(currentNews.get(0).getTitel());
                 currentNewsListAdapter.notifyDataSetChanged();
@@ -99,9 +108,11 @@ public class CurrentNewsListFragment extends Fragment {
             @Override
             public void onFail(VolleyError error) {
                 loading = false;
+                pageToLoad--;
             }
         });
         pageToLoad++;
     }
+
 
 }

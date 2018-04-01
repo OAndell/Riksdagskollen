@@ -147,6 +147,7 @@ public class PartyListFragment extends Fragment {
             @Override
             public void onFail(VolleyError error) {
                 setLoading(false);
+                pageToLoad--;
             }
         });
         pageToLoad++;
