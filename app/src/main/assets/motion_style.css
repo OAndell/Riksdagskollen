@@ -59,17 +59,47 @@ img {
 
 table {
         display: block;
-        overflow-x: auto;
-        white-space: nowrap;
+        overflow-x: hidden;
         border-spacing: 10px;
-        border-collapse: separate;
+        border-collapse: collapse;
+        margin-bottom: 1.25rem;
+        table-layout: fixed;
     }
 
-@media screen and (max-width:200px) {
-    body {
-        overflow-x:auto;
+
+    td {
+        padding: 5px;
+        word-wrap: break-word;
+        text-align: left;
     }
-    table {
-        width:200px;
+
+    th {
+        font-weight: bold;
+        word-wrap: break-word;
+        text-align: left;
     }
-}
+
+
+    table caption {
+      background: transparent;
+      font-weight: bold;
+    }
+
+    table thead {
+      background: #F5F5F5;
+    }
+
+    table thead tr th,
+    table thead tr td {
+      font-weight: bold;
+    }
+
+    table tfoot {
+      background: #F5F5F5;
+    }
+
+    table tfoot tr th,
+    table tfoot tr td {
+      font-weight: bold;
+
+    }
