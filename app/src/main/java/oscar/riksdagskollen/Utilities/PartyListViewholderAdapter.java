@@ -37,10 +37,16 @@ public class PartyListViewholderAdapter extends RecyclerView.Adapter<RecyclerVie
 
 
     class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView document;
-        MyViewHolder(View partyView) {
+        TextView documentTitle;
+        TextView published;
+        TextView author;
+        TextView dokName;
+        public MyViewHolder(View partyView) {
             super(partyView);
-            document = (TextView) partyView.findViewById(R.id.document);
+            documentTitle = partyView.findViewById(R.id.document);
+            published = partyView.findViewById(R.id.publicerad);
+            author = partyView.findViewById(R.id.författare);
+            dokName = partyView.findViewById(R.id.dok_typ);
             partyView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -49,7 +55,10 @@ public class PartyListViewholderAdapter extends RecyclerView.Adapter<RecyclerVie
         }
 
         void bind(final PartyDocument item, final OnPartyDocumentClickListener listener) {
-            document.setText(item.getTitel());
+            documentTitle.setText(item.getTitel());
+            published.setText("Publicerad " + item.getPublicerad());
+            author.setText(item.getUndertitel());
+            dokName.setText(item.getDokumentnamn());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     listener.onPartyDocumentClickListener(item);
