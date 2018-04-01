@@ -79,7 +79,9 @@ public class PartyDocument implements Parcelable {
         return getTitel();
     }
 
-    public PartyDocument() {
+    public PartyDocument(String publicerad, String titel) {
+        this.publicerad = publicerad;
+        this.titel = titel;
     }
 
     @Override
