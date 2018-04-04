@@ -18,7 +18,7 @@ import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.Callbacks.RepresentativeCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.Intressent;
-import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
+import oscar.riksdagskollen.Utilities.JSONModels.Object;
 import oscar.riksdagskollen.Utilities.JSONModels.Representative;
 import oscar.riksdagskollen.Utilities.JSONModels.StringRequestCallback;
 
@@ -28,7 +28,7 @@ import oscar.riksdagskollen.Utilities.JSONModels.StringRequestCallback;
 
 public class DocumentReaderActivity extends AppCompatActivity{
 
-    PartyDocument document;
+    Object document;
     private String docBody;
     private RikdagskollenApp app;
     private LinearLayout portaitContainer;

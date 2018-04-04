@@ -7,20 +7,16 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.Utilities.JSONModels.Party;
-import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
-import oscar.riksdagskollen.Utilities.JSONModels.RiksdagenViewHolderAdapter;
 
 /**
  * Created by shelbot on 2018-03-27.
  */
 
 public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter{
-    private List<PartyDocument> documentList;
+    private List<Object> documentList;
 
     class MyViewHolder extends RecyclerView.ViewHolder{
         TextView documentTitle;
@@ -40,7 +36,7 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter{
             });
         }
 
-        void bind(final PartyDocument item, final OnItemClickListener listener) {
+        void bind(final Object item, final OnItemClickListener listener) {
             documentTitle.setText(item.getTitel());
             published.setText("Publicerad " + item.getPublicerad());
             author.setText(item.getUndertitel());
@@ -55,7 +51,7 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter{
 
 
 
-    public PartyListViewholderAdapter(List<PartyDocument> documentList, OnItemClickListener clickListener) {
+    public PartyListViewholderAdapter(List<Object> documentList, OnItemClickListener clickListener) {
         super(documentList,clickListener);
         this.documentList = documentList;
         this.clickListener = clickListener;
@@ -89,7 +85,7 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter{
             //add our view to a footer view and display it
             prepareHeaderFooter((HeaderFooterViewHolder) holder, v);
         }else {
-            PartyDocument document = documentList.get(position);
+            Object document = documentList.get(position);
             ((MyViewHolder) holder).bind(document,clickListener);
         }
     }

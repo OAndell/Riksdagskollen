@@ -10,7 +10,6 @@ import java.util.List;
 
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.Utilities.JSONModels.CurrentNews;
-import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
 
 /**
  * Created by oscar on 2018-03-29.
