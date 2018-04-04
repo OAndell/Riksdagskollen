@@ -32,8 +32,8 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_party_list,null);
-
         recyclerView = view.findViewById(R.id.recycler_view);
+        adapter = getAdapter();
         recyclerView.setAdapter(adapter);
         recyclerView.setNestedScrollingEnabled(true);
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
@@ -64,9 +64,6 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         return view;
     }
 
-    protected void setAdapter(RiksdagenViewHolderAdapter adapter) {
-        this.adapter = adapter;
-    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -81,9 +78,6 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         return loading;
     }
 
-    public RiksdagenViewHolderAdapter getAdapter() {
-        return adapter;
-    }
 
     protected int getPageToLoad() {
         return pageToLoad;
@@ -97,6 +91,7 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         pageToLoad--;
     }
 
+    abstract RiksdagenViewHolderAdapter getAdapter();
 
 
     protected void setLoadingMoreItems(Boolean loading){

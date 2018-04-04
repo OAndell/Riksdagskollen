@@ -27,6 +27,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment {
 
     Party party;
     private List<PartyDocument> documentList = new ArrayList<>();
+    private PartyListViewholderAdapter adapter;
 
     /**
      *
@@ -46,7 +47,8 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.party = getArguments().getParcelable("party");
-        setAdapter(new PartyListViewholderAdapter(documentList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(party.getName());
+        adapter = new PartyListViewholderAdapter(documentList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {
                 Intent intent;
@@ -59,8 +61,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment {
                 intent.putExtra("document",((PartyDocument)document));
                 startActivity(intent);
             }
-        }));
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(party.getName());
+        });
     }
 
 
@@ -88,9 +89,10 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment {
         incrementPage();
     }
 
-
-
-
+    @Override
+    RiksdagenViewHolderAdapter getAdapter() {
+        return adapter;
+    }
 
 
 }

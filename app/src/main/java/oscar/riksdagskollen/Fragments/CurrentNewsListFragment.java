@@ -32,6 +32,7 @@ import oscar.riksdagskollen.Utilities.RiksdagenViewHolderAdapter;
 
 public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
     private List<CurrentNews> newsList = new ArrayList<>();
+    private CurrentNewsListAdapter adapter;
 
     public static CurrentNewsListFragment newInstance(){
         CurrentNewsListFragment newInstance = new CurrentNewsListFragment();
@@ -41,8 +42,8 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setAdapter(new CurrentNewsListAdapter(newsList));
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.news);
+        adapter = new CurrentNewsListAdapter(newsList);
 
     }
 
@@ -70,5 +71,8 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
         incrementPage();
     }
 
-
+    @Override
+    RiksdagenViewHolderAdapter getAdapter() {
+        return adapter;
+    }
 }
