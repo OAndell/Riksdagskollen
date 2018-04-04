@@ -16,7 +16,7 @@ import oscar.riksdagskollen.R;
  */
 
 public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter{
-    private List<Object> documentList;
+    private List<PartyDocument> documentList;
 
     class MyViewHolder extends RecyclerView.ViewHolder{
         TextView documentTitle;
@@ -36,14 +36,14 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter{
             });
         }
 
-        void bind(final Object item, final OnItemClickListener listener) {
+        void bind(final PartyDocument item, final OnItemClickListener listener) {
             documentTitle.setText(item.getTitel());
             published.setText("Publicerad " + item.getPublicerad());
             author.setText(item.getUndertitel());
             dokName.setText(item.getDokumentnamn());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                    listener.onPartyDocumentClickListener(item);
+                    listener.onItemClick(item);
                 }
             });
         }
@@ -51,7 +51,7 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter{
 
 
 
-    public PartyListViewholderAdapter(List<Object> documentList, OnItemClickListener clickListener) {
+    public PartyListViewholderAdapter(List<PartyDocument> documentList, OnItemClickListener clickListener) {
         super(documentList,clickListener);
         this.documentList = documentList;
         this.clickListener = clickListener;
@@ -85,7 +85,7 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter{
             //add our view to a footer view and display it
             prepareHeaderFooter((HeaderFooterViewHolder) holder, v);
         }else {
-            Object document = documentList.get(position);
+            PartyDocument document = documentList.get(position);
             ((MyViewHolder) holder).bind(document,clickListener);
         }
     }

@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by gustavaaro on 2018-03-25.
  */
 
-public class Object extends java.lang.Object implements Parcelable {
+public class PartyDocument extends java.lang.Object implements Parcelable {
 
     String id;
     String undertitel;
@@ -79,7 +79,7 @@ public class Object extends java.lang.Object implements Parcelable {
         return getTitel();
     }
 
-    public Object(String publicerad, String titel) {
+    public PartyDocument(String publicerad, String titel) {
         this.publicerad = publicerad;
         this.titel = titel;
     }
@@ -105,7 +105,7 @@ public class Object extends java.lang.Object implements Parcelable {
         dest.writeParcelable(this.dokintressent, flags);
     }
 
-    protected Object(Parcel in) {
+    protected PartyDocument(Parcel in) {
         this.id = in.readString();
         this.undertitel = in.readString();
         this.titel = in.readString();
@@ -120,15 +120,15 @@ public class Object extends java.lang.Object implements Parcelable {
         this.dokintressent = in.readParcelable(DokIntressent.class.getClassLoader());
     }
 
-    public static final Creator<Object> CREATOR = new Creator<Object>() {
+    public static final Creator<PartyDocument> CREATOR = new Creator<PartyDocument>() {
         @Override
-        public Object createFromParcel(Parcel source) {
-            return new Object(source);
+        public PartyDocument createFromParcel(Parcel source) {
+            return new PartyDocument(source);
         }
 
         @Override
-        public Object[] newArray(int size) {
-            return new Object[size];
+        public PartyDocument[] newArray(int size) {
+            return new PartyDocument[size];
         }
     };
 }

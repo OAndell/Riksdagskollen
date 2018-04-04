@@ -10,14 +10,14 @@ import android.widget.TextView;
 import java.util.List;
 
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.Utilities.JSONModels.Object;
+import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
 
 /**
  * Created by shelbot on 2018-03-27.
  */
 
 public class PartyListAdapter extends RecyclerView.Adapter<PartyListAdapter.MyViewHolder> {
-    private List<Object> documentList;
+    private List<PartyDocument> documentList;
     private Context context;
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
@@ -37,7 +37,7 @@ public class PartyListAdapter extends RecyclerView.Adapter<PartyListAdapter.MyVi
 
 
 
-    public PartyListAdapter(Context context, List<Object> documentList) {
+    public PartyListAdapter(Context context, List<PartyDocument> documentList) {
         this.documentList = documentList;
         this.context =  context;
     }
@@ -52,13 +52,13 @@ public class PartyListAdapter extends RecyclerView.Adapter<PartyListAdapter.MyVi
         return new MyViewHolder(itemView);
     }
 
-    public void setDocumentList(List<Object> documentList) {
+    public void setDocumentList(List<PartyDocument> documentList) {
         this.documentList = documentList;
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Object partyDocument = documentList.get(position);
+        PartyDocument partyDocument = documentList.get(position);
         holder.publicerad.setText(partyDocument.getPublicerad());
         holder.document.setText(partyDocument.getTitel());
     }

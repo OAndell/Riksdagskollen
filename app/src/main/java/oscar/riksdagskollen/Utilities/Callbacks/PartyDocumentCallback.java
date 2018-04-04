@@ -4,7 +4,7 @@ import com.android.volley.VolleyError;
 
 import java.util.List;
 
-import oscar.riksdagskollen.Utilities.JSONModels.Object;
+import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
 
 /**
  * Created by gustavaaro on 2018-03-25.
@@ -12,7 +12,7 @@ import oscar.riksdagskollen.Utilities.JSONModels.Object;
 
 public interface PartyDocumentCallback {
 
-    void onDocumentsFetched(List<Object> documents);
+    void onDocumentsFetched(List<PartyDocument> documents);
 
     void onFail(VolleyError error);
 }

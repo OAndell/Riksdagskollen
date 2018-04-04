@@ -25,7 +25,7 @@ public abstract class RiksdagenViewHolderAdapter extends RecyclerView.Adapter<Re
 
     public interface OnItemClickListener {
 
-        void onPartyDocumentClickListener(Object document);
+        void onItemClick(Object document);
     }
 
 

@@ -17,7 +17,7 @@ import oscar.riksdagskollen.Utilities.Callbacks.RepresentativeCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.CurrentNews;
 import oscar.riksdagskollen.Utilities.JSONModels.Party;
 import oscar.riksdagskollen.Utilities.Callbacks.JSONRequestCallback;
-import oscar.riksdagskollen.Utilities.JSONModels.Object;
+import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
 import oscar.riksdagskollen.Utilities.JSONModels.Representative;
 import oscar.riksdagskollen.Utilities.JSONModels.StringRequestCallback;
 
@@ -46,7 +46,7 @@ public class RiksdagenAPIManager {
             public void onRequestSuccess(JSONObject response) {
                 try {
                     JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
-                    Object[] documents = gson.fromJson(jsonDocuments.toString(),Object[].class);
+                    PartyDocument[] documents = gson.fromJson(jsonDocuments.toString(),PartyDocument[].class);
                     callback.onDocumentsFetched(Arrays.asList(documents));
                 }catch (JSONException e){
                     e.printStackTrace();
@@ -114,7 +114,7 @@ public class RiksdagenAPIManager {
         });
     }
 
-    public void getDocumentBody(Object document, StringRequestCallback callback){
+    public void getDocumentBody(PartyDocument document, StringRequestCallback callback){
         if(document == null){
             // Very long motion, used for testing by sending null as an argument
             requestManager.downloadHtmlPage("http://data.riksdagen.se/dokument/H5023752.html",callback);

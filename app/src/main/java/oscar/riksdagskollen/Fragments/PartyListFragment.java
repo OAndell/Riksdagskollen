@@ -4,12 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.android.volley.VolleyError;
 
@@ -18,11 +12,10 @@ import java.util.List;
 
 import oscar.riksdagskollen.Activities.DocumentReaderActivity;
 import oscar.riksdagskollen.Activities.MotionActivity;
-import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.Callbacks.PartyDocumentCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.Party;
-import oscar.riksdagskollen.Utilities.JSONModels.Object;
+import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
 import oscar.riksdagskollen.Utilities.JSONModels.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Utilities.JSONModels.PartyListViewholderAdapter;
 
@@ -33,7 +26,7 @@ import oscar.riksdagskollen.Utilities.JSONModels.PartyListViewholderAdapter;
 public class PartyListFragment extends RiksdagenAutoLoadingListFragment {
 
     Party party;
-    private List<Object> documentList = new ArrayList<>();
+    private List<PartyDocument> documentList = new ArrayList<>();
 
     /**
      *
@@ -55,14 +48,15 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment {
         this.party = getArguments().getParcelable("party");
         setAdapter(new PartyListViewholderAdapter(documentList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
-            public void onPartyDocumentClickListener(Object document) {
+            public void onItemClick(Object document) {
                 Intent intent;
-                if(document.isMotion()){
+
+                if(((PartyDocument) document).isMotion()){
                     intent = new Intent(getContext(), MotionActivity.class);
                 } else {
                     intent = new Intent(getContext(), DocumentReaderActivity.class);
                 }
-                intent.putExtra("document",document);
+                intent.putExtra("document",((PartyDocument)document));
                 startActivity(intent);
             }
         }));
@@ -78,7 +72,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment {
         setLoadingMoreItems(true);
         RikdagskollenApp.getInstance().getRiksdagenAPIManager().getDocumentsForParty(party, getPageToLoad(), new PartyDocumentCallback() {
             @Override
-            public void onDocumentsFetched(List<Object> documents) {
+            public void onDocumentsFetched(List<PartyDocument> documents) {
                 setShowLoadingView(false);
                 documentList.addAll(documents);
                 getAdapter().notifyDataSetChanged();
