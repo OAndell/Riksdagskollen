@@ -16,8 +16,8 @@ import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.Callbacks.PartyDocumentCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.Party;
 import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
-import oscar.riksdagskollen.Utilities.JSONModels.RiksdagenViewHolderAdapter;
-import oscar.riksdagskollen.Utilities.JSONModels.PartyListViewholderAdapter;
+import oscar.riksdagskollen.Utilities.RiksdagenViewHolderAdapter;
+import oscar.riksdagskollen.Utilities.PartyListViewholderAdapter;
 
 /**
  * Created by gustavaaro on 2018-03-26.

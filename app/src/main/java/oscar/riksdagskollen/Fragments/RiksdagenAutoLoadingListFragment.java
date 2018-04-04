@@ -11,8 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.Utilities.CurrentNewsListAdapter;
-import oscar.riksdagskollen.Utilities.JSONModels.RiksdagenViewHolderAdapter;
+import oscar.riksdagskollen.Utilities.RiksdagenViewHolderAdapter;
 
 /**
  * Created by gustavaaro on 2018-04-04.

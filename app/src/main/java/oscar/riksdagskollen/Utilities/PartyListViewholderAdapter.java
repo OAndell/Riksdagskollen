@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Utilities.JSONModels;
+package oscar.riksdagskollen.Utilities;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,12 +10,14 @@ import android.widget.TextView;
 import java.util.List;
 
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
+import oscar.riksdagskollen.Utilities.RiksdagenViewHolderAdapter;
 
 /**
  * Created by shelbot on 2018-03-27.
  */
 
-public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter{
+public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
     private List<PartyDocument> documentList;
 
     class MyViewHolder extends RecyclerView.ViewHolder{
@@ -90,17 +92,6 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter{
         }
     }
 
-
-    @Override
-    public int getItemViewType(int position) {
-        //check what type our position is, based on the assumption that the order is headers > items > footers
-        if(position < headers.size()){
-            return TYPE_HEADER;
-        }else if(position >= headers.size() + documentList.size()){
-            return TYPE_FOOTER;
-        }
-        return TYPE_ITEM;
-    }
 
 
 

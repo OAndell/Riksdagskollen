@@ -18,23 +18,20 @@ import java.util.List;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.Callbacks.CurrentNewsCallback;
+import oscar.riksdagskollen.Utilities.Callbacks.PartyDocumentCallback;
 import oscar.riksdagskollen.Utilities.CurrentNewsListAdapter;
 import oscar.riksdagskollen.Utilities.JSONModels.CurrentNews;
+import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
+import oscar.riksdagskollen.Utilities.PartyListViewholderAdapter;
+import oscar.riksdagskollen.Utilities.RiksdagenViewHolderAdapter;
 
 
 /**
  * Created by oscar on 2018-03-29.
  */
 
-public class CurrentNewsListFragment extends Fragment {
-    int pageToLoad = 1;
-    private boolean loading = false;
+public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
     private List<CurrentNews> newsList = new ArrayList<>();
-    private RecyclerView recyclerView;
-    private int pastVisiblesItems;
-    private CurrentNewsListAdapter currentNewsListAdapter;
-    private ViewGroup loadingView;
-
 
     public static CurrentNewsListFragment newInstance(){
         CurrentNewsListFragment newInstance = new CurrentNewsListFragment();
@@ -44,68 +41,33 @@ public class CurrentNewsListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setAdapter(new CurrentNewsListAdapter(newsList));
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.news);
+
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_party_list,null);
-        currentNewsListAdapter = new CurrentNewsListAdapter(newsList);
-        recyclerView = view.findViewById(R.id.recycler_view);
-        recyclerView.setAdapter(currentNewsListAdapter);
-        recyclerView.setNestedScrollingEnabled(true);
-        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0) //check for scroll down
-                {
-                    int visibleItemCount = mLayoutManager.getChildCount();
-                    int totalItemCount = mLayoutManager.getItemCount();
-                    pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition();
-
-                    if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                        if(!loading) loadNextPage();
-                    }
-
-                }
-            }
-        });
-        loadingView = view.findViewById(R.id.loading_view);
-        loadNextPage();
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        // If we already have content in the adapter, do not show the loading view
-        if(currentNewsListAdapter.getItemCount() > 0) loadingView.setVisibility(View.GONE);
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    private void loadNextPage(){
-        loading = true;
-
-        RikdagskollenApp.getInstance().getRiksdagenAPIManager().getCurrentNews(new CurrentNewsCallback() {
-
+    /**
+     * Load the next page and add it to the adapter when downloaded and parsed.
+     * Hides the loading view.
+     */
+    protected void loadNextPage(){
+        setLoadingMoreItems(true);
+        RikdagskollenApp.getInstance().getRiksdagenAPIManager().getCurrentNews( new CurrentNewsCallback() {
             @Override
             public void onNewsFetched(List<CurrentNews> currentNews) {
-                loading = false;
-                loadingView.setVisibility(View.GONE);
+                setShowLoadingView(false);
                 newsList.addAll(currentNews);
-                System.out.println(currentNews.get(0).getTitel());
-                currentNewsListAdapter.notifyDataSetChanged();
+                getAdapter().notifyDataSetChanged();
+                setLoadingMoreItems(false);
             }
 
             @Override
             public void onFail(VolleyError error) {
-                loading = false;
-                pageToLoad--;
+                setLoadingMoreItems(false);
+                decrementPage();
             }
         });
-        pageToLoad++;
+        incrementPage();
     }
 
 
