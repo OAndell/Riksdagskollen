@@ -1,14 +1,12 @@
 package oscar.riksdagskollen.Fragments;
 
 import android.support.v4.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -17,15 +15,11 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 
-import oscar.riksdagskollen.Activities.DocumentReaderActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.Callbacks.CurrentNewsCallback;
-import oscar.riksdagskollen.Utilities.Callbacks.PartyDocumentCallback;
 import oscar.riksdagskollen.Utilities.CurrentNewsListAdapter;
 import oscar.riksdagskollen.Utilities.JSONModels.CurrentNews;
-import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
-import oscar.riksdagskollen.Utilities.PartyListViewholderAdapter;
 
 
 /**

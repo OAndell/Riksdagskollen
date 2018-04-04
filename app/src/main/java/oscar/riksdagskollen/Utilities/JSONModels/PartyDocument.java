@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by gustavaaro on 2018-03-25.
  */
 
-public class PartyDocument implements Parcelable {
+public class PartyDocument extends Object implements Parcelable {
 
     String id;
     String undertitel;

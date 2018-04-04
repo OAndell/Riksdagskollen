@@ -1,6 +1,5 @@
 package oscar.riksdagskollen.Fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,10 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 
 import com.android.volley.VolleyError;
@@ -27,7 +24,8 @@ import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.Callbacks.PartyDocumentCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.Party;
 import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
-import oscar.riksdagskollen.Utilities.PartyListViewholderAdapter;
+import oscar.riksdagskollen.Utilities.JSONModels.RiksdagenViewHolderAdapter;
+import oscar.riksdagskollen.Utilities.JSONModels.PartyListViewholderAdapter;
 
 /**
  * Created by gustavaaro on 2018-03-26.
@@ -76,7 +74,7 @@ public class PartyListFragment extends Fragment {
         loadingView = view.findViewById(R.id.loading_view);
 
 
-        partyListAdapter = new PartyListViewholderAdapter(documentList, new PartyListViewholderAdapter.OnPartyDocumentClickListener() {
+        partyListAdapter = new PartyListViewholderAdapter( documentList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onPartyDocumentClickListener(PartyDocument document) {
                 Intent intent;
@@ -125,7 +123,7 @@ public class PartyListFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // If we already have content in the adapter, do not show the loading view
-        if(partyListAdapter.getDocumentCount() > 0) loadingView.setVisibility(View.GONE);
+        if(partyListAdapter.getItemCount() > 0) loadingView.setVisibility(View.GONE);
     }
 
 
