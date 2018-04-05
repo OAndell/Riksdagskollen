@@ -2,6 +2,7 @@ package oscar.riksdagskollen.Utilities;
 
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +68,9 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
         }
     }
 
-
+    /**
+     * Class for displaying individual items in the list.
+     */
     public class NewsViewHolder extends RecyclerView.ViewHolder{
         private TextView title;
         private TextView body;
@@ -86,20 +89,18 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
 
         public void bind(final CurrentNews item) {
             title.setText(item.getTitel());
-
-            try {
-                body.setText(new String(item.getSummary().getBytes("US-ASCII"), "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                System.out.println("Something went wrong with the text encoding ");
-                body.setText(item.getSummary());
-            }
-
+            body.setText(Html.fromHtml(item.getSummary()));
             date.setText(item.getPublicerad());
             imageText.setText(item.getImg_text());
             if(item.getImg_url() != null){
+                image.setVisibility(View.VISIBLE);
+                System.out.println("BILD FÖR :  " + item.getTitel());
                 image.setImageUrl("http://riksdagen.se" + item.getImg_url(),
                         RikdagskollenApp.getInstance().getRequestManager().getmImageLoader());
-             }
+            }
+            else {
+                image.setVisibility(View.GONE);
+            }
         }
     }
 
