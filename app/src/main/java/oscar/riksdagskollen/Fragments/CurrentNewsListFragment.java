@@ -67,7 +67,7 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
                 setLoadingMoreItems(false);
                 decrementPage();
             }
-        });
+        }, getPageToLoad());
         incrementPage();
     }
 

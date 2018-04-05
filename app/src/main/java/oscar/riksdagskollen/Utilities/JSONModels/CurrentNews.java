@@ -55,5 +55,7 @@ public class CurrentNews {
     }
 
 
-
+    public String getPublicerad() {
+        return publicerad;
+    }
 }

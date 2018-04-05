@@ -1,15 +1,21 @@
 package oscar.riksdagskollen.Utilities;
 
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.NetworkImageView;
+
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.JSONModels.CurrentNews;
 import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
 
@@ -34,7 +40,7 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(viewType == TYPE_ITEM) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.party_list_row, parent, false);
+                    .inflate(R.layout.news_list_row, parent, false);
             return new CurrentNewsListAdapter.NewsViewHolder(itemView);
         } else {
             FrameLayout frameLayout = new FrameLayout(parent.getContext());
@@ -63,14 +69,37 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
 
 
     public class NewsViewHolder extends RecyclerView.ViewHolder{
-        public TextView document;
+        private TextView title;
+        private TextView body;
+        private TextView date;
+        private TextView imageText;
+        private NetworkImageView image;
+
         public NewsViewHolder(View textView) {
             super(textView);
-            document = (TextView) textView.findViewById(R.id.document);
+            title = textView.findViewById(R.id.title);
+            body = textView.findViewById(R.id.body_text);
+            date = textView.findViewById(R.id.publicerad);
+            imageText = textView.findViewById(R.id.image_text);
+            image =  textView.findViewById(R.id.image);
         }
 
         public void bind(final CurrentNews item) {
-            document.setText(item.getTitel());
+            title.setText(item.getTitel());
+
+            try {
+                body.setText(new String(item.getSummary().getBytes("US-ASCII"), "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                System.out.println("Something went wrong with the text encoding ");
+                body.setText(item.getSummary());
+            }
+
+            date.setText(item.getPublicerad());
+            imageText.setText(item.getImg_text());
+            if(item.getImg_url() != null){
+                image.setImageUrl("http://riksdagen.se" + item.getImg_url(),
+                        RikdagskollenApp.getInstance().getRequestManager().getmImageLoader());
+             }
         }
     }
 
