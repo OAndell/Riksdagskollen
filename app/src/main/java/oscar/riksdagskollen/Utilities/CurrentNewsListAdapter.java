@@ -89,18 +89,27 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
 
         public void bind(final CurrentNews item) {
             title.setText(item.getTitel());
-            body.setText(Html.fromHtml(item.getSummary()));
+            body.setText(parseString(item.getSummary()));
             date.setText(item.getPublicerad());
-            imageText.setText(item.getImg_text());
+            imageText.setText(item.getImg_fotograf());
             if(item.getImg_url() != null){
                 image.setVisibility(View.VISIBLE);
-                System.out.println("BILD FÖR :  " + item.getTitel());
+                //Fix better default image... maybe
+                image.setDefaultImageResId(R.drawable.riksdagen_logo_yellow);
                 image.setImageUrl("http://riksdagen.se" + item.getImg_url(),
                         RikdagskollenApp.getInstance().getRequestManager().getmImageLoader());
             }
             else {
                 image.setVisibility(View.GONE);
             }
+        }
+
+        //Maybe do this better......
+        private String parseString(String s){
+            s = Html.fromHtml(s).toString();
+            s = s.replaceAll("&nbsp;"," ");
+            s = s.substring(3,s.length()-4); //remove <p> and </p>
+            return s;
         }
     }
 
