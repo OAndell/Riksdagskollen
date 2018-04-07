@@ -1,5 +1,7 @@
 package oscar.riksdagskollen.Fragments;
 
+import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +17,7 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 
+import oscar.riksdagskollen.Activities.NewsReaderActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.Callbacks.CurrentNewsCallback;
@@ -43,7 +46,14 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.news);
-        adapter = new CurrentNewsListAdapter(newsList);
+        adapter = new CurrentNewsListAdapter(newsList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Object document) {
+                Intent intent = new Intent(getContext(), NewsReaderActivity.class);
+                intent.putExtra("document", (CurrentNews) document);
+                startActivity(new Intent(getContext(), NewsReaderActivity.class));
+            }
+        });
 
     }
 

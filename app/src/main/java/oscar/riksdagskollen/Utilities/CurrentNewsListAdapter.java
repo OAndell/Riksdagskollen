@@ -27,13 +27,9 @@ import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
 public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
     private List<CurrentNews> newsList;
 
-    public CurrentNewsListAdapter(List<CurrentNews> items) {
-        super(items, new OnItemClickListener() {
-            @Override
-            public void onItemClick(Object document) {
-
-            }
-        });
+    public CurrentNewsListAdapter(List<CurrentNews> items, final OnItemClickListener listener) {
+        super(items, listener);
+        this.clickListener = listener;
         newsList = items;
     }
 
@@ -64,7 +60,7 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
             prepareHeaderFooter((HeaderFooterViewHolder) holder, v);
         }else {
             CurrentNews document = newsList.get(position);
-            ((CurrentNewsListAdapter.NewsViewHolder) holder).bind(document);
+            ((CurrentNewsListAdapter.NewsViewHolder) holder).bind(document, this.clickListener);
         }
     }
 
@@ -87,11 +83,12 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
             image =  textView.findViewById(R.id.image);
         }
 
-        public void bind(final CurrentNews item) {
+        public void bind(final CurrentNews item ,final OnItemClickListener listener) {
             title.setText(item.getTitel());
             body.setText(parseString(item.getSummary()));
             date.setText(item.getPublicerad());
             imageText.setText(item.getImg_fotograf());
+
             if(item.getImg_url() != null){
                 image.setVisibility(View.VISIBLE);
                 //Fix better default image... maybe
@@ -102,6 +99,12 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
             else {
                 image.setVisibility(View.GONE);
             }
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    listener.onItemClick(item);
+                }
+            });
         }
 
         //Maybe do this better......
