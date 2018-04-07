@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity
         initMenuOptions();
 
         // Mark News-fragment as selected at startup
+        onNavigationItemSelected(navigationView.getMenu().getItem(0).getSubMenu().getItem(0));
         navigationView.getMenu().getItem(0).getSubMenu().getItem(0).setChecked(true);
     }
 
@@ -105,7 +106,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.votes_nav:
                 break;
             case R.id.dec_nav:
-
                 break;
             case R.id.prot_nav:
                 break;
