@@ -61,14 +61,7 @@ public class NewsReaderActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 Document doc = Jsoup.parse(response);
-                System.out.println( doc.getElementsByClass("header-container"));
-                //doc.removeClass("header-container");
-                //doc.getElementsByClass("header-container").remove();
-               // doc.select("header-container").remove();
-                //doc.select("div>header-container").remove();
-                //TODO remove header and stuff
-
-                webView.loadData(doc.toString(), "text/html", "UTF-8" );
+                webView.loadData(doc.getElementsByClass("main-content").toString(), "text/html", "UTF-8" );
                 loadingView.setVisibility(View.GONE);
             }
 
