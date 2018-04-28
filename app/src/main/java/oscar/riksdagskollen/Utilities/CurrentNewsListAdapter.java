@@ -89,6 +89,7 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
             date.setText(item.getPublicerad());
             imageText.setText(item.getImg_fotograf());
 
+
             if(item.getImg_url() != null){
                 image.setVisibility(View.VISIBLE);
                 //Fix better default image... maybe

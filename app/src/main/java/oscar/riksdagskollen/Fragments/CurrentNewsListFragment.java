@@ -51,7 +51,7 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
             public void onItemClick(Object document) {
                 Intent intent = new Intent(getContext(), NewsReaderActivity.class);
                 intent.putExtra("document", (CurrentNews) document);
-                startActivity(new Intent(getContext(), NewsReaderActivity.class));
+                startActivity(intent);
             }
         });
 

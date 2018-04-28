@@ -127,4 +127,10 @@ public class RiksdagenAPIManager {
     }
 
 
+    public void getNewsHTML(String url, StringRequestCallback callback) {
+        String fullURL = "http://riksdagen.se" + url;
+        requestManager.downloadHtmlPage(fullURL,callback);
+    }
+
+
 }
