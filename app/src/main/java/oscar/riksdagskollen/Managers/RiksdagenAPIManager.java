@@ -14,12 +14,14 @@ import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.Callbacks.CurrentNewsCallback;
 import oscar.riksdagskollen.Utilities.Callbacks.DecisionsCallback;
 import oscar.riksdagskollen.Utilities.Callbacks.PartyDocumentCallback;
+import oscar.riksdagskollen.Utilities.Callbacks.ProtocolCallback;
 import oscar.riksdagskollen.Utilities.Callbacks.RepresentativeCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.CurrentNews;
 import oscar.riksdagskollen.Utilities.JSONModels.DecisionDocument;
 import oscar.riksdagskollen.Utilities.JSONModels.Party;
 import oscar.riksdagskollen.Utilities.Callbacks.JSONRequestCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
+import oscar.riksdagskollen.Utilities.JSONModels.Protocol;
 import oscar.riksdagskollen.Utilities.JSONModels.Representative;
 import oscar.riksdagskollen.Utilities.JSONModels.StringRequestCallback;
 
@@ -184,6 +186,28 @@ public class RiksdagenAPIManager {
     public void getNewsHTML(String url, StringRequestCallback callback) {
         String fullURL = "http://riksdagen.se" + url;
         requestManager.downloadHtmlPage(fullURL,callback);
+    }
+
+
+    public void getProtocols(final ProtocolCallback callback,  int page){
+        String subURL = "/dokumentlista/?sok=&doktyp=prot&sort=datum&sortorder=desc&utformat=json" + "&p=" + page;;
+        requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+            @Override
+            public void onRequestSuccess(JSONObject response) {
+                try {
+                    JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
+                    Protocol[] protocols = gson.fromJson(jsonDocuments.toString(),Protocol[].class);
+                    callback.onProtocolsFetched(Arrays.asList(protocols));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onRequestFail(VolleyError error) {
+                callback.onFail(error);
+            }
+        });
     }
 
 
