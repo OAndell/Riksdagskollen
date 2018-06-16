@@ -26,6 +26,7 @@ import oscar.riksdagskollen.Utilities.JSONModels.StringRequestCallback;
 
 /**
  * Created by oscar on 2018-04-07.
+ * TODO This class is currently unused but should be used to display an in app news readers
  */
 
 public class NewsReaderActivity extends AppCompatActivity {
@@ -54,8 +55,6 @@ public class NewsReaderActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptEnabled(true);
 
 
-        //TODO ?????? WHY IS SUMMARY  URL?
-        System.out.println(document.getSummary());
         final RikdagskollenApp app = RikdagskollenApp.getInstance();
         app.getRiksdagenAPIManager().getNewsHTML(document.getSummary(), new StringRequestCallback() {
             @Override

@@ -3,12 +3,10 @@ package oscar.riksdagskollen.Utilities.JSONModels;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.json.JSONObject;
-
-import java.net.URL;
-
 /**
  * Created by oscar on 2018-03-28.
+ * To find real url:
+ * CurrentNews -> CurrentNewsLinkList -> CurrentNewsLinks
  */
 
 public class CurrentNews implements Parcelable {
@@ -16,13 +14,13 @@ public class CurrentNews implements Parcelable {
     private String titel;
     private String publicerad;
     private String summary;
-    private String url;
+    private String url; //This is often not the correct url
+    //use CurrentNews -> CurrentNewsLinkList -> CurrentNewsLinks -> url
     private String img_url;
     private String img_text;
     private String img_fotograf;
     private String img_tumnagel_url;
-    private JSONObject sokdata;
-    private JSONObject linklista;
+    private CurrentNewsLinkList linklista;
 
     protected CurrentNews(Parcel in) {
         id = in.readString();
@@ -34,6 +32,8 @@ public class CurrentNews implements Parcelable {
         img_text = in.readString();
         img_fotograf = in.readString();
         img_tumnagel_url = in.readString();
+        this.linklista = in.readParcelable(CurrentNewsLinkList.class.getClassLoader());
+
     }
 
     public static final Creator<CurrentNews> CREATOR = new Creator<CurrentNews>() {
@@ -76,12 +76,8 @@ public class CurrentNews implements Parcelable {
         return img_tumnagel_url;
     }
 
-    public JSONObject getSokdata() {
-        return sokdata;
-    }
-
-    public JSONObject getLinklista() {
-        return linklista;
+    public CurrentNewsLinkList getLinklista(){
+       return linklista;
     }
 
     public String getUrl(){
@@ -104,5 +100,6 @@ public class CurrentNews implements Parcelable {
         dest.writeString(this.publicerad);
         dest.writeString(this.url);
         dest.writeString(this.summary);
+        dest.writeParcelable(this.linklista, i);
     }
 }

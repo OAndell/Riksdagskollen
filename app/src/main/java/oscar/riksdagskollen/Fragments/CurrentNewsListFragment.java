@@ -1,6 +1,7 @@
 package oscar.riksdagskollen.Fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -49,9 +50,14 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
         adapter = new CurrentNewsListAdapter(newsList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {
+                /*
+                TODO now the mobile browser us used. It may be good to create an in app viewer.
                 Intent intent = new Intent(getContext(), NewsReaderActivity.class);
                 intent.putExtra("document", (CurrentNews) document);
-                startActivity(intent);
+                startActivity(intent);*/
+                CurrentNews newsDoc = (CurrentNews) document;
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://riksdagen.se" + newsDoc.getLinklista().getLink().getUrl()));
+                startActivity(browserIntent);
             }
         });
 
@@ -59,7 +65,7 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
 
     /**
      * Load the next page and add it to the adapter when downloaded and parsed.
-     * Hides the loading view.
+     * Hides the loading view.s
      */
     protected void loadNextPage(){
         setLoadingMoreItems(true);
