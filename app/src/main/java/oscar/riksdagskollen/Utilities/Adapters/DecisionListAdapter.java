@@ -2,7 +2,6 @@ package oscar.riksdagskollen.Utilities.Adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.transition.TransitionManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spannable;
@@ -13,13 +12,20 @@ import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.VolleyError;
 
 import java.util.List;
 
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.Utilities.Callbacks.DecisionsCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.DecisionDocument;
 
 /**
@@ -29,10 +35,12 @@ import oscar.riksdagskollen.Utilities.JSONModels.DecisionDocument;
 public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
     private List<DecisionDocument> decisionDocuments;
     private Context context;
+    private RecyclerView recyclerView;
 
-    public DecisionListAdapter(List<DecisionDocument> items, final OnItemClickListener listener) {
+    public DecisionListAdapter(List<DecisionDocument> items, final OnItemClickListener listener, RecyclerView recyclerView) {
         super(items, listener);
         this.clickListener = listener;
+        this.recyclerView = recyclerView;
         decisionDocuments = items;
     }
 
@@ -112,7 +120,29 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
             fullBet.setText(textButtonBuilder("Läs fullständigt betänkande:  " + item.getRm() + ":" + item.getBeteckning()));
             searchVote.setText(textButtonBuilder("Sök efter votering"));
 
+            fullBet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RikdagskollenApp.getInstance().getRiksdagenAPIManager().getDecisionWithId(
+                            new DecisionsCallback() {
+                                @Override
+                                public void onDecisionsFetched(List<DecisionDocument> decisions) {
+                                    if(decisions.size() != 0){
+                                        Toast.makeText(context,"Kunde inte hitta betänkande.", Toast.LENGTH_LONG).show();
+                                    } else {
 
+                                    }
+                                }
+
+                                @Override
+                                public void onFail(VolleyError error) {
+
+                                }
+                            },
+                            item.getDok_id()
+                    );
+                }
+            });
 
             if (item.isExpanded()){
                 body.setVisibility(View.VISIBLE);
@@ -134,10 +164,10 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
 
                     listener.onItemClick(item);
                     if (item.isExpanded()) {
-                        collapse(true);
+                        expandItemView(false);
                         item.setExpanded(false);
                     } else {
-                        collapse(false);
+                        expandItemView(true);
                         item.setExpanded(true);
                     }
                 }
@@ -166,20 +196,84 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
         }
 
 
-        void collapse(boolean collapse) {
-            TransitionManager.beginDelayedTransition((ViewGroup) itemView.getParent());
-            if (collapse){
-                body.setVisibility(View.GONE);
-                fullBet.setVisibility(View.GONE);
-                searchVote.setVisibility(View.GONE);
+        void expandItemView(boolean expand) {
+
+            final int originalHeight;
+            final int newHeight;
+
+            if (expand){
+                //body.setVisibility(View.GONE);
+                //fullBet.setVisibility(View.GONE);
+                //searchVote.setVisibility(View.GONE);
+                expand(fullBet);
+                expand(searchVote);
+                expand(body);
             }
             else {
-                body.setVisibility(View.VISIBLE);
-                fullBet.setVisibility(View.VISIBLE);
-                searchVote.setVisibility(View.VISIBLE);
+                collapse(body);
+                collapse(fullBet);
+                collapse(searchVote);
+                //body.setVisibility(View.VISIBLE);
+                //fullBet.setVisibility(View.VISIBLE);
+                //searchVote.setVisibility(View.VISIBLE);
             }
+
+            //if(itemView.getParent() != null) TransitionManager.beginDelayedTransition((ViewGroup) itemView.getParent(), new AutoTransition().setDuration(125));
+
         }
 
 
+    }
+
+
+    public void expand(final View v) {
+        v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        final int targtetHeight = v.getMeasuredHeight();
+
+        v.getLayoutParams().height = 0;
+        v.setVisibility(View.VISIBLE);
+        Animation a = new Animation()
+        {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                v.getLayoutParams().height = interpolatedTime == 1
+                        ? ViewGroup.LayoutParams.WRAP_CONTENT
+                        : (int)(targtetHeight * interpolatedTime);
+                v.requestLayout();
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        a.setDuration(125);
+        v.startAnimation(a);
+    }
+
+    public void collapse(final View v) {
+        final int initialHeight = v.getMeasuredHeight();
+
+        Animation a = new Animation()
+        {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                if(interpolatedTime == 1){
+                    v.setVisibility(View.GONE);
+                }else{
+                    v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                    v.requestLayout();
+                }
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        a.setDuration(125);
+        v.startAnimation(a);
     }
 }

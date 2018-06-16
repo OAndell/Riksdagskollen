@@ -114,6 +114,10 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
 
     }
 
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
+
     protected void setShowLoadingView(boolean loading){
         if(loading) loadingView.setVisibility(View.VISIBLE);
         else loadingView.setVisibility(View.GONE);

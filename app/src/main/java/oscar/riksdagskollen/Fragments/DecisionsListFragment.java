@@ -44,7 +44,7 @@ public class DecisionsListFragment extends RiksdagenAutoLoadingListFragment {
             public void onItemClick(Object document) {
 
             }
-        });
+        }, getRecyclerView());
 
     }
 
