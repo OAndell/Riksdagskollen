@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.Utilities.RiksdagenViewHolderAdapter;
+import oscar.riksdagskollen.Utilities.Adapters.RiksdagenViewHolderAdapter;
 
 /**
  * Created by gustavaaro on 2018-04-04.

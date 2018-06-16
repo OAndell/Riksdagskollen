@@ -16,6 +16,7 @@ import com.android.volley.VolleyError;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import oscar.riksdagskollen.Managers.RiksdagenAPIManager;
 import oscar.riksdagskollen.R;
@@ -60,7 +61,11 @@ public class NewsReaderActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 Document doc = Jsoup.parse(response);
-                webView.loadData(doc.getElementsByClass("main-content").toString(), "text/html", "UTF-8" );
+                Elements elements = doc.getElementsByClass("main-content");
+                Document newdoc = Jsoup.parse(elements.toString());
+                newdoc.head().append("<meta name=\"viewport\" content='width=device-width, initial-scale=2.0,text/html, charset='utf-8'>\n");
+
+                webView.loadData(newdoc.toString(), "text/html", "UTF-8" );
                 loadingView.setVisibility(View.GONE);
             }
 

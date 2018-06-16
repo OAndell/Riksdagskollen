@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Utilities;
+package oscar.riksdagskollen.Utilities.Adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,7 +11,6 @@ import java.util.List;
 
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
-import oscar.riksdagskollen.Utilities.RiksdagenViewHolderAdapter;
 
 /**
  * Created by shelbot on 2018-03-27.

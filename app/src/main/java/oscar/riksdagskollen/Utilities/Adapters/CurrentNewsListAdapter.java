@@ -1,24 +1,20 @@
-package oscar.riksdagskollen.Utilities;
+package oscar.riksdagskollen.Utilities.Adapters;
 
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.JSONModels.CurrentNews;
-import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
 
 /**
  * Created by oscar on 2018-03-29.

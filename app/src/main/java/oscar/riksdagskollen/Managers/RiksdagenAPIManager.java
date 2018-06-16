@@ -12,9 +12,11 @@ import java.util.Arrays;
 
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.Callbacks.CurrentNewsCallback;
+import oscar.riksdagskollen.Utilities.Callbacks.DecisionsCallback;
 import oscar.riksdagskollen.Utilities.Callbacks.PartyDocumentCallback;
 import oscar.riksdagskollen.Utilities.Callbacks.RepresentativeCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.CurrentNews;
+import oscar.riksdagskollen.Utilities.JSONModels.DecisionDocument;
 import oscar.riksdagskollen.Utilities.JSONModels.Party;
 import oscar.riksdagskollen.Utilities.Callbacks.JSONRequestCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
@@ -65,7 +67,7 @@ public class RiksdagenAPIManager {
      * Get the current news (Aktuellt)
      * @param callback callback which a List of currentNews is returned
      */
-    public void  getCurrentNews(final CurrentNewsCallback callback, int page){
+    public void getCurrentNews(final CurrentNewsCallback callback, int page){
         String subURL = "/dokumentlista/?avd=aktuellt&sort=datum&sortorder=desc&lang=sv&cmskategori=startsida&utformat=json"
                 + "&p=" + page;
         requestManager.doGetRequest(subURL, new JSONRequestCallback() {
@@ -75,6 +77,32 @@ public class RiksdagenAPIManager {
                     JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
                     CurrentNews[] news = gson.fromJson(jsonDocuments.toString(),CurrentNews[].class);
                     callback.onNewsFetched(Arrays.asList(news));
+                }catch (JSONException e){
+                    e.printStackTrace();
+                    callback.onFail(new VolleyError("Failed to parse JSON"));
+                }
+            }
+
+            @Override
+            public void onRequestFail(VolleyError error) {
+                callback.onFail(error);
+            }
+        });
+    }
+
+    /**
+     * Get decisions
+     * @param callback callback which a List of the latest decisions is returned
+     */
+    public void getDecisions(final DecisionsCallback callback, int page){
+        String subURL = "/dokumentlista/?doktyp=bet&sort=datum&sortorder=desc&dokstat=beslutade&utformat=json" + "&p=" + page;
+        requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+            @Override
+            public void onRequestSuccess(JSONObject response) {
+                try {
+                    JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
+                    DecisionDocument[] decisionDocuments = gson.fromJson(jsonDocuments.toString(),DecisionDocument[].class);
+                    callback.onDecisionsFetched(Arrays.asList(decisionDocuments));
                 }catch (JSONException e){
                     e.printStackTrace();
                     callback.onFail(new VolleyError("Failed to parse JSON"));

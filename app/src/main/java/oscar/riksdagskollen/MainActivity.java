@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import oscar.riksdagskollen.Activities.DocumentReaderActivity;
 import oscar.riksdagskollen.Fragments.CurrentNewsListFragment;
 import oscar.riksdagskollen.Activities.MotionActivity;
+import oscar.riksdagskollen.Fragments.DecisionsListFragment;
 import oscar.riksdagskollen.Fragments.PartyListFragment;
 import oscar.riksdagskollen.Utilities.JSONModels.Party;
 
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     CurrentNewsListFragment currentNewsListFragment;
+    DecisionsListFragment decisionsFragment;
     PartyListFragment sPartyFragment;
     PartyListFragment mPartyFragment;
     PartyListFragment sdPartyFragment;
@@ -41,7 +43,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -106,6 +107,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.votes_nav:
                 break;
             case R.id.dec_nav:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,decisionsFragment).commit();
                 break;
             case R.id.prot_nav:
                 break;
@@ -144,6 +146,7 @@ public class MainActivity extends AppCompatActivity
 
     private void initMenuOptions(){
         currentNewsListFragment = CurrentNewsListFragment.newInstance();
+        decisionsFragment = DecisionsListFragment.newInstance();
     }
 
     // Create all of the PartyFragments with new Party objects

@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Utilities;
+package oscar.riksdagskollen.Utilities.Adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
