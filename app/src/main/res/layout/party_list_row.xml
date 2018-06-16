@@ -4,7 +4,7 @@
     android:layout_width="match_parent">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view"
+        android:dok_id="@+dok_id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -23,13 +23,13 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/dok_typ"
+                android:dok_id="@+dok_id/dok_typ"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Motion"/>
 
             <TextView
-                android:id="@+id/document"
+                android:dok_id="@+dok_id/document"
                 android:layout_marginTop="8dp"
                 android:layout_gravity="start"
                 android:textColor="@color/primaryColor"
@@ -40,14 +40,14 @@
                 android:layout_width="wrap_content" />
 
             <TextView
-                android:id="@+id/författare"
+                android:dok_id="@+dok_id/författare"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="av Jimmy Åkesson (SD)"
                 android:textColor="@color/primaryColor"
                 />
             <TextView
-                android:id="@+id/publicerad"
+                android:dok_id="@+dok_id/publicerad"
                 android:layout_gravity="left"
                 android:layout_weight="0.3"
                 android:layout_width="wrap_content"

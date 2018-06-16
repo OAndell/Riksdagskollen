@@ -1,23 +1,21 @@
 package oscar.riksdagskollen.Utilities.Adapters;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
-import android.support.transition.ChangeBounds;
+import android.graphics.Typeface;
 import android.support.transition.TransitionManager;
-import android.support.transition.TransitionSet;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.List;
 
@@ -76,35 +74,64 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
     public class DecisionView extends RecyclerView.ViewHolder {
         private TextView title;
         private TextView body;
-        private TextView date;
-        private TextView imageText;
-        private NetworkImageView image;
+        private TextView justDate;
+        private TextView debateDate;
+        private TextView decisionDate;
+        private ImageView expandIcon;
+
+        private TextView fullBet;
+        private TextView searchVote;
 
         private View itemView;
+
+        int rotationAngle = 0;
+
 
 
         public DecisionView(final View view) {
             super(view);
-
             this.itemView = view;
             title = view.findViewById(R.id.title);
             body = view.findViewById(R.id.body_text);
-            date = view.findViewById(R.id.publicerad);
-            imageText = view.findViewById(R.id.image_text);
-            image = view.findViewById(R.id.image);
+            expandIcon = view.findViewById(R.id.expand_icon);
+            justDate = view.findViewById(R.id.justering_date);
+            debateDate = view.findViewById(R.id.debatt_date);
+            decisionDate = view.findViewById(R.id.beslut_date);
+            fullBet = view.findViewById(R.id.full_bet_link);
+            searchVote = view.findViewById(R.id.search_vote);
         }
 
         public void bind(final DecisionDocument item, final OnItemClickListener listener) {
             title.setText(item.getNotisrubrik());
-            date.setText(item.getPublicerad());
+            body.setText(Html.fromHtml(item.getNotis()));
+            System.out.println(item.getNotisrubrik());
+            System.out.println(item.getDebattdag());
+            justDate.setText(dateStringBuilder("Justering: ",item.getJusteringsdag()));
+            debateDate.setText(dateStringBuilder("Debatt: ", item.getDebattdag()));
+            decisionDate.setText(dateStringBuilder("Beslut: ", item.getBeslutsdag()));
+            fullBet.setText(textButtonBuilder("Läs fullständigt betänkande:  " + item.getRm() + ":" + item.getBeteckning()));
+            searchVote.setText(textButtonBuilder("Sök efter votering"));
+
+
+
             if (item.isExpanded()){
                 body.setVisibility(View.VISIBLE);
+                fullBet.setVisibility(View.VISIBLE);
+                searchVote.setVisibility(View.VISIBLE);
+                expandIcon.setRotation(180);
             } else {
                 body.setVisibility(View.GONE);
+                fullBet.setVisibility(View.GONE);
+                searchVote.setVisibility(View.GONE);
+                expandIcon.setRotation(0    );
             }
             itemView.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View v) {
+                    rotationAngle = rotationAngle == 0 ? 180 : 0;  //toggle
+                    expandIcon.animate().rotation(rotationAngle).setDuration(200).start();
+
                     listener.onItemClick(item);
                     if (item.isExpanded()) {
                         collapse(true);
@@ -115,13 +142,42 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
                     }
                 }
             });
+
+        }
+
+        private SpannableString textButtonBuilder(String text){
+            SpannableString txtSpannable= new SpannableString(text);
+            StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
+            txtSpannable.setSpan(boldSpan, 0, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            txtSpannable.setSpan(new UnderlineSpan(),0,text.length(),0);
+            return txtSpannable;
+        }
+
+        private SpannableStringBuilder dateStringBuilder(String entity, String value){
+            SpannableStringBuilder builder = new SpannableStringBuilder();
+            SpannableString txtSpannable= new SpannableString(entity);
+            if (value == null) value = "";
+            StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
+            txtSpannable.setSpan(boldSpan, 0, entity.length()-2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            builder.append(txtSpannable);
+            builder.append(value);
+            return builder;
         }
 
 
         void collapse(boolean collapse) {
             TransitionManager.beginDelayedTransition((ViewGroup) itemView.getParent());
-            if (collapse) body.setVisibility(View.GONE);
-            else body.setVisibility(View.VISIBLE);
+            if (collapse){
+                body.setVisibility(View.GONE);
+                fullBet.setVisibility(View.GONE);
+                searchVote.setVisibility(View.GONE);
+            }
+            else {
+                body.setVisibility(View.VISIBLE);
+                fullBet.setVisibility(View.VISIBLE);
+                searchVote.setVisibility(View.VISIBLE);
+            }
         }
 
 

@@ -4,7 +4,7 @@
     android:layout_width="match_parent">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view"
+        android:dok_id="@+dok_id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -23,7 +23,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/title"
+                android:dok_id="@+dok_id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
@@ -34,13 +34,13 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/body_text"
+                android:dok_id="@+dok_id/body_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text='"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."' />
+                android:text='"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim dok_id est laborum."' />
 
             <com.android.volley.toolbox.NetworkImageView
-                android:id="@+id/image"
+                android:dok_id="@+dok_id/image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:elevation="3dp"
@@ -49,13 +49,13 @@
                 android:adjustViewBounds="true"/>
 
             <TextView
-                android:id="@+id/image_text"
+                android:dok_id="@+dok_id/image_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="(bildtext)" />
 
             <TextView
-                android:id="@+id/publicerad"
+                android:dok_id="@+dok_id/publicerad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"

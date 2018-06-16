@@ -22,7 +22,7 @@
         <WebView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/news_reader_webview">
+            android:dok_id="@+dok_id/news_reader_webview">
         </WebView>
     </ScrollView>
 
