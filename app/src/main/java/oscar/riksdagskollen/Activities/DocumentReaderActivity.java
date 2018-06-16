@@ -114,8 +114,6 @@ public class DocumentReaderActivity extends AppCompatActivity{
         titleTV.setText(document.getTitel());
         authorTV.setText(String.format("av %s", document.getUndertitel()));
 
-        //TODO: ta ut den riktiga mottagaren ur texten och sätt den här
-        recipientTV.setText("Till en person");
         body.setText(docBody);
     }
 

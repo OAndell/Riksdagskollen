@@ -19,12 +19,14 @@ import oscar.riksdagskollen.Fragments.CurrentNewsListFragment;
 import oscar.riksdagskollen.Activities.MotionActivity;
 import oscar.riksdagskollen.Fragments.DecisionsListFragment;
 import oscar.riksdagskollen.Fragments.PartyListFragment;
+import oscar.riksdagskollen.Fragments.ProtocolListFragment;
 import oscar.riksdagskollen.Utilities.JSONModels.Party;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     CurrentNewsListFragment currentNewsListFragment;
+    ProtocolListFragment protFragment;
     DecisionsListFragment decisionsFragment;
     PartyListFragment sPartyFragment;
     PartyListFragment mPartyFragment;
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -110,6 +113,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,decisionsFragment).commit();
                 break;
             case R.id.prot_nav:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,protFragment).commit();
                 break;
             case R.id.s_nav:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,sPartyFragment).commit();
@@ -146,6 +150,8 @@ public class MainActivity extends AppCompatActivity
 
     private void initMenuOptions(){
         currentNewsListFragment = CurrentNewsListFragment.newInstance();
+        protFragment = ProtocolListFragment.newInstance();
+
         decisionsFragment = DecisionsListFragment.newInstance();
     }
 
