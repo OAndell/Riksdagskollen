@@ -32,13 +32,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:dok_id="@+dok_id/doc_title_layout"
+                    android:id="@+id/doc_title_layout"
                     android:gravity="center"
                     android:padding="16dp"
                     android:orientation="vertical">
 
                     <TextView
-                        android:dok_id="@+dok_id/act_doc_reader_title"
+                        android:id="@+id/act_doc_reader_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -48,7 +48,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:dok_id="@+dok_id/act_doc_reader_author"
+                        android:id="@+id/act_doc_reader_author"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -74,7 +74,7 @@
             <WebView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:dok_id="@+dok_id/webview">
+                android:id="@+id/webview">
             </WebView>
 
             <TextView
@@ -93,7 +93,7 @@
                 android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:dok_id="@+dok_id/act_doc_reader_portrait_container"
+                    android:id="@+id/act_doc_reader_portrait_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp"

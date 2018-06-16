@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <com.android.volley.toolbox.NetworkImageView
-        android:dok_id="@+dok_id/intressent_portait"
+        android:id="@+id/intressent_portait"
         android:layout_width="100dp"
         android:layout_height="90dp"
         android:elevation="3dp"/>
@@ -15,7 +15,7 @@
     <TextView
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:dok_id="@+dok_id/intressent_name"
+        android:id="@+id/intressent_name"
         android:gravity="center"
         android:textColor="@color/primaryColor"
         android:textSize="15sp"

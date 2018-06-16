@@ -4,7 +4,7 @@
     android:layout_width="match_parent">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:dok_id="@+dok_id/card_view"
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -30,7 +30,7 @@
                 android:weightSum="10">
 
                 <TextView
-                    android:dok_id="@+dok_id/title"
+                    android:id="@+id/title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -44,7 +44,7 @@
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="25dp"
-                    android:dok_id="@+dok_id/expand_icon"
+                    android:id="@+id/expand_icon"
                     android:layout_weight="1"
                     android:src="@drawable/ic_expand"/>
 
@@ -52,7 +52,7 @@
 
 
             <TextView
-                android:dok_id="@+dok_id/body_text"
+                android:id="@+id/body_text"
                 android:visibility="visible"
                 android:textColor="@color/secondaryTextColor"
                 android:layout_marginTop="5dp"
@@ -63,7 +63,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:dok_id="@+dok_id/full_bet_link"
+                android:id="@+id/full_bet_link"
                 android:layout_marginTop="15dp"
                 android:textSize="15sp"
                 android:textColor="@color/secondaryTextColor"
@@ -75,7 +75,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:dok_id="@+dok_id/search_vote"
+                android:id="@+id/search_vote"
                 android:layout_marginTop="15dp"
                 android:textSize="15sp"
                 android:textColor="@color/secondaryTextColor"
@@ -84,14 +84,14 @@
                 />
 
 
-        <com.google.android.flexbox.FlexboxLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_marginTop="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:alignContent="space_between"
-            app:alignItems="flex_start" >
+            <com.google.android.flexbox.FlexboxLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:alignContent="space_between"
+                app:alignItems="flex_start" >
 
                 <TextView
                     android:layout_width="match_parent"
@@ -100,7 +100,7 @@
                     android:textSize="14sp"
                     android:textStyle="normal"
                     android:text="Justering: 2018-06-13"
-                    android:dok_id="@+dok_id/justering_date"/>
+                    android:id="@+id/justering_date"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -109,7 +109,7 @@
                     android:textStyle="normal"
                     android:textColor="@color/secondaryTextColor"
                     android:text="Debatt: 2018-06-11"
-                    android:dok_id="@+dok_id/debatt_date"/>
+                    android:id="@+id/debatt_date"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -118,8 +118,8 @@
                     android:textSize="14sp"
                     android:textStyle="normal"
                     android:text="Beslut: 2018-06-13"
-                    android:dok_id="@+dok_id/beslut_date"/>
-        </com.google.android.flexbox.FlexboxLayout>
+                    android:id="@+id/beslut_date"/>
+            </com.google.android.flexbox.FlexboxLayout>
 
 
         </LinearLayout>

@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:dok_id="@+dok_id/open_in_web"
+    <item android:id="@+id/open_in_web"
         android:title="Öppna i webbläsare"
         android:icon="@drawable/ic_open_in_browser_24dp"
         app:showAsAction="always"/>

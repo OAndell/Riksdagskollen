@@ -5,20 +5,20 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:dok_id="@+dok_id/news_nav"
+                    android:id="@+id/news_nav"
                     android:icon="@drawable/rlogo"
                     android:title="@string/news" />
                 <item
-                    android:dok_id="@+dok_id/votes_nav"
+                    android:id="@+id/votes_nav"
                     android:icon="@drawable/votlogo"
                     android:title="@string/votes" />
                 <item
-                    android:dok_id="@+dok_id/dec_nav"
+                    android:id="@+id/dec_nav"
                     android:icon="@drawable/betlogo"
                     android:title="@string/decisions"/>
 
                 <item
-                    android:dok_id="@+dok_id/prot_nav"
+                    android:id="@+id/prot_nav"
                     android:icon="@drawable/protlogo"
                     android:title="@string/prot"/>
                 </group>
@@ -30,38 +30,38 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:dok_id="@+dok_id/s_nav"
+                    android:id="@+id/s_nav"
                     android:icon="@drawable/slogo"
                     android:title="@string/party_s" />
                 <item
-                    android:dok_id="@+dok_id/m_nav"
+                    android:id="@+id/m_nav"
                     android:icon="@drawable/mlogo"
                     android:title="@string/party_m" />
                 <item
-                    android:dok_id="@+dok_id/sd_nav"
+                    android:id="@+id/sd_nav"
                     android:icon="@drawable/sdlogo"
                     android:title="@string/party_sd" />
                 <item
-                    android:dok_id="@+dok_id/mp_nav"
+                    android:id="@+id/mp_nav"
                     android:icon="@drawable/mplogo"
                     android:title="@string/party_mp" />
                 <item
-                    android:dok_id="@+dok_id/c_nav"
+                    android:id="@+id/c_nav"
                     android:icon="@drawable/clogo"
                     android:title="@string/party_c"
                     />
                 <item
-                    android:dok_id="@+dok_id/v_nav"
+                    android:id="@+id/v_nav"
                     android:icon="@drawable/vlogo"
                     android:title="@string/party_v"
                     />
                 <item
-                    android:dok_id="@+dok_id/l_nav"
+                    android:id="@+id/l_nav"
                     android:icon="@drawable/llogo"
                     android:title="@string/party_l"
                     />
                 <item
-                    android:dok_id="@+dok_id/kd_nav"
+                    android:id="@+id/kd_nav"
                     android:icon="@drawable/kdlogo"
                     android:title="@string/party_kd"
                     />
@@ -74,7 +74,7 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:dok_id="@+dok_id/about_nav"
+                    android:id="@+id/about_nav"
                     android:icon="@drawable/abouticon"
                     android:title="@string/about" />
             </group>
