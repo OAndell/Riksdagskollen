@@ -18,6 +18,44 @@ h4 {
     color: #1b506f;
 }
 
+.Innehllsfrteckning {
+    margin-top: 1.2em;
+}
+
+.Avsnittsrubrik {
+    margin-top: 1.2em;
+}
+
+.tSidrubrikJA {
+    font-size: 1.1em;
+    color: #1b506f;
+    font-weight: bold;
+    padding-top: 10px;
+}
+
+.DokumentRubrik{
+   font-size: 1.2em;
+   color: #1b506f;
+   font-weight: bold;
+}
+
+.Rubrik1Dokumentinformation {
+    font-size: 1.2em;
+    color: #1b506f;
+    font-weight: bold;
+}
+
+.Hyperlink {
+    text-decoration: underline;
+}
+
+p {
+    display: block;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+    margin-left: 0;
+    margin-right: 0;
+}
 
 li {
     font-size: 1.0em;
@@ -38,6 +76,7 @@ body {
     margin-left: 20px;
     margin-right: 20px;
     margin-top -10px;
+    padding: 0;
     overflow-x:hidden;
 }
 

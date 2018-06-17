@@ -50,37 +50,55 @@
 
             </LinearLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/bet_name"
+                android:textSize="14sp"
+                android:textColor="@color/secondaryTextColor"
+                android:textStyle="bold"
+                android:text="Betänkande 20_sad"/>
+
 
             <TextView
                 android:id="@+id/body_text"
                 android:visibility="visible"
                 android:textColor="@color/secondaryTextColor"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="7dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text='"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim dok_id est laborum."' />
 
-            <TextView
+            <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/full_bet_link"
-                android:layout_marginTop="15dp"
-                android:textSize="15sp"
-                android:textColor="@color/secondaryTextColor"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/loading_view_backgrond"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:gravity="center_vertical|start"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                android:shadowDy="0"
+                android:textColor="@color/primaryTextColor"
                 android:text="Läs fullständigt betänkande: FKJG-293"
-                android:textStyle="bold"
                 />
 
 
-            <TextView
+            <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/search_vote"
-                android:layout_marginTop="15dp"
-                android:textSize="15sp"
-                android:textColor="@color/secondaryTextColor"
+                android:background="@drawable/loading_view_backgrond"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textSize="14sp"
+                android:gravity="start|center_vertical"
+                android:textColor="@color/primaryTextColor"
                 android:text="Sök efter votering"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 />
 
 

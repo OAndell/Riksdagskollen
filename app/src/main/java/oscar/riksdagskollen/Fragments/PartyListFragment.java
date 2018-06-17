@@ -56,7 +56,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment {
                 if(((PartyDocument) document).isMotion()){
                     intent = new Intent(getContext(), MotionActivity.class);
                 } else {
-                    intent = new Intent(getContext(), DocumentReaderActivity.class);
+                    intent = new Intent(getContext(), MotionActivity.class);
                 }
                 intent.putExtra("document",((PartyDocument)document));
                 startActivity(intent);

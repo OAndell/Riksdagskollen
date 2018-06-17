@@ -18,12 +18,21 @@ public class DecisionDocument implements Parcelable {
     private String justeringsdag;
     private String reservationer;
     private String typ;
+    private String dokument_url_html;
+    private String titel;
+
+    public String getDokument_url_html() {
+        return dokument_url_html;
+    }
 
     private String rm;
     private String beteckning;
 
     private boolean isExpanded = false;
 
+    public String getTitel() {
+        return titel;
+    }
 
     public String getDebattdag() {
         return debattdag;
@@ -77,6 +86,9 @@ public class DecisionDocument implements Parcelable {
         isExpanded = expanded;
     }
 
+    public DecisionDocument() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -93,6 +105,8 @@ public class DecisionDocument implements Parcelable {
         dest.writeString(this.justeringsdag);
         dest.writeString(this.reservationer);
         dest.writeString(this.typ);
+        dest.writeString(this.dokument_url_html);
+        dest.writeString(this.titel);
         dest.writeString(this.rm);
         dest.writeString(this.beteckning);
         dest.writeByte(this.isExpanded ? (byte) 1 : (byte) 0);
@@ -108,6 +122,8 @@ public class DecisionDocument implements Parcelable {
         this.justeringsdag = in.readString();
         this.reservationer = in.readString();
         this.typ = in.readString();
+        this.dokument_url_html = in.readString();
+        this.titel = in.readString();
         this.rm = in.readString();
         this.beteckning = in.readString();
         this.isExpanded = in.readByte() != 0;

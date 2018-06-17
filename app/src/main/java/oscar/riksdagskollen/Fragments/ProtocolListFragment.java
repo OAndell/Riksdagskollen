@@ -45,7 +45,8 @@ public class ProtocolListFragment extends RiksdagenAutoLoadingListFragment {
                 startActivity(browserIntent);*/
 
                 Intent intent = new Intent(getContext(), ProtocolReaderActivity.class);
-                intent.putExtra("document", (Protocol) document);
+                intent.putExtra("url", ((Protocol) document).getDokument_url_html());
+                intent.putExtra("title",((Protocol) document).getTitel());
                 startActivity(intent);
             }
         });

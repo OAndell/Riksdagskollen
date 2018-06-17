@@ -63,13 +63,18 @@ public class MotionActivity extends AppCompatActivity {
         context = this;
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Motion");
+        toolbar.setTitle(document.getDokumentnamn());
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        titleTV.setText(document.getTitel());
-        authorTV.setText(document.getUndertitel());
+        if(!document.isMotion()){
+            titleTV.setVisibility(View.GONE);
+            authorTV.setVisibility(View.GONE);
+            findViewById(R.id.divider).setVisibility(View.GONE);
+        } else {
+            titleTV.setText(document.getTitel());
+            authorTV.setText(document.getUndertitel());
+        }
 
         WebViewClient webViewClient = new CustomWebViewClient();
 

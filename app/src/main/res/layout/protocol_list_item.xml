@@ -3,7 +3,7 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent">
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,37 +34,24 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/body_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
                 android:layout_marginTop="3dp"
+                android:maxLines="9"
+                android:ellipsize="end"
+                android:id="@+id/summary"
+                android:textColor="@color/secondaryTextColor"
                 android:textSize="14sp"
-                android:text='"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."' />
-
-            <com.android.volley.toolbox.NetworkImageView
-                android:id="@+id/image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:elevation="3dp"
-                android:layout_marginTop="8dp"
-
-                android:adjustViewBounds="true"/>
+                android:text="Riksdagens snabbprotokoll\n 2017/18:133\n Fredagen den 15 juni\n Kl. 09.0012.49\n Det justerade protokollet beräknas utkomma om tre veckor. 1  Justering av protokoll\n Protokollet för den 25 maj justerades. 2  Anmälan om återtagande av plats i riksdagen\n Talmannen meddelade att Hannah Bergstedt S återtagit sin plats i riksdagen"/>
 
             <TextView
-                android:id="@+id/image_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="(bildtext)" />
-
-            <TextView
-                android:id="@+id/publicerad"
+                android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_marginTop="16dp"
                 android:layout_weight="0.3"
-                android:text="Publicerad: 2017-08-19"
+                android:text="2017-08-19"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="14sp"
                 android:textStyle="normal" />

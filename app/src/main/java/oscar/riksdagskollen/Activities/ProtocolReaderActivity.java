@@ -1,19 +1,30 @@
 package oscar.riksdagskollen.Activities;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 
 import com.android.volley.VolleyError;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.JSONModels.Protocol;
@@ -30,9 +41,13 @@ public class ProtocolReaderActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_reader);
-        Protocol document = (Protocol) getIntent().getParcelableExtra("document");
-
+        String url = getIntent().getStringExtra("url");
+        String title = getIntent().getStringExtra("title");
         final ViewGroup loadingView = findViewById(R.id.loading_view);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle(title);
 
         final WebView webView = findViewById(R.id.news_reader_webview);
         webView.setWebChromeClient(new WebChromeClient(){
@@ -51,7 +66,7 @@ public class ProtocolReaderActivity extends AppCompatActivity {
 
 
         final RikdagskollenApp app = RikdagskollenApp.getInstance();
-        app.getRequestManager().downloadHtmlPage("http:"+ document.getDokument_url_html(), new StringRequestCallback() {
+        app.getRequestManager().downloadHtmlPage("http:"+ url, new StringRequestCallback() {
             @Override
             public void onResponse(String response) {
                 Document doc = Jsoup.parse(response);
@@ -65,11 +80,14 @@ public class ProtocolReaderActivity extends AppCompatActivity {
                 doc.select("div>hr.sidhuvud_linje").remove();
                 doc.select("head>style").remove();
                 doc.select("body>div>br").remove();
+                doc.select("body>div>style").remove();
+                doc.select("body>style").remove();
 
 
                 //Clear default styling
-                String result  = doc.toString().replaceAll("class=\\\"[A-Öa-ö0-9]+\\\"","");
-                result = result.replaceAll("style=\"[A-Öa-ö-_:;\\s0-9.%']+\"","");
+                //String result  = doc.toString().replaceAll("class=\\\"[A-Öa-ö0-9]+\\\"","");
+                String result = doc.toString().replaceAll("style=\"[A-Öa-ö-_:;\\s0-9.%'#:space:/]+\"","");
+                result = result.replaceAll("&nbsp;","");
                 webView.loadDataWithBaseURL("file:///android_asset/", result, "text/html", "UTF-8", null);
 
             }
@@ -80,6 +98,36 @@ public class ProtocolReaderActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    // For debug purposes in the future
+    /*
+    private void writeToFile(String data) {
+
+            try {
+                File myFile = new File(Environment.getExternalStorageDirectory() + "/config.html");
+                myFile.createNewFile();
+                FileOutputStream fOut = new FileOutputStream(myFile);
+                OutputStreamWriter myOutWriter =new OutputStreamWriter(fOut);
+                myOutWriter.append(data);
+                myOutWriter.close();
+                fOut.close();
+                Toast.makeText(this,"Done writing SD 'mysdfile.txt'", Toast.LENGTH_SHORT).show();
+            }
+            catch (Exception e)
+            {
+                Toast.makeText(this, e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+
+    }*/
 
 
 }

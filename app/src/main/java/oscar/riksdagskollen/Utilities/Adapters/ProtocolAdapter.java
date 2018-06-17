@@ -1,6 +1,7 @@
 package oscar.riksdagskollen.Utilities.Adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,7 @@ public class ProtocolAdapter  extends RiksdagenViewHolderAdapter{
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(viewType == TYPE_ITEM) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.news_list_row, parent, false);
+                    .inflate(R.layout.protocol_list_item, parent, false);
             return new ProtocolAdapter.ProtocolViewHolder(itemView);
         } else {
             FrameLayout frameLayout = new FrameLayout(parent.getContext());
@@ -63,26 +64,20 @@ public class ProtocolAdapter  extends RiksdagenViewHolderAdapter{
      */
     public class ProtocolViewHolder extends RecyclerView.ViewHolder{
         private TextView title;
-        private TextView body;
+        private TextView summary;
         private TextView date;
-        private TextView imageText;
-        private NetworkImageView image;
 
-        public ProtocolViewHolder(View textView) {
-            super(textView);
-            title = textView.findViewById(R.id.title);
-            body = textView.findViewById(R.id.body_text);
-            date = textView.findViewById(R.id.publicerad);
-            imageText = textView.findViewById(R.id.image_text);
-            image =  textView.findViewById(R.id.image);
+        public ProtocolViewHolder(View itemView) {
+            super(itemView);
+            title = itemView.findViewById(R.id.title);
+            date = itemView.findViewById(R.id.date);
+            summary = itemView.findViewById(R.id.summary);
         }
 
         public void bind(final Protocol item ,final OnItemClickListener listener) {
             title.setText(item.getTitel());
-            body.setVisibility(View.GONE);
-            date.setVisibility(View.GONE);
-            imageText.setVisibility(View.GONE);
-
+            date.setText(item.getDatum());
+            summary.setText(String.format("%s%s",item.getSummary(),"..."));
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {

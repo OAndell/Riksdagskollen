@@ -1,6 +1,7 @@
 package oscar.riksdagskollen.Utilities.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,10 +25,12 @@ import com.android.volley.VolleyError;
 
 import java.util.List;
 
+import oscar.riksdagskollen.Activities.ProtocolReaderActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.Callbacks.DecisionsCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.DecisionDocument;
+import oscar.riksdagskollen.Utilities.JSONModels.Protocol;
 
 /**
  * Created by oscar on 2018-03-29.
@@ -85,10 +89,11 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
         private TextView justDate;
         private TextView debateDate;
         private TextView decisionDate;
+        private TextView betName;
         private ImageView expandIcon;
 
-        private TextView fullBet;
-        private TextView searchVote;
+        private Button fullBet;
+        private Button searchVote;
 
         private View itemView;
 
@@ -106,19 +111,21 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
             debateDate = view.findViewById(R.id.debatt_date);
             decisionDate = view.findViewById(R.id.beslut_date);
             fullBet = view.findViewById(R.id.full_bet_link);
+            betName = view.findViewById(R.id.bet_name);
             searchVote = view.findViewById(R.id.search_vote);
         }
 
         public void bind(final DecisionDocument item, final OnItemClickListener listener) {
-            title.setText(item.getNotisrubrik());
+            title.setText(item.getTitel());
+            betName.setText("Betänkande:  " + item.getRm() + ":" + item.getBeteckning());
             body.setText(Html.fromHtml(item.getNotis()));
             System.out.println(item.getNotisrubrik());
             System.out.println(item.getDebattdag());
             justDate.setText(dateStringBuilder("Justering: ",item.getJusteringsdag()));
             debateDate.setText(dateStringBuilder("Debatt: ", item.getDebattdag()));
             decisionDate.setText(dateStringBuilder("Beslut: ", item.getBeslutsdag()));
-            fullBet.setText(textButtonBuilder("Läs fullständigt betänkande:  " + item.getRm() + ":" + item.getBeteckning()));
-            searchVote.setText(textButtonBuilder("Sök efter votering"));
+            fullBet.setText("Läs fullständigt betänkande");
+            searchVote.setText("Sök efter votering");
 
             fullBet.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -127,10 +134,13 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
                             new DecisionsCallback() {
                                 @Override
                                 public void onDecisionsFetched(List<DecisionDocument> decisions) {
-                                    if(decisions.size() != 0){
+                                    if(decisions.isEmpty()){
                                         Toast.makeText(context,"Kunde inte hitta betänkande.", Toast.LENGTH_LONG).show();
                                     } else {
-
+                                        Intent intent = new Intent(context, ProtocolReaderActivity.class);
+                                        intent.putExtra("url", item.getDokument_url_html());
+                                        intent.putExtra("title",item.getNotisrubrik());
+                                        context.startActivity(intent);
                                     }
                                 }
 
@@ -159,9 +169,6 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
 
                 @Override
                 public void onClick(View v) {
-                    rotationAngle = rotationAngle == 0 ? 180 : 0;  //toggle
-                    expandIcon.animate().rotation(rotationAngle).setDuration(200).start();
-
                     listener.onItemClick(item);
                     if (item.isExpanded()) {
                         expandItemView(false);
@@ -170,17 +177,12 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
                         expandItemView(true);
                         item.setExpanded(true);
                     }
+
+                    rotationAngle = item.isExpanded() ? 180 : 0;  //toggle
+                    expandIcon.animate().rotation(rotationAngle).setDuration(200).start();
                 }
             });
 
-        }
-
-        private SpannableString textButtonBuilder(String text){
-            SpannableString txtSpannable= new SpannableString(text);
-            StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
-            txtSpannable.setSpan(boldSpan, 0, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            txtSpannable.setSpan(new UnderlineSpan(),0,text.length(),0);
-            return txtSpannable;
         }
 
         private SpannableStringBuilder dateStringBuilder(String entity, String value){
@@ -198,27 +200,44 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
 
         void expandItemView(boolean expand) {
 
-            final int originalHeight;
-            final int newHeight;
-
             if (expand){
-                //body.setVisibility(View.GONE);
-                //fullBet.setVisibility(View.GONE);
-                //searchVote.setVisibility(View.GONE);
-                expand(fullBet);
-                expand(searchVote);
-                expand(body);
+                expand(body, new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        fullBet.setVisibility(View.VISIBLE);
+                        searchVote.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
             }
             else {
-                collapse(body);
-                collapse(fullBet);
-                collapse(searchVote);
-                //body.setVisibility(View.VISIBLE);
-                //fullBet.setVisibility(View.VISIBLE);
-                //searchVote.setVisibility(View.VISIBLE);
-            }
+                collapse(body, new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                        fullBet.setVisibility(View.GONE);
+                        searchVote.setVisibility(View.GONE);
+                    }
 
-            //if(itemView.getParent() != null) TransitionManager.beginDelayedTransition((ViewGroup) itemView.getParent(), new AutoTransition().setDuration(125));
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+            }
 
         }
 
@@ -226,7 +245,7 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
     }
 
 
-    public void expand(final View v) {
+    private void expand(final View v, Animation.AnimationListener listener) {
         v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         final int targtetHeight = v.getMeasuredHeight();
 
@@ -249,10 +268,11 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
         };
 
         a.setDuration(125);
+        a.setAnimationListener(listener);
         v.startAnimation(a);
     }
 
-    public void collapse(final View v) {
+    private void collapse(final View v, Animation.AnimationListener listener) {
         final int initialHeight = v.getMeasuredHeight();
 
         Animation a = new Animation()
@@ -274,6 +294,7 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
         };
 
         a.setDuration(125);
+        a.setAnimationListener(listener);
         v.startAnimation(a);
     }
 }

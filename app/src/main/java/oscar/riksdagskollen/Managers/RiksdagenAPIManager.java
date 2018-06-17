@@ -178,7 +178,7 @@ public class RiksdagenAPIManager {
         }else if(document.isMotion()){
             requestManager.downloadHtmlPage("http:" + document.getDokument_url_html(), callback);
         } else {
-            requestManager.doStringGetRequest("http:" + document.getDokument_url_text(),callback);
+            requestManager.doStringGetRequest("http:" + document.getDokument_url_html(),callback);
         }
     }
 
