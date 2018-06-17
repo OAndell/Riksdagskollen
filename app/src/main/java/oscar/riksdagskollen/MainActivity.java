@@ -20,6 +20,7 @@ import oscar.riksdagskollen.Activities.MotionActivity;
 import oscar.riksdagskollen.Fragments.DecisionsListFragment;
 import oscar.riksdagskollen.Fragments.PartyListFragment;
 import oscar.riksdagskollen.Fragments.ProtocolListFragment;
+import oscar.riksdagskollen.Fragments.VoteListFragment;
 import oscar.riksdagskollen.Utilities.JSONModels.Party;
 
 public class MainActivity extends AppCompatActivity
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity
     CurrentNewsListFragment currentNewsListFragment;
     ProtocolListFragment protFragment;
     DecisionsListFragment decisionsFragment;
+    VoteListFragment voteListFragment;
     PartyListFragment sPartyFragment;
     PartyListFragment mPartyFragment;
     PartyListFragment sdPartyFragment;
@@ -101,6 +103,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,currentNewsListFragment).commit();
                 break;
             case R.id.votes_nav:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,voteListFragment).commit();
                 break;
             case R.id.dec_nav:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,decisionsFragment).commit();
@@ -144,7 +147,7 @@ public class MainActivity extends AppCompatActivity
     private void initMenuOptions(){
         currentNewsListFragment = CurrentNewsListFragment.newInstance();
         protFragment = ProtocolListFragment.newInstance();
-
+        voteListFragment = VoteListFragment.newInstance();
         decisionsFragment = DecisionsListFragment.newInstance();
     }
 

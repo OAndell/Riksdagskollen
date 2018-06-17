@@ -16,6 +16,7 @@ import oscar.riksdagskollen.Utilities.Callbacks.DecisionsCallback;
 import oscar.riksdagskollen.Utilities.Callbacks.PartyDocumentCallback;
 import oscar.riksdagskollen.Utilities.Callbacks.ProtocolCallback;
 import oscar.riksdagskollen.Utilities.Callbacks.RepresentativeCallback;
+import oscar.riksdagskollen.Utilities.Callbacks.VoteCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.CurrentNews;
 import oscar.riksdagskollen.Utilities.JSONModels.DecisionDocument;
 import oscar.riksdagskollen.Utilities.JSONModels.Party;
@@ -24,6 +25,7 @@ import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
 import oscar.riksdagskollen.Utilities.JSONModels.Protocol;
 import oscar.riksdagskollen.Utilities.JSONModels.Representative;
 import oscar.riksdagskollen.Utilities.JSONModels.StringRequestCallback;
+import oscar.riksdagskollen.Utilities.JSONModels.Vote;
 
 /**
  * Created by gustavaaro on 2018-03-25.
@@ -209,6 +211,28 @@ public class RiksdagenAPIManager {
             }
         });
     }
+
+    public void getVotes(final VoteCallback callback, int page){
+        String subURL = "/dokumentlista/?sok=&doktyp=votering&sort=datum&sortorder=desc&utformat=json" + "&p=" + page;;
+        requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+            @Override
+            public void onRequestSuccess(JSONObject response) {
+                try {
+                    JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
+                    Vote[] protocols = gson.fromJson(jsonDocuments.toString(),Vote[].class);
+                    callback.onVotesFetched(Arrays.asList(protocols));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onRequestFail(VolleyError error) {
+                callback.onFail(error);
+            }
+        });
+    }
+
 
 
 }

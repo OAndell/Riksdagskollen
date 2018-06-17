@@ -31,6 +31,7 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".Activities.NewsReaderActivity" />
         <activity android:name=".Activities.ProtocolReaderActivity" />
+        <activity android:name=".Activities.VoteActivity" />
     </application>
 
 </manifest>
