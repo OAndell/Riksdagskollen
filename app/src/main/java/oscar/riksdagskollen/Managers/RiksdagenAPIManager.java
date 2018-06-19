@@ -2,6 +2,7 @@ package oscar.riksdagskollen.Managers;
 
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,6 +19,8 @@ import oscar.riksdagskollen.Utilities.Callbacks.ProtocolCallback;
 import oscar.riksdagskollen.Utilities.Callbacks.RepresentativeCallback;
 import oscar.riksdagskollen.Utilities.Callbacks.VoteCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.CurrentNews;
+import oscar.riksdagskollen.Utilities.JSONModels.CurrentNewsLink;
+import oscar.riksdagskollen.Utilities.JSONModels.CurrentNewsLinkList;
 import oscar.riksdagskollen.Utilities.JSONModels.DecisionDocument;
 import oscar.riksdagskollen.Utilities.JSONModels.Party;
 import oscar.riksdagskollen.Utilities.Callbacks.JSONRequestCallback;
@@ -78,6 +81,9 @@ public class RiksdagenAPIManager {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(CurrentNewsLink.class, new CurrentNewsLink.CurrentNewsLinkDeserializer())
+                            .create();
                     JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
                     CurrentNews[] news = gson.fromJson(jsonDocuments.toString(),CurrentNews[].class);
                     callback.onNewsFetched(Arrays.asList(news));
