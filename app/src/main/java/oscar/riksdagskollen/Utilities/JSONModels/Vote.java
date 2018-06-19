@@ -37,6 +37,10 @@ public class Vote implements Parcelable {
         return summary;
     }
 
+    public String getNotis() {
+        return notis;
+    }
+
     private String id;
     private String publicerad;
     private String undertitel;
@@ -44,6 +48,9 @@ public class Vote implements Parcelable {
     private String dokument_url_html;
     private String titel;
     private String summary;
+
+
+    private String notis;
 
 
     protected Vote(Parcel in) {
@@ -54,6 +61,7 @@ public class Vote implements Parcelable {
         dokument_url_html = in.readString();
         titel = in.readString();
         summary = in.readString();
+        notis = in.readString();
 
     }
 
@@ -66,6 +74,7 @@ public class Vote implements Parcelable {
         dest.writeString(dokument_url_html);
         dest.writeString(titel);
         dest.writeString(summary);
+        dest.writeString(notis);
     }
 
     @Override
