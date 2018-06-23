@@ -4,15 +4,19 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.jsoup.Jsoup;
@@ -40,6 +44,9 @@ public class VoteActivity extends AppCompatActivity{
         setContentView(R.layout.activity_vote);
         Vote document = getIntent().getParcelableExtra("document");
 
+        TextView title = findViewById(R.id.vote_title);
+        title.setText(document.getTitel());
+
         final RikdagskollenApp app = oscar.riksdagskollen.RikdagskollenApp.getInstance();
         app.getRequestManager().downloadHtmlPage("http:" + document.getDokument_url_html(), new StringRequestCallback() {
             @Override
@@ -62,45 +69,71 @@ public class VoteActivity extends AppCompatActivity{
 
     private void setUpGraph(VoteResults voteResults){
         BarData data = new BarData(getDataSet(voteResults.getTotal()));
-        data.setValueTextSize(10f);
+        data.setValueTextSize(14f);
         data.setValueTextColor(Color.BLACK);
 
         HorizontalBarChart chart =  findViewById(R.id.chart);
         chart.setData(data);
         chart.setDescription(null);
-        chart.getXAxis().setDrawGridLines(false);
-        chart.getXAxis().setDrawLabels(false);
+
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setDrawLabels(false);
+
+        //TODO borde gå och lösa
+        /*xAxis.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return getXAxisValues().get((int)value);
+            }
+        });*/
+
         chart.getAxisLeft().setDrawLabels(false);
         chart.getAxisLeft().setDrawGridLines(false);
         chart.getAxisRight().setDrawLabels(false);
         chart.getAxisRight().setDrawGridLines(false);
         chart.getLegend().setEnabled(false);
-        chart.setDrawValueAboveBar(false);
+        chart.setDrawValueAboveBar(true);
         chart.setFitBars(true);
+        chart.setDrawBorders(true);
         chart.invalidate();
+
     }
 
 
     private BarDataSet getDataSet(int[] totalVotes){
         ArrayList<Integer> colors = new ArrayList<>();
+        //TODO colors
         colors.add(Color.GRAY);
-        colors.add(Color.GREEN);
-        colors.add(Color.BLUE);
+        colors.add(Color.BLACK);
         colors.add(Color.RED);
+        colors.add(Color.GREEN);
 
         ArrayList<BarEntry> entries = new ArrayList();
-        entries.add(new BarEntry(1f, totalVotes[0]));
-        entries.add(new BarEntry(2f, totalVotes[1]));
-        entries.add(new BarEntry(3f, totalVotes[2]));
-        entries.add(new BarEntry(4f, totalVotes[3]));;
+        entries.add(new BarEntry(1, totalVotes[3]));
+        entries.add(new BarEntry(2, totalVotes[2]));
+        entries.add(new BarEntry(3, totalVotes[1]));
+        entries.add(new BarEntry(4, totalVotes[0]));;
 
-        BarDataSet dataset = new BarDataSet(entries,"Röster");
+        BarDataSet dataset = new BarDataSet(entries,"");
 
         dataset.setColors(colors);
         dataset.setDrawValues(true);
 
         return dataset;
 
+    }
+
+    private ArrayList<String> getXAxisValues() {
+        ArrayList<String> xAxis = new ArrayList<>();
+        xAxis.add("Frånvarande");
+        xAxis.add("Avstående");
+        xAxis.add("Nej");
+        xAxis.add("Ja");
+        xAxis.add("");
+
+        return xAxis;
     }
 
     class VoteResults{

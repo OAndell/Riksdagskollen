@@ -85,7 +85,7 @@ public class RiksdagenAPIManager {
                             .registerTypeAdapter(CurrentNewsLink.class, new CurrentNewsLink.CurrentNewsLinkDeserializer())
                             .create();
                     JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
-                    CurrentNews[] news = gson.fromJson(jsonDocuments.toString(),CurrentNews[].class);
+                    CurrentNews[] news = gson.fromJson(jsonDocuments.toString(), CurrentNews[].class);
                     callback.onNewsFetched(Arrays.asList(news));
                 }catch (JSONException e){
                     e.printStackTrace();

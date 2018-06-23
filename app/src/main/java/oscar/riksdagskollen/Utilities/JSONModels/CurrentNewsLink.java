@@ -23,6 +23,7 @@ public class CurrentNewsLink  implements Parcelable {
 
     protected CurrentNewsLink(Parcel in) {
         url = in.readString();
+
     }
 
     public static final Creator<CurrentNewsLink> CREATOR = new Creator<CurrentNewsLink>() {
