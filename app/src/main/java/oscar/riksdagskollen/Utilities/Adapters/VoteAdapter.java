@@ -79,7 +79,9 @@ public class VoteAdapter  extends RiksdagenViewHolderAdapter{
 
         public void bind(final Vote item ,final OnItemClickListener listener) {
             title.setText(item.getTitel());
-            body.setText("TODOß");
+            //TODO
+            body.setText("Not much to show here. Make expandeble like decision??");
+
             date.setVisibility(View.GONE);
             imageText.setVisibility(View.GONE);
 

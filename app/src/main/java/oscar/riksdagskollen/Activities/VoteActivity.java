@@ -17,6 +17,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.jsoup.Jsoup;
@@ -38,6 +39,7 @@ import oscar.riksdagskollen.Utilities.JSONModels.Vote;
 
 public class VoteActivity extends AppCompatActivity{
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +53,16 @@ public class VoteActivity extends AppCompatActivity{
         app.getRequestManager().downloadHtmlPage("http:" + document.getDokument_url_html(), new StringRequestCallback() {
             @Override
             public void onResponse(String response) {
-                setUpGraph(new VoteResults(response));
+                VoteResults results = new VoteResults(response);
+                setupMainGraph(results);
+                ArrayList<HorizontalBarChart> partyCharts = new ArrayList<>();
+                partyCharts.add((HorizontalBarChart) findViewById(R.id.chartS));
+                partyCharts.add((HorizontalBarChart) findViewById(R.id.chartM));
+                partyCharts.add((HorizontalBarChart) findViewById(R.id.chartSD));
+                partyCharts.add((HorizontalBarChart) findViewById(R.id.chartMP));
+                partyCharts.add((HorizontalBarChart) findViewById(R.id.chartC));
+                String[] parties = {"S","M","SD","MP","C","V","L","KD"};
+                setupPartyGraph(results, partyCharts, parties);
             }
 
             @Override
@@ -67,7 +78,7 @@ public class VoteActivity extends AppCompatActivity{
 
     }
 
-    private void setUpGraph(VoteResults voteResults){
+    private void setupMainGraph(VoteResults voteResults){
         BarData data = new BarData(getDataSet(voteResults.getTotal()));
         data.setValueTextSize(14f);
         data.setValueTextColor(Color.BLACK);
@@ -76,12 +87,16 @@ public class VoteActivity extends AppCompatActivity{
         chart.setData(data);
         chart.setDescription(null);
 
+        //X-axis settings
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setDrawLabels(false);
+        xAxis.setAxisLineWidth(2);
+        xAxis.setAxisLineColor(Color.BLACK);
 
-        //TODO borde gå och lösa
+
+        //TODO borde gå och lösa, fast kanske är bättre att göra som vi gör nu
         /*xAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
@@ -91,14 +106,16 @@ public class VoteActivity extends AppCompatActivity{
 
         chart.getAxisLeft().setDrawLabels(false);
         chart.getAxisLeft().setDrawGridLines(false);
+        chart.getAxisLeft().setDrawAxisLine(false);
         chart.getAxisRight().setDrawLabels(false);
         chart.getAxisRight().setDrawGridLines(false);
+        chart.getAxisRight().setDrawAxisLine(false);
+
         chart.getLegend().setEnabled(false);
         chart.setDrawValueAboveBar(true);
         chart.setFitBars(true);
-        chart.setDrawBorders(true);
+        //chart.setDrawBorders(true); //Looks nice to have this on, but values get outside the border
         chart.invalidate();
-
     }
 
 
@@ -117,14 +134,13 @@ public class VoteActivity extends AppCompatActivity{
         entries.add(new BarEntry(4, totalVotes[0]));;
 
         BarDataSet dataset = new BarDataSet(entries,"");
-
         dataset.setColors(colors);
         dataset.setDrawValues(true);
-
         return dataset;
 
     }
 
+    //TODO not used mabye remove
     private ArrayList<String> getXAxisValues() {
         ArrayList<String> xAxis = new ArrayList<>();
         xAxis.add("Frånvarande");
@@ -134,6 +150,67 @@ public class VoteActivity extends AppCompatActivity{
         xAxis.add("");
 
         return xAxis;
+    }
+
+
+    private void setupPartyGraph(VoteResults voteResults, ArrayList<HorizontalBarChart> charts, String[] parties){
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(Color.GREEN);
+        colors.add(Color.RED);
+        colors.add(Color.BLACK);
+        colors.add(Color.GRAY);
+
+        for (int i = 0; i < charts.size(); i++) {
+            HorizontalBarChart chart =  charts.get(i);
+
+            ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
+
+            int[] partyResults = voteResults.getPartyVotes(parties[i]);
+            yVals1.add(new BarEntry(0, new float[]{partyResults[0], partyResults[1], partyResults[2], partyResults[3]}));
+
+            BarDataSet set1;
+
+            if (charts.get(i).getData() != null &&
+                    chart.getData().getDataSetCount() > 0) {
+                set1 = (BarDataSet) chart.getData().getDataSetByIndex(0);
+                set1.setValues(yVals1);
+                chart.getData().notifyDataChanged();
+                chart.notifyDataSetChanged();
+            } else {
+                set1 = new BarDataSet(yVals1, "");
+                set1.setDrawIcons(false);
+                set1.setColors(colors);
+                ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+                dataSets.add(set1);
+
+                BarData data = new BarData(dataSets);
+                data.setValueTextColor(Color.BLACK);
+
+                chart.setData(data);
+            }
+
+            chart.getXAxis().setDrawAxisLine(false);
+            chart.getXAxis().setDrawGridLines(false);
+            chart.getXAxis().setDrawLabels(false);
+
+            chart.getAxisLeft().setDrawLabels(false);
+            chart.getAxisLeft().setDrawGridLines(false);
+            chart.getAxisLeft().setDrawAxisLine(false);
+            chart.getAxisRight().setDrawLabels(false);
+            chart.getAxisRight().setDrawGridLines(false);
+            chart.getAxisRight().setDrawAxisLine(false);
+
+
+
+            chart.getLegend().setEnabled(false);
+            chart.setDrawValueAboveBar(false);
+            chart.setFitBars(true);
+            chart.setDescription(null);
+            chart.invalidate();
+
+        }
+
+
     }
 
     class VoteResults{
