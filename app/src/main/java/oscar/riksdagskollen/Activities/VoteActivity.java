@@ -3,6 +3,7 @@ package oscar.riksdagskollen.Activities;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
@@ -61,6 +62,9 @@ public class VoteActivity extends AppCompatActivity{
                 partyCharts.add((HorizontalBarChart) findViewById(R.id.chartSD));
                 partyCharts.add((HorizontalBarChart) findViewById(R.id.chartMP));
                 partyCharts.add((HorizontalBarChart) findViewById(R.id.chartC));
+                partyCharts.add((HorizontalBarChart) findViewById(R.id.chartV));
+                partyCharts.add((HorizontalBarChart) findViewById(R.id.chartL));
+                partyCharts.add((HorizontalBarChart) findViewById(R.id.chartKD));
                 String[] parties = {"S","M","SD","MP","C","V","L","KD"};
                 setupPartyGraph(results, partyCharts, parties);
             }
@@ -72,8 +76,8 @@ public class VoteActivity extends AppCompatActivity{
 
 
         });
-
-
+        //TODO download and set body texts
+        TextView textBody = findViewById(R.id.body_text);
 
 
     }
@@ -93,7 +97,7 @@ public class VoteActivity extends AppCompatActivity{
         xAxis.setDrawGridLines(false);
         xAxis.setDrawLabels(false);
         xAxis.setAxisLineWidth(2);
-        xAxis.setAxisLineColor(Color.BLACK);
+        xAxis.setAxisLineColor(ContextCompat.getColor(this, R.color.primaryColor));
 
 
         //TODO borde gå och lösa, fast kanske är bättre att göra som vi gör nu
@@ -114,6 +118,8 @@ public class VoteActivity extends AppCompatActivity{
         chart.getLegend().setEnabled(false);
         chart.setDrawValueAboveBar(true);
         chart.setFitBars(true);
+        chart.setTouchEnabled(false); //Remove ability to zoom n stuff
+
         //chart.setDrawBorders(true); //Looks nice to have this on, but values get outside the border
         chart.invalidate();
     }
@@ -121,11 +127,11 @@ public class VoteActivity extends AppCompatActivity{
 
     private BarDataSet getDataSet(int[] totalVotes){
         ArrayList<Integer> colors = new ArrayList<>();
-        //TODO colors
-        colors.add(Color.GRAY);
-        colors.add(Color.BLACK);
-        colors.add(Color.RED);
-        colors.add(Color.GREEN);
+        //TODO decide colors
+        colors.add(ContextCompat.getColor(this, R.color.absentVoteColor));
+        colors.add(ContextCompat.getColor(this, R.color.refrainVoteColor));
+        colors.add(ContextCompat.getColor(this, R.color.noVoteColor));
+        colors.add(ContextCompat.getColor(this, R.color.yesVoteColor));
 
         ArrayList<BarEntry> entries = new ArrayList();
         entries.add(new BarEntry(1, totalVotes[3]));
@@ -148,46 +154,38 @@ public class VoteActivity extends AppCompatActivity{
         xAxis.add("Nej");
         xAxis.add("Ja");
         xAxis.add("");
-
         return xAxis;
     }
 
 
     private void setupPartyGraph(VoteResults voteResults, ArrayList<HorizontalBarChart> charts, String[] parties){
         ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(Color.GREEN);
-        colors.add(Color.RED);
-        colors.add(Color.BLACK);
-        colors.add(Color.GRAY);
+        colors.add(ContextCompat.getColor(this, R.color.yesVoteColor));
+        colors.add(ContextCompat.getColor(this, R.color.noVoteColor));
+        colors.add(ContextCompat.getColor(this, R.color.refrainVoteColor));
+        colors.add(ContextCompat.getColor(this, R.color.absentVoteColor));
 
         for (int i = 0; i < charts.size(); i++) {
             HorizontalBarChart chart =  charts.get(i);
 
-            ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
+            ArrayList<BarEntry> yVals1 = new ArrayList<>();
 
             int[] partyResults = voteResults.getPartyVotes(parties[i]);
             yVals1.add(new BarEntry(0, new float[]{partyResults[0], partyResults[1], partyResults[2], partyResults[3]}));
 
-            BarDataSet set1;
 
-            if (charts.get(i).getData() != null &&
-                    chart.getData().getDataSetCount() > 0) {
-                set1 = (BarDataSet) chart.getData().getDataSetByIndex(0);
-                set1.setValues(yVals1);
-                chart.getData().notifyDataChanged();
-                chart.notifyDataSetChanged();
-            } else {
-                set1 = new BarDataSet(yVals1, "");
-                set1.setDrawIcons(false);
-                set1.setColors(colors);
-                ArrayList<IBarDataSet> dataSets = new ArrayList<>();
-                dataSets.add(set1);
+            BarDataSet set1 = new BarDataSet(yVals1, "");
+            set1.setDrawIcons(false);
+            set1.setColors(colors);
+            ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+            dataSets.add(set1);
 
-                BarData data = new BarData(dataSets);
-                data.setValueTextColor(Color.BLACK);
+            BarData data = new BarData(dataSets);
+            //data.setValueTextColor(Color.BLACK);
+            //TODO find a nice way of showing values, something with onclick seems best
+            data.setDrawValues(false);
 
-                chart.setData(data);
-            }
+            chart.setData(data);
 
             chart.getXAxis().setDrawAxisLine(false);
             chart.getXAxis().setDrawGridLines(false);
@@ -200,32 +198,31 @@ public class VoteActivity extends AppCompatActivity{
             chart.getAxisRight().setDrawGridLines(false);
             chart.getAxisRight().setDrawAxisLine(false);
 
-
-
             chart.getLegend().setEnabled(false);
             chart.setDrawValueAboveBar(false);
             chart.setFitBars(true);
             chart.setDescription(null);
             chart.invalidate();
-
         }
-
-
     }
 
+    /**
+     * Class for parsing and getting the voteresults.
+     */
     class VoteResults{
 
         private HashMap<String,int[]> voteResults = new HashMap<>();
 
         public VoteResults(String response) {
             Document doc = Jsoup.parse(response);
-
             //This is probably a really bad way of doing this.
             String allVotesString = doc.getElementsByClass("vottabell").text().split("Frånvarande")[1];
             String allVotesArr[] = allVotesString.split(" ");
             for (int i = 1; i < allVotesArr.length; i=i+5) {
-                int[] data = {Integer.valueOf(allVotesArr[i+1]),Integer.valueOf(allVotesArr[i+2]),
-                        Integer.valueOf(allVotesArr[i+3]),Integer.valueOf(allVotesArr[i+4])};
+                int[] data = {Integer.valueOf(allVotesArr[i+1]),
+                              Integer.valueOf(allVotesArr[i+2]),
+                              Integer.valueOf(allVotesArr[i+3]),
+                              Integer.valueOf(allVotesArr[i+4])};
                 voteResults.put(allVotesArr[i],data);
             }
 

@@ -8,4 +8,10 @@
     <color name="secondaryDarkColor">#cccccc</color>
     <color name="primaryTextColor">#ffffff</color>
     <color name="secondaryTextColor">#424242</color>
+    <color name="yesVoteColor">#3cb44b</color>
+    <color name="noVoteColor">#e6194b</color>
+    <color name="refrainVoteColor">#808080</color>
+    <color name="absentVoteColor">#000000</color>
+
+
 </resources>

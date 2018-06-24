@@ -25,6 +25,7 @@
     <string name="vote_no">Nej</string>
     <string name="vote_novote">Avstående</string>
     <string name="vote_absent">Frånvarande</string>
+    <string name="vote_partyvotes_title">"Röstfördelning:"</string>
 
 
 
