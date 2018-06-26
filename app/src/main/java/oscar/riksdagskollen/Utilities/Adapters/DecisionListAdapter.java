@@ -133,6 +133,7 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
             decisionDate.setText(dateStringBuilder("Beslut: ", item.getBeslutsdag()));
             fullBet.setText("Läs fullständigt betänkande");
             searchVote.setText("Visa voteringar");
+            if(!item.hasVotes()) searchVote.setVisibility(View.GONE);
 
 
             fullBet.setOnClickListener(new View.OnClickListener() {
@@ -165,7 +166,7 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
             if (item.isExpanded()){
                 body.setVisibility(View.VISIBLE);
                 fullBet.setVisibility(View.VISIBLE);
-                searchVote.setVisibility(View.VISIBLE);
+                if(item.hasVotes())searchVote.setVisibility(View.VISIBLE);
                 expandIcon.setRotation(180);
             } else {
                 body.setVisibility(View.GONE);
@@ -240,6 +241,7 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
                                     Intent intent = new Intent(context, SearchedVoteAcitivity.class);
                                     ArrayList<Vote> list = new ArrayList<>(votes);
                                     intent.putParcelableArrayListExtra("votes", list);
+                                    intent.putExtra("document",item);
                                     context.startActivity(intent);
                                 }
                             });
