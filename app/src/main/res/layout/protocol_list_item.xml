@@ -13,7 +13,7 @@
         card_view:cardElevation="6dp"
         card_view:cardUseCompatPadding="true"
         card_view:contentPaddingBottom="20dp"
-        card_view:contentPaddingLeft="20dp"
+        card_view:contentPaddingLeft="8dp"
         card_view:contentPaddingRight="20dp"
         card_view:contentPaddingTop="8dp">
 
@@ -23,35 +23,30 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/dok_typ"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Protokoll"/>
+
+            <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginTop="8dp"
-                android:text="Rubrik"
+                android:layout_marginTop="4dp"
+                android:text="Protokoll 2017/18:20 Torsdagen den 19 oktober"
                 android:textColor="@color/primaryColor"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:maxLines="9"
-                android:ellipsize="end"
-                android:id="@+id/summary"
-                android:textColor="@color/secondaryTextColor"
-                android:textSize="14sp"
-                android:text="Riksdagens snabbprotokoll\n 2017/18:133\n Fredagen den 15 juni\n Kl. 09.0012.49\n Det justerade protokollet beräknas utkomma om tre veckor. 1  Justering av protokoll\n Protokollet för den 25 maj justerades. 2  Anmälan om återtagande av plats i riksdagen\n Talmannen meddelade att Hannah Bergstedt S återtagit sin plats i riksdagen"/>
-
-            <TextView
+          <TextView
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_marginTop="16dp"
                 android:layout_weight="0.3"
-                android:text="2017-08-19"
+                android:text="Publicerad 2017-08-19"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="14sp"
                 android:textStyle="normal" />

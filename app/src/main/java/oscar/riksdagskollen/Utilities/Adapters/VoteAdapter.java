@@ -75,6 +75,7 @@ public class VoteAdapter  extends RiksdagenViewHolderAdapter{
             date = textView.findViewById(R.id.publicerad);
             imageText = textView.findViewById(R.id.image_text);
             image =  textView.findViewById(R.id.image);
+            image.setVisibility(View.GONE);
         }
 
         public void bind(final Vote item ,final OnItemClickListener listener) {

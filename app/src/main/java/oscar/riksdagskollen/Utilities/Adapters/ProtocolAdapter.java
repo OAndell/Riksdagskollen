@@ -64,20 +64,17 @@ public class ProtocolAdapter  extends RiksdagenViewHolderAdapter{
      */
     public class ProtocolViewHolder extends RecyclerView.ViewHolder{
         private TextView title;
-        private TextView summary;
         private TextView date;
 
         public ProtocolViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.title);
             date = itemView.findViewById(R.id.date);
-            summary = itemView.findViewById(R.id.summary);
         }
 
         public void bind(final Protocol item ,final OnItemClickListener listener) {
             title.setText(item.getTitel());
-            date.setText(item.getDatum());
-            summary.setText(String.format("%s%s",item.getSummary(),"..."));
+            date.setText("Publicerad " + item.getDatum());
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {

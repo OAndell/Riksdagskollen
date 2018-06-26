@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.android.volley.VolleyError;
 
@@ -43,11 +46,17 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment {
         return newInstance;
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(party.getName());
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.party = getArguments().getParcelable("party");
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(party.getName());
         adapter = new PartyListViewholderAdapter(documentList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {
