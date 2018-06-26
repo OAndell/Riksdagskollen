@@ -34,22 +34,35 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment {
 
     private List<Vote> voteList = new ArrayList<>();
     private VoteAdapter adapter;
+    private boolean isShowingSearchedVotes = false;
 
-    public static VoteListFragment newInstance(){
+    public static VoteListFragment newInstance(@Nullable ArrayList<Vote> votes){
         VoteListFragment newInstance = new VoteListFragment();
+        if(votes != null) {
+            Bundle args = new Bundle();
+            args.putParcelableArrayList("votes",votes);
+            newInstance.setArguments(args);
+        }
         return newInstance;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.votes);
+        if(!isShowingSearchedVotes){
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.votes);
+        }
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getArguments() != null) {
+            voteList = getArguments().getParcelableArrayList("votes");
+            if(voteList != null && !voteList.isEmpty()) isShowingSearchedVotes = true;
+        }
+
         adapter = new VoteAdapter(voteList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {
@@ -66,25 +79,28 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment {
      * Hides the loading view.s
      */
     protected void loadNextPage(){
-        setLoadingMoreItems(true);
-        RikdagskollenApp.getInstance().getRiksdagenAPIManager().getVotes( new VoteCallback() {
 
-            @Override
-            public void onVotesFetched(List<Vote> votes) {
-                setShowLoadingView(false);
-                voteList.addAll(votes);
-                getAdapter().notifyDataSetChanged();
-                setLoadingMoreItems(false);
-            }
+        if(!isShowingSearchedVotes) {
+            setLoadingMoreItems(true);
+            RikdagskollenApp.getInstance().getRiksdagenAPIManager().getVotes(new VoteCallback() {
 
-            @Override
-            public void onFail(VolleyError error) {
-                setLoadingMoreItems(false);
-                decrementPage();
-            }
-        },getPageToLoad());
+                @Override
+                public void onVotesFetched(List<Vote> votes) {
+                    setShowLoadingView(false);
+                    voteList.addAll(votes);
+                    getAdapter().notifyDataSetChanged();
+                    setLoadingMoreItems(false);
+                }
 
-        incrementPage();
+                @Override
+                public void onFail(VolleyError error) {
+                    setLoadingMoreItems(false);
+                    decrementPage();
+                }
+            }, getPageToLoad());
+
+            incrementPage();
+        }
     }
 
     @Override

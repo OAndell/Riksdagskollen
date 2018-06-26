@@ -3,6 +3,7 @@ package oscar.riksdagskollen.Utilities.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spannable;
@@ -23,14 +24,20 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import oscar.riksdagskollen.Activities.ProtocolReaderActivity;
+import oscar.riksdagskollen.Activities.SearchedVoteAcitivity;
+import oscar.riksdagskollen.Managers.RiksdagenAPIManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Utilities.Callbacks.DecisionsCallback;
+import oscar.riksdagskollen.Utilities.Callbacks.VoteCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.DecisionDocument;
 import oscar.riksdagskollen.Utilities.JSONModels.Protocol;
+import oscar.riksdagskollen.Utilities.JSONModels.Vote;
 
 /**
  * Created by oscar on 2018-03-29.
@@ -125,7 +132,8 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
             debateDate.setText(dateStringBuilder("Debatt: ", item.getDebattdag()));
             decisionDate.setText(dateStringBuilder("Beslut: ", item.getBeslutsdag()));
             fullBet.setText("Läs fullständigt betänkande");
-            searchVote.setText("Sök efter votering");
+            searchVote.setText("Visa voteringar");
+
 
             fullBet.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -146,7 +154,7 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
 
                                 @Override
                                 public void onFail(VolleyError error) {
-
+                                    Toast.makeText(context,"Kunde inte hitta betänkande.", Toast.LENGTH_LONG).show();
                                 }
                             },
                             item.getDok_id()
@@ -171,10 +179,10 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
                 public void onClick(View v) {
                     listener.onItemClick(item);
                     if (item.isExpanded()) {
-                        expandItemView(false);
+                        expandItemView(false, item);
                         item.setExpanded(false);
                     } else {
-                        expandItemView(true);
+                        expandItemView(true, item);
                         item.setExpanded(true);
                     }
 
@@ -198,7 +206,7 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
         }
 
 
-        void expandItemView(boolean expand) {
+        void expandItemView(boolean expand, final DecisionDocument item) {
 
             if (expand){
                 expand(body, new Animation.AnimationListener() {
@@ -210,12 +218,40 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         fullBet.setVisibility(View.VISIBLE);
-                        searchVote.setVisibility(View.VISIBLE);
+                        if(item.hasVotes()) searchVote.setVisibility(View.VISIBLE);
                     }
 
                     @Override
                     public void onAnimationRepeat(Animation animation) {
 
+                    }
+                });
+
+
+                RikdagskollenApp.getInstance().getRiksdagenAPIManager().searchVotesForDecision(item, new VoteCallback() {
+                    @Override
+                    public void onVotesFetched(final List<Vote> votes) {
+                        if(!votes.isEmpty()){
+                            item.setHasVotes(true);
+                            searchVote.setVisibility(View.VISIBLE);
+                            searchVote.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(context, SearchedVoteAcitivity.class);
+                                    ArrayList<Vote> list = new ArrayList<>(votes);
+                                    intent.putParcelableArrayListExtra("votes", list);
+                                    context.startActivity(intent);
+                                }
+                            });
+                        } else {
+                            item.setHasVotes(false);
+                        }
+                    }
+
+                    @Override
+                    public void onFail(VolleyError error) {
+                        searchVote.setVisibility(View.GONE);
+                        item.setHasVotes(false);
                     }
                 });
             }
@@ -224,7 +260,7 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
                     @Override
                     public void onAnimationStart(Animation animation) {
                         fullBet.setVisibility(View.GONE);
-                        searchVote.setVisibility(View.GONE);
+                        if(item.hasVotes()) searchVote.setVisibility(View.GONE);
                     }
 
                     @Override

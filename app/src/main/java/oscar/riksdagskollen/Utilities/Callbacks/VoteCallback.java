@@ -2,6 +2,7 @@ package oscar.riksdagskollen.Utilities.Callbacks;
 
 import com.android.volley.VolleyError;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import oscar.riksdagskollen.Utilities.JSONModels.Vote;

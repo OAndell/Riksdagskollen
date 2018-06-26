@@ -21,6 +21,8 @@ public class DecisionDocument implements Parcelable {
     private String dokument_url_html;
     private String titel;
 
+    private boolean hasVotes = false;
+
     public String getDokument_url_html() {
         return dokument_url_html;
     }
@@ -94,6 +96,14 @@ public class DecisionDocument implements Parcelable {
         return 0;
     }
 
+    public void setHasVotes(boolean hasVotes) {
+        this.hasVotes = hasVotes;
+    }
+
+    public boolean hasVotes() {
+        return hasVotes;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.dok_id);
@@ -107,6 +117,7 @@ public class DecisionDocument implements Parcelable {
         dest.writeString(this.typ);
         dest.writeString(this.dokument_url_html);
         dest.writeString(this.titel);
+        dest.writeByte(this.hasVotes ? (byte) 1 : (byte) 0);
         dest.writeString(this.rm);
         dest.writeString(this.beteckning);
         dest.writeByte(this.isExpanded ? (byte) 1 : (byte) 0);
@@ -124,6 +135,7 @@ public class DecisionDocument implements Parcelable {
         this.typ = in.readString();
         this.dokument_url_html = in.readString();
         this.titel = in.readString();
+        this.hasVotes = in.readByte() != 0;
         this.rm = in.readString();
         this.beteckning = in.readString();
         this.isExpanded = in.readByte() != 0;

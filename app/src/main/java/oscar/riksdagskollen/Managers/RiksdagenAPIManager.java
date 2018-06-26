@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -229,6 +230,29 @@ public class RiksdagenAPIManager {
                     callback.onVotesFetched(Arrays.asList(protocols));
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    callback.onFail(new VolleyError("Could not parse response"));
+                }
+            }
+
+            @Override
+            public void onRequestFail(VolleyError error) {
+                callback.onFail(error);
+            }
+        });
+    }
+
+    public void searchVotesForDecision(DecisionDocument decision, final VoteCallback callback){
+        String subURL = "/dokumentlista/?sok=" + decision.getRm() + ":" + decision.getBeteckning() + "&doktyp=votering&sort=datum&sortorder=desc&utformat=json";
+        requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+            @Override
+            public void onRequestSuccess(JSONObject response) {
+                try {
+                    JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
+                    Vote[] protocols = gson.fromJson(jsonDocuments.toString(),Vote[].class);
+                    callback.onVotesFetched(Arrays.asList(protocols));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    callback.onFail(new VolleyError("Could not parse response"));
                 }
             }
 
