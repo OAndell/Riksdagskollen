@@ -1,10 +1,21 @@
 package oscar.riksdagskollen.Activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -23,6 +34,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
@@ -31,6 +43,8 @@ import java.util.List;
 
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.Utilities.Callbacks.PartyDocumentCallback;
+import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
 import oscar.riksdagskollen.Utilities.JSONModels.StringRequestCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.Vote;
 
@@ -40,14 +54,26 @@ import oscar.riksdagskollen.Utilities.JSONModels.Vote;
 
 public class VoteActivity extends AppCompatActivity{
 
+    private Boolean graphLoaded = false;
+    private Boolean motionLoaded = false;
+    private ViewGroup loadingView;
+    private ScrollView mainContent;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vote);
-        Vote document = getIntent().getParcelableExtra("document");
+        loadingView = findViewById(R.id.loading_view);
+        mainContent = findViewById(R.id.main_content);
 
-        TextView title = findViewById(R.id.vote_title);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.vote);
+
+        final Vote document = getIntent().getParcelableExtra("document");
+
+
+
+        final TextView title = findViewById(R.id.vote_title);
         title.setText(document.getTitel());
 
         final RikdagskollenApp app = oscar.riksdagskollen.RikdagskollenApp.getInstance();
@@ -67,6 +93,9 @@ public class VoteActivity extends AppCompatActivity{
                 partyCharts.add((HorizontalBarChart) findViewById(R.id.chartKD));
                 String[] parties = {"S","M","SD","MP","C","V","L","KD"};
                 setupPartyGraph(results, partyCharts, parties);
+                graphLoaded =true;
+                checkLoading();
+
             }
 
             @Override
@@ -76,9 +105,86 @@ public class VoteActivity extends AppCompatActivity{
 
 
         });
-        //TODO download and set body texts
-        TextView textBody = findViewById(R.id.body_text);
 
+
+        final Context context = this;
+        final TextView textBody = findViewById(R.id.point_title);
+        final LinearLayout motionHolder = findViewById(R.id.motion_holder);
+            app.getRequestManager().downloadHtmlPage("http://data.riksdagen.se/dokument/H501" + document.getBeteckning() + ".html", new StringRequestCallback() {
+                @Override
+                public void onResponse(String response) {
+                    Document doc = Jsoup.parse(response);
+                    Integer pointNumber = Integer.valueOf(document.getTitel().split("förslagspunkt ")[1]);
+                    Elements pointTitle =  doc.select("table:contains("+pointNumber+".)");
+                    try {
+                        Element next = pointTitle.get(0);
+                        String pointName = pointTitle.get(0).text().substring(3);
+
+
+                        ArrayList<String> motions = new ArrayList<>();
+                        for (int i = 0; i < 10; i++) {
+                            next = next.nextElementSibling();
+                            if(next.text().contains(":") && next.text().contains("/")){
+                                motions.add(next.text().split(" ")[0]);
+                            }
+                            else if(next.toString().contains("Reservation")){
+                                break;
+                            }
+                        }
+                        textBody.setText(pointName);
+                        for (int i = 0; i < motions.size(); i++) {
+                            app.getRiksdagenAPIManager().getMotionByID(motions.get(i), new PartyDocumentCallback() {
+                                @Override
+                                public void onDocumentsFetched(List<PartyDocument> documents) {
+                                    final PartyDocument motionDocument = documents.get(0);
+                                    LayoutInflater layoutInflater = getLayoutInflater();
+                                    TextView motionTitle = (TextView) layoutInflater.inflate(R.layout.vote_button_row, null);
+                                    SpannableString content = new SpannableString(motionDocument.getTitel());
+                                    content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                                    motionTitle.setText(content);
+                                    motionTitle.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Intent intent = new Intent(context, MotionActivity.class);
+                                            intent.putExtra("document",((PartyDocument)motionDocument));
+                                            startActivity(intent);
+                                        }
+                                    });
+                                    motionHolder.addView(motionTitle);
+                                    TextView lowerText = new TextView(context);
+                                    lowerText.setText(motionDocument.getUndertitel()+ "\n");
+                                    motionHolder.addView(lowerText);
+                                    motionLoaded = true; //not true
+                                    checkLoading();
+                                }
+
+                                @Override
+                                public void onFail(VolleyError error) {
+
+                                }
+                            });
+                        }
+                    //We could not find the vote point for some reason
+                    }catch (Exception IndexOutOfBoundsException){
+                        motionLoaded = true;
+                        checkLoading();
+                        textBody.setText("");
+                    }
+                }
+
+                @Override
+                public void onFail(VolleyError error) {
+
+                }
+            });
+    }
+
+
+    private void checkLoading(){
+        if(graphLoaded && motionLoaded){
+            loadingView.setVisibility(View.GONE);
+            mainContent.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -98,15 +204,6 @@ public class VoteActivity extends AppCompatActivity{
         xAxis.setDrawLabels(false);
         xAxis.setAxisLineWidth(2);
         xAxis.setAxisLineColor(ContextCompat.getColor(this, R.color.primaryColor));
-
-
-        //TODO borde gå och lösa, fast kanske är bättre att göra som vi gör nu
-        /*xAxis.setValueFormatter(new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                return getXAxisValues().get((int)value);
-            }
-        });*/
 
         chart.getAxisLeft().setDrawLabels(false);
         chart.getAxisLeft().setDrawGridLines(false);
@@ -145,18 +242,6 @@ public class VoteActivity extends AppCompatActivity{
         return dataset;
 
     }
-
-    //TODO not used mabye remove
-    private ArrayList<String> getXAxisValues() {
-        ArrayList<String> xAxis = new ArrayList<>();
-        xAxis.add("Frånvarande");
-        xAxis.add("Avstående");
-        xAxis.add("Nej");
-        xAxis.add("Ja");
-        xAxis.add("");
-        return xAxis;
-    }
-
 
     private void setupPartyGraph(VoteResults voteResults, ArrayList<HorizontalBarChart> charts, String[] parties){
         ArrayList<Integer> colors = new ArrayList<>();
@@ -202,6 +287,7 @@ public class VoteActivity extends AppCompatActivity{
             chart.setDrawValueAboveBar(false);
             chart.setFitBars(true);
             chart.setDescription(null);
+            chart.setTouchEnabled(false); //Remove interactivity.
             chart.invalidate();
         }
     }

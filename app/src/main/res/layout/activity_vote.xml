@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include layout="@layout/riksdagen_toolbar"></include>
+    <include layout="@layout/loading_view" android:visibility="visible"></include>
+
+
+    <ScrollView
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -92,16 +101,24 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/body_text"
+            android:id="@+id/point_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="8dp"
+            android:text="Punktrubrik"
+            android:textAlignment="center"
+            android:textColor="@color/primaryColor"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+
+        <LinearLayout
+            android:id="@+id/motion_holder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="7dp"
-            android:text='"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim dok_id est laborum."'
-            android:textAlignment="textStart"
-            android:textColor="@color/secondaryTextColor"
-            android:visibility="visible" />
-
-
+            android:orientation="vertical">
+        </LinearLayout>
 
         <TextView
             android:id="@+id/vote_title2"
@@ -270,6 +287,5 @@
 
 
     </LinearLayout>
-
-
-</ScrollView>
+    </ScrollView>
+</LinearLayout>

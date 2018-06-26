@@ -41,6 +41,11 @@ public class Vote implements Parcelable {
         return notis;
     }
 
+    public String getBeteckning() {
+        return beteckning;
+    }
+
+
     private String id;
     private String publicerad;
     private String undertitel;
@@ -48,6 +53,8 @@ public class Vote implements Parcelable {
     private String dokument_url_html;
     private String titel;
     private String summary;
+
+    private String beteckning;
 
 
     private String notis;
@@ -62,6 +69,7 @@ public class Vote implements Parcelable {
         titel = in.readString();
         summary = in.readString();
         notis = in.readString();
+        beteckning = in.readString();
 
     }
 
@@ -75,6 +83,7 @@ public class Vote implements Parcelable {
         dest.writeString(titel);
         dest.writeString(summary);
         dest.writeString(notis);
+        dest.writeString(beteckning);
     }
 
     @Override

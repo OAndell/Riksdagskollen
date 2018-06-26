@@ -31,7 +31,7 @@ public class VoteAdapter  extends RiksdagenViewHolderAdapter{
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(viewType == TYPE_ITEM) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.news_list_row, parent, false);
+                    .inflate(R.layout.protocol_list_item, parent, false);
             return new VoteAdapter.VoteViewHolder(itemView);
         } else {
             FrameLayout frameLayout = new FrameLayout(parent.getContext());
@@ -63,29 +63,21 @@ public class VoteAdapter  extends RiksdagenViewHolderAdapter{
      */
     public class VoteViewHolder extends RecyclerView.ViewHolder{
         private TextView title;
-        private TextView body;
+        private TextView docType;
         private TextView date;
-        private TextView imageText;
-        private NetworkImageView image;
+
 
         public VoteViewHolder(View textView) {
             super(textView);
             title = textView.findViewById(R.id.title);
-            body = textView.findViewById(R.id.body_text);
-            date = textView.findViewById(R.id.publicerad);
-            imageText = textView.findViewById(R.id.image_text);
-            image =  textView.findViewById(R.id.image);
-            image.setVisibility(View.GONE);
+            docType = textView.findViewById(R.id.dok_typ);
+            date = textView.findViewById(R.id.date);
         }
 
         public void bind(final Vote item ,final OnItemClickListener listener) {
             title.setText(item.getTitel());
-            //TODO
-            body.setText("Not much to show here. Make expandeble like decision??");
-
+            docType.setText(R.string.vote);
             date.setVisibility(View.GONE);
-            imageText.setVisibility(View.GONE);
-
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {

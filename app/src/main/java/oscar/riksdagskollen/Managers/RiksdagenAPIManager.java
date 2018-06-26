@@ -240,5 +240,29 @@ public class RiksdagenAPIManager {
     }
 
 
+    public void getMotionByID(String id, final PartyDocumentCallback callback){
+        String subURL = "/dokumentlista/?sok="+id+"&doktyp=mot&sort=datum&sortorder=desc&utformat=json";
+        requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+            @Override
+            public void onRequestSuccess(JSONObject response) {
+                try {
+                    JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
+                    PartyDocument[] documents = gson.fromJson(jsonDocuments.toString(),PartyDocument[].class);
+                    callback.onDocumentsFetched(Arrays.asList(documents));
+                }catch (JSONException e){
+                    e.printStackTrace();
+                    callback.onFail(new VolleyError("Failed to parse JSON"));
+                }
+            }
+
+            @Override
+            public void onRequestFail(VolleyError error) {
+                callback.onFail(error);
+            }
+        });
+
+    }
+
+
 
 }

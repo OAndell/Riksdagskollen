@@ -60,13 +60,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment {
         adapter = new PartyListViewholderAdapter(documentList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {
-                Intent intent;
-
-                if(((PartyDocument) document).isMotion()){
-                    intent = new Intent(getContext(), MotionActivity.class);
-                } else {
-                    intent = new Intent(getContext(), MotionActivity.class);
-                }
+                Intent intent = new Intent(getContext(), MotionActivity.class);
                 intent.putExtra("document",((PartyDocument)document));
                 startActivity(intent);
             }

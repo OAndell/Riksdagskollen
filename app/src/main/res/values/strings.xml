@@ -21,6 +21,7 @@
     <string name="votes">Voteringar</string>
     <string name="about">Om appen</string>
     <string name="prot">Kammarprotokoll</string>
+    <string name="vote">Votering</string>
     <string name="vote_yes">Ja</string>
     <string name="vote_no">Nej</string>
     <string name="vote_novote">Avstående</string>
