@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -68,6 +69,9 @@ public class VoteActivity extends AppCompatActivity{
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.vote);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final Vote document = getIntent().getParcelableExtra("document");
 
@@ -221,6 +225,11 @@ public class VoteActivity extends AppCompatActivity{
         chart.invalidate();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        return super.onOptionsItemSelected(item);
+    }
 
     private BarDataSet getDataSet(int[] totalVotes){
         ArrayList<Integer> colors = new ArrayList<>();

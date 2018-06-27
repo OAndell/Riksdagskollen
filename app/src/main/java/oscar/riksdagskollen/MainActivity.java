@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity
     private void initMenuOptions(){
         currentNewsListFragment = CurrentNewsListFragment.newInstance();
         protFragment = ProtocolListFragment.newInstance();
-        voteListFragment = VoteListFragment.newInstance();
+        voteListFragment = VoteListFragment.newInstance(null);
         decisionsFragment = DecisionsListFragment.newInstance();
         aboutFragment = AboutFragment.newInstance();
     }

@@ -6,7 +6,7 @@
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/news_nav"
-                    android:icon="@drawable/rlogo"
+                    android:icon="@drawable/riksdagen_logo_yellow"
                     android:title="@string/news" />
                 <item
                     android:id="@+id/votes_nav"
