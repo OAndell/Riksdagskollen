@@ -13,6 +13,6 @@
         android:layout_height="130dp"
         android:layout_gravity="center"
         android:paddingTop="20dp"
-        app:srcCompat="@drawable/riksdagen_logo_yellow" />
+        app:srcCompat="@drawable/ic_riksdagskollen_hoizontal" />
 
 </LinearLayout>
