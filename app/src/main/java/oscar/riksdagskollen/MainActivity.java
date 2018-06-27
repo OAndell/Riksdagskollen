@@ -1,10 +1,6 @@
 package oscar.riksdagskollen;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,9 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import oscar.riksdagskollen.Activities.DocumentReaderActivity;
+import oscar.riksdagskollen.Fragments.AboutFragment;
 import oscar.riksdagskollen.Fragments.CurrentNewsListFragment;
-import oscar.riksdagskollen.Activities.MotionActivity;
 import oscar.riksdagskollen.Fragments.DecisionsListFragment;
 import oscar.riksdagskollen.Fragments.PartyListFragment;
 import oscar.riksdagskollen.Fragments.ProtocolListFragment;
@@ -30,6 +25,7 @@ public class MainActivity extends AppCompatActivity
     ProtocolListFragment protFragment;
     DecisionsListFragment decisionsFragment;
     VoteListFragment voteListFragment;
+    AboutFragment aboutFragment;
     PartyListFragment sPartyFragment;
     PartyListFragment mPartyFragment;
     PartyListFragment sdPartyFragment;
@@ -136,7 +132,8 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,kdPartyFragment).commit();
                 break;
             case R.id.about_nav:
-
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,aboutFragment).commit();
+                break;
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -149,6 +146,7 @@ public class MainActivity extends AppCompatActivity
         protFragment = ProtocolListFragment.newInstance();
         voteListFragment = VoteListFragment.newInstance();
         decisionsFragment = DecisionsListFragment.newInstance();
+        aboutFragment = AboutFragment.newInstance();
     }
 
     // Create all of the PartyFragments with new Party objects

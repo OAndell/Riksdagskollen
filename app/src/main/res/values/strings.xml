@@ -27,8 +27,10 @@
     <string name="vote_novote">Avstående</string>
     <string name="vote_absent">Frånvarande</string>
     <string name="vote_partyvotes_title">"Röstfördelning:"</string>
-
-
+    <string name="about_title">Om Riksdagskollen</string>
+    <string name="about_body">Riksdagskollen är en android applikation utvecklad av stå universitetsstudenter för att hålla koll på vad som händer i vår riksdag. All källkod finns tillgänglig på GitHub. Har du några idéer? Bidra gärna!\n\nSamtliga dokument och bilder är hämtade från riksdagens egna API: data.riksdagen.se</string>
+    <string name="about_footer">Oscar Andell &amp; Gustav Aaro</string>
+    <string name="github">https://github.com/OAndell/Riksdagskollen</string>
 
 
 </resources>
