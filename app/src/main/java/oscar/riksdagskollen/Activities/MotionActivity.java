@@ -20,6 +20,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -175,10 +176,17 @@ public class MotionActivity extends AppCompatActivity {
             app.getRiksdagenAPIManager().searchForReply(document, new PartyDocumentCallback() {
                 @Override
                 public void onDocumentsFetched(List<PartyDocument> documents) {
-                    System.out.println(documents.get(0).getTitel());
-                    System.out.println(documents.get(0).getDokument_url_html());
-                    System.out.println(documents.get(0).getUndertitel());
-                    //TODO göra något vettigt här. En knapp till en ny av denna activity?? Eller visa under
+                    final PartyDocument reply = documents.get(0);
+                    Button replyButton = findViewById(R.id.reply_button);
+                    replyButton.setVisibility(View.VISIBLE);
+                    replyButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(context, MotionActivity.class);
+                            intent.putExtra("document",((PartyDocument)reply));
+                            startActivity(intent);
+                        }
+                    });
                 }
 
                 @Override

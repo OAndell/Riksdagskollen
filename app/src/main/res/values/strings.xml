@@ -31,6 +31,7 @@
     <string name="about_body">Riksdagskollen är en android applikation utvecklad av stå universitetsstudenter för att hålla koll på vad som händer i vår riksdag. All källkod finns tillgänglig på GitHub. Har du några idéer? Bidra gärna!\n\nSamtliga dokument och bilder är hämtade från riksdagens egna API: data.riksdagen.se</string>
     <string name="about_footer">Oscar Andell &amp; Gustav Aaro</string>
     <string name="github">https://github.com/OAndell/Riksdagskollen</string>
+    <string name="view_reply_button">Läs svar</string>
 
 
 </resources>
