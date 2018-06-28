@@ -31,8 +31,11 @@ import com.android.volley.toolbox.NetworkImageView;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import java.util.List;
+
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.Utilities.Callbacks.PartyDocumentCallback;
 import oscar.riksdagskollen.Utilities.Callbacks.RepresentativeCallback;
 import oscar.riksdagskollen.Utilities.JSONModels.Intressent;
 import oscar.riksdagskollen.Utilities.JSONModels.PartyDocument;
@@ -127,7 +130,6 @@ public class MotionActivity extends AppCompatActivity {
                 String result  = doc.toString().replaceAll("class=\\\"[A-Öa-ö0-9]+\\\"","");
                 result = result.replaceAll("style=\"[A-Öa-ö-_:;\\s0-9.%']+\"","");
                 webView.loadDataWithBaseURL("file:///android_asset/", result, "text/html", "UTF-8", null);
-                System.out.println(result);
             }
 
             @Override
@@ -165,6 +167,25 @@ public class MotionActivity extends AppCompatActivity {
                 portaitContainer.addView(portraitView);
             }
 
+        }
+
+
+        //Tries to find a response to the document if the doc has type = "fr"
+        if(document.getTyp().equals("fr")){
+            app.getRiksdagenAPIManager().searchForReply(document, new PartyDocumentCallback() {
+                @Override
+                public void onDocumentsFetched(List<PartyDocument> documents) {
+                    System.out.println(documents.get(0).getTitel());
+                    System.out.println(documents.get(0).getDokument_url_html());
+                    System.out.println(documents.get(0).getUndertitel());
+                    //TODO göra något vettigt här. En knapp till en ny av denna activity?? Eller visa under
+                }
+
+                @Override
+                public void onFail(VolleyError error) {
+
+                }
+            });
         }
 
     }

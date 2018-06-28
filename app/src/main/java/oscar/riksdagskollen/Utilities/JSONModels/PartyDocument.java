@@ -12,7 +12,9 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
     String id;
     String undertitel;
     String titel;
+    String rm;
     String typ;
+    String beteckning;
     String publicerad;
     String doktyp;
     String dokument_url_text;
@@ -70,6 +72,14 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
         return dokumentnamn;
     }
 
+    public String getRm() {
+        return rm;
+    }
+
+    public String getBeteckning() {
+        return beteckning;
+    }
+
     public boolean isMotion(){
         return dokumentnamn.equalsIgnoreCase("motion");
     }
@@ -94,7 +104,9 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
         dest.writeString(this.id);
         dest.writeString(this.undertitel);
         dest.writeString(this.titel);
+        dest.writeString(this.rm);
         dest.writeString(this.typ);
+        dest.writeString(this.beteckning);
         dest.writeString(this.publicerad);
         dest.writeString(this.doktyp);
         dest.writeString(this.dokument_url_text);
@@ -109,7 +121,9 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
         this.id = in.readString();
         this.undertitel = in.readString();
         this.titel = in.readString();
+        this.beteckning = in.readString();
         this.typ = in.readString();
+        this.rm = in.readString();
         this.publicerad = in.readString();
         this.doktyp = in.readString();
         this.dokument_url_text = in.readString();
