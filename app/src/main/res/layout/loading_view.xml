@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:id="@+id/loading_view"
     android:fitsSystemWindows="true"
-    tools:context=".Activities.DocumentReaderActivity">
+    tools:context=".Activity.DocumentReaderActivity">
 
 
     <LinearLayout
