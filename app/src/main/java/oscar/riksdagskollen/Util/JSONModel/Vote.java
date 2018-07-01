@@ -9,6 +9,10 @@ import android.os.Parcelable;
 
 public class Vote implements Parcelable {
 
+    public String getDatum(){
+        return datum;
+    }
+
     public String getId() {
         return id;
     }
@@ -45,14 +49,14 @@ public class Vote implements Parcelable {
         return beteckning;
     }
 
-
-    private final String id;
-    private final String publicerad;
-    private final String undertitel;
-    private final String dokument_url_text;
-    private final String dokument_url_html;
-    private final String titel;
-    private final String summary;
+    private String datum;
+    private String id;
+    private String publicerad;
+    private String undertitel;
+    private String dokument_url_text;
+    private String dokument_url_html;
+    private String titel;
+    private String summary;
 
     private final String beteckning;
 
@@ -61,6 +65,7 @@ public class Vote implements Parcelable {
 
 
     private Vote(Parcel in) {
+        datum = in.readString();
         id = in.readString();
         publicerad = in.readString();
         undertitel = in.readString();
@@ -75,6 +80,7 @@ public class Vote implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(datum);
         dest.writeString(id);
         dest.writeString(publicerad);
         dest.writeString(undertitel);
