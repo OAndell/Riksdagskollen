@@ -17,7 +17,7 @@ import oscar.riksdagskollen.Util.JSONModel.Vote;
  */
 
 public class VoteAdapter  extends RiksdagenViewHolderAdapter{
-    private List<Vote> voteList;
+    private final List<Vote> voteList;
 
     public VoteAdapter(List<Vote> items, final OnItemClickListener listener) {
         super(items, listener);
@@ -60,9 +60,9 @@ public class VoteAdapter  extends RiksdagenViewHolderAdapter{
      * Class for displaying individual items in the list.
      */
     public class VoteViewHolder extends RecyclerView.ViewHolder{
-        private TextView title;
-        private TextView docType;
-        private TextView date;
+        private final TextView title;
+        private final TextView docType;
+        private final TextView date;
 
 
         public VoteViewHolder(View textView) {

@@ -28,7 +28,7 @@ import oscar.riksdagskollen.Util.JSONModel.StringRequestCallback;
 
 public class DocumentReaderActivity extends AppCompatActivity{
 
-    PartyDocument document;
+    private PartyDocument document;
     private String docBody;
     private RikdagskollenApp app;
     private LinearLayout portaitContainer;

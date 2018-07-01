@@ -28,7 +28,7 @@ import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 
 public class ProtocolListFragment extends RiksdagenAutoLoadingListFragment {
 
-    private List<Protocol> protocolList = new ArrayList<>();
+    private final List<Protocol> protocolList = new ArrayList<>();
     private ProtocolAdapter adapter;
 
     public static ProtocolListFragment newInstance(){

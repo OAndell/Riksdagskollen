@@ -299,7 +299,7 @@ public class VoteActivity extends AppCompatActivity{
      */
     class VoteResults{
 
-        private HashMap<String,int[]> voteResults = new HashMap<>();
+        private final HashMap<String,int[]> voteResults = new HashMap<>();
 
         public VoteResults(String response) {
             Document doc = Jsoup.parse(response);

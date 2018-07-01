@@ -9,20 +9,20 @@ import android.os.Parcelable;
 
 public class PartyDocument extends java.lang.Object implements Parcelable {
 
-    String id;
-    String undertitel;
-    String titel;
-    String rm;
-    String typ;
-    String beteckning;
-    String publicerad;
-    String doktyp;
-    String dokument_url_text;
-    String dokument_url_html;
-    String traff;
-    String summary;
-    String dokumentnamn;
-    DokIntressent dokintressent;
+    private String id;
+    private String undertitel;
+    private final String titel;
+    private String rm;
+    private String typ;
+    private String beteckning;
+    private final String publicerad;
+    private String doktyp;
+    private String dokument_url_text;
+    private String dokument_url_html;
+    private String traff;
+    private String summary;
+    private String dokumentnamn;
+    private DokIntressent dokintressent;
 
     public DokIntressent getDokintressent() {
         return dokintressent;
@@ -117,7 +117,7 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
         dest.writeParcelable(this.dokintressent, flags);
     }
 
-    protected PartyDocument(Parcel in) {
+    private PartyDocument(Parcel in) {
         this.id = in.readString();
         this.undertitel = in.readString();
         this.titel = in.readString();

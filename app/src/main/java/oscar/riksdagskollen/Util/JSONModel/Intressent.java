@@ -9,10 +9,10 @@ import android.os.Parcelable;
 
 public class Intressent implements Parcelable {
 
-    String roll;
-    String namn;
-    String intressent_id;
-    String partibet;
+    private String roll;
+    private String namn;
+    private String intressent_id;
+    private String partibet;
 
     public String getRoll() {
         return roll;
@@ -47,7 +47,7 @@ public class Intressent implements Parcelable {
     public Intressent() {
     }
 
-    protected Intressent(Parcel in) {
+    private Intressent(Parcel in) {
         this.roll = in.readString();
         this.namn = in.readString();
         this.intressent_id = in.readString();

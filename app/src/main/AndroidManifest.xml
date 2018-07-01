@@ -43,7 +43,6 @@
             android:screenOrientation="portrait"
             android:configChanges="orientation"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".Activity.AboutActivity" />
     </application>
 
 </manifest>

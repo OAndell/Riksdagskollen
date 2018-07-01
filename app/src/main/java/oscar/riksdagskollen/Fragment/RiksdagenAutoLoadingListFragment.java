@@ -79,22 +79,22 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
     }
 
 
-    protected int getPageToLoad() {
+    int getPageToLoad() {
         return pageToLoad;
     }
 
-    protected void incrementPage(){
+    void incrementPage(){
         pageToLoad++;
     }
 
-    protected void decrementPage(){
+    void decrementPage(){
         pageToLoad--;
     }
 
     abstract RiksdagenViewHolderAdapter getAdapter();
 
 
-    protected void setLoadingMoreItems(Boolean loading){
+    void setLoadingMoreItems(Boolean loading){
         this.loading = loading;
 
         // The runnables are apparently needed to avoid long warnings
@@ -114,11 +114,11 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
 
     }
 
-    public RecyclerView getRecyclerView() {
+    RecyclerView getRecyclerView() {
         return recyclerView;
     }
 
-    protected void setShowLoadingView(boolean loading){
+    void setShowLoadingView(boolean loading){
         if(loading) loadingView.setVisibility(View.VISIBLE);
         else loadingView.setVisibility(View.GONE);
     }

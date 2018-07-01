@@ -10,19 +10,19 @@ import android.os.Parcelable;
  */
 
 public class CurrentNews implements Parcelable {
-    private String id;
-    private String titel;
-    private String publicerad;
-    private String summary;
-    private String url; //This is often not the correct url
+    private final String id;
+    private final String titel;
+    private final String publicerad;
+    private final String summary;
+    private final String url; //This is often not the correct url
     //use CurrentNews -> CurrentNewsLinkList -> CurrentNewsLinks -> url
-    private String img_url;
-    private String img_text;
-    private String img_fotograf;
-    private String img_tumnagel_url;
-    private CurrentNewsLinkList linklista;
+    private final String img_url;
+    private final String img_text;
+    private final String img_fotograf;
+    private final String img_tumnagel_url;
+    private final CurrentNewsLinkList linklista;
 
-    protected CurrentNews(Parcel in) {
+    private CurrentNews(Parcel in) {
         id = in.readString();
         titel = in.readString();
         publicerad = in.readString();

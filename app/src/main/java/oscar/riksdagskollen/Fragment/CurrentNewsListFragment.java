@@ -27,7 +27,7 @@ import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
  */
 
 public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
-    private List<CurrentNews> newsList = new ArrayList<>();
+    private final List<CurrentNews> newsList = new ArrayList<>();
     private CurrentNewsListAdapter adapter;
 
     public static CurrentNewsListFragment newInstance(){

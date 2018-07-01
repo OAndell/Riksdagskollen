@@ -49,10 +49,10 @@ import oscar.riksdagskollen.Util.JSONModel.StringRequestCallback;
 
 public class MotionActivity extends AppCompatActivity {
 
-    PartyDocument document;
-    ViewGroup loadingView;
+    private PartyDocument document;
+    private ViewGroup loadingView;
     ProgressBar progress;
-    Context context;
+    private Context context;
 
 
     @Override

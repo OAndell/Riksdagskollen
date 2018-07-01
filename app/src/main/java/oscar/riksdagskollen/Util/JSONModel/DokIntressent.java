@@ -31,7 +31,7 @@ public class DokIntressent implements Parcelable {
     public DokIntressent() {
     }
 
-    protected DokIntressent(Parcel in) {
+    DokIntressent(Parcel in) {
         this.intressent = in.createTypedArrayList(Intressent.CREATOR);
     }
 

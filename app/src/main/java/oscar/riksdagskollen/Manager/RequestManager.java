@@ -44,10 +44,10 @@ public class RequestManager {
     private final static int PATCH = 7;
     private final static int DELETE = 3;
 
-    RequestQueue requestQueue;
-    Cache cache;
-    Network network = new BasicNetwork(new HurlStack());
-    ImageLoader mImageLoader;
+    private final RequestQueue requestQueue;
+    private final Cache cache;
+    private final Network network = new BasicNetwork(new HurlStack());
+    private final ImageLoader mImageLoader;
 
     public RequestManager(){
         cache = new DiskBasedCache(RikdagskollenApp.getInstance().getCacheDir(), 1024 * 1024);
@@ -142,9 +142,9 @@ public class RequestManager {
 
     class HtmlDownloader extends AsyncTask<String, String, String> {
 
-        private String url;
+        private final String url;
 
-        private StringRequestCallback callback;
+        private final StringRequestCallback callback;
 
         HtmlDownloader(String url, StringRequestCallback callback){
             this.url = url;

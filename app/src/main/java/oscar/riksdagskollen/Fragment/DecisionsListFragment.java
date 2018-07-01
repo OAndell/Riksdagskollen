@@ -25,7 +25,7 @@ import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 
 public class DecisionsListFragment extends RiksdagenAutoLoadingListFragment {
 
-    private List<DecisionDocument> decisionDocuments = new ArrayList<>();
+    private final List<DecisionDocument> decisionDocuments = new ArrayList<>();
     private DecisionListAdapter adapter;
 
     public static DecisionsListFragment newInstance(){

@@ -17,13 +17,13 @@ import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
  */
 
 public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
-    private List<PartyDocument> documentList;
+    private final List<PartyDocument> documentList;
 
     class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView documentTitle;
-        TextView published;
-        TextView author;
-        TextView dokName;
+        final TextView documentTitle;
+        final TextView published;
+        final TextView author;
+        final TextView dokName;
         public MyViewHolder(View partyView) {
             super(partyView);
             documentTitle = partyView.findViewById(R.id.document);

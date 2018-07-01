@@ -21,7 +21,7 @@ import oscar.riksdagskollen.Util.JSONModel.CurrentNews;
  */
 
 public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
-    private List<CurrentNews> newsList;
+    private final List<CurrentNews> newsList;
 
     public CurrentNewsListAdapter(List<CurrentNews> items, final OnItemClickListener listener) {
         super(items, listener);
@@ -64,11 +64,11 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
      * Class for displaying individual items in the list.
      */
     public class NewsViewHolder extends RecyclerView.ViewHolder{
-        private TextView title;
-        private TextView body;
-        private TextView date;
-        private TextView imageText;
-        private NetworkImageView image;
+        private final TextView title;
+        private final TextView body;
+        private final TextView date;
+        private final TextView imageText;
+        private final NetworkImageView image;
 
         public NewsViewHolder(View textView) {
             super(textView);

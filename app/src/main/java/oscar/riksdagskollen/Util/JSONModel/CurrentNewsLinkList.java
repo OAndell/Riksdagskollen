@@ -14,7 +14,7 @@ import com.google.gson.annotations.SerializedName;
 public class CurrentNewsLinkList implements Parcelable {
 
     @SerializedName("link")
-    private CurrentNewsLink link;
+    private final CurrentNewsLink link;
 
     public CurrentNewsLink getLink(){
         return link;
@@ -31,7 +31,7 @@ public class CurrentNewsLinkList implements Parcelable {
         dest.writeParcelable(this.link, flags);
     }
 
-    protected CurrentNewsLinkList(Parcel in) {
+    CurrentNewsLinkList(Parcel in) {
         this.link = in.readParcelable(CurrentNewsLink.class.getClassLoader());
     }
 

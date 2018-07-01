@@ -22,20 +22,20 @@ import oscar.riksdagskollen.Util.JSONModel.Party;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    CurrentNewsListFragment currentNewsListFragment;
-    ProtocolListFragment protFragment;
-    DecisionsListFragment decisionsFragment;
-    VoteListFragment voteListFragment;
-    AboutFragment aboutFragment;
-    PartyListFragment sPartyFragment;
-    PartyListFragment mPartyFragment;
-    PartyListFragment sdPartyFragment;
-    PartyListFragment mpPartyFragment;
-    PartyListFragment cPartyFragment;
-    PartyListFragment vPartyFragment;
-    PartyListFragment lPartyFragment;
-    PartyListFragment kdPartyFragment;
-    NavigationView navigationView;
+    private CurrentNewsListFragment currentNewsListFragment;
+    private ProtocolListFragment protFragment;
+    private DecisionsListFragment decisionsFragment;
+    private VoteListFragment voteListFragment;
+    private AboutFragment aboutFragment;
+    private PartyListFragment sPartyFragment;
+    private PartyListFragment mPartyFragment;
+    private PartyListFragment sdPartyFragment;
+    private PartyListFragment mpPartyFragment;
+    private PartyListFragment cPartyFragment;
+    private PartyListFragment vPartyFragment;
+    private PartyListFragment lPartyFragment;
+    private PartyListFragment kdPartyFragment;
+    private NavigationView navigationView;
 
 
     @Override

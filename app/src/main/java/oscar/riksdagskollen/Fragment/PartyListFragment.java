@@ -27,8 +27,8 @@ import oscar.riksdagskollen.Util.Adapter.PartyListViewholderAdapter;
 
 public class PartyListFragment extends RiksdagenAutoLoadingListFragment {
 
-    Party party;
-    private List<PartyDocument> documentList = new ArrayList<>();
+    private Party party;
+    private final List<PartyDocument> documentList = new ArrayList<>();
     private PartyListViewholderAdapter adapter;
 
     /**

@@ -9,8 +9,8 @@ import android.os.Parcelable;
 
 public class Party implements Parcelable {
 
-    private String id;
-    private String name;
+    private final String id;
+    private final String name;
 
     public Party(String name, String id) {
         this.id = id;
@@ -36,7 +36,7 @@ public class Party implements Parcelable {
         dest.writeString(this.name);
     }
 
-    protected Party(Parcel in) {
+    private Party(Parcel in) {
         this.id = in.readString();
         this.name = in.readString();
     }

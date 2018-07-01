@@ -35,8 +35,8 @@ import oscar.riksdagskollen.Util.JSONModel.Vote;
 
 public class RiksdagenAPIManager {
 
-    private RequestManager requestManager;
-    private Gson gson;
+    private final RequestManager requestManager;
+    private final Gson gson;
 
 
     public RiksdagenAPIManager(RikdagskollenApp app){

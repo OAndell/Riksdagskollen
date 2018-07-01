@@ -9,7 +9,7 @@ import android.os.Parcelable;
 
 public class Protocol implements Parcelable {
 
-    private String dokument_url_text;
+    private final String dokument_url_text;
 
     public String getDokument_url_text() {
         return dokument_url_text;
@@ -27,11 +27,11 @@ public class Protocol implements Parcelable {
         return id;
     }
 
-    private String dokument_url_html;
-    private String titel;
-    private String id;
-    private String datum;
-    private String summary;
+    private final String dokument_url_html;
+    private final String titel;
+    private final String id;
+    private final String datum;
+    private final String summary;
 
     public String getDatum() {
         return datum;
@@ -57,7 +57,7 @@ public class Protocol implements Parcelable {
         dest.writeString(this.summary);
     }
 
-    protected Protocol(Parcel in) {
+    private Protocol(Parcel in) {
         this.dokument_url_text = in.readString();
         this.dokument_url_html = in.readString();
         this.titel = in.readString();

@@ -19,7 +19,7 @@ import java.lang.reflect.Type;
  */
 
 public class CurrentNewsLink  implements Parcelable {
-    private String url;
+    private final String url;
 
     protected CurrentNewsLink(Parcel in) {
         url = in.readString();

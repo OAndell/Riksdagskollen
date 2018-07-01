@@ -17,7 +17,7 @@ import oscar.riksdagskollen.Util.JSONModel.Protocol;
  */
 
 public class ProtocolAdapter  extends RiksdagenViewHolderAdapter{
-    private List<Protocol> protocolsList;
+    private final List<Protocol> protocolsList;
 
     public ProtocolAdapter(List<Protocol> items, final OnItemClickListener listener) {
         super(items, listener);
@@ -60,8 +60,8 @@ public class ProtocolAdapter  extends RiksdagenViewHolderAdapter{
      * Class for displaying individual items in the list.
      */
     public class ProtocolViewHolder extends RecyclerView.ViewHolder{
-        private TextView title;
-        private TextView date;
+        private final TextView title;
+        private final TextView date;
 
         public ProtocolViewHolder(View itemView) {
             super(itemView);

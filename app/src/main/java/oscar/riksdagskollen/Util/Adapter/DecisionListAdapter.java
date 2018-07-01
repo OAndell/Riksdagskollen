@@ -39,9 +39,9 @@ import oscar.riksdagskollen.Util.JSONModel.Vote;
  */
 
 public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
-    private List<DecisionDocument> decisionDocuments;
+    private final List<DecisionDocument> decisionDocuments;
     private Context context;
-    private RecyclerView recyclerView;
+    private final RecyclerView recyclerView;
 
     public DecisionListAdapter(List<DecisionDocument> items, final OnItemClickListener listener, RecyclerView recyclerView) {
         super(items, listener);
@@ -86,18 +86,18 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
      * Class for displaying individual items in the list.
      */
     public class DecisionView extends RecyclerView.ViewHolder {
-        private TextView title;
-        private TextView body;
-        private TextView justDate;
-        private TextView debateDate;
-        private TextView decisionDate;
-        private TextView betName;
-        private ImageView expandIcon;
+        private final TextView title;
+        private final TextView body;
+        private final TextView justDate;
+        private final TextView debateDate;
+        private final TextView decisionDate;
+        private final TextView betName;
+        private final ImageView expandIcon;
 
-        private Button fullBet;
-        private Button searchVote;
+        private final Button fullBet;
+        private final Button searchVote;
 
-        private View itemView;
+        private final View itemView;
 
         int rotationAngle = 0;
 
@@ -121,8 +121,6 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
             title.setText(item.getTitel());
             betName.setText("Betänkande:  " + item.getRm() + ":" + item.getBeteckning());
             body.setText(Html.fromHtml(item.getNotis()));
-            System.out.println(item.getNotisrubrik());
-            System.out.println(item.getDebattdag());
             justDate.setText(dateStringBuilder("Justering: ",item.getJusteringsdag()));
             debateDate.setText(dateStringBuilder("Debatt: ", item.getDebattdag()));
             decisionDate.setText(dateStringBuilder("Beslut: ", item.getBeslutsdag()));

@@ -123,7 +123,7 @@ public class DecisionDocument implements Parcelable {
         dest.writeByte(this.isExpanded ? (byte) 1 : (byte) 0);
     }
 
-    protected DecisionDocument(Parcel in) {
+    private DecisionDocument(Parcel in) {
         this.dok_id = in.readString();
         this.notisrubrik = in.readString();
         this.publicerad = in.readString();

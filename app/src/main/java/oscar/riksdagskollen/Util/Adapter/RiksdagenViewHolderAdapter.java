@@ -14,14 +14,14 @@ import java.util.List;
 
 public abstract class RiksdagenViewHolderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private List<?> items;
-    protected List<View> headers = new ArrayList<>();
-    protected List<View> footers = new ArrayList<>();
+    private final List<?> items;
+    final List<View> headers = new ArrayList<>();
+    final List<View> footers = new ArrayList<>();
 
-    protected static final int TYPE_HEADER = 111;
-    protected static final int TYPE_FOOTER = 222;
-    protected static final int TYPE_ITEM = 333;
-    protected OnItemClickListener clickListener;
+    private static final int TYPE_HEADER = 111;
+    private static final int TYPE_FOOTER = 222;
+    static final int TYPE_ITEM = 333;
+    OnItemClickListener clickListener;
 
     public interface OnItemClickListener {
 
@@ -30,14 +30,14 @@ public abstract class RiksdagenViewHolderAdapter extends RecyclerView.Adapter<Re
 
 
     public static class HeaderFooterViewHolder extends RecyclerView.ViewHolder{
-        FrameLayout base;
+        final FrameLayout base;
         public HeaderFooterViewHolder(View itemView) {
             super(itemView);
             this.base = (FrameLayout) itemView;
         }
     }
 
-    public RiksdagenViewHolderAdapter(List<?> items, OnItemClickListener clickListener) {
+    RiksdagenViewHolderAdapter(List<?> items, OnItemClickListener clickListener) {
         this.items = items;
         this.clickListener = clickListener;
     }
@@ -68,7 +68,7 @@ public abstract class RiksdagenViewHolderAdapter extends RecyclerView.Adapter<Re
         return items.size();
     }
 
-    protected void prepareHeaderFooter(HeaderFooterViewHolder vh, View view){
+    void prepareHeaderFooter(HeaderFooterViewHolder vh, View view){
         //empty out our FrameLayout and replace with our header/footer
         vh.base.removeAllViews();
         vh.base.addView(view);
