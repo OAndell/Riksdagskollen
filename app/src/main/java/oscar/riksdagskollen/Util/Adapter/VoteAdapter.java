@@ -75,7 +75,7 @@ public class VoteAdapter  extends RiksdagenViewHolderAdapter{
         public void bind(final Vote item ,final OnItemClickListener listener) {
             title.setText(item.getTitel());
             docType.setText(R.string.vote);
-            date.setVisibility(View.GONE);
+            date.setText(item.getDatum());
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
