@@ -195,6 +195,7 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
             txtSpannable.setSpan(boldSpan, 0, entity.length()-2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             builder.append(txtSpannable);
+            builder.append("\n");
             builder.append(value);
             return builder;
         }
