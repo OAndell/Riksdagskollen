@@ -100,6 +100,7 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     listener.onItemClick(item);
+
                 }
             });
         }

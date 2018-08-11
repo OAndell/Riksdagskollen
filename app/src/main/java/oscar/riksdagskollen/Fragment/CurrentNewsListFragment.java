@@ -55,8 +55,15 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
                 intent.putExtra("document", (CurrentNews) document);
                 startActivity(intent);*/
                 CurrentNews newsDoc = (CurrentNews) document;
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://riksdagen.se" + newsDoc.getLinklista().getLink().getUrl()));
-                startActivity(browserIntent);
+                Intent browserIntent;
+                try{
+                    browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://riksdagen.se" + newsDoc.getLinklista().getLink().getUrl()));
+                    startActivity(browserIntent);
+                }catch (NullPointerException e){ //Some news does not contain the LinkLista object
+                    System.out.println("Could not open news url");
+                    //browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://riksdagen.se" + newsDoc.getUrl()));
+                    //startActivity(browserIntent);
+                }
             }
         });
 
