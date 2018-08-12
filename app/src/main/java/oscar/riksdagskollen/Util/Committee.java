@@ -54,7 +54,7 @@ public enum Committee {
         JuU.categoryColor = R.color.cat_blue;
 
         KU.committeeCategoryName = "Riksdagen";
-        KU.categoryColor = R.color.cat_blue_gray;
+        KU.categoryColor = R.color.primaryColor;
 
         KrU.committeeCategoryName = "Kultur";
         KrU.categoryColor = R.color.cat_pink;
@@ -63,13 +63,13 @@ public enum Committee {
         MJU.categoryColor = R.color.cat_green;
 
         NU.committeeCategoryName = "Näringsliv";
-        NU.categoryColor = R.color.cat_dark_blue;
+        NU.categoryColor = R.color.cat_orange;
 
         SkU.committeeCategoryName = "Skatter";
         SkU.categoryColor = R.color.cat_yellow;
 
         SfU.committeeCategoryName = "Socialförsäkringar";
-        SfU.categoryColor = R.color.cat_cyan;
+        SfU.categoryColor = R.color.cat_brown;
 
         SoU.committeeCategoryName = "Vård och omsorg";
         SoU.categoryColor = R.color.cat_red;
@@ -84,7 +84,7 @@ public enum Committee {
         UU.categoryColor = R.color.cat_light_gray;
 
         UFöU.committeeCategoryName = "Utrikesförsvar";
-        UFöU.categoryColor = R.color.cat_brown;
+        UFöU.categoryColor = R.color.cat_lime;
     }
 
     public int getCategoryColor() {
@@ -101,6 +101,11 @@ public enum Committee {
         for (Committee c : values()) {
             if (id.equals(c.id))return c;
         }
+
+        for (Committee c: values()){
+            if (id.contains(c.id))return c;
+        }
+
         return null;
     }
 
