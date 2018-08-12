@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/reply_button"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/loading_view_backgrond"
+                android:background="@drawable/button_background"
                 android:layout_margin="10dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
@@ -119,8 +119,8 @@
                 android:textSize="14sp"
                 android:textStyle="normal"
                 android:shadowDy="0"
-                android:textColor="@color/primaryTextColor"
                 android:text="@string/view_reply_button"
+                android:textColor="@color/primaryColor"
                 android:visibility="gone"/>
 
         </LinearLayout>
