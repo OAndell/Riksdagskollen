@@ -11,15 +11,48 @@
         card_view:cardBackgroundColor="@color/cardview_light_background"
         card_view:cardCornerRadius="3dp"
         card_view:cardElevation="6dp"
-        card_view:cardUseCompatPadding="true"
-        card_view:contentPaddingBottom="20dp"
-        card_view:contentPaddingLeft="20dp"
-        card_view:contentPaddingRight="20dp"
-        card_view:contentPaddingTop="8dp">
+        card_view:cardUseCompatPadding="true">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:gravity="start"
+            android:id="@+id/category_name1"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            android:textColor="@color/secondaryTextColor"
+            android:paddingTop="0dp"/>
+
+
+        <FrameLayout
+            android:id="@+id/category_border"
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:layout_gravity="start"
+            android:background="#FF0000">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Miltär och försvar"
+                android:gravity="center_vertical"
+                android:id="@+id/category_name"
+                android:paddingRight="20dp"
+                android:paddingLeft="20dp"
+                android:textSize="14sp"
+                android:textColor="#FFFFFF"
+                android:paddingTop="0dp"/>
+
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingRight="20dp"
+            android:paddingBottom="20dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="35dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -74,14 +107,14 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/full_bet_link"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/loading_view_backgrond"
+                android:background="@drawable/button_background"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:gravity="center_vertical|start"
                 android:textSize="14sp"
                 android:textStyle="normal"
                 android:shadowDy="0"
-                android:textColor="@color/primaryTextColor"
+                android:textColor="@color/primaryColor"
                 android:text="Läs fullständigt betänkande: FKJG-293"
                 />
 
@@ -90,13 +123,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/search_vote"
-                android:background="@drawable/loading_view_backgrond"
+                android:background="@drawable/button_background"
                 android:layout_marginTop="5dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:textSize="14sp"
                 android:gravity="start|center_vertical"
-                android:textColor="@color/primaryTextColor"
+                android:textColor="@color/primaryColor"
                 android:text="Sök efter votering"
                 android:textStyle="normal"
                 />

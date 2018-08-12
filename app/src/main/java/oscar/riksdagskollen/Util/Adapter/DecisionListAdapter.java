@@ -3,6 +3,7 @@ package oscar.riksdagskollen.Util.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spannable;
@@ -22,6 +23,8 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +34,7 @@ import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.DecisionsCallback;
 import oscar.riksdagskollen.Util.Callback.VoteCallback;
+import oscar.riksdagskollen.Util.Committee;
 import oscar.riksdagskollen.Util.JSONModel.DecisionDocument;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
 
@@ -92,7 +96,10 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
         private final TextView debateDate;
         private final TextView decisionDate;
         private final TextView betName;
+        private final TextView catName;
         private final ImageView expandIcon;
+        private final View catColor;
+        private boolean isAnimating = false;
 
         private final Button fullBet;
         private final Button searchVote;
@@ -106,15 +113,17 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
         public DecisionView(final View view) {
             super(view);
             this.itemView = view;
-            title = view.findViewById(R.id.title);
-            body = view.findViewById(R.id.body_text);
-            expandIcon = view.findViewById(R.id.expand_icon);
-            justDate = view.findViewById(R.id.justering_date);
-            debateDate = view.findViewById(R.id.debatt_date);
-            decisionDate = view.findViewById(R.id.beslut_date);
-            fullBet = view.findViewById(R.id.full_bet_link);
-            betName = view.findViewById(R.id.bet_name);
-            searchVote = view.findViewById(R.id.search_vote);
+            title = itemView.findViewById(R.id.title);
+            body = itemView.findViewById(R.id.body_text);
+            expandIcon = itemView.findViewById(R.id.expand_icon);
+            justDate = itemView.findViewById(R.id.justering_date);
+            debateDate = itemView.findViewById(R.id.debatt_date);
+            decisionDate = itemView.findViewById(R.id.beslut_date);
+            fullBet = itemView.findViewById(R.id.full_bet_link);
+            betName = itemView.findViewById(R.id.bet_name);
+            searchVote = itemView.findViewById(R.id.search_vote);
+            catColor = itemView.findViewById(R.id.category_border);
+            catName = itemView.findViewById(R.id.category_name);
         }
 
         public void bind(final DecisionDocument item, final OnItemClickListener listener) {
@@ -126,7 +135,11 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
             decisionDate.setText(dateStringBuilder("Beslut: ", item.getBeslutsdag()));
             fullBet.setText("Läs fullständigt betänkande");
             searchVote.setText("Visa voteringar");
-            if(!item.hasVotes()) searchVote.setVisibility(View.GONE);
+
+            Committee committee = Committee.getCategoryFromBet(item.getBeteckning());
+            catColor.setBackgroundColor(context.getResources().getColor(committee.getCategoryColor()));
+            catName.setText(committee.getCommitteeCategoryName());
+            if(!item.hasVotes() || !item.isExpanded()) searchVote.setVisibility(View.GONE);
 
 
             fullBet.setOnClickListener(new View.OnClickListener() {
@@ -207,13 +220,14 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
                 expand(body, new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
-
+                        isAnimating = true;
                     }
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         fullBet.setVisibility(View.VISIBLE);
                         if(item.hasVotes()) searchVote.setVisibility(View.VISIBLE);
+                        isAnimating = false;
                     }
 
                     @Override
@@ -228,7 +242,7 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
                     public void onVotesFetched(final List<Vote> votes) {
                         if(!votes.isEmpty()){
                             item.setHasVotes(true);
-                            searchVote.setVisibility(View.VISIBLE);
+                            if(!isAnimating) searchVote.setVisibility(View.VISIBLE);
                             searchVote.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -255,13 +269,14 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
                 collapse(body, new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
+                        isAnimating = true;
                         fullBet.setVisibility(View.GONE);
                         if(item.hasVotes()) searchVote.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-
+                        isAnimating = false;
                     }
 
                     @Override

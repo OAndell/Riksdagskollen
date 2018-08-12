@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.Util.Committee;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 
 /**
