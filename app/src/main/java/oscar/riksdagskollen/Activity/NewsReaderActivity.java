@@ -19,7 +19,7 @@ import org.jsoup.select.Elements;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Util.JSONModel.CurrentNews;
-import oscar.riksdagskollen.Util.JSONModel.StringRequestCallback;
+import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 
 
 /**

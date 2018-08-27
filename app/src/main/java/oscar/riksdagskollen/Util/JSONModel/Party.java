@@ -3,6 +3,7 @@ package oscar.riksdagskollen.Util.JSONModel;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+
 /**
  * Created by gustavaaro on 2018-03-25.
  */
@@ -13,8 +14,8 @@ public class Party implements Parcelable {
     private final String name;
 
     public Party(String name, String id) {
-        this.id = id;
         this.name = name;
+        this.id = id;
     }
 
     public String getID(){

@@ -27,7 +27,7 @@ import java.net.URL;
 
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.JSONRequestCallback;
-import oscar.riksdagskollen.Util.JSONModel.StringRequestCallback;
+import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 
 
 /**

@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Util.JSONModel;
+package oscar.riksdagskollen.Util.Callback;
 
 import com.android.volley.VolleyError;
 
