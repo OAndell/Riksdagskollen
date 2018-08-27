@@ -16,10 +16,12 @@ import java.util.List;
 import oscar.riksdagskollen.Activity.MotionActivity;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.PartyDocumentCallback;
+import oscar.riksdagskollen.Util.Callback.PartyLeadersCallback;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Adapter.PartyListViewholderAdapter;
+import oscar.riksdagskollen.Util.JSONModel.Representative;
 
 /**
  * Created by gustavaaro on 2018-03-26.
@@ -42,6 +44,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment {
         args.putParcelable("party",party);
         PartyListFragment newInstance = new PartyListFragment();
         newInstance.setArguments(args);
+
         return newInstance;
     }
 

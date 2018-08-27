@@ -11,6 +11,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -18,6 +19,7 @@ import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.CurrentNewsCallback;
 import oscar.riksdagskollen.Util.Callback.DecisionsCallback;
 import oscar.riksdagskollen.Util.Callback.PartyDocumentCallback;
+import oscar.riksdagskollen.Util.Callback.PartyLeadersCallback;
 import oscar.riksdagskollen.Util.Callback.ProtocolCallback;
 import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.Callback.VoteCallback;
@@ -166,7 +168,7 @@ public class RiksdagenAPIManager {
                     public void onRequestSuccess(JSONObject response) {
                         try {
                             JSONObject jsonDocuments = response.getJSONObject("personlista").getJSONObject("person");
-                            Representative representative = gson.fromJson(jsonDocuments.toString(),Representative.class);
+                            Representative representative = gson.fromJson(jsonDocuments.toString(), Representative.class);
                             callback.onPersonFetched(representative);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -188,6 +190,7 @@ public class RiksdagenAPIManager {
          * @param partyID ex V,S,M etc
          * @param callback
          */
+        //Not sure if this even works with the API
         public void getRepresentative(String fname, String ename, String partyID, final RepresentativeCallback callback){
             String subURL = "/personlista/?iid=&fnamn"+fname+"&ename="+ename+"&parti="+partyID+"=&utformat=json";
             requestManager.doGetRequest(subURL, new JSONRequestCallback() {
@@ -340,7 +343,7 @@ public class RiksdagenAPIManager {
             }
 
 
-            public void getPartyLeaders(String partyName, String partyID) {
+            public void getPartyLeaders(String partyName, final PartyLeadersCallback callback) {
                 //need to remove swedish chars
                 partyName = partyName.replace("ö","o");
                 partyName = partyName.replace("ä","a");
@@ -348,6 +351,7 @@ public class RiksdagenAPIManager {
                 requestManager.downloadHtmlPage(partyInfoUrl, new StringRequestCallback() {
                     @Override
                     public void onResponse(String response) {
+                        ArrayList<Representative> representatives = new ArrayList<>();
                         Document doc = Jsoup.parse(response);
                         Elements leadersList = doc.getElementsByClass("fellow-item");
                         for (int i = 0; i < leadersList.size(); i++) {
@@ -357,9 +361,15 @@ public class RiksdagenAPIManager {
                             if(position.equals("")){
                                 break;
                             }
-                            //TODO the best way would be to create Representative objects for the party leaders.
-                            //TODO the problem is that i have not managed to find a way to do this with double names.
+                            String[] nameArr = name.split(" ");
+                            String firstName = nameArr[0];
+                            String lastName = "";
+                            for (int j = 1; j < nameArr.length; j++) {
+                                lastName += nameArr[j];
+                            }
+                            representatives.add(new Representative(firstName, lastName,position,imageURL));
                         }
+                        callback.onPersonFetched(representatives);
                     }
 
                     @Override

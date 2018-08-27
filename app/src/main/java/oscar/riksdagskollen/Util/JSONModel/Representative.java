@@ -6,7 +6,13 @@ package oscar.riksdagskollen.Util.JSONModel;
  */
 public class Representative  {
 
-    //TODO Add more info! Because why not
+    public Representative(String tilltalsnamn, String efternamn, String roll_kod, String image){
+        this.tilltalsnamn = tilltalsnamn;
+        this.efternamn = efternamn;
+        this.roll_kod = roll_kod;
+        this.bild_url_192 = image;
+    }
+
     private String intressent_id;
     private String hangar_id;
     private String fodd_ar;
@@ -19,6 +25,7 @@ public class Representative  {
     private String bild_url_80;
     private String bild_url_192;
     private String bild_url_max;
+    private String roll_kod;
 
     public String getIntressent_id() {
         return intressent_id;
@@ -68,4 +75,7 @@ public class Representative  {
         return bild_url_max;
     }
 
+    public String getRoll_kod() {
+        return roll_kod;
+    }
 }
