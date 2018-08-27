@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import oscar.riksdagskollen.Fragment.AboutFragment;
 import oscar.riksdagskollen.Fragment.CurrentNewsListFragment;
 import oscar.riksdagskollen.Fragment.DecisionsListFragment;
+import oscar.riksdagskollen.Fragment.PartyInfoFragment;
 import oscar.riksdagskollen.Fragment.PartyListFragment;
 import oscar.riksdagskollen.Fragment.ProtocolListFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
@@ -155,13 +156,13 @@ public class MainActivity extends AppCompatActivity
 
     // Create all of the PartyFragments with new Party objects
     private void initPartyFragments(){
-        mPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_m),"m"));
-        sPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_s),"s"));
-        sdPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_sd),"sd"));
-        kdPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_kd),"kd"));
-        vPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_v),"v"));
-        cPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_c),"c"));
-        mpPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_mp),"mp"));
-        lPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_l),"l"));
+        mPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_m),"m",R.drawable.mlogo));
+        sPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_s),"s",R.drawable.slogo));
+        sdPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_sd),"sd",R.drawable.sdlogo));
+        kdPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_kd),"kd",R.drawable.kdlogo));
+        vPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_v),"v",R.drawable.vlogo));
+        cPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_c),"c",R.drawable.clogo));
+        mpPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_mp),"mp",R.drawable.mplogo));
+        lPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_l),"l",R.drawable.llogo));
     }
 }

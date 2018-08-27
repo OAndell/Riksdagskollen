@@ -32,8 +32,6 @@ public class AboutFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_about,null);
     }
 
-
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         TextView gitHubLink = view.findViewById(R.id.github_link);
