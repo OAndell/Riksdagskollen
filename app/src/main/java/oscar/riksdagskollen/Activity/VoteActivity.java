@@ -34,6 +34,8 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
@@ -117,20 +119,27 @@ public class VoteActivity extends AppCompatActivity{
                         Element next = pointTitle.get(0);
                         String pointName = pointTitle.get(0).text().substring(3);
 
-
-                        ArrayList<String> motions = new ArrayList<>();
+                        final HashMap<String, String> motions = new HashMap<>();
                         for (int i = 0; i < 10; i++) {
                             next = next.nextElementSibling();
-                            if(next.text().contains(":") && next.text().contains("/")){
-                                motions.add(next.text().split(" ")[0]);
+                            if(next.text().contains(":") && next.text().contains("/") && next.text().indexOf(':') == 7){
+                                Pattern propositionPattern = Pattern.compile("yrkande.* [0-9,–]*");
+                                Matcher matcher = propositionPattern.matcher(next.text());
+                                String prop = "";
+                                if (matcher.find()){
+                                    prop = matcher.group(0);
+                                    prop = prop.replace("yrkandena", ": Förslag");
+                                    prop = prop.replace("yrkande", ": Förslag");
+                                }
+                                motions.put(next.text().split(" ")[0], prop);
                             }
                             else if(next.toString().contains("Reservation")){
                                 break;
                             }
                         }
                         textBody.setText(pointName);
-                        for (int i = 0; i < motions.size(); i++) {
-                            app.getRiksdagenAPIManager().getMotionByID(motions.get(i), new PartyDocumentCallback() {
+                        for (final String key : motions.keySet()) {
+                            app.getRiksdagenAPIManager().getMotionByID(key, new PartyDocumentCallback() {
                                 @Override
                                 public void onDocumentsFetched(List<PartyDocument> documents) {
                                     final PartyDocument motionDocument = documents.get(0);
@@ -138,7 +147,7 @@ public class VoteActivity extends AppCompatActivity{
                                     TextView motionTitle = (TextView) layoutInflater.inflate(R.layout.vote_button_row, null);
                                     SpannableString content = new SpannableString(motionDocument.getTitel());
                                     content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                                    motionTitle.setText(content);
+                                    motionTitle.setText(content + motions.get(key));
                                     motionTitle.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
@@ -162,7 +171,7 @@ public class VoteActivity extends AppCompatActivity{
                             });
                         }
                     //We could not find the vote point for some reason
-                    }catch (Exception IndexOutOfBoundsException){
+                    }catch (Exception e){
                         motionLoaded = true;
                         checkLoading();
                         textBody.setText("");
