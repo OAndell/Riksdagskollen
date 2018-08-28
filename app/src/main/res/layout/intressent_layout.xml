@@ -21,5 +21,4 @@
         android:textSize="15sp"
         android:layout_marginTop="10dp"
         android:text="Jan Åslund (M) VÄLDIGT LÅNGT NAMN"/>
-
 </LinearLayout>

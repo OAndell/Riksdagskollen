@@ -16,11 +16,12 @@
 
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/leadersLayout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:alignContent="center"
-                app:flexWrap="wrap"></com.google.android.flexbox.FlexboxLayout>
+                app:flexWrap="wrap"
+                app:alignItems="center"
+                app:justifyContent="center">
+            </com.google.android.flexbox.FlexboxLayout>
 
             <ImageView
                 android:id="@+id/party_logo"
