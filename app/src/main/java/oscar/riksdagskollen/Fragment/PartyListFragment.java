@@ -39,7 +39,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment {
      * @return a new instance of this fragment with the Party object in its arguments
      */
 
-    public static PartyListFragment newIntance(Party party){
+    public static PartyListFragment newInstance(Party party){
         Bundle args = new Bundle();
         args.putParcelable("party",party);
         PartyListFragment newInstance = new PartyListFragment();

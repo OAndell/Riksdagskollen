@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import oscar.riksdagskollen.Fragment.AboutFragment;
 import oscar.riksdagskollen.Fragment.CurrentNewsListFragment;
 import oscar.riksdagskollen.Fragment.DecisionsListFragment;
-import oscar.riksdagskollen.Fragment.PartyInfoFragment;
+import oscar.riksdagskollen.Fragment.PartyFragment;
 import oscar.riksdagskollen.Fragment.PartyListFragment;
 import oscar.riksdagskollen.Fragment.ProtocolListFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
@@ -28,14 +28,14 @@ public class MainActivity extends AppCompatActivity
     private DecisionsListFragment decisionsFragment;
     private VoteListFragment voteListFragment;
     private AboutFragment aboutFragment;
-    private PartyListFragment sPartyFragment;
-    private PartyListFragment mPartyFragment;
-    private PartyListFragment sdPartyFragment;
-    private PartyListFragment mpPartyFragment;
-    private PartyListFragment cPartyFragment;
-    private PartyListFragment vPartyFragment;
-    private PartyListFragment lPartyFragment;
-    private PartyListFragment kdPartyFragment;
+    private PartyFragment sPartyFragment;
+    private PartyFragment mPartyFragment;
+    private PartyFragment sdPartyFragment;
+    private PartyFragment mpPartyFragment;
+    private PartyFragment cPartyFragment;
+    private PartyFragment vPartyFragment;
+    private PartyFragment lPartyFragment;
+    private PartyFragment kdPartyFragment;
     private NavigationView navigationView;
 
 
@@ -156,13 +156,13 @@ public class MainActivity extends AppCompatActivity
 
     // Create all of the PartyFragments with new Party objects
     private void initPartyFragments(){
-        mPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_m),"m",R.drawable.mlogo));
-        sPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_s),"s",R.drawable.slogo));
-        sdPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_sd),"sd",R.drawable.sdlogo));
-        kdPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_kd),"kd",R.drawable.kdlogo));
-        vPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_v),"v",R.drawable.vlogo));
-        cPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_c),"c",R.drawable.clogo));
-        mpPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_mp),"mp",R.drawable.mplogo));
-        lPartyFragment = PartyListFragment.newIntance(new Party(getString(R.string.party_l),"l",R.drawable.llogo));
+        mPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_m),"m",R.drawable.mlogo));
+        sPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_s),"s",R.drawable.slogo));
+        sdPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_sd),"sd",R.drawable.sdlogo));
+        kdPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_kd),"kd",R.drawable.kdlogo));
+        vPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_v),"v",R.drawable.vlogo));
+        cPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_c),"c",R.drawable.clogo));
+        mpPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_mp),"mp",R.drawable.mplogo));
+        lPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_l),"l",R.drawable.llogo));
     }
 }

@@ -365,7 +365,7 @@ public class RiksdagenAPIManager {
                             String firstName = nameArr[0];
                             String lastName = "";
                             for (int j = 1; j < nameArr.length; j++) {
-                                lastName += nameArr[j];
+                                lastName += nameArr[j] + " ";
                             }
                             representatives.add(new Representative(firstName, lastName,position,imageURL));
                         }
