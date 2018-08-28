@@ -7,11 +7,19 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.NetworkImageView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.Committee;
+import oscar.riksdagskollen.Util.JSONModel.Intressent;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
+import oscar.riksdagskollen.Util.JSONModel.Representative;
 
 /**
  * Created by shelbot on 2018-03-27.
@@ -25,12 +33,16 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
         final TextView published;
         final TextView author;
         final TextView dokName;
+        final NetworkImageView authorView;
+
         public MyViewHolder(View partyView) {
             super(partyView);
             documentTitle = partyView.findViewById(R.id.document);
             published = partyView.findViewById(R.id.publicerad);
             author = partyView.findViewById(R.id.författare);
             dokName = partyView.findViewById(R.id.dok_typ);
+            authorView = partyView.findViewById(R.id.author_img);
+
             partyView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -48,6 +60,30 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
                     listener.onItemClick(item);
                 }
             });
+
+            authorView.setDefaultImageResId(R.mipmap.ic_default_person);
+            ArrayList<Intressent> i = item.getDokintressent().getIntressenter();
+            int senderCount = 0;
+            for (Intressent intressent: i) {
+                if (intressent.getRoll().equals("undertecknare")) senderCount++;
+                if (senderCount > 1) break;
+            }
+            if (senderCount > 1 ) authorView.setVisibility(View.GONE);
+            else {
+                authorView.setVisibility(View.VISIBLE);
+                RikdagskollenApp.getInstance().getRiksdagenAPIManager().getRepresentative(i.get(0).getIntressent_id(), new RepresentativeCallback() {
+                    @Override
+                    public void onPersonFetched(Representative representative) {
+                        authorView.setImageUrl(representative.getBild_url_192(),RikdagskollenApp.getInstance().getRequestManager().getmImageLoader());
+                    }
+                    @Override
+                    public void onFail(VolleyError error) {
+
+                    }
+                });
+            }
+
+
         }
     }
 
@@ -57,7 +93,6 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
         super(documentList,clickListener);
         this.documentList = documentList;
         this.clickListener = clickListener;
-
     }
 
 

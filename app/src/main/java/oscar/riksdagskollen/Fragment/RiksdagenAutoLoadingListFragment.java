@@ -91,6 +91,10 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         pageToLoad--;
     }
 
+    void resetPage(){
+        pageToLoad = 1;
+    }
+
     abstract RiksdagenViewHolderAdapter getAdapter();
 
 

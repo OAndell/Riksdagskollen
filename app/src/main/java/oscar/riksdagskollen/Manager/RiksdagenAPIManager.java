@@ -33,6 +33,7 @@ import oscar.riksdagskollen.Util.JSONModel.Protocol;
 import oscar.riksdagskollen.Util.JSONModel.Representative;
 import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
+import oscar.riksdagskollen.Util.PartyDocumentType;
 
 /**
  * Created by gustavaaro on 2018-03-25.
@@ -50,10 +51,18 @@ public class RiksdagenAPIManager {
             }
 
 
-            public void getDocumentsForParty(Party party,int page, final PartyDocumentCallback callback){
+            public void getDocumentsForParty(Party party, int page, final PartyDocumentCallback callback, ArrayList<PartyDocumentType> filter){
+                String dokTypeFilter = "";
+                for (PartyDocumentType dokType: filter){
+                    dokTypeFilter += dokType.getDocType() + ",";
+                }
+
+
                 String subURL = "/dokumentlista/?avd=dokument&del=dokument&fcs=1&sort=datum&sortorder=desc&utformat=json"
                         + "&parti=" + party.getID()
-                        + "&p=" + page;
+                        + "&p=" + page
+                        + "&doktyp="+dokTypeFilter;
+
                 requestManager.doGetRequest(subURL, new JSONRequestCallback() {
                     @Override
                     public void onRequestSuccess(JSONObject response) {
