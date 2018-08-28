@@ -33,5 +33,13 @@
     <string name="github">https://github.com/OAndell/Riksdagskollen</string>
     <string name="view_reply_button">Denna fråga har besvarats: Läs svar</string>
 
+    <string name="s_website">www.socialdemokraterna.se</string>
+    <string name="m_website">www.moderaterna.se</string>
+    <string name="sd_website">www.sd.se</string>
+    <string name="mp_website">www.mp.se</string>
+    <string name="c_website">www.centerpartiet.se</string>
+    <string name="v_website">www.vansterpartiet.se</string>
+    <string name="l_website">www.liberalerna.se</string>
+    <string name="kd_website">www.kristdemokraterna.se</string>
 
 </resources>

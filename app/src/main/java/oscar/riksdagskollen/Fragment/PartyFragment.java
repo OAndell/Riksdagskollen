@@ -64,7 +64,7 @@ public class PartyFragment extends Fragment {
 
         Adapter adapter = new Adapter(getChildFragmentManager());
         adapter.addFragment(listFragment, "Flöde");
-        adapter.addFragment(infoFragment, "Info");
+        adapter.addFragment(infoFragment, "Parti");
         viewPager.setAdapter(adapter);
 
 

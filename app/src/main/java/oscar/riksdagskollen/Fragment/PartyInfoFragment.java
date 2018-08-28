@@ -1,9 +1,13 @@
 package oscar.riksdagskollen.Fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,10 +56,13 @@ public class PartyInfoFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         this.party = getArguments().getParcelable("party");
-        final FlexboxLayout leadersLayout = view.findViewById(R.id.leadersLayout);
 
+        //Set party logo
         ImageView partyLogoView = view.findViewById(R.id.party_logo);
         partyLogoView.setImageResource(party.getDrawableLogo());
+
+        //Fill view with party leaders
+        final FlexboxLayout leadersLayout = view.findViewById(R.id.leadersLayout);
         final RikdagskollenApp app = RikdagskollenApp.getInstance();
         app.getRiksdagenAPIManager().getPartyLeaders(party.getName(), new PartyLeadersCallback() {
             @Override
@@ -69,8 +76,6 @@ public class PartyInfoFragment extends Fragment {
                     TextView nameTv = portraitView.findViewById(R.id.intressent_name);
                     nameTv.setText(leaders.get(i).getTilltalsnamn()+" "+leaders.get(i).getEfternamn() +"\n" + leaders.get(i).getRoll_kod());
                     leadersLayout.addView(portraitView);
-                    System.out.println(leaders.get(i).getTilltalsnamn()+ " " + leaders.get(i).getEfternamn());
-                    System.out.println("   " +leaders.get(i).getRoll_kod());
                 }
             }
 
@@ -79,5 +84,20 @@ public class PartyInfoFragment extends Fragment {
 
             }
         });
+
+        //Set party website
+        TextView website = view.findViewById(R.id.website);
+        SpannableString content = new SpannableString(party.getWebsite());
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+        website.setText(content);
+        website.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"+party.getWebsite()));
+                startActivity(browserIntent);
+            }
+        });
+
+
     }
 }

@@ -23,6 +23,19 @@
                 app:justifyContent="center">
             </com.google.android.flexbox.FlexboxLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/website"
+                android:gravity="center"
+                android:textColor="@color/primaryColor"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:text="www.example.se"/>
+
+
             <ImageView
                 android:id="@+id/party_logo"
                 android:layout_width="300dp"

@@ -156,13 +156,13 @@ public class MainActivity extends AppCompatActivity
 
     // Create all of the PartyFragments with new Party objects
     private void initPartyFragments(){
-        mPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_m),"m",R.drawable.mlogo));
-        sPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_s),"s",R.drawable.slogo));
-        sdPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_sd),"sd",R.drawable.sdlogo));
-        kdPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_kd),"kd",R.drawable.kdlogo));
-        vPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_v),"v",R.drawable.vlogo));
-        cPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_c),"c",R.drawable.clogo));
-        mpPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_mp),"mp",R.drawable.mplogo));
-        lPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_l),"l",R.drawable.llogo));
+        mPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_m),"m",R.drawable.mlogo, getString(R.string.m_website)));
+        sPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_s),"s",R.drawable.slogo, getString(R.string.s_website)));
+        sdPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_sd),"sd",R.drawable.sdlogo, getString(R.string.sd_website)));
+        kdPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_kd),"kd",R.drawable.kdlogo, getString(R.string.kd_website)));
+        vPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_v),"v",R.drawable.vlogo, getString(R.string.v_website)));
+        cPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_c),"c",R.drawable.clogo, getString(R.string.c_website)));
+        mpPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_mp),"mp",R.drawable.mplogo, getString(R.string.mp_website)));
+        lPartyFragment = PartyFragment.newInstance(new Party(getString(R.string.party_l),"l",R.drawable.llogo, getString(R.string.l_website)));
     }
 }
