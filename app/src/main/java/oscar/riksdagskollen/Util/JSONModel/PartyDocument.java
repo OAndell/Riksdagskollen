@@ -94,6 +94,12 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
         this.titel = titel;
     }
 
+    public long uniqueDocId(){
+        String stringID = getId();
+        stringID = stringID.replaceAll("[A-ö]+","");
+        return Long.parseLong(stringID);
+    }
+
     @Override
     public int describeContents() {
         return 0;

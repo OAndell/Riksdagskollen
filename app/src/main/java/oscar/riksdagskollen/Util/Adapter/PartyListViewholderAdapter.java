@@ -52,7 +52,8 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
 
         void bind(final PartyDocument item, final OnItemClickListener listener) {
             documentTitle.setText(item.getTitel());
-            published.setText("Publicerad " + item.getPublicerad());
+            if(item.getPublicerad() != null && !item.getPublicerad().equals("null")) published.setText("Publicerad " + item.getPublicerad());
+            else published.setText("");
             author.setText(item.getUndertitel());
             dokName.setText(item.getDokumentnamn());
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -60,9 +61,11 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
                     listener.onItemClick(item);
                 }
             });
+            ArrayList<Intressent> i = item.getDokintressent().getIntressenter();
 
             authorView.setDefaultImageResId(R.mipmap.ic_default_person);
-            ArrayList<Intressent> i = item.getDokintressent().getIntressenter();
+            authorView.invalidate();
+
             int senderCount = 0;
             for (Intressent intressent: i) {
                 if (intressent.getRoll().equals("undertecknare")) senderCount++;
@@ -74,6 +77,7 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
                 RikdagskollenApp.getInstance().getRiksdagenAPIManager().getRepresentative(i.get(0).getIntressent_id(), new RepresentativeCallback() {
                     @Override
                     public void onPersonFetched(Representative representative) {
+                        authorView.setActivated(true);
                         authorView.setImageUrl(representative.getBild_url_192(),RikdagskollenApp.getInstance().getRequestManager().getmImageLoader());
                     }
                     @Override
@@ -87,7 +91,12 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
         }
     }
 
-
+    @Override
+    public long getItemId(int position) {
+        // Give loading view id 1
+        if (position == documentList.size()) return 1;
+        return documentList.get(position).uniqueDocId();
+    }
 
     public PartyListViewholderAdapter(List<PartyDocument> documentList, OnItemClickListener clickListener) {
         super(documentList,clickListener);

@@ -62,6 +62,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
     @Override
     public void onResume() {
         super.onResume();
+        setHasOptionsMenu(true);
         preferences.registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -69,6 +70,8 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
     public void onPause() {
         super.onPause();
         preferences.unregisterOnSharedPreferenceChangeListener(this);
+        setHasOptionsMenu(false);
+
     }
 
     @Nullable
@@ -93,6 +96,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
                 startActivity(intent);
             }
         });
+        getAdapter().setHasStableIds(true);
     }
 
     @Override
