@@ -42,4 +42,22 @@
     <string name="l_website">www.liberalerna.se</string>
     <string name="kd_website">www.kristdemokraterna.se</string>
 
+    <string name="s_ideology">Demokratisk socialism, Socialdemokrati, Tredje vägens politik, Feminism</string>
+    <string name="m_ideology">Liberalkonservatism, Marknadsliberalism</string>
+    <string name="sd_ideology">Nationalkonservatism, Socialkonservatism, Nationalism, Euroskepticism</string>
+    <string name="mp_ideology">Grön ideologi, Ekologism, Feminism</string>
+    <string name="c_ideology">Liberalism, Socialliberalism, Grön ideologi, Decentralism, Liberalfeminism</string>
+    <string name="v_ideology">Socialism, Feminism, Grön ideologi/Ekologism, Euroskepticism</string>
+    <string name="l_ideology">Socialliberalism, Liberalfeminism</string>
+    <string name="kd_ideology">Kristdemokrati, Socialkonservatism</string>
+
+
+    <string name="s_about">TODO</string>
+    <string name="c_about">TODO</string>
+    <string name="kd_about">Kristdemokraterna sätter människovärdet främst och vill prioritera det som är nödvändigt för att bygga ett samhälle som håller ihop</string>
+    <string name="l_about">Vi är Liberalerna – Sveriges liberala parti. Vi vill ha en riktigt bra skola för alla barn, och en integrationspolitik som både ställer krav och skapar möjligheter.</string>
+    <string name="m_about">Sverige ska präglas av företagsamhet, jämlikhet och social rörlighet där varje ny generation får en chans att forma sitt eget liv, inte bara följa i sina föräldrars fotspår.</string>
+    <string name="sd_about">Vi är det Sverigevänliga alternativet. Vi värnar tidigare generationers arbete och vårdar det som snart ska överlämnas åt nästa. Vi är hela Sveriges parti och vi tror på förändring framåt.</string>
+    <string name="mp_about">Miljöpartiet har vuxit fram ur rörelserna för miljö, fred och jämställdhet. Idag är vi med och gör politiken grönare.</string>
+    <string name="v_about">Vi är en växande rörelse som verkar för ett samhälle för alla och inte bara några få. Ett samhälle som präglas av medmänsklighet, solidaritet och rättvisa.</string>
 </resources>

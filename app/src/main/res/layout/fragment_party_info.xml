@@ -4,6 +4,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include layout="@layout/loading_view" android:visibility="visible"></include>
+    
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,6 +24,28 @@
                 app:alignItems="center"
                 app:justifyContent="center">
             </com.google.android.flexbox.FlexboxLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/primaryColor"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:text="Politisk ideologi"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ideology"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_gravity="center"
+                android:text="Demokratisk socialism, Socialdemokrati, Tredje vägens politik, Feminism"/>
 
             <TextView
                 android:layout_width="wrap_content"

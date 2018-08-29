@@ -57,6 +57,10 @@ public class PartyInfoFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         this.party = getArguments().getParcelable("party");
 
+        final ViewGroup loadingView = view.findViewById(R.id.loading_view);
+
+
+
         //Set party logo
         ImageView partyLogoView = view.findViewById(R.id.party_logo);
         partyLogoView.setImageResource(party.getDrawableLogo());
@@ -77,6 +81,7 @@ public class PartyInfoFragment extends Fragment {
                     nameTv.setText(leaders.get(i).getTilltalsnamn()+" "+leaders.get(i).getEfternamn() +"\n" + leaders.get(i).getRoll_kod());
                     leadersLayout.addView(portraitView);
                 }
+                loadingView.setVisibility(View.GONE);
             }
 
             @Override
@@ -84,6 +89,10 @@ public class PartyInfoFragment extends Fragment {
 
             }
         });
+
+        //ideology
+        TextView ideologyView = view.findViewById(R.id.ideology);
+        ideologyView.setText(party.getIdeology());
 
         //Set party website
         TextView website = view.findViewById(R.id.website);

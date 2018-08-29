@@ -13,12 +13,14 @@ public class Party implements Parcelable {
     private final String id;
     private final String name;
     private final String website;
+    private final String ideology;
     private final int drawableLogo;
 
-    public Party(String name, String id, int drawableLogo, String website) {
+    public Party(String name, String id, int drawableLogo, String website, String ideology) {
         this.name = name;
         this.id = id;
         this.drawableLogo = drawableLogo;
+        this.ideology = ideology;
         this.website = website;
     }
 
@@ -38,6 +40,10 @@ public class Party implements Parcelable {
         return drawableLogo;
     }
 
+    public String getIdeology(){
+        return ideology;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -49,6 +55,7 @@ public class Party implements Parcelable {
         dest.writeString(this.name);
         dest.writeInt(this.drawableLogo);
         dest.writeString(this.website);
+        dest.writeString(this.ideology);
     }
 
     private Party(Parcel in) {
@@ -56,6 +63,7 @@ public class Party implements Parcelable {
         this.name = in.readString();
         this.drawableLogo = in.readInt();
         this.website = in.readString();
+        this.ideology = in.readString();
     }
 
     public static final Parcelable.Creator<Party> CREATOR = new Parcelable.Creator<Party>() {
