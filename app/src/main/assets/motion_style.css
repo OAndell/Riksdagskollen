@@ -98,7 +98,7 @@ img {
 
 table {
         display: block;
-        overflow-x: hidden;
+        overflow-x: scroll;
         border-spacing: 10px;
         border-collapse: collapse;
         margin-bottom: 1.25rem;
