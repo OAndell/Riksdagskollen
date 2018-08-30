@@ -40,6 +40,8 @@ dependencies {
     implementation 'com.google.android:flexbox:1.0.0'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
 
 
     testCompile 'junit:junit:4.12'

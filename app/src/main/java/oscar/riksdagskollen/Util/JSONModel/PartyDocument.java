@@ -22,6 +22,7 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
     private String traff;
     private String summary;
     private String dokumentnamn;
+    private String datum;
     private DokIntressent dokintressent;
 
     public DokIntressent getDokintressent() {
@@ -84,6 +85,10 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
         return dokumentnamn.equalsIgnoreCase("motion");
     }
 
+    public String getDatum() {
+        return datum;
+    }
+
     @Override
     public String toString() {
         return getTitel();
@@ -120,16 +125,17 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
         dest.writeString(this.traff);
         dest.writeString(this.summary);
         dest.writeString(this.dokumentnamn);
+        dest.writeString(this.datum);
         dest.writeParcelable(this.dokintressent, flags);
     }
 
-    private PartyDocument(Parcel in) {
+    protected PartyDocument(Parcel in) {
         this.id = in.readString();
         this.undertitel = in.readString();
         this.titel = in.readString();
-        this.beteckning = in.readString();
-        this.typ = in.readString();
         this.rm = in.readString();
+        this.typ = in.readString();
+        this.beteckning = in.readString();
         this.publicerad = in.readString();
         this.doktyp = in.readString();
         this.dokument_url_text = in.readString();
@@ -137,6 +143,7 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
         this.traff = in.readString();
         this.summary = in.readString();
         this.dokumentnamn = in.readString();
+        this.datum = in.readString();
         this.dokintressent = in.readParcelable(DokIntressent.class.getClassLoader());
     }
 

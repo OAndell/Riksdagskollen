@@ -1,25 +1,20 @@
 package oscar.riksdagskollen.Util.Adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.NetworkImageView;
+import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RikdagskollenApp;
-import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
-import oscar.riksdagskollen.Util.Committee;
-import oscar.riksdagskollen.Util.JSONModel.Intressent;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
-import oscar.riksdagskollen.Util.JSONModel.Representative;
 
 /**
  * Created by shelbot on 2018-03-27.
@@ -33,7 +28,7 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
         final TextView published;
         final TextView author;
         final TextView dokName;
-        final NetworkImageView authorView;
+        final ImageView authorView;
 
         public MyViewHolder(View partyView) {
             super(partyView);
@@ -52,7 +47,11 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
 
         void bind(final PartyDocument item, final OnItemClickListener listener) {
             documentTitle.setText(item.getTitel());
+
+            // Handle documents without publication date
             if(item.getPublicerad() != null && !item.getPublicerad().equals("null")) published.setText("Publicerad " + item.getPublicerad());
+            else if (item.getDatum() != null && !item.getDatum().equals("null"))
+                published.setText("Publicerad " + item.getDatum());
             else published.setText("");
             author.setText(item.getUndertitel());
             dokName.setText(item.getDokumentnamn());
@@ -61,10 +60,18 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
                     listener.onItemClick(item);
                 }
             });
-            ArrayList<Intressent> i = item.getDokintressent().getIntressenter();
+            /*
+                Code for showing images of authors in feed below. Quite unstable right now with flickering etc. Need to be reworked
+                before being usable.
 
-            authorView.setDefaultImageResId(R.mipmap.ic_default_person);
-            authorView.invalidate();
+            final ArrayList<Intressent> i = item.getDokintressent().getIntressenter();
+
+
+            Picasso.get().cancelRequest(authorView);
+            Picasso.get().load(R.mipmap.ic_default_person)
+                    .fit()
+                    .into(authorView);
+
 
             int senderCount = 0;
             for (Intressent intressent: i) {
@@ -74,18 +81,21 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
             if (senderCount > 1 ) authorView.setVisibility(View.GONE);
             else {
                 authorView.setVisibility(View.VISIBLE);
+
                 RikdagskollenApp.getInstance().getRiksdagenAPIManager().getRepresentative(i.get(0).getIntressent_id(), new RepresentativeCallback() {
                     @Override
                     public void onPersonFetched(Representative representative) {
-                        authorView.setActivated(true);
-                        authorView.setImageUrl(representative.getBild_url_192(),RikdagskollenApp.getInstance().getRequestManager().getmImageLoader());
+                        if(representative.getIntressent_id().equals(i.get(0).getIntressent_id())){
+                            Picasso.get().load(representative.getBild_url_192()).placeholder(R.mipmap.ic_default_person).into(authorView);
+                        }
                     }
                     @Override
                     public void onFail(VolleyError error) {
 
                     }
                 });
-            }
+            } }*/
+
 
 
         }
@@ -136,7 +146,14 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
         }
     }
 
-
-
-
+    @Override
+    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+        super.onViewRecycled(holder);
+        if (holder instanceof MyViewHolder) {
+            Picasso.get().cancelRequest(((MyViewHolder) holder).authorView);
+            Picasso.get().load(R.mipmap.ic_default_person)
+                    .fit()
+                    .into(((MyViewHolder) holder).authorView);
+        }
+    }
 }
