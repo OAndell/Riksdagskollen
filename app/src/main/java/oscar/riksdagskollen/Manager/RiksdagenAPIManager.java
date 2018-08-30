@@ -1,5 +1,6 @@
 package oscar.riksdagskollen.Manager;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,24 +15,23 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.CurrentNewsCallback;
 import oscar.riksdagskollen.Util.Callback.DecisionsCallback;
+import oscar.riksdagskollen.Util.Callback.JSONRequestCallback;
 import oscar.riksdagskollen.Util.Callback.PartyDocumentCallback;
 import oscar.riksdagskollen.Util.Callback.PartyLeadersCallback;
 import oscar.riksdagskollen.Util.Callback.ProtocolCallback;
 import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
+import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 import oscar.riksdagskollen.Util.Callback.VoteCallback;
 import oscar.riksdagskollen.Util.JSONModel.CurrentNews;
 import oscar.riksdagskollen.Util.JSONModel.CurrentNewsLink;
 import oscar.riksdagskollen.Util.JSONModel.DecisionDocument;
 import oscar.riksdagskollen.Util.JSONModel.Party;
-import oscar.riksdagskollen.Util.Callback.JSONRequestCallback;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Protocol;
 import oscar.riksdagskollen.Util.JSONModel.Representative;
-import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
 import oscar.riksdagskollen.Util.PartyDocumentType;
 
@@ -170,9 +170,9 @@ public class RiksdagenAPIManager {
              * @param iid intressent_id for the representative
              * @param callback callback function which the a Representative JSON model is returned.
              */
-            public void getRepresentative(String iid, final RepresentativeCallback callback){
+            public Request getRepresentative(String iid, final RepresentativeCallback callback) {
                 String subURL = "/personlista/?iid="+iid+"&utformat=json";
-                requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+                return requestManager.doGetRequest(subURL, new JSONRequestCallback() {
                     @Override
                     public void onRequestSuccess(JSONObject response) {
                         try {

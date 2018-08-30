@@ -6,15 +6,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
+import oscar.riksdagskollen.Util.JSONModel.Intressent;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
+import oscar.riksdagskollen.Util.JSONModel.Representative;
+import oscar.riksdagskollen.Util.View.CircularNetworkImageView;
 
 /**
  * Created by shelbot on 2018-03-27.
@@ -22,13 +28,16 @@ import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 
 public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
     private final List<PartyDocument> documentList;
+    private final RikdagskollenApp app = RikdagskollenApp.getInstance();
 
-    class MyViewHolder extends RecyclerView.ViewHolder{
+
+    class MyViewHolder extends RecyclerView.ViewHolder {
         final TextView documentTitle;
         final TextView published;
         final TextView author;
         final TextView dokName;
-        final ImageView authorView;
+        final CircularNetworkImageView authorView;
+        Request imageUrlRequest;
 
         public MyViewHolder(View partyView) {
             super(partyView);
@@ -49,54 +58,44 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
             documentTitle.setText(item.getTitel());
 
             // Handle documents without publication date
-            if(item.getPublicerad() != null && !item.getPublicerad().equals("null")) published.setText("Publicerad " + item.getPublicerad());
+            if (item.getPublicerad() != null && !item.getPublicerad().equals("null"))
+                published.setText("Publicerad " + item.getPublicerad());
             else if (item.getDatum() != null && !item.getDatum().equals("null"))
                 published.setText("Publicerad " + item.getDatum());
             else published.setText("");
             author.setText(item.getUndertitel());
             dokName.setText(item.getDokumentnamn());
             itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     listener.onItemClick(item);
                 }
             });
-            /*
-                Code for showing images of authors in feed below. Quite unstable right now with flickering etc. Need to be reworked
-                before being usable.
+
 
             final ArrayList<Intressent> i = item.getDokintressent().getIntressenter();
 
 
-            Picasso.get().cancelRequest(authorView);
-            Picasso.get().load(R.mipmap.ic_default_person)
-                    .fit()
-                    .into(authorView);
-
-
             int senderCount = 0;
-            for (Intressent intressent: i) {
+            for (Intressent intressent : i) {
                 if (intressent.getRoll().equals("undertecknare")) senderCount++;
                 if (senderCount > 1) break;
             }
-            if (senderCount > 1 ) authorView.setVisibility(View.GONE);
+            if (senderCount > 1) authorView.setVisibility(View.GONE);
             else {
                 authorView.setVisibility(View.VISIBLE);
-
-                RikdagskollenApp.getInstance().getRiksdagenAPIManager().getRepresentative(i.get(0).getIntressent_id(), new RepresentativeCallback() {
+                imageUrlRequest = app.getRiksdagenAPIManager().getRepresentative(i.get(0).getIntressent_id(), new RepresentativeCallback() {
                     @Override
                     public void onPersonFetched(Representative representative) {
-                        if(representative.getIntressent_id().equals(i.get(0).getIntressent_id())){
-                            Picasso.get().load(representative.getBild_url_192()).placeholder(R.mipmap.ic_default_person).into(authorView);
-                        }
+                        authorView.setImageUrl(representative.getBild_url_192(), app.getRequestManager().getmImageLoader());
                     }
+
                     @Override
                     public void onFail(VolleyError error) {
 
                     }
                 });
-            } }*/
-
-
+            }
 
         }
     }
@@ -150,10 +149,10 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
         if (holder instanceof MyViewHolder) {
-            Picasso.get().cancelRequest(((MyViewHolder) holder).authorView);
-            Picasso.get().load(R.mipmap.ic_default_person)
-                    .fit()
-                    .into(((MyViewHolder) holder).authorView);
+            MyViewHolder viewHolder = ((MyViewHolder) holder);
+            if (viewHolder.imageUrlRequest != null) viewHolder.imageUrlRequest.cancel();
+            viewHolder.authorView.setImageResource(R.mipmap.ic_default_person);
+
         }
     }
 }

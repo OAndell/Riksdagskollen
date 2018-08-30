@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.android.volley.Cache;
 import com.android.volley.Network;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -69,8 +70,8 @@ public class RequestManager {
         return mImageLoader;
     }
 
-    public void doGetRequest(String subURL, JSONRequestCallback callback){
-        doJsonRequest(GET,null,subURL,callback);
+    public Request doGetRequest(String subURL, JSONRequestCallback callback) {
+        return doJsonRequest(GET, null, subURL, callback);
     }
 
     public void doStringGetRequest(String subURL, StringRequestCallback callback){
@@ -93,16 +94,16 @@ public class RequestManager {
         doJsonRequest(PATCH,jsonRequest,subURL,callback);
     }
 
-    private void doJsonRequest(int method, JSONObject jsonRequest, String subURL, JSONRequestCallback callback){
+    private Request doJsonRequest(int method, JSONObject jsonRequest, String subURL, JSONRequestCallback callback) {
         String url = baseUrl + subURL;
-        queueJSONRequest(jsonRequest,url,method,callback);
+        return queueJSONRequest(jsonRequest, url, method, callback);
     }
 
     private void doStringRequest(int method, String subURL, StringRequestCallback callback){
         queueStringRequest(subURL,method,callback);
     }
 
-    private void queueJSONRequest(final JSONObject jsonRequest, final String url, final int method, final JSONRequestCallback callback){
+    private Request queueJSONRequest(final JSONObject jsonRequest, final String url, final int method, final JSONRequestCallback callback) {
         System.out.println("Making request to: " + url);
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(method, url, jsonRequest, new Response.Listener<JSONObject>() {
             @Override
@@ -117,7 +118,9 @@ public class RequestManager {
             }
         });
         requestQueue.add(jsonObjectRequest);
+        return jsonObjectRequest;
     }
+
 
     private void queueStringRequest(final String url, final int method, final StringRequestCallback callback ){
         final StringRequest request = new StringRequest(method, url, new Response.Listener<String>() {
@@ -138,6 +141,14 @@ public class RequestManager {
     public void downloadHtmlPage(String url, StringRequestCallback callback){
         HtmlDownloader task = new HtmlDownloader(url,callback);
         task.execute();
+    }
+
+    public void cancelRequestWithTag(String tag) {
+        System.out.println(requestQueue);
+        if (requestQueue != null) {
+            requestQueue.cancelAll(tag);
+        }
+        System.out.println(requestQueue);
     }
 
     class HtmlDownloader extends AsyncTask<String, String, String> {
@@ -189,8 +200,5 @@ public class RequestManager {
 
 
     }
-
-
-
 
 }

@@ -37,6 +37,10 @@ public class CircularNetworkImageView extends NetworkImageView {
         mContext = context;
     }
 
+    public Context getmContext() {
+        return mContext;
+    }
+
     @Override
     public void setImageBitmap(Bitmap bm) {
         if(bm==null) return;
@@ -44,6 +48,10 @@ public class CircularNetworkImageView extends NetworkImageView {
                 getCircularBitmap(bm)));
     }
 
+    @Override
+    public void setImageResource(int resId) {
+        super.setImageResource(resId);
+    }
 
     /**
      * Creates a circular bitmap and uses whichever dimension is smaller to determine the width

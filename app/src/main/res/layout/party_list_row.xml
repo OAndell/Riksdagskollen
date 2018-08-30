@@ -70,12 +70,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:visibility="gone"
                 android:layout_gravity="center_vertical"
                 android:orientation="vertical"
                 android:layout_weight="16">
 
-                <ImageView
+                <oscar.riksdagskollen.Util.View.CircularNetworkImageView
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:id="@+id/author_img"
