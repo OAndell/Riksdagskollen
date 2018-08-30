@@ -1,15 +1,17 @@
 package oscar.riksdagskollen.Activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-
 
 import com.android.volley.VolleyError;
 
@@ -27,12 +29,16 @@ import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
  */
 
 public class ProtocolReaderActivity extends AppCompatActivity {
+
+    private String url;
+    private String title;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_reader);
-        String url = getIntent().getStringExtra("url");
-        String title = getIntent().getStringExtra("title");
+        url = getIntent().getStringExtra("url");
+        title = getIntent().getStringExtra("title");
+
         final ViewGroup loadingView = findViewById(R.id.loading_view);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -90,9 +96,22 @@ public class ProtocolReaderActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.motion_activity_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.open_in_web:
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse("http:" + url));
+                startActivity(i);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
