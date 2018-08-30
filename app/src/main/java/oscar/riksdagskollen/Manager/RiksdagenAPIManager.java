@@ -330,7 +330,7 @@ public class RiksdagenAPIManager {
             }
 
             public void searchForReply(PartyDocument document, final PartyDocumentCallback callback){
-                String subURL = "/dokumentlista/?sok="+document.getBeteckning()+":"+ document.getRm()+"&doktyp=frs&sort=datum&sortorder=desc&utformat=json";
+                String subURL = "/dokumentlista/?sok="+document.getRm()+":"+ document.getBeteckning()+"&doktyp=frs&sort=datum&sortorder=desc&utformat=json";
                 requestManager.doGetRequest(subURL, new JSONRequestCallback() {
                     @Override
                     public void onRequestSuccess(JSONObject response) {
