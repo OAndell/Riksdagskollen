@@ -138,9 +138,9 @@ public class RequestManager {
         requestQueue.add(request);
     }
 
-    public void downloadHtmlPage(String url, StringRequestCallback callback){
+    public AsyncTask downloadHtmlPage(String url, StringRequestCallback callback){
         HtmlDownloader task = new HtmlDownloader(url,callback);
-        task.execute();
+        return task.execute();
     }
 
     public void cancelRequestWithTag(String tag) {

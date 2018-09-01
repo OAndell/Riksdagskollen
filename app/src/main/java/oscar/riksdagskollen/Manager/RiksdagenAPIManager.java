@@ -1,5 +1,7 @@
 package oscar.riksdagskollen.Manager;
 
+import android.os.AsyncTask;
+
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
@@ -276,7 +278,7 @@ public class RiksdagenAPIManager {
             }
 
             public void searchVotesForDecision(DecisionDocument decision, final VoteCallback callback){
-                String subURL = "/dokumentlista/?sok=" + decision.getRm() + ":" + decision.getBeteckning() + "&doktyp=votering&sort=datum&sortorder=desc&utformat=json";
+                String subURL  = "/dokumentlista/?sok=" + decision.getRm() + ":" + decision.getBeteckning() + "&doktyp=votering&sort=datum&sortorder=desc&utformat=json";
                 requestManager.doGetRequest(subURL, new JSONRequestCallback() {
                     @Override
                     public void onRequestSuccess(JSONObject response) {
@@ -344,12 +346,12 @@ public class RiksdagenAPIManager {
             }
 
 
-            public void getPartyLeaders(String partyName, final PartyLeadersCallback callback) {
+            public AsyncTask getPartyLeaders(String partyName, final PartyLeadersCallback callback) {
                 //need to remove swedish chars
                 partyName = partyName.replace("ö","o");
                 partyName = partyName.replace("ä","a");
                 String partyInfoUrl = "http://riksdagen.se/sv/ledamoter-partier/"+partyName;
-                requestManager.downloadHtmlPage(partyInfoUrl, new StringRequestCallback() {
+                return requestManager.downloadHtmlPage(partyInfoUrl, new StringRequestCallback() {
                     @Override
                     public void onResponse(String response) {
                         ArrayList<Representative> representatives = new ArrayList<>();
