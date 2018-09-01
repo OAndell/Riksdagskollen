@@ -151,7 +151,7 @@ public class ProtocolAdapter  extends RiksdagenViewHolderAdapter{
         }
 
         public void bind(final Protocol item ,final OnItemClickListener listener) {
-            title.setText(item.getTitel());
+            title.setText(trimTitle(item.getTitel()));
             date.setText("Publicerad " + item.getDatum());
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -159,6 +159,11 @@ public class ProtocolAdapter  extends RiksdagenViewHolderAdapter{
                     listener.onItemClick(item);
                 }
             });
+        }
+
+        //Removes text "Protokoll 2017/18:XYZ" from title
+        private String trimTitle(String title){
+            return title.split(":")[1].substring(4).trim();
         }
 
     }
