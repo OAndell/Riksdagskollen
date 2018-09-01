@@ -155,7 +155,9 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
         }
 
         public void bind(final Vote item ,final OnItemClickListener listener) {
-            title.setText(item.getTitel());
+
+            title.setText(trimTitle(item.getTitel()));
+
             docType.setText(R.string.vote);
             date.setText(item.getDatum());
 
@@ -164,6 +166,11 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
                     listener.onItemClick(item);
                 }
             });
+        }
+
+        //Removes text "Omröstning: Betänkande 2017:18Xyxyx" from title
+        private String trimTitle(String title){
+            return title.split(":")[2].substring(5).trim();
         }
 
     }
