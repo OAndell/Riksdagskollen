@@ -1,5 +1,6 @@
 package oscar.riksdagskollen.Util.Adapter;
 
+import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public abstract class RiksdagenViewHolderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private final List<?> items;
+    private SortedList<?> sortedList;
     final List<View> headers = new ArrayList<>();
     final List<View> footers = new ArrayList<>();
 
@@ -37,9 +38,12 @@ public abstract class RiksdagenViewHolderAdapter extends RecyclerView.Adapter<Re
         }
     }
 
-    RiksdagenViewHolderAdapter(List<?> items, OnItemClickListener clickListener) {
-        this.items = items;
+    RiksdagenViewHolderAdapter(OnItemClickListener clickListener) {
         this.clickListener = clickListener;
+    }
+
+    public void setSortedList(SortedList<?> sortedList) {
+        this.sortedList = sortedList;
     }
 
     @Override
@@ -50,10 +54,10 @@ public abstract class RiksdagenViewHolderAdapter extends RecyclerView.Adapter<Re
 
     @Override
     public int getItemViewType(int position) {
-        //check what type our position is, based on the assumption that the order is headers > items > footers
+        //check what type our position is, based on the assumption that the order is headers > sortedList > footers
         if(position < headers.size()){
             return TYPE_HEADER;
-        }else if(position >= headers.size() + items.size()){
+        } else if (position >= headers.size() + sortedList.size()) {
             return TYPE_FOOTER;
         }
         return TYPE_ITEM;
@@ -61,11 +65,11 @@ public abstract class RiksdagenViewHolderAdapter extends RecyclerView.Adapter<Re
 
     @Override
     public int getItemCount(){
-        return headers.size() + footers.size() + items.size();
+        return headers.size() + footers.size() + sortedList.size();
     };
 
     public int getObjectCount(){
-        return items.size();
+        return sortedList.size();
     }
 
     void prepareHeaderFooter(HeaderFooterViewHolder vh, View view){
@@ -95,12 +99,18 @@ public abstract class RiksdagenViewHolderAdapter extends RecyclerView.Adapter<Re
         }
     }
 
+    public abstract void replaceAll(List<?> items);
+
+    public abstract void addAll(List<?> items);
+
+    public abstract void removeAll(List<?> items);
+
     //add a footer to the adapter
     public void addFooter(View footer){
         if(!footers.contains(footer)){
             footers.add(footer);
             //animate
-            notifyItemInserted(headers.size()+ items.size()+footers.size()-1);
+            notifyItemInserted(headers.size() + sortedList.size() + footers.size() - 1);
         }
     }
 
@@ -108,14 +118,13 @@ public abstract class RiksdagenViewHolderAdapter extends RecyclerView.Adapter<Re
     public void removeFooter(View footer){
         if(footers.contains(footer)) {
             //animate
-            notifyItemRemoved(headers.size()+ items.size()+footers.indexOf(footer));
+            notifyItemRemoved(headers.size() + sortedList.size() + footers.indexOf(footer));
             footers.remove(footer);
             if(footer.getParent() != null) {
                 ((ViewGroup) footer.getParent()).removeView(footer);
             }
         }
     }
-
 
 
 }

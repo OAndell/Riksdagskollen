@@ -22,9 +22,32 @@ public class CurrentNews implements Parcelable {
     private final String img_tumnagel_url;
     private final CurrentNewsLinkList linklista;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CurrentNews that = (CurrentNews) o;
+
+        if (!id.equals(that.id)) return false;
+        if (!titel.equals(that.titel)) return false;
+        if (url != null ? !url.equals(that.url) : that.url != null) return false;
+        return linklista != null ? linklista.equals(that.linklista) : that.linklista == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + titel.hashCode();
+        result = 31 * result + (url != null ? url.hashCode() : 0);
+        result = 31 * result + (linklista != null ? linklista.hashCode() : 0);
+        return result;
+    }
+
     private CurrentNews(Parcel in) {
         id = in.readString();
         titel = in.readString();
+
         publicerad = in.readString();
         summary = in.readString();
         url = in.readString();

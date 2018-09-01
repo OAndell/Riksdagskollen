@@ -2,13 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    >
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <include layout="@layout/loading_view"/>
+    <include layout="@layout/loading_view" />
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -16,7 +15,17 @@
         android:layout_height="wrap_content"
         android:scrollbars="vertical" />
 
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:gravity="center"
+        android:textColor="@color/primaryColor"
+        android:id="@+id/no_content_warning"
+        android:text="Det verkar inte finnas något här :( \n Testa att ändra dina filterinställningar" />
 
 
 </RelativeLayout>

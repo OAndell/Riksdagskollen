@@ -25,26 +25,29 @@ import oscar.riksdagskollen.Util.JSONModel.Party;
 public class PartyFragment extends Fragment {
 
     private Party party;
+    private PartyListFragment listFragment;
+    private PartyInfoFragment infoFragment;
 
     public static PartyFragment newInstance(Party party){
         Bundle args = new Bundle();
         args.putParcelable("party",party);
         PartyFragment newInstance = new PartyFragment();
         newInstance.setArguments(args);
+        newInstance.setRetainInstance(true);
         return newInstance;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+        this.party = getArguments().getParcelable("party");
+        infoFragment = PartyInfoFragment.newInstance(party);
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        this.party = getArguments().getParcelable("party");
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(party.getName());
-
         View view = inflater.inflate(R.layout.fragment_party,container, false);
         // Setting ViewPager for each Tabs
         ViewPager viewPager = view.findViewById(R.id.viewpager);
@@ -57,18 +60,16 @@ public class PartyFragment extends Fragment {
 
     }
 
+    public void setListFragment(PartyListFragment listFragment) {
+        this.listFragment = listFragment;
+    }
+
     // Add Fragments to Tabs
     private void setupViewPager(ViewPager viewPager) {
-        PartyListFragment listFragment = PartyListFragment.newInstance(party);
-        PartyInfoFragment infoFragment = PartyInfoFragment.newInstance(party);
-
         Adapter adapter = new Adapter(getChildFragmentManager());
         adapter.addFragment(listFragment, "Flöde");
         adapter.addFragment(infoFragment, "Parti");
         viewPager.setAdapter(adapter);
-
-
-
     }
 
     static class Adapter extends FragmentPagerAdapter {
@@ -99,8 +100,6 @@ public class PartyFragment extends Fragment {
             return mFragmentTitleList.get(position);
         }
     }
-
-
 
 
 }

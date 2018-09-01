@@ -16,9 +16,9 @@ import java.util.List;
 import oscar.riksdagskollen.Activity.VoteActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Adapter.VoteAdapter;
 import oscar.riksdagskollen.Util.Callback.VoteCallback;
-import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
 
 
@@ -84,7 +84,7 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment {
                 public void onVotesFetched(List<Vote> votes) {
                     setShowLoadingView(false);
                     voteList.addAll(votes);
-                    getAdapter().notifyDataSetChanged();
+                    getAdapter().addAll(votes);
                     setLoadingMoreItems(false);
                 }
 

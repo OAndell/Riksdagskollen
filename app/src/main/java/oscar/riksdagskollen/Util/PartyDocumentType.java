@@ -1,6 +1,9 @@
 package oscar.riksdagskollen.Util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 
 /**
  * Created by gustavaaro on 2018-08-28.
@@ -36,14 +39,27 @@ public enum PartyDocumentType {
     }
 
     public static CharSequence[] getDisplayNames(){
-        return new CharSequence[]{Fraga.displayName,Interpellation.displayName,Motion.displayName};
+        CharSequence[] names = new CharSequence[values().length];
+        for (int i = 0; i < values().length; i++) {
+            names[i] = values()[i].displayName;
+        }
+
+        return names;
     }
+
+    public static PartyDocumentType getDocTypeForDocument(PartyDocument document) {
+
+        for (int i = 0; i < values().length; i++) {
+            if (document.getDoktyp().equals(values()[i].docType)) {
+                return values()[i];
+            }
+        }
+        return null;
+    }
+
     public static ArrayList<PartyDocumentType> getAllDokTypes(){
         ArrayList<PartyDocumentType> filter = new ArrayList<>();
-        filter.add(Fraga);
-        filter.add(Interpellation);
-        filter.add(Motion);
-
+        filter.addAll(Arrays.asList(values()));
         return filter;
     }
 

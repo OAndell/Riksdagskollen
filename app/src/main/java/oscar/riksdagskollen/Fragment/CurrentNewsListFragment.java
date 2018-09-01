@@ -16,10 +16,10 @@ import java.util.List;
 
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
-import oscar.riksdagskollen.Util.Callback.CurrentNewsCallback;
 import oscar.riksdagskollen.Util.Adapter.CurrentNewsListAdapter;
-import oscar.riksdagskollen.Util.JSONModel.CurrentNews;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
+import oscar.riksdagskollen.Util.Callback.CurrentNewsCallback;
+import oscar.riksdagskollen.Util.JSONModel.CurrentNews;
 
 
 /**
@@ -80,7 +80,7 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
             public void onNewsFetched(List<CurrentNews> currentNews) {
                 setShowLoadingView(false);
                 newsList.addAll(currentNews);
-                getAdapter().notifyDataSetChanged();
+                getAdapter().addAll(currentNews);
                 setLoadingMoreItems(false);
             }
 

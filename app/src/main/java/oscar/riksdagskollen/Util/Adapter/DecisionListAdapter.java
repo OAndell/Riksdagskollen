@@ -3,7 +3,7 @@ package oscar.riksdagskollen.Util.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.v7.widget.CardView;
+import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spannable;
@@ -23,9 +23,9 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 import oscar.riksdagskollen.Activity.ProtocolReaderActivity;
@@ -34,7 +34,7 @@ import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.DecisionsCallback;
 import oscar.riksdagskollen.Util.Callback.VoteCallback;
-import oscar.riksdagskollen.Util.Committee;
+import oscar.riksdagskollen.Util.DecicionCategory;
 import oscar.riksdagskollen.Util.JSONModel.DecisionDocument;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
 
@@ -43,15 +43,63 @@ import oscar.riksdagskollen.Util.JSONModel.Vote;
  */
 
 public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
-    private final List<DecisionDocument> decisionDocuments;
+    private final SortedList<DecisionDocument> decisionDocuments = new SortedList<>(DecisionDocument.class, new SortedList.Callback<DecisionDocument>() {
+        @Override
+        public int compare(DecisionDocument o1, DecisionDocument o2) {
+            return mComparator.compare(o1, o2);
+        }
+
+        @Override
+        public void onChanged(int position, int count) {
+            notifyItemRangeChanged(position, count);
+        }
+
+        @Override
+        public boolean areContentsTheSame(DecisionDocument oldItem, DecisionDocument newItem) {
+            return oldItem.equals(newItem);
+        }
+
+        @Override
+        public boolean areItemsTheSame(DecisionDocument item1, DecisionDocument item2) {
+            return item1.equals(item2);
+        }
+
+        @Override
+        public void onInserted(int position, int count) {
+            notifyItemRangeInserted(position, count);
+        }
+
+        @Override
+        public void onRemoved(int position, int count) {
+            notifyItemRangeRemoved(position, count);
+        }
+
+        @Override
+        public void onMoved(int fromPosition, int toPosition) {
+            notifyItemMoved(fromPosition, toPosition);
+        }
+    });
     private Context context;
-    private final RecyclerView recyclerView;
+
+    private static final Comparator<DecisionDocument> DEFAULT_COMPARATOR = new Comparator<DecisionDocument>() {
+        @Override
+        public int compare(DecisionDocument a, DecisionDocument b) {
+            return 0;
+        }
+    };
+    private Comparator<DecisionDocument> mComparator = DEFAULT_COMPARATOR;
+
 
     public DecisionListAdapter(List<DecisionDocument> items, final OnItemClickListener listener, RecyclerView recyclerView) {
-        super(items, listener);
+        super(listener);
+        setSortedList(decisionDocuments);
+        addAll(items);
+
         this.clickListener = listener;
-        this.recyclerView = recyclerView;
-        decisionDocuments = items;
+    }
+
+    public void setComparator(Comparator<DecisionDocument> comparator) {
+        this.mComparator = comparator;
     }
 
     @Override
@@ -68,6 +116,38 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
             return new HeaderFooterViewHolder(frameLayout);
         }
     }
+
+    public void add(DecisionDocument model) {
+        decisionDocuments.add(model);
+    }
+
+    public void remove(DecisionDocument model) {
+        decisionDocuments.remove(model);
+    }
+
+    @Override
+    public void addAll(List<?> items) {
+        decisionDocuments.addAll((Collection<DecisionDocument>) items);
+    }
+
+    @Override
+    public void removeAll(List<?> items) {
+        decisionDocuments.beginBatchedUpdates();
+        for (Object item : items) {
+            decisionDocuments.remove((DecisionDocument) item);
+        }
+        decisionDocuments.endBatchedUpdates();
+    }
+
+    @Override
+    public void replaceAll(List<?> items) {
+        decisionDocuments.beginBatchedUpdates();
+        decisionDocuments.clear();
+        ;
+        decisionDocuments.addAll((Collection<DecisionDocument>) items);
+        decisionDocuments.endBatchedUpdates();
+    }
+
 
 
     @Override
@@ -136,9 +216,9 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
             fullBet.setText("Läs fullständigt betänkande");
             searchVote.setText("Visa voteringar");
 
-            Committee committee = Committee.getCategoryFromBet(item.getBeteckning());
-            catColor.setBackgroundColor(context.getResources().getColor(committee.getCategoryColor()));
-            catName.setText(committee.getCommitteeCategoryName());
+            DecicionCategory decicionCategory = DecicionCategory.getCategoryFromBet(item.getBeteckning());
+            catColor.setBackgroundColor(context.getResources().getColor(decicionCategory.getCategoryColor()));
+            catName.setText(decicionCategory.getCategoryName());
             if(!item.hasVotes() || !item.isExpanded()) searchVote.setVisibility(View.GONE);
 
 

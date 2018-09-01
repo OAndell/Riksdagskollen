@@ -20,6 +20,7 @@ public class DecisionDocument implements Parcelable {
     private String typ;
     private String dokument_url_html;
     private String titel;
+    private String datum;
 
     private boolean hasVotes = false;
 
@@ -80,6 +81,10 @@ public class DecisionDocument implements Parcelable {
         return typ;
     }
 
+    public String getDatum() {
+        return datum;
+    }
+
     public boolean isExpanded() {
         return isExpanded;
     }
@@ -91,17 +96,41 @@ public class DecisionDocument implements Parcelable {
     public DecisionDocument() {
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
     public void setHasVotes(boolean hasVotes) {
         this.hasVotes = hasVotes;
     }
 
     public boolean hasVotes() {
         return hasVotes;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DecisionDocument that = (DecisionDocument) o;
+
+        if (!dok_id.equals(that.dok_id)) return false;
+        if (!typ.equals(that.typ)) return false;
+        if (!titel.equals(that.titel)) return false;
+        if (!rm.equals(that.rm)) return false;
+        return beteckning.equals(that.beteckning);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = dok_id.hashCode();
+        result = 31 * result + typ.hashCode();
+        result = 31 * result + titel.hashCode();
+        result = 31 * result + rm.hashCode();
+        result = 31 * result + beteckning.hashCode();
+        return result;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     @Override
@@ -117,13 +146,14 @@ public class DecisionDocument implements Parcelable {
         dest.writeString(this.typ);
         dest.writeString(this.dokument_url_html);
         dest.writeString(this.titel);
+        dest.writeString(this.datum);
         dest.writeByte(this.hasVotes ? (byte) 1 : (byte) 0);
         dest.writeString(this.rm);
         dest.writeString(this.beteckning);
         dest.writeByte(this.isExpanded ? (byte) 1 : (byte) 0);
     }
 
-    private DecisionDocument(Parcel in) {
+    protected DecisionDocument(Parcel in) {
         this.dok_id = in.readString();
         this.notisrubrik = in.readString();
         this.publicerad = in.readString();
@@ -135,6 +165,7 @@ public class DecisionDocument implements Parcelable {
         this.typ = in.readString();
         this.dokument_url_html = in.readString();
         this.titel = in.readString();
+        this.datum = in.readString();
         this.hasVotes = in.readByte() != 0;
         this.rm = in.readString();
         this.beteckning = in.readString();

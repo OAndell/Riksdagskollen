@@ -111,6 +111,31 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PartyDocument that = (PartyDocument) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (titel != null ? !titel.equals(that.titel) : that.titel != null) return false;
+        if (rm != null ? !rm.equals(that.rm) : that.rm != null) return false;
+        if (beteckning != null ? !beteckning.equals(that.beteckning) : that.beteckning != null)
+            return false;
+        return doktyp != null ? doktyp.equals(that.doktyp) : that.doktyp == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (titel != null ? titel.hashCode() : 0);
+        result = 31 * result + (rm != null ? rm.hashCode() : 0);
+        result = 31 * result + (beteckning != null ? beteckning.hashCode() : 0);
+        result = 31 * result + (doktyp != null ? doktyp.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
         dest.writeString(this.undertitel);

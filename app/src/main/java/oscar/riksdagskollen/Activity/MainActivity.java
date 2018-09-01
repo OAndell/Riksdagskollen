@@ -14,6 +14,7 @@ import oscar.riksdagskollen.Fragment.AboutFragment;
 import oscar.riksdagskollen.Fragment.CurrentNewsListFragment;
 import oscar.riksdagskollen.Fragment.DecisionsListFragment;
 import oscar.riksdagskollen.Fragment.PartyFragment;
+import oscar.riksdagskollen.Fragment.PartyListFragment;
 import oscar.riksdagskollen.Fragment.ProtocolListFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
 import oscar.riksdagskollen.R;
@@ -35,6 +36,15 @@ public class MainActivity extends AppCompatActivity
     private PartyFragment vPartyFragment;
     private PartyFragment lPartyFragment;
     private PartyFragment kdPartyFragment;
+    private PartyListFragment sPartyListFragment;
+    private PartyListFragment mPartyListFragment;
+    private PartyListFragment sdPartyListFragment;
+    private PartyListFragment mpPartyListFragment;
+    private PartyListFragment cPartyListFragment;
+    private PartyListFragment vPartyListFragment;
+    private PartyListFragment lPartyListFragment;
+    private PartyListFragment kdPartyListFragment;
+
     private NavigationView navigationView;
 
 
@@ -158,45 +168,77 @@ public class MainActivity extends AppCompatActivity
 
     // Create all of the PartyFragments with new Party objects
     private void initPartyFragments(){
-        mPartyFragment = PartyFragment.newInstance(new Party(
+        Party mParty = new Party(
                 getString(R.string.party_m),
                 "m",R.drawable.mlogo,
                 getString(R.string.m_website),
-                getString(R.string.m_ideology)));
-        sPartyFragment = PartyFragment.newInstance(new Party(
+                getString(R.string.m_ideology));
+        mPartyListFragment = PartyListFragment.newInstance(mParty);
+        mPartyFragment = PartyFragment.newInstance(mParty);
+        mPartyFragment.setListFragment(mPartyListFragment);
+
+
+        Party sParty = new Party(
                 getString(R.string.party_s),
                 "s",R.drawable.slogo,
                 getString(R.string.s_website),
-                getString(R.string.s_ideology)));
-        sdPartyFragment = PartyFragment.newInstance(new Party(
+                getString(R.string.s_ideology));
+        sPartyListFragment = PartyListFragment.newInstance(sParty);
+        sPartyFragment = PartyFragment.newInstance(sParty);
+        sPartyFragment.setListFragment(sPartyListFragment);
+
+        Party sdParty = new Party(
                 getString(R.string.party_sd),
                 "sd",R.drawable.sdlogo,
                 getString(R.string.sd_website),
-                getString(R.string.sd_ideology)));
-        kdPartyFragment = PartyFragment.newInstance(new Party(
+                getString(R.string.sd_ideology));
+        sdPartyListFragment = PartyListFragment.newInstance(sdParty);
+        sdPartyFragment = PartyFragment.newInstance(sdParty);
+        sdPartyFragment.setListFragment(sdPartyListFragment);
+
+        Party kdParty = new Party(
                 getString(R.string.party_kd),
                 "kd",R.drawable.kdlogo,
                 getString(R.string.kd_website),
-                getString(R.string.kd_ideology)));
-        vPartyFragment = PartyFragment.newInstance(new Party(
+                getString(R.string.kd_ideology));
+        kdPartyListFragment = PartyListFragment.newInstance(kdParty);
+        kdPartyFragment = PartyFragment.newInstance(kdParty);
+        kdPartyFragment.setListFragment(kdPartyListFragment);
+
+        Party vParty = new Party(
                 getString(R.string.party_v),
                 "v",R.drawable.vlogo,
                 getString(R.string.v_website),
-                getString(R.string.v_ideology)));
-        cPartyFragment = PartyFragment.newInstance(new Party(
+                getString(R.string.v_ideology));
+        vPartyListFragment = PartyListFragment.newInstance(vParty);
+        vPartyFragment = PartyFragment.newInstance(vParty);
+        vPartyFragment.setListFragment(vPartyListFragment);
+
+        Party cParty = new Party(
                 getString(R.string.party_c),
                 "c",R.drawable.clogo,
                 getString(R.string.c_website),
-                getString(R.string.c_ideology)));
-        mpPartyFragment = PartyFragment.newInstance(new Party(
+                getString(R.string.c_ideology));
+        cPartyListFragment = PartyListFragment.newInstance(cParty);
+        cPartyFragment = PartyFragment.newInstance(cParty);
+        cPartyFragment.setListFragment(cPartyListFragment);
+
+        Party mpParty = new Party(
                 getString(R.string.party_mp),
                 "mp",R.drawable.mplogo,
                 getString(R.string.mp_website),
-                getString(R.string.mp_ideology)));
-        lPartyFragment = PartyFragment.newInstance(new Party(
+                getString(R.string.mp_ideology));
+        mpPartyListFragment = PartyListFragment.newInstance(mpParty);
+        mpPartyFragment = PartyFragment.newInstance(mpParty);
+        mpPartyFragment.setListFragment(mpPartyListFragment);
+
+        Party lParty = new Party(
                 getString(R.string.party_l),
                 "l",R.drawable.llogo,
                 getString(R.string.l_website),
-                getString(R.string.l_ideology)));
+                getString(R.string.l_ideology));
+        lPartyListFragment = PartyListFragment.newInstance(lParty);
+        lPartyFragment = PartyFragment.newInstance(lParty);
+        lPartyFragment.setListFragment(lPartyListFragment);
     }
 }

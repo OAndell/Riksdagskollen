@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
@@ -26,6 +27,9 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
     private int pageToLoad = 1;
     private ProgressBar itemsLoadingView;
     private int pastVisiblesItems;
+    protected TextView noContentWarning;
+    protected static final int MIN_DOC = 6;
+
 
 
     @Nullable
@@ -55,12 +59,13 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
             }
         });
         loadingView = view.findViewById(R.id.loading_view);
+        noContentWarning = view.findViewById(R.id.no_content_warning);
         itemsLoadingView = new ProgressBar(getContext());
         itemsLoadingView.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.primaryColor),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
 
 
-        loadNextPage();
+        if (adapter.getItemCount() < 10) loadNextPage();
         return view;
     }
 
@@ -89,10 +94,6 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
 
     void decrementPage(){
         pageToLoad--;
-    }
-
-    void resetPage(){
-        pageToLoad = 1;
     }
 
     abstract RiksdagenViewHolderAdapter getAdapter();

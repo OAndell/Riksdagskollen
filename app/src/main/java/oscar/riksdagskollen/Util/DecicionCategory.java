@@ -1,8 +1,6 @@
 package oscar.riksdagskollen.Util;
 
-import android.content.Context;
-
-import javax.xml.transform.Source;
+import java.util.ArrayList;
 
 import oscar.riksdagskollen.R;
 
@@ -10,7 +8,7 @@ import oscar.riksdagskollen.R;
  * Created by gustavaaro on 2018-07-21.
  */
 
-public enum Committee {
+public enum DecicionCategory {
 
     FiU("FiU"),
     CU("CU"),
@@ -29,7 +27,7 @@ public enum Committee {
     UU("UU"),
     UFöU("UFöU");
 
-    Committee(String id){
+    DecicionCategory(String id) {
         this.id = id;
     }
 
@@ -91,22 +89,48 @@ public enum Committee {
         return categoryColor;
     }
 
-    public String getCommitteeCategoryName() {
+    public String getCategoryName() {
         return committeeCategoryName;
     }
 
-    public static Committee getCategoryFromBet(String bet){
+    public String getId() {
+        return id;
+    }
+
+    public static CharSequence[] getCategoryNames() {
+        CharSequence[] names = new CharSequence[values().length];
+
+        for (int i = 0; i < names.length; i++) {
+            names[i] = values()[i].committeeCategoryName;
+        }
+
+        return names;
+    }
+
+    public static ArrayList<DecicionCategory> getAllCategories() {
+        ArrayList<DecicionCategory> categories = new ArrayList<>();
+        for (int i = 0; i < values().length; i++) {
+            categories.add(values()[i]);
+        }
+        return categories;
+    }
+
+    public static DecicionCategory getCategoryFromBet(String bet) {
         String id = bet.split("[0-9]+")[0];
 
-        for (Committee c : values()) {
+        for (DecicionCategory c : values()) {
             if (id.equals(c.id))return c;
         }
 
-        for (Committee c: values()){
+        for (DecicionCategory c : values()) {
             if (id.contains(c.id))return c;
         }
 
         return null;
     }
 
+    @Override
+    public String toString() {
+        return committeeCategoryName;
+    }
 }

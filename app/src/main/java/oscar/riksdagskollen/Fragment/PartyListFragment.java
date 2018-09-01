@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,17 +18,15 @@ import com.android.volley.VolleyError;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.prefs.PreferenceChangeEvent;
-import java.util.prefs.PreferenceChangeListener;
 
 import oscar.riksdagskollen.Activity.MotionActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.Util.Adapter.PartyListViewholderAdapter;
+import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Callback.PartyDocumentCallback;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
-import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
-import oscar.riksdagskollen.Util.Adapter.PartyListViewholderAdapter;
 import oscar.riksdagskollen.Util.PartyDocumentType;
 
 /**
@@ -39,7 +36,7 @@ import oscar.riksdagskollen.Util.PartyDocumentType;
 public class PartyListFragment extends RiksdagenAutoLoadingListFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private Party party;
-    private final List<PartyDocument> documentList = new ArrayList<>();
+    private ArrayList<PartyDocument> documentList = new ArrayList<>();
     private PartyListViewholderAdapter adapter;
     private SharedPreferences preferences;
     private ArrayList<PartyDocumentType> oldFilter;
@@ -55,7 +52,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
         args.putParcelable("party",party);
         PartyListFragment newInstance = new PartyListFragment();
         newInstance.setArguments(args);
-
+        newInstance.setRetainInstance(true);
         return newInstance;
     }
 
@@ -64,6 +61,8 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
         super.onResume();
         setHasOptionsMenu(true);
         preferences.registerOnSharedPreferenceChangeListener(this);
+        if (getFilter().isEmpty()) noContentWarning.setVisibility(View.VISIBLE);
+        onFilterChanged();
     }
 
     @Override
@@ -84,7 +83,6 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setHasOptionsMenu(true);
         this.party = getArguments().getParcelable("party");
         preferences = getActivity().getSharedPreferences(party.getID(),getActivity().MODE_PRIVATE);
@@ -105,9 +103,9 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
         if(item.getItemId() == R.id.menu_filter){
             oldFilter = getFilter();
             final CharSequence[] items = PartyDocumentType.getDisplayNames();
-            boolean[] checked = new boolean[]{false, false, false};
+            boolean[] checked = new boolean[items.length];
             for (int i = 0; i < items.length; i++){
-                checked[i] = preferences.getBoolean(PartyDocumentType.getAllDokTypes().get(i).getDocType(), false);
+                checked[i] = preferences.getBoolean(PartyDocumentType.getAllDokTypes().get(i).getDocType(), true);
             }
 
             final SharedPreferences.Editor editor = preferences.edit();
@@ -144,15 +142,6 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
         return super.onOptionsItemSelected(item);
     }
 
-    private void onFilterChange(){
-        // Only reload if necessary
-        if(!oldFilter.equals(getFilter())){
-            resetPage();
-            documentList.clear();
-            loadNextPage();
-        }
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.filter, menu);
@@ -168,10 +157,17 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
         RikdagskollenApp.getInstance().getRiksdagenAPIManager().getDocumentsForParty(party, getPageToLoad(), new PartyDocumentCallback() {
             @Override
             public void onDocumentsFetched(List<PartyDocument> documents) {
-                setShowLoadingView(false);
                 documentList.addAll(documents);
-                getAdapter().notifyDataSetChanged();
+                List<PartyDocument> filteredDocuments = filter(documents);
+                getAdapter().addAll(filteredDocuments);
+
+                // Load next page if the requested page does not contain any documents matching the filter
+                // or if there are too few documents in the list
+
+                if ((filteredDocuments.isEmpty() || getAdapter().getItemCount() < MIN_DOC) && !getFilter().isEmpty())
+                    loadNextPage();
                 setLoadingMoreItems(false);
+                setShowLoadingView(false);
             }
 
             @Override
@@ -179,16 +175,39 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
                 setLoadingMoreItems(false);
                 decrementPage();
             }
-        }, getFilter());
+        });
         incrementPage();
     }
 
     private ArrayList<PartyDocumentType> getFilter(){
         ArrayList<PartyDocumentType> filter = new ArrayList<>();
         for (PartyDocumentType documentType: PartyDocumentType.values()) {
-            if(preferences.getBoolean(documentType.getDocType(), false)) filter.add(documentType);
+            if (preferences.getBoolean(documentType.getDocType(), true)) filter.add(documentType);
         }
         return filter;
+    }
+
+    private List<PartyDocument> filter(List<PartyDocument> documents) {
+        final List<PartyDocument> filteredDocumentList = new ArrayList<>();
+        for (PartyDocument document : documents) {
+            if (getFilter().contains(PartyDocumentType.getDocTypeForDocument(document))) {
+                filteredDocumentList.add(document);
+            }
+        }
+        return filteredDocumentList;
+    }
+
+    private void onFilterChanged() {
+        List<PartyDocumentType> filter = getFilter();
+        if (!filter.equals(oldFilter)) {
+            getAdapter().replaceAll(filter(documentList));
+        }
+
+        if (filter.isEmpty()) noContentWarning.setVisibility(View.VISIBLE);
+        else noContentWarning.setVisibility(View.GONE);
+
+        if (getAdapter().getItemCount() < MIN_DOC && !filter.isEmpty()) loadNextPage();
+
     }
 
     @Override
@@ -198,7 +217,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        onFilterChange();
+        onFilterChanged();
     }
 }
 
