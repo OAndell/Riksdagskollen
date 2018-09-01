@@ -76,34 +76,26 @@ public class VoteActivity extends AppCompatActivity{
         title.setText(document.getTitel());
 
         final RikdagskollenApp app = oscar.riksdagskollen.RikdagskollenApp.getInstance();
-        app.getRequestManager().downloadHtmlPage("http:" + document.getDokument_url_html(), new StringRequestCallback() {
-            @Override
-            public void onResponse(String response) {
-                VoteResults results = new VoteResults(response);
-                setupMainGraph(results);
-                ArrayList<HorizontalBarChart> partyCharts = new ArrayList<>();
-                partyCharts.add((HorizontalBarChart) findViewById(R.id.chartS));
-                partyCharts.add((HorizontalBarChart) findViewById(R.id.chartM));
-                partyCharts.add((HorizontalBarChart) findViewById(R.id.chartSD));
-                partyCharts.add((HorizontalBarChart) findViewById(R.id.chartMP));
-                partyCharts.add((HorizontalBarChart) findViewById(R.id.chartC));
-                partyCharts.add((HorizontalBarChart) findViewById(R.id.chartV));
-                partyCharts.add((HorizontalBarChart) findViewById(R.id.chartL));
-                partyCharts.add((HorizontalBarChart) findViewById(R.id.chartKD));
-                String[] parties = {"S","M","SD","MP","C","V","L","KD"};
-                setupPartyGraph(results, partyCharts, parties);
-                graphLoaded =true;
-                checkLoading();
+        if (document.getVoteResults() != null) {
+            // Aldready downloaded results
+            prepareGraphs(new VoteResults(document.getVoteResults()));
+        } else {
+            app.getRequestManager().downloadHtmlPage("http:" + document.getDokument_url_html(), new StringRequestCallback() {
+                @Override
+                public void onResponse(String response) {
+                    VoteResults results = new VoteResults(response);
+                    prepareGraphs(new VoteResults(results.getVoteResults()));
+                }
 
-            }
+                @Override
+                public void onFail(VolleyError error) {
 
-            @Override
-            public void onFail(VolleyError error) {
+                }
 
-            }
+            });
+        }
 
 
-        });
 
 
         final Context context = this;
@@ -183,6 +175,23 @@ public class VoteActivity extends AppCompatActivity{
 
                 }
             });
+    }
+
+    private void prepareGraphs(VoteResults results) {
+        setupMainGraph(results);
+        ArrayList<HorizontalBarChart> partyCharts = new ArrayList<>();
+        partyCharts.add((HorizontalBarChart) findViewById(R.id.chartS));
+        partyCharts.add((HorizontalBarChart) findViewById(R.id.chartM));
+        partyCharts.add((HorizontalBarChart) findViewById(R.id.chartSD));
+        partyCharts.add((HorizontalBarChart) findViewById(R.id.chartMP));
+        partyCharts.add((HorizontalBarChart) findViewById(R.id.chartC));
+        partyCharts.add((HorizontalBarChart) findViewById(R.id.chartV));
+        partyCharts.add((HorizontalBarChart) findViewById(R.id.chartL));
+        partyCharts.add((HorizontalBarChart) findViewById(R.id.chartKD));
+        String[] parties = {"S", "M", "SD", "MP", "C", "V", "L", "KD"};
+        setupPartyGraph(results, partyCharts, parties);
+        graphLoaded = true;
+        checkLoading();
     }
 
 
@@ -307,7 +316,11 @@ public class VoteActivity extends AppCompatActivity{
      */
     public static class VoteResults {
 
-        private final HashMap<String,int[]> voteResults = new HashMap<>();
+        private HashMap<String, int[]> voteResults = new HashMap<>();
+
+        public VoteResults(HashMap<String, int[]> voteResults) {
+            this.voteResults = voteResults;
+        }
 
         public VoteResults(String response) {
             Document doc = Jsoup.parse(response);

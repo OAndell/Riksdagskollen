@@ -13,12 +13,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.android.flexbox.FlexboxLayout;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 import oscar.riksdagskollen.Activity.MainActivity;
@@ -128,10 +128,10 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
         if (holder instanceof VoteViewHolder) {
-            ((VoteViewHolder) holder).noVoteContainer.removeAllViews();
-            ((VoteViewHolder) holder).yesVoteContainer.removeAllViews();
-            ((VoteViewHolder) holder).resultRequest.cancel(true);
-
+            VoteViewHolder viewHolder = (VoteViewHolder) holder;
+            viewHolder.noVoteContainer.removeAllViews();
+            viewHolder.yesVoteContainer.removeAllViews();
+            if (viewHolder.resultRequest != null) viewHolder.resultRequest.cancel(true);
         }
     }
 
@@ -195,48 +195,54 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
             title.setText(trimTitle(item.getTitel()));
             date.setText(item.getDatum());
 
-
-
-            resultRequest = RikdagskollenApp.getInstance().getRequestManager().downloadHtmlPage("http:" + item.getDokument_url_html(), new StringRequestCallback() {
-                @Override
-                public void onResponse(String response) {
-                    VoteActivity.VoteResults results = new VoteActivity.VoteResults(response);
-                    ImageView partyIcon;
-                    for (Party party : MainActivity.getParties()) {
-                        int[] partyResult = results.getPartyVotes(party.getID().toUpperCase());
-                        if (partyResult == null) continue;
-                        int resultIndex = 0;
-                        int max = 0;
-                        for (int i = 0; i < 3; i++) {
-                            if (i > 1) continue;
-                            if (partyResult[i] > max) resultIndex = i;
-                        }
-                        partyIcon = new ImageView(context);
-                        partyIcon.setImageResource(party.getDrawableLogo());
-                        partyIcon.setLayoutParams(new LinearLayout.LayoutParams(80, 80));
-                        if (resultIndex == 0) yesVoteContainer.addView(partyIcon);
-                        else if (resultIndex == 1) noVoteContainer.addView(partyIcon);
+            if (item.getVoteResults() != null) {
+                arrangeVotes(item.getVoteResults());
+            } else {
+                resultRequest = RikdagskollenApp.getInstance().getRequestManager().downloadHtmlPage("http:" + item.getDokument_url_html(), new StringRequestCallback() {
+                    @Override
+                    public void onResponse(String response) {
+                        VoteActivity.VoteResults results = new VoteActivity.VoteResults(response);
+                        item.setVoteResults(results.getVoteResults());
+                        arrangeVotes(results.getVoteResults());
                     }
-                }
 
-                @Override
-                public void onFail(VolleyError error) {
+                    @Override
+                    public void onFail(VolleyError error) {
 
-                }
+                    }
+                });
 
-
-            });
-
+            }
 
             DecicionCategory decicionCategory = DecicionCategory.getCategoryFromBet(item.getBeteckning());
             catColor.setBackgroundColor(context.getResources().getColor(decicionCategory.getCategoryColor()));
             catName.setText(decicionCategory.getCategoryName());
 
             itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     listener.onItemClick(item);
                 }
             });
+        }
+
+        private void arrangeVotes(HashMap<String, int[]> voteResults) {
+            ImageView partyIcon;
+            for (Party party : MainActivity.getParties()) {
+                int[] partyResult = voteResults.get(party.getID().toUpperCase());
+                if (partyResult == null) continue;
+                int resultIndex = 0;
+                int max = 0;
+                for (int i = 0; i < 3; i++) {
+                    if (i > 1) continue;
+                    if (partyResult[i] > max) resultIndex = i;
+                }
+                partyIcon = new ImageView(context);
+                partyIcon.setImageResource(party.getDrawableLogo());
+                partyIcon.setLayoutParams(new LinearLayout.LayoutParams(80, 80));
+                if (resultIndex == 0) yesVoteContainer.addView(partyIcon);
+                else if (resultIndex == 1) noVoteContainer.addView(partyIcon);
+            }
         }
 
         //Removes text "Omröstning: Betänkande 2017:18Xyxyx" from title
