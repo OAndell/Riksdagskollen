@@ -14,6 +14,7 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 
+import oscar.riksdagskollen.Activity.NewsReaderActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.CurrentNewsListAdapter;
@@ -49,16 +50,18 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
         adapter = new CurrentNewsListAdapter(newsList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {
-                /*
-                TODO now the mobile browser us used. It may be good to create an in app viewer.
-                Intent intent = new Intent(getContext(), NewsReaderActivity.class);
-                intent.putExtra("document", (CurrentNews) document);
-                startActivity(intent);*/
+
+                //Intent intent = new Intent(getContext(), NewsReaderActivity.class);
+                //intent.putExtra("document", (CurrentNews) document);
+                //startActivity(intent);
                 CurrentNews newsDoc = (CurrentNews) document;
-                Intent browserIntent;
+                Intent intent;
                 try{
-                    browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://riksdagen.se" + newsDoc.getLinklista().getLink().getUrl()));
-                    startActivity(browserIntent);
+                    intent = new Intent(getContext(), NewsReaderActivity.class);
+                    intent.putExtra("url",  newsDoc.getLinklista().getLink().getUrl());
+                    System.out.println("http://riksdagen.se" + newsDoc.getLinklista().getLink().getUrl());
+                    //intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://riksdagen.se" + newsDoc.getLinklista().getLink().getUrl()));
+                    startActivity(intent);
                 }catch (NullPointerException e){ //Some news does not contain the LinkLista object
                     System.out.println("Could not open news url");
                     //browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://riksdagen.se" + newsDoc.getUrl()));
