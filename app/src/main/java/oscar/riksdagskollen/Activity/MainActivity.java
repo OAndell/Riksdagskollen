@@ -10,6 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import oscar.riksdagskollen.Fragment.AboutFragment;
 import oscar.riksdagskollen.Fragment.CurrentNewsListFragment;
 import oscar.riksdagskollen.Fragment.DecisionsListFragment;
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity
     private PartyListFragment lPartyListFragment;
     private PartyListFragment kdPartyListFragment;
 
+    public static List<Party> parties = new ArrayList<>();
     private NavigationView navigationView;
 
 
@@ -240,5 +244,18 @@ public class MainActivity extends AppCompatActivity
         lPartyListFragment = PartyListFragment.newInstance(lParty);
         lPartyFragment = PartyFragment.newInstance(lParty);
         lPartyFragment.setListFragment(lPartyListFragment);
+
+        parties.add(mParty);
+        parties.add(sParty);
+        parties.add(sdParty);
+        parties.add(kdParty);
+        parties.add(vParty);
+        parties.add(cParty);
+        parties.add(mpParty);
+        parties.add(lParty);
+    }
+
+    public static List<Party> getParties() {
+        return parties;
     }
 }

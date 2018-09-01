@@ -40,8 +40,8 @@ import java.util.regex.Pattern;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.PartyDocumentCallback;
-import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
+import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
 
 /**
@@ -305,7 +305,7 @@ public class VoteActivity extends AppCompatActivity{
     /**
      * Class for parsing and getting the voteresults.
      */
-    class VoteResults{
+    public static class VoteResults {
 
         private final HashMap<String,int[]> voteResults = new HashMap<>();
 
