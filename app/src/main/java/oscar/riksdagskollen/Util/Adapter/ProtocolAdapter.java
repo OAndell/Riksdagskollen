@@ -163,7 +163,7 @@ public class ProtocolAdapter  extends RiksdagenViewHolderAdapter{
 
         //Removes text "Protokoll 2017/18:XYZ" from title
         private String trimTitle(String title){
-            return title.split(":")[1].substring(4).trim();
+            return title.split(":\\d+")[1].trim();
         }
 
     }
