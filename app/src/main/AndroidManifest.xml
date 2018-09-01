@@ -32,7 +32,8 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".Activity.MotionActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".Activity.NewsReaderActivity" />
+        <activity android:name=".Activity.NewsReaderActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".Activity.ProtocolReaderActivity" />
         <activity android:name=".Activity.VoteActivity"
             android:screenOrientation="portrait"
