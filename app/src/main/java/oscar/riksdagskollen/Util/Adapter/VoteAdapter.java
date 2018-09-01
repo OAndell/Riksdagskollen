@@ -1,6 +1,7 @@
 package oscar.riksdagskollen.Util.Adapter;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.android.flexbox.FlexboxLayout;
 
@@ -128,6 +130,8 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
         if (holder instanceof VoteViewHolder) {
             ((VoteViewHolder) holder).noVoteContainer.removeAllViews();
             ((VoteViewHolder) holder).yesVoteContainer.removeAllViews();
+            ((VoteViewHolder) holder).resultRequest.cancel(true);
+
         }
     }
 
@@ -173,6 +177,7 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
         private final TextView catName;
         public final FlexboxLayout yesVoteContainer;
         public final FlexboxLayout noVoteContainer;
+        public AsyncTask resultRequest;
 
 
         public VoteViewHolder(View textView) {
@@ -190,7 +195,9 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
             title.setText(trimTitle(item.getTitel()));
             date.setText(item.getDatum());
 
-            RikdagskollenApp.getInstance().getRequestManager().downloadHtmlPage("http:" + item.getDokument_url_html(), new StringRequestCallback() {
+
+
+            resultRequest = RikdagskollenApp.getInstance().getRequestManager().downloadHtmlPage("http:" + item.getDokument_url_html(), new StringRequestCallback() {
                 @Override
                 public void onResponse(String response) {
                     VoteActivity.VoteResults results = new VoteActivity.VoteResults(response);
@@ -242,4 +249,5 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
 
 
 }
+
 
