@@ -324,6 +324,10 @@ public class VoteActivity extends AppCompatActivity{
 
         }
 
+        public HashMap<String, int[]> getVoteResults() {
+            return voteResults;
+        }
+
         public int[] getPartyVotes(String party){
             return voteResults.get(party);
         }
