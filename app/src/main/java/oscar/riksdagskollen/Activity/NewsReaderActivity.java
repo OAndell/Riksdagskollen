@@ -1,5 +1,6 @@
 package oscar.riksdagskollen.Activity;
 
+import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -14,9 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 
 import com.android.volley.VolleyError;
@@ -63,23 +67,15 @@ public class NewsReaderActivity extends AppCompatActivity {
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebViewClient(new WebViewClient()
-        {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url)
-            {
-                Log.i("WebView", "Attempting to load URL: " + url);
+        webView.loadUrl("http://riksdagen.se"+url);
+        loadingView.setVisibility(View.GONE);
 
-                view.loadUrl(url);
-                return true;
-            }
-        });
 
-        final RikdagskollenApp app = RikdagskollenApp.getInstance();
+        /*final RikdagskollenApp app = RikdagskollenApp.getInstance();
         app.getRiksdagenAPIManager().getNewsHTML(url, new StringRequestCallback() {
             @Override
             public void onResponse(String response) {
-                try {
+                /*try {
                     Document doc = Jsoup.parse(response);
                     Elements elements = doc.getElementsByClass("page-contents");
 
@@ -104,7 +100,8 @@ public class NewsReaderActivity extends AppCompatActivity {
             public void onFail(VolleyError error) {
 
             }
-        });
+        });*/
+
     }
 
     @Override

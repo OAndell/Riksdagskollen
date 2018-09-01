@@ -235,7 +235,6 @@ public class VoteActivity extends AppCompatActivity{
 
     private BarDataSet getDataSet(int[] totalVotes){
         ArrayList<Integer> colors = new ArrayList<>();
-        //TODO decide colors
         colors.add(ContextCompat.getColor(this, R.color.absentVoteColor));
         colors.add(ContextCompat.getColor(this, R.color.refrainVoteColor));
         colors.add(ContextCompat.getColor(this, R.color.noVoteColor));
