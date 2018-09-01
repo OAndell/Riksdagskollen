@@ -62,7 +62,8 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
         setHasOptionsMenu(true);
         preferences.registerOnSharedPreferenceChangeListener(this);
         if (getFilter().isEmpty()) noContentWarning.setVisibility(View.VISIBLE);
-        onFilterChanged();
+        applyFilter();
+
     }
 
     @Override
@@ -70,7 +71,6 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
         super.onPause();
         preferences.unregisterOnSharedPreferenceChangeListener(this);
         setHasOptionsMenu(false);
-
     }
 
     @Nullable
@@ -164,9 +164,13 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
                 // Load next page if the requested page does not contain any documents matching the filter
                 // or if there are too few documents in the list
 
-                if ((filteredDocuments.isEmpty() || getAdapter().getItemCount() < MIN_DOC) && !getFilter().isEmpty())
+                if ((filteredDocuments.isEmpty() || getAdapter().getItemCount() < MIN_DOC) && !getFilter().isEmpty()) {
                     loadNextPage();
-                setLoadingMoreItems(false);
+                    setLoadingUntilFull(true);
+                } else {
+                    setLoadingUntilFull(false);
+                }
+                if (!isLoadingUntilFull()) setLoadingMoreItems(false);
                 setShowLoadingView(false);
             }
 
@@ -197,10 +201,15 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
         return filteredDocumentList;
     }
 
+    private void applyFilter() {
+        getAdapter().replaceAll(filter(documentList));
+    }
+
     private void onFilterChanged() {
         List<PartyDocumentType> filter = getFilter();
+
         if (!filter.equals(oldFilter)) {
-            getAdapter().replaceAll(filter(documentList));
+            applyFilter();
         }
 
         if (filter.isEmpty()) noContentWarning.setVisibility(View.VISIBLE);

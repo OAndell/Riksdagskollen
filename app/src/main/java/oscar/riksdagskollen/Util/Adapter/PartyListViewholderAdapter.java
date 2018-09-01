@@ -157,7 +157,6 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
     public void replaceAll(List<?> items) {
         documentList.beginBatchedUpdates();
         documentList.clear();
-        ;
         documentList.addAll((Collection<PartyDocument>) items);
         documentList.endBatchedUpdates();
     }

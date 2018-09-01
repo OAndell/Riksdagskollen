@@ -24,6 +24,7 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
     private ViewGroup loadingView;
     private RecyclerView recyclerView;
     private boolean loading;
+    private boolean loadingUntilFull = false;
     private int pageToLoad = 1;
     private ProgressBar itemsLoadingView;
     private int pastVisiblesItems;
@@ -65,10 +66,13 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
                 android.graphics.PorterDuff.Mode.MULTIPLY);
 
 
-        if (adapter.getItemCount() < 10) loadNextPage();
+        if (adapter.getItemCount() < MIN_DOC) loadNextPage();
         return view;
     }
 
+    public void setLoadingUntilFull(boolean loadingUntilFull) {
+        this.loadingUntilFull = loadingUntilFull;
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -98,6 +102,9 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
 
     abstract RiksdagenViewHolderAdapter getAdapter();
 
+    public boolean isLoadingUntilFull() {
+        return loadingUntilFull;
+    }
 
     void setLoadingMoreItems(Boolean loading){
         this.loading = loading;

@@ -69,6 +69,7 @@ public class DecisionsListFragment extends RiksdagenAutoLoadingListFragment impl
     public void onResume() {
         super.onResume();
         setHasOptionsMenu(true);
+        applyFilter();
         preferences.registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -150,10 +151,14 @@ public class DecisionsListFragment extends RiksdagenAutoLoadingListFragment impl
         return filteredDocumentList;
     }
 
+    private void applyFilter() {
+        getAdapter().replaceAll(filter(decisionDocuments));
+    }
+
     private void onFilterChanged() {
         List<DecicionCategory> filter = getFilter();
         if (!filter.equals(oldFilter)) {
-            getAdapter().replaceAll(filter(decisionDocuments));
+            applyFilter();
         }
 
         if (filter.isEmpty()) noContentWarning.setVisibility(View.VISIBLE);
@@ -175,9 +180,13 @@ public class DecisionsListFragment extends RiksdagenAutoLoadingListFragment impl
                 // Load next page if the requested page does not contain any documents matching the filter
                 // or if there are too few documents in the list
 
-                if ((filteredDocuments.isEmpty() || getAdapter().getItemCount() < MIN_DOC) && !getFilter().isEmpty())
+                if ((filteredDocuments.isEmpty() || getAdapter().getItemCount() < MIN_DOC) && !getFilter().isEmpty()) {
                     loadNextPage();
-                setLoadingMoreItems(false);
+                    setLoadingUntilFull(true);
+                } else {
+                    setLoadingUntilFull(false);
+                }
+                if (!isLoadingUntilFull()) setLoadingMoreItems(false);
                 setShowLoadingView(false);
             }
 
