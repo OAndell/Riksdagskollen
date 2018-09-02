@@ -9,7 +9,9 @@
     <color name="primaryTextColor">#ffffff</color>
     <color name="secondaryTextColor">#424242</color>
     <color name="yesVoteColor">#3cb44b</color>
+    <color name="yesVoteColorLight">#d9f2dc</color>
     <color name="noVoteColor">#e6194b</color>
+    <color name="noVoteColorLight">#fad1db</color>
     <color name="refrainVoteColor">#808080</color>
     <color name="absentVoteColor">#000000</color>
 

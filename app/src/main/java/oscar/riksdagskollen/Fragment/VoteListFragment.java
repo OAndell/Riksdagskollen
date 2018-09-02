@@ -58,6 +58,7 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
         if(!isShowingSearchedVotes){
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.votes);
         }
+        applyFilter();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -65,7 +66,6 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
     public void onResume() {
         super.onResume();
         setHasOptionsMenu(true);
-        applyFilter();
         preferences.registerOnSharedPreferenceChangeListener(this);
     }
 

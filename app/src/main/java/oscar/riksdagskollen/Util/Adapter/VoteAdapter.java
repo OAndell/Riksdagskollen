@@ -175,9 +175,11 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
         private final TextView date;
         private final View catColor;
         private final TextView catName;
-        public final FlexboxLayout yesVoteContainer;
-        public final FlexboxLayout noVoteContainer;
-        public AsyncTask resultRequest;
+        final FlexboxLayout yesVoteContainer;
+        final FlexboxLayout noVoteContainer;
+        AsyncTask resultRequest;
+        private LinearLayout yesSideContainer;
+        private LinearLayout noSideContainer;
 
 
         public VoteViewHolder(View textView) {
@@ -188,6 +190,9 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
             catName = itemView.findViewById(R.id.category_name);
             yesVoteContainer = itemView.findViewById(R.id.vote_yes_icons);
             noVoteContainer = itemView.findViewById(R.id.vote_no_icons);
+
+            noSideContainer = itemView.findViewById(R.id.no_side_container);
+            yesSideContainer = itemView.findViewById(R.id.yes_side_container);
         }
 
         public void bind(final Vote item ,final OnItemClickListener listener) {
@@ -228,6 +233,9 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
 
         private void arrangeVotes(HashMap<String, int[]> voteResults) {
             ImageView partyIcon;
+
+            int totalYes = 0;
+            int totalNo = 0;
             for (Party party : MainActivity.getParties()) {
                 int[] partyResult = voteResults.get(party.getID().toUpperCase());
                 if (partyResult == null) continue;
@@ -240,9 +248,24 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
                 partyIcon = new ImageView(context);
                 partyIcon.setImageResource(party.getDrawableLogo());
                 partyIcon.setLayoutParams(new LinearLayout.LayoutParams(80, 80));
-                if (resultIndex == 0) yesVoteContainer.addView(partyIcon);
-                else if (resultIndex == 1) noVoteContainer.addView(partyIcon);
+
+                if (resultIndex == 0) {
+                    yesVoteContainer.addView(partyIcon);
+                    totalYes++;
+                } else if (resultIndex == 1) {
+                    noVoteContainer.addView(partyIcon);
+                    totalNo++;
+                }
+
             }
+            if (totalYes > totalNo) {
+                yesSideContainer.setBackgroundColor(context.getResources().getColor(R.color.yesVoteColorLight));
+                noSideContainer.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
+            } else {
+                noSideContainer.setBackgroundColor(context.getResources().getColor(R.color.noVoteColorLight));
+                yesSideContainer.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
+            }
+
         }
 
         //Removes text "Omröstning: Betänkande 2017:18Xyxyx" from title

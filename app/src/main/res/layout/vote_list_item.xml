@@ -1,8 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content"
-    android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_width="match_parent">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
@@ -64,6 +63,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/yes_side_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
@@ -74,20 +74,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="5"
-                        android:textSize="22sp"
-                        android:textColor="@color/primaryColor"
                         android:gravity="center"
-                        android:text="Ja" />
+                        android:text="Ja"
+                        android:textColor="@color/primaryColor"
+                        android:textSize="22sp" />
 
                     <com.google.android.flexbox.FlexboxLayout
+                        android:id="@+id/vote_yes_icons"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="5"
                         android:layout_marginTop="8dp"
+                        android:layout_weight="5"
+                        android:orientation="horizontal"
                         card_view:alignContent="center"
-                        card_view:justifyContent="center"
-                        android:id="@+id/vote_yes_icons"
-                        android:orientation="horizontal">
+                        card_view:justifyContent="center">
 
 
                     </com.google.android.flexbox.FlexboxLayout>
@@ -101,6 +101,7 @@
                     android:background="@color/primaryColor" />
 
                 <LinearLayout
+                    android:id="@+id/no_side_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
@@ -111,19 +112,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:textSize="22sp"
+                        android:text="Nej"
                         android:textColor="@color/primaryColor"
-                        android:text="Nej" />
+                        android:textSize="22sp" />
 
                     <com.google.android.flexbox.FlexboxLayout
+                        android:id="@+id/vote_no_icons"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_weight="5"
-                        card_view:alignContent="center"
-                        card_view:justifyContent="center"
                         android:orientation="horizontal"
-                        android:id="@+id/vote_no_icons">
+                        card_view:alignContent="center"
+                        card_view:justifyContent="center">
 
 
                     </com.google.android.flexbox.FlexboxLayout>
