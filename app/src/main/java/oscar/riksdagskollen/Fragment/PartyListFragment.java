@@ -61,9 +61,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
         super.onResume();
         setHasOptionsMenu(true);
         preferences.registerOnSharedPreferenceChangeListener(this);
-        if (getFilter().isEmpty()) noContentWarning.setVisibility(View.VISIBLE);
-        applyFilter();
-
+        showNoContentWarning(getFilter().isEmpty());
     }
 
     @Override
@@ -78,6 +76,13 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(party.getName());
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        applyFilter();
+        showNoContentWarning(getFilter().isEmpty());
     }
 
     @Override
@@ -159,11 +164,15 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
             public void onDocumentsFetched(List<PartyDocument> documents) {
                 documentList.addAll(documents);
                 List<PartyDocument> filteredDocuments = filter(documents);
+
+                int itemCountBeforeLoad = getAdapter().getItemCount();
                 getAdapter().addAll(filteredDocuments);
+
+                // Unpretty fix for a bug where recyclerview sometimes scrolls to the bottom after initial filter
+                if (itemCountBeforeLoad <= 1) getRecyclerView().scrollToPosition(0);
 
                 // Load next page if the requested page does not contain any documents matching the filter
                 // or if there are too few documents in the list
-
                 if ((filteredDocuments.isEmpty() || getAdapter().getItemCount() < MIN_DOC) && !getFilter().isEmpty()) {
                     loadNextPage();
                     setLoadingUntilFull(true);
@@ -212,9 +221,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
             applyFilter();
         }
 
-        if (filter.isEmpty()) noContentWarning.setVisibility(View.VISIBLE);
-        else noContentWarning.setVisibility(View.GONE);
-
+        showNoContentWarning(filter.isEmpty());
         if (getAdapter().getItemCount() < MIN_DOC && !filter.isEmpty()) loadNextPage();
 
     }

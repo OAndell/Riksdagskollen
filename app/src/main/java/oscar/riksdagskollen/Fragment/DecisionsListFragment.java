@@ -78,9 +78,14 @@ public class DecisionsListFragment extends RiksdagenAutoLoadingListFragment impl
         super.onPause();
         preferences.unregisterOnSharedPreferenceChangeListener(this);
         setHasOptionsMenu(false);
-
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        applyFilter();
+        showNoContentWarning(getFilter().isEmpty());
+    }
 
     private List<DecicionCategory> getFilter() {
         ArrayList<DecicionCategory> filter = new ArrayList<>();
@@ -161,8 +166,7 @@ public class DecisionsListFragment extends RiksdagenAutoLoadingListFragment impl
             applyFilter();
         }
 
-        if (filter.isEmpty()) noContentWarning.setVisibility(View.VISIBLE);
-        else noContentWarning.setVisibility(View.GONE);
+        showNoContentWarning(filter.isEmpty());
 
         if (getAdapter().getItemCount() < MIN_DOC && !filter.isEmpty()) loadNextPage();
     }

@@ -74,6 +74,11 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         this.loadingUntilFull = loadingUntilFull;
     }
 
+    protected void showNoContentWarning(boolean show) {
+        if (show) noContentWarning.setVisibility(View.VISIBLE);
+        else noContentWarning.setVisibility(View.GONE);
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         // If we already have content in the adapter, do not show the loading view
