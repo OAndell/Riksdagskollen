@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity
     private PartyListFragment lPartyListFragment;
     private PartyListFragment kdPartyListFragment;
 
-    public static List<Party> parties = new ArrayList<>();
+    public static List<Party> parties;
     private NavigationView navigationView;
 
 
@@ -56,8 +56,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        parties = new ArrayList<>();
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
