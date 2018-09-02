@@ -69,7 +69,6 @@ public class DecisionsListFragment extends RiksdagenAutoLoadingListFragment impl
     public void onResume() {
         super.onResume();
         setHasOptionsMenu(true);
-        applyFilter();
         preferences.registerOnSharedPreferenceChangeListener(this);
     }
 
