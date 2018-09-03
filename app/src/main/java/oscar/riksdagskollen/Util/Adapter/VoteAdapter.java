@@ -242,8 +242,10 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
                 int resultIndex = 0;
                 int max = 0;
                 for (int i = 0; i < 3; i++) {
-                    if (i > 1) continue;
-                    if (partyResult[i] > max) resultIndex = i;
+                    if (partyResult[i] > max) {
+                        resultIndex = i;
+                        max = partyResult[i];
+                    }
                 }
                 partyIcon = new ImageView(context);
                 partyIcon.setImageResource(party.getDrawableLogo());
