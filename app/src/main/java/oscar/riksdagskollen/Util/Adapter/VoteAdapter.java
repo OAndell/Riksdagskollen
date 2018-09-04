@@ -264,7 +264,6 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
                 yesSideContainer.setBackgroundColor(context.getResources().getColor(R.color.yesVoteColorLight));
                 noSideContainer.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
             } else {
-                System.out.println(totalYes + "   " + totalNo);
                 noSideContainer.setBackgroundColor(context.getResources().getColor(R.color.noVoteColorLight));
                 yesSideContainer.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
             }
