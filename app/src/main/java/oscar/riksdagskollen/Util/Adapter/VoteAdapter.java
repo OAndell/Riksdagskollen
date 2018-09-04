@@ -253,10 +253,10 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
 
                 if (resultIndex == 0) {
                     yesVoteContainer.addView(partyIcon);
-                    totalYes++;
+                    totalYes += partyResult[resultIndex];
                 } else if (resultIndex == 1) {
                     noVoteContainer.addView(partyIcon);
-                    totalNo++;
+                    totalNo += partyResult[resultIndex];
                 }
 
             }
@@ -264,6 +264,7 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
                 yesSideContainer.setBackgroundColor(context.getResources().getColor(R.color.yesVoteColorLight));
                 noSideContainer.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
             } else {
+                System.out.println(totalYes + "   " + totalNo);
                 noSideContainer.setBackgroundColor(context.getResources().getColor(R.color.noVoteColorLight));
                 yesSideContainer.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
             }
