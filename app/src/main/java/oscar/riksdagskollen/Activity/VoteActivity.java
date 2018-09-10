@@ -115,7 +115,6 @@ public class VoteActivity extends AppCompatActivity{
                         for (int i = 0; i < 10; i++) {
                             next = next.nextElementSibling();
                             if(next.text().contains(":") && next.text().contains("/") && next.text().indexOf(':') == 7){
-                                System.out.println(next.text());
                                 Pattern propositionPattern = Pattern.compile("yrkande.* [0-9,–]*");
                                 Matcher matcher = propositionPattern.matcher(next.text());
                                 String prop = "";
