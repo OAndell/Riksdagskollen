@@ -115,6 +115,7 @@ public class VoteActivity extends AppCompatActivity{
                         for (int i = 0; i < 10; i++) {
                             next = next.nextElementSibling();
                             if(next.text().contains(":") && next.text().contains("/") && next.text().indexOf(':') == 7){
+                                System.out.println(next.text());
                                 Pattern propositionPattern = Pattern.compile("yrkande.* [0-9,–]*");
                                 Matcher matcher = propositionPattern.matcher(next.text());
                                 String prop = "";
@@ -134,7 +135,15 @@ public class VoteActivity extends AppCompatActivity{
                             app.getRiksdagenAPIManager().getMotionByID(key, new PartyDocumentCallback() {
                                 @Override
                                 public void onDocumentsFetched(List<PartyDocument> documents) {
+
+                                    // Very uncommon case, for now we don't have a good method of comparing documents so skip it
+                                    if (documents.size() > 1) {
+                                        return;
+                                    }
+
                                     final PartyDocument motionDocument = documents.get(0);
+
+
                                     LayoutInflater layoutInflater = getLayoutInflater();
                                     TextView motionTitle = (TextView) layoutInflater.inflate(R.layout.vote_button_row, null);
                                     SpannableString content = new SpannableString(motionDocument.getTitel());
