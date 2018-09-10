@@ -325,14 +325,21 @@ public class VoteActivity extends AppCompatActivity{
         public VoteResults(String response) {
             Document doc = Jsoup.parse(response);
             //This is probably a really bad way of doing this.
-            String allVotesString = doc.getElementsByClass("vottabell").text().split("Frånvarande")[1];
+
+            String allVotesString = doc.getElementsByClass("vottabell").get(0).text().split("Frånvarande")[1];
             String allVotesArr[] = allVotesString.split(" ");
             for (int i = 1; i < allVotesArr.length; i=i+5) {
-                int[] data = {Integer.valueOf(allVotesArr[i+1]),
-                              Integer.valueOf(allVotesArr[i+2]),
-                              Integer.valueOf(allVotesArr[i+3]),
-                              Integer.valueOf(allVotesArr[i+4])};
-                voteResults.put(allVotesArr[i],data);
+                try {
+
+                    int[] data = {Integer.valueOf(allVotesArr[i + 1]),
+                            Integer.valueOf(allVotesArr[i + 2]),
+                            Integer.valueOf(allVotesArr[i + 3]),
+                            Integer.valueOf(allVotesArr[i + 4])};
+                    voteResults.put(allVotesArr[i], data);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+
             }
 
         }
