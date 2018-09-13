@@ -26,6 +26,8 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
     private boolean loading;
     private boolean loadingUntilFull = false;
     private int pageToLoad = 1;
+    private int searchPageToLoad = 1;
+    private boolean isSearching = false;
     private ProgressBar itemsLoadingView;
     private int pastVisiblesItems;
     protected TextView noContentWarning;
@@ -92,6 +94,13 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         return loading;
     }
 
+    public boolean isSearching() {
+        return isSearching;
+    }
+
+    public void setSearching(boolean searching) {
+        isSearching = searching;
+    }
 
     int getPageToLoad() {
         return pageToLoad;
@@ -103,6 +112,22 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
 
     void decrementPage(){
         pageToLoad--;
+    }
+
+    protected void incrementSearchPage() {
+        searchPageToLoad++;
+    }
+
+    protected void decrementSearchPage() {
+        searchPageToLoad--;
+    }
+
+    protected void resetSearchPage() {
+        searchPageToLoad = 1;
+    }
+
+    public int getSearchPageToLoad() {
+        return searchPageToLoad;
     }
 
     abstract RiksdagenViewHolderAdapter getAdapter();

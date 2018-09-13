@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/menu_search"
+        android:icon="@drawable/ic_search"
+        app:showAsAction="always|collapseActionView"
+        android:visible="true"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        android:title="Sök beslut" />
+
+
+    <item
+        android:id="@+id/menu_filter"
+        android:icon="@drawable/ic_filter"
+        app:showAsAction="always"
+        android:visible="true"
+        android:title="Filtrera">
+
+    </item>
+
+
+</menu>

@@ -10,22 +10,22 @@ import oscar.riksdagskollen.R;
 
 public enum DecicionCategory {
 
-    FiU("FiU"),
-    CU("CU"),
     AU("AU"),
+    CU("CU"),
+    FiU("FiU"),
     FöU("FöU"),
     JuU("JuU"),
     KU("KU"),
     KrU("KrU"),
     MJU("MJU"),
     NU("NU"),
-    SkU("SkU"),
     SfU("SfU"),
+    SkU("SkU"),
     SoU("SoU"),
     TU("TU"),
-    UbU("UbU"),
+    UFöU("UFöU"),
     UU("UU"),
-    UFöU("UFöU");
+    UbU("UbU");
 
     DecicionCategory(String id) {
         this.id = id;

@@ -209,7 +209,8 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
         public void bind(final DecisionDocument item, final OnItemClickListener listener) {
             title.setText(item.getTitel());
             betName.setText("Betänkande:  " + item.getRm() + ":" + item.getBeteckning());
-            body.setText(Html.fromHtml(item.getNotis()));
+            if (item.getNotis() != null) body.setText(Html.fromHtml(item.getNotis()));
+            else body.setText("");
             justDate.setText(dateStringBuilder("Justering: ",item.getJusteringsdag()));
             debateDate.setText(dateStringBuilder("Debatt: ", item.getDebattdag()));
             decisionDate.setText(dateStringBuilder("Beslut: ", item.getBeslutsdag()));
