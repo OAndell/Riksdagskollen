@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Laddar..."
-                android:textColor="@color/primaryTextColor" />
+                android:textColor="?attr/secondaryLightColor" />
 
         </LinearLayout>
 

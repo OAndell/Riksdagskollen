@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -19,10 +18,10 @@
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/result_tabs"
-                android:background="@color/primaryColor"
-                app:tabTextColor="@color/secondaryDarkColor"
-                app:tabSelectedTextColor="@color/secondaryLightColor"
-                app:tabIndicatorColor="@color/secondaryLightColor"
+                android:background="?colorPrimary"
+                app:tabTextColor="?attr/secondaryDarkColor"
+                app:tabSelectedTextColor="?attr/secondaryLightColor"
+                app:tabIndicatorColor="?attr/secondaryLightColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:tabMaxWidth="0dp"

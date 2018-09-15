@@ -30,6 +30,7 @@ import java.util.List;
 
 import oscar.riksdagskollen.Activity.ProtocolReaderActivity;
 import oscar.riksdagskollen.Activity.SearchedVoteAcitivity;
+import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.DecisionsCallback;
@@ -218,7 +219,12 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
             searchVote.setText("Visa voteringar");
 
             DecicionCategory decicionCategory = DecicionCategory.getCategoryFromBet(item.getBeteckning());
-            catColor.setBackgroundColor(context.getResources().getColor(decicionCategory.getCategoryColor()));
+            if (RikdagskollenApp.getInstance().getThemeManager().getCurrentTheme() != ThemeManager.Theme.BLACK) {
+                catColor.setBackgroundColor(context.getResources().getColor(decicionCategory.getCategoryColor()));
+            } else {
+                // Dont use colors for black theme
+                catColor.setBackgroundColor(context.getResources().getColor(R.color.black));
+            }
             catName.setText(decicionCategory.getCategoryName());
             if(!item.hasVotes() || !item.isExpanded()) searchVote.setVisibility(View.GONE);
 

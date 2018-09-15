@@ -8,14 +8,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        card_view:contentPaddingBottom="20dp"
         card_view:contentPaddingLeft="8dp"
         card_view:contentPaddingRight="20dp"
         card_view:contentPaddingTop="8dp"
         card_view:cardUseCompatPadding="true"
         card_view:cardElevation="6dp"
-        card_view:cardBackgroundColor="@color/cardview_light_background"
+        card_view:cardBackgroundColor="?attr/cardViewBackgroundColor"
         card_view:cardCornerRadius="3dp">
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_gravity="bottom"
+            android:background="?attr/cardViewBorderColor">
+
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,13 +41,14 @@
                     android:id="@+id/dok_typ"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="?attr/mainBodyTextColor"
                     android:text="Motion"/>
 
                 <TextView
                     android:id="@+id/document"
                     android:layout_marginTop="8dp"
                     android:layout_gravity="start"
-                    android:textColor="@color/primaryColor"
+                    android:textColor="?attr/mainTitleTextColor"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:text="En titel om den fråga som dokumentet rör"
@@ -51,7 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="av Jimmy Åkesson (SD)"
-                    android:textColor="@color/primaryColor"
+                    android:textColor="?mainBodyTextColor"
                     />
                 <TextView
                     android:id="@+id/publicerad"
@@ -60,8 +69,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:textColor="@color/secondaryTextColor"
+                    android:textColor="?mainBodyTextColor"
                     android:textSize="14sp"
+                    android:layout_marginBottom="16dp"
                     android:text="Publicerad: 2017-08-19"
                     android:textStyle="normal" />
             </LinearLayout>
@@ -75,11 +85,11 @@
                 android:layout_weight="16">
 
                 <oscar.riksdagskollen.Util.View.CircularNetworkImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
                     android:id="@+id/author_img"
                     android:layout_gravity="center"
-                    android:src="@mipmap/ic_default_person"/>
+                    card_view:srcCompat="@drawable/ic_person" />
 
             </LinearLayout>
 

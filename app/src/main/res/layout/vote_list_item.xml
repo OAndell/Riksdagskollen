@@ -8,10 +8,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        card_view:cardBackgroundColor="@color/cardview_light_background"
+        card_view:cardBackgroundColor="?cardViewBackgroundColor"
         card_view:cardCornerRadius="3dp"
         card_view:cardElevation="6dp"
         card_view:cardUseCompatPadding="true">
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="?cardViewBorderColor" />
 
         <FrameLayout
             android:id="@+id/category_border"
@@ -27,7 +36,7 @@
                 android:gravity="center_vertical"
                 android:id="@+id/category_name"
                 android:paddingRight="20dp"
-                android:paddingLeft="20dp"
+                android:paddingLeft="8dp"
                 android:textSize="14sp"
                 android:textColor="#FFFFFF"
                 android:paddingTop="0dp" />
@@ -50,7 +59,7 @@
                 android:layout_gravity="start"
                 android:layout_marginTop="4dp"
                 android:text="Omröstning; Klimatpolitik, förslagspunkt 8"
-                android:textColor="@color/primaryColor"
+                android:textColor="?mainTitleTextColor"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -76,7 +85,7 @@
                         android:layout_weight="5"
                         android:gravity="center"
                         android:text="Ja"
-                        android:textColor="@color/primaryColor"
+                        android:textColor="?mainTitleTextColor"
                         android:textSize="22sp" />
 
                     <com.google.android.flexbox.FlexboxLayout
@@ -98,7 +107,7 @@
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/primaryColor" />
+                    android:background="?buttonColor" />
 
                 <LinearLayout
                     android:id="@+id/no_side_container"
@@ -113,7 +122,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="Nej"
-                        android:textColor="@color/primaryColor"
+                        android:textColor="?mainTitleTextColor"
                         android:textSize="22sp" />
 
                     <com.google.android.flexbox.FlexboxLayout
@@ -143,7 +152,8 @@
                 android:layout_marginTop="16dp"
                 android:layout_weight="0.3"
                 android:text="Publicerad 2017-08-19"
-                android:textColor="@color/secondaryTextColor"
+                android:layout_marginBottom="8dp"
+                android:textColor="?mainBodyTextColor"
                 android:textSize="14sp"
                 android:textStyle="normal" />
 

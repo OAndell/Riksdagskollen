@@ -62,7 +62,7 @@ public class CircularNetworkImageView extends NetworkImageView {
      */
     public Bitmap getCircularBitmap(Bitmap bitmap) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-                bitmap.getWidth(), Config.ARGB_8888);
+                bitmap.getHeight(), Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
         int width = bitmap.getWidth();
         final int color = 0xff424242;

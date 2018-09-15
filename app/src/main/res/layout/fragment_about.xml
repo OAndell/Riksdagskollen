@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/primaryTextColor"
+    android:background="?attr/mainBackgroundColor"
     android:padding="16dp">
 
 
@@ -21,7 +21,7 @@
             android:gravity="center_vertical"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:textColor="@color/primaryColor"
+            android:textColor="?attr/mainTitleTextColor"
             android:visibility="visible" />
 
         <ImageView
@@ -39,7 +39,7 @@
         android:layout_marginTop="15dp"
         android:text='@string/about_body'
         android:textSize="17sp"
-        android:textColor="@color/primaryColor"
+        android:textColor="?attr/mainBodyTextColor"
         android:visibility="visible" />
 
     <LinearLayout
@@ -55,7 +55,7 @@
             android:gravity="center_vertical|left"
             android:text="GitHub:"
             android:textSize="15sp"
-            android:textColor="@color/primaryColor"
+            android:textColor="?attr/mainTitleTextColor"
             android:textStyle="bold"
             />
 
@@ -68,7 +68,7 @@
             android:textSize="15sp"
             android:maxLines="2"
             android:text="@string/github"
-            android:textColor="@color/secondaryTextColor" />
+            android:textColor="?attr/mainBodyTextColor" />
     </LinearLayout>
 
 
@@ -81,7 +81,7 @@
         android:id="@+id/show_licenses_button"
         android:background="@drawable/button_background"
         android:text="Visa licenser för öppen källkod"
-        android:textColor="@color/primaryColor" />
+        android:textColor="?attr/buttonColor" />
 
 
 </LinearLayout>

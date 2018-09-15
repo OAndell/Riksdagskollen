@@ -52,7 +52,7 @@ public enum DecicionCategory {
         JuU.categoryColor = R.color.cat_blue;
 
         KU.committeeCategoryName = "Riksdagen";
-        KU.categoryColor = R.color.primaryColor;
+        KU.categoryColor = R.color.riksdagBlue;
 
         KrU.committeeCategoryName = "Kultur";
         KrU.categoryColor = R.color.cat_pink;

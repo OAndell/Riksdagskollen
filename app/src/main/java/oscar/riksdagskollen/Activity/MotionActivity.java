@@ -3,17 +3,22 @@ package oscar.riksdagskollen.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -24,7 +29,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
@@ -38,10 +42,10 @@ import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.PartyDocumentCallback;
 import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
+import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 import oscar.riksdagskollen.Util.JSONModel.Intressent;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Representative;
-import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 
 /**
  * Created by gustavaaro on 2018-03-29.
@@ -58,7 +62,18 @@ public class MotionActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(RikdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         setContentView(R.layout.activity_motion);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = getTheme();
+            theme.resolveAttribute(R.attr.mainBackgroundColor, typedValue, true);
+            @ColorInt int navColor = typedValue.data;
+            window.setNavigationBarColor(navColor);
+        }
+
         document = getIntent().getParcelableExtra("document");
 
         TextView titleTV = findViewById(R.id.act_doc_reader_title);
@@ -117,7 +132,7 @@ public class MotionActivity extends AppCompatActivity {
                 Document doc = Jsoup.parse(response);
                 //Remove title
                 doc.head().append("<meta name=\"viewport\" content='width=device-width, initial-scale=2.0,text/html, charset='utf-8'>\n");
-                doc.head().appendElement("link").attr("rel", "stylesheet").attr("type", "text/css").attr("href", "motion_style.css");
+                doc.head().appendElement("link").attr("rel", "stylesheet").attr("type", "text/css").attr("href", app.getThemeManager().getCurrentTheme().getCss());
                 doc.select("div>span.sidhuvud_publikation").remove();
                 doc.select("div>span.sidhuvud_beteckning").remove();
                 doc.select("div>span.MotionarLista").remove();
@@ -162,7 +177,7 @@ public class MotionActivity extends AppCompatActivity {
             if(i.getRoll().equals("undertecknare") || (document.getDoktyp().equals("frs") && i.getRoll().equals("besvaradav"))){
                 portraitView = LayoutInflater.from(this).inflate(R.layout.intressent_layout,null);
                 final NetworkImageView portrait = portraitView.findViewById(R.id.intressent_portait);
-                portrait.setDefaultImageResId(R.mipmap.ic_default_person);
+                portrait.setDefaultImageResId(R.drawable.ic_person);
                 nameTv = portraitView.findViewById(R.id.intressent_name);
                 nameTv.setText(i.getNamn() + " (" + i.getPartibet() + ")");
 

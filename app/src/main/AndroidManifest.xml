@@ -10,14 +10,14 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/DefaultTheme"
         android:name=".RikdagskollenApp"
         >
 
         <activity
             android:name=".Activity.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/DefaultTheme.NoActionBar"
             android:screenOrientation="portrait"
             android:configChanges="orientation"
             >
@@ -35,21 +35,21 @@
         </activity>
         <activity
             android:name=".Activity.DocumentReaderActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/DefaultTheme.NoActionBar" />
         <activity android:name=".Activity.MotionActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/DefaultTheme.NoActionBar" />
         <activity android:name=".Activity.NewsReaderActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/DefaultTheme.NoActionBar" />
         <activity android:name=".Activity.ProtocolReaderActivity" />
         <activity android:name=".Activity.VoteActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/DefaultTheme.NoActionBar"
         />
         <activity android:name=".Activity.SearchedVoteAcitivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/DefaultTheme.NoActionBar" />
     </application>
 
 </manifest>

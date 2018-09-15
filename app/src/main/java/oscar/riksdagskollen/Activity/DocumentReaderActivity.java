@@ -17,10 +17,10 @@ import com.android.volley.toolbox.NetworkImageView;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
+import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 import oscar.riksdagskollen.Util.JSONModel.Intressent;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Representative;
-import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 
 /**
  * Created by gustavaaro on 2018-03-27.
@@ -90,7 +90,7 @@ public class DocumentReaderActivity extends AppCompatActivity{
             if(i.getRoll().equals("undertecknare")){
                 portraitView = LayoutInflater.from(this).inflate(R.layout.intressent_layout,null);
                 final NetworkImageView portrait = portraitView.findViewById(R.id.intressent_portait);
-                portrait.setDefaultImageResId(R.mipmap.ic_default_person);
+                portrait.setDefaultImageResId(R.drawable.ic_person);
                 nameTv = portraitView.findViewById(R.id.intressent_name);
                 nameTv.setText(i.getNamn() + " (" + i.getPartibet() + ")");
 

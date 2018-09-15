@@ -8,6 +8,6 @@
     android:orientation="horizontal"
     android:shadowDy="0"
     android:text=""
-    android:textColor="@color/primaryColor"
+    android:textColor="?attr/mainTitleTextColor"
     android:textSize="16sp"
     android:textStyle="normal"></TextView>

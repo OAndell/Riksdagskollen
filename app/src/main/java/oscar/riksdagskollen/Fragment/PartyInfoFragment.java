@@ -12,8 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -75,7 +73,7 @@ public class PartyInfoFragment extends Fragment {
                     View portraitView = LayoutInflater.from(getContext()).inflate(R.layout.intressent_layout_big,null);
 
                     NetworkImageView portrait = portraitView.findViewById(R.id.intressent_portait);
-                    portrait.setDefaultImageResId(R.mipmap.ic_default_person);
+                    portrait.setDefaultImageResId(R.drawable.ic_person);
                     portrait.setImageUrl(leaders.get(i).getBild_url_192(),app.getRequestManager().getmImageLoader());
                     TextView nameTv = portraitView.findViewById(R.id.intressent_name);
                     nameTv.setText(leaders.get(i).getTilltalsnamn()+" "+leaders.get(i).getEfternamn() +"\n" + leaders.get(i).getRoll_kod());

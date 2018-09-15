@@ -2,18 +2,23 @@ package oscar.riksdagskollen.Activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -54,13 +59,31 @@ public class VoteActivity extends AppCompatActivity{
     private Boolean motionLoaded = false;
     private ViewGroup loadingView;
     private ScrollView mainContent;
+    @ColorInt
+    private int titleColor;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(RikdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         setContentView(R.layout.activity_vote);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = getTheme();
+            theme.resolveAttribute(R.attr.mainBackgroundColor, typedValue, true);
+            @ColorInt int navColor = typedValue.data;
+            window.setNavigationBarColor(navColor);
+        }
+
         loadingView = findViewById(R.id.loading_view);
         mainContent = findViewById(R.id.main_content);
+
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = getTheme();
+        theme.resolveAttribute(R.attr.mainBodyTextColor, typedValue, true);
+        titleColor = typedValue.data;
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.vote);
@@ -160,6 +183,7 @@ public class VoteActivity extends AppCompatActivity{
                                     TextView lowerText = new TextView(context);
                                     lowerText.setText(motionDocument.getUndertitel()+ "\n");
                                     motionHolder.addView(lowerText);
+                                    lowerText.setTextColor(titleColor);
                                     motionLoaded = true; //not true
                                     checkLoading();
                                 }
@@ -226,7 +250,7 @@ public class VoteActivity extends AppCompatActivity{
         xAxis.setDrawGridLines(false);
         xAxis.setDrawLabels(false);
         xAxis.setAxisLineWidth(2);
-        xAxis.setAxisLineColor(ContextCompat.getColor(this, R.color.primaryColor));
+        xAxis.setAxisLineColor(titleColor);
 
         chart.getAxisLeft().setDrawLabels(false);
         chart.getAxisLeft().setDrawGridLines(false);

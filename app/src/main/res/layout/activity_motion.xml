@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/secondaryColor">
+    android:background="?attr/mainBackgroundColor">
 
     <include layout="@layout/riksdagen_toolbar"></include>
 
@@ -44,7 +44,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="Användningen av ordet särskola i gymnasiet"
-                        android:textColor="@color/primaryColor"
+                        android:textColor="?attr/mainTitleTextColor"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -54,7 +54,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="av Agneta Sjödin (S)"
-                        android:textColor="@color/primaryColor" />
+                        android:textColor="?mainTitleTextColor" />
 
                 </LinearLayout>
 
@@ -68,7 +68,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="10dp"
-                android:background="@color/primaryColor">
+                android:background="?mainTitleTextColor">
 
             </View>
 
@@ -87,7 +87,7 @@
                 android:textStyle="bold"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:textColor="@color/primaryColor"
+                android:textColor="?mainTitleTextColor"
                 android:textSize="16sp"/>
 
             <HorizontalScrollView
@@ -123,7 +123,7 @@
                 android:textStyle="normal"
                 android:shadowDy="0"
                 android:text="@string/view_reply_button"
-                android:textColor="@color/primaryColor"
+                android:textColor="?buttonColor"
                 android:visibility="gone"/>
 
         </LinearLayout>

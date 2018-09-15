@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="mainBackgroundColor" format="color" />
+    <attr name="cardViewBackgroundColor" format="color" />
+    <attr name="cardViewBorderColor" format="color" />
+    <attr name="mainTitleTextColor" format="color" />
+    <attr name="mainBodyTextColor" format="color" />
+    <attr name="buttonColor" format="color" />
+    <attr name="secondaryLightColor" format="color" />
+    <attr name="secondaryDarkColor" format="color" />
+    <attr name="yesindicatorcolor" format="color" />
+    <attr name="noindicatorcolor" format="color" />
+    <attr name="navigationBarColor" format="color" />
+
+
+</resources>

@@ -1,14 +1,19 @@
 package oscar.riksdagskollen.Activity;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -35,7 +40,18 @@ public class ProtocolReaderActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(RikdagskollenApp.getInstance().getThemeManager().getCurrentTheme(false));
         setContentView(R.layout.activity_news_reader);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = getTheme();
+            theme.resolveAttribute(R.attr.mainBackgroundColor, typedValue, true);
+            @ColorInt int navColor = typedValue.data;
+            window.setNavigationBarColor(navColor);
+        }
+
         url = getIntent().getStringExtra("url");
         title = getIntent().getStringExtra("title");
 
@@ -68,7 +84,7 @@ public class ProtocolReaderActivity extends AppCompatActivity {
                 Document doc = Jsoup.parse(response);
 
                 doc.head().append("<meta name=\"viewport\" content='width=device-width, initial-scale=1.0,text/html, charset='utf-8'>\n");
-                doc.head().appendElement("link").attr("rel", "stylesheet").attr("type", "text/css").attr("href", "motion_style.css");
+                doc.head().appendElement("link").attr("rel", "stylesheet").attr("type", "text/css").attr("href", app.getThemeManager().getCurrentTheme().getCss());
                 doc.select("div>span.sidhuvud_publikation").remove();
                 doc.select("div>span.sidhuvud_beteckning").remove();
                 doc.select("div>span.MotionarLista").remove();

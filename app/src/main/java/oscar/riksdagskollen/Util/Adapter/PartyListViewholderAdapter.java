@@ -168,7 +168,7 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
         if (holder instanceof MyViewHolder) {
             MyViewHolder viewHolder = ((MyViewHolder) holder);
             if (viewHolder.imageUrlRequest != null) viewHolder.imageUrlRequest.cancel();
-            viewHolder.authorView.setImageResource(R.mipmap.ic_default_person);
+            viewHolder.authorView.setImageResource(R.drawable.ic_person);
 
         }
     }

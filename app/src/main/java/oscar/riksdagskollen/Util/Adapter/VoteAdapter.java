@@ -1,10 +1,13 @@
 package oscar.riksdagskollen.Util.Adapter;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,7 @@ import java.util.List;
 
 import oscar.riksdagskollen.Activity.MainActivity;
 import oscar.riksdagskollen.Activity.VoteActivity;
+import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
@@ -220,7 +224,12 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
             }
 
             DecicionCategory decicionCategory = DecicionCategory.getCategoryFromBet(item.getBeteckning());
-            catColor.setBackgroundColor(context.getResources().getColor(decicionCategory.getCategoryColor()));
+            if (RikdagskollenApp.getInstance().getThemeManager().getCurrentTheme() != ThemeManager.Theme.BLACK) {
+                catColor.setBackgroundColor(context.getResources().getColor(decicionCategory.getCategoryColor()));
+            } else {
+                // Dont use colors for black theme
+                catColor.setBackgroundColor(context.getResources().getColor(R.color.black));
+            }
             catName.setText(decicionCategory.getCategoryName());
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -260,11 +269,21 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
                 }
 
             }
+
+            TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = context.getTheme();
+            theme.resolveAttribute(R.attr.yesindicatorcolor, typedValue, true);
+            @ColorInt int yesColor = typedValue.data;
+
+            theme.resolveAttribute(R.attr.noindicatorcolor, typedValue, true);
+            @ColorInt int noColor = typedValue.data;
+
+
             if (totalYes > totalNo) {
-                yesSideContainer.setBackgroundColor(context.getResources().getColor(R.color.yesVoteColorLight));
+                yesSideContainer.setBackgroundColor(yesColor);
                 noSideContainer.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
             } else {
-                noSideContainer.setBackgroundColor(context.getResources().getColor(R.color.noVoteColorLight));
+                noSideContainer.setBackgroundColor(noColor);
                 yesSideContainer.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
             }
 

@@ -1,14 +1,21 @@
 package oscar.riksdagskollen.Activity;
 
+import android.content.DialogInterface;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +27,9 @@ import oscar.riksdagskollen.Fragment.PartyFragment;
 import oscar.riksdagskollen.Fragment.PartyListFragment;
 import oscar.riksdagskollen.Fragment.ProtocolListFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
+import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 
 public class MainActivity extends AppCompatActivity
@@ -55,10 +64,21 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(RikdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         parties = new ArrayList<>();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = getTheme();
+            theme.resolveAttribute(R.attr.mainBackgroundColor, typedValue, true);
+            @ColorInt int navColor = typedValue.data;
+            window.setNavigationBarColor(navColor);
+        }
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -99,12 +119,40 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
+        switch (item.getItemId()) {
+            case R.id.menu_theme:
+                final ThemeManager themeManager = RikdagskollenApp.getInstance().getThemeManager();
+                final ThemeManager.Theme[] themes = ThemeManager.Theme.values();
+
+                AlertDialog dialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom)
+                        .setTitle("Välj utseende")
+                        .setSingleChoiceItems(
+                                ThemeManager.Theme.getDisplayNames(),
+                                themeManager.getCurrentThemeIndex(),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        themeManager.setTheme(themes[i]);
+                                        applyTheme();
+                                    }
+                                }).create();
+
+                dialog.show();
+                break;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void applyTheme() {
+        setTheme(RikdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
+        recreate();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

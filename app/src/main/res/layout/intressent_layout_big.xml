@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/intressent_name"
         android:gravity="center"
-        android:textColor="@color/primaryColor"
+        android:textColor="?attr/mainTitleTextColor"
         android:textSize="15sp"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"

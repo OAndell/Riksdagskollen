@@ -3,6 +3,7 @@
 xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?mainBackgroundColor"
     android:orientation="vertical">
 
     <include layout="@layout/riksdagen_toolbar"></include>
@@ -30,7 +31,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_marginTop="8dp"
             android:text="Rubrik"
             android:textAlignment="center"
-            android:textColor="@color/primaryColor"
+            android:textColor="?mainTitleTextColor"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -52,7 +53,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:paddingTop="20dp"
                     android:text="@string/vote_yes"
                     android:textAlignment="center"
-                    android:textColor="@color/primaryColor"
+                    android:textColor="?mainTitleTextColor"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -64,7 +65,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:paddingTop="20dp"
                     android:text="@string/vote_no"
                     android:textAlignment="center"
-                    android:textColor="@color/primaryColor"
+                    android:textColor="?mainTitleTextColor"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -76,7 +77,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:paddingTop="20dp"
                     android:text="@string/vote_novote"
                     android:textAlignment="center"
-                    android:textColor="@color/primaryColor"
+                    android:textColor="?mainTitleTextColor"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -89,7 +90,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:paddingTop="20dp"
                     android:text="@string/vote_absent"
                     android:textAlignment="center"
-                    android:textColor="@color/primaryColor"
+                    android:textColor="?mainTitleTextColor"
                     android:textSize="16sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -109,7 +110,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_marginTop="8dp"
             android:text="Punktrubrik"
             android:textAlignment="center"
-            android:textColor="@color/primaryColor"
+            android:textColor="?mainTitleTextColor"
             android:textSize="16sp"
             android:textStyle="bold"/>
 
@@ -130,7 +131,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_marginTop="8dp"
             android:text="@string/vote_partyvotes_title"
             android:textAlignment="center"
-            android:textColor="@color/primaryColor"
+            android:textColor="?mainTitleTextColor"
             android:textSize="16sp"
             android:textStyle="bold" />
 
