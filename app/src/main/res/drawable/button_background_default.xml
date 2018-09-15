@@ -2,7 +2,8 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
     <corners android:radius="3dp" />
+    <solid android:color="@android:color/transparent" />
     <stroke
         android:width="5px"
-        android:color="?attr/buttonColor" />
+        android:color="@color/riksdagBlue" />
 </shape>

@@ -24,7 +24,7 @@
         android:textStyle="bold"
         android:visibility="gone"
         android:gravity="center"
-        android:textColor="@color/riksdagBlue"
+        android:textColor="?buttonColor"
         android:id="@+id/no_content_warning"
         android:text="Det verkar inte finnas något här :( \n Testa att ändra dina filterinställningar" />
 

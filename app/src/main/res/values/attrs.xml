@@ -11,6 +11,8 @@
     <attr name="yesindicatorcolor" format="color" />
     <attr name="noindicatorcolor" format="color" />
     <attr name="navigationBarColor" format="color" />
-
+    <attr name="navigationDrawerHighlight" format="color" />
+    <attr name="loadingViewDrawable" format="reference" />
+    <attr name="buttonBackgroundDrawable" format="reference" />
 
 </resources>

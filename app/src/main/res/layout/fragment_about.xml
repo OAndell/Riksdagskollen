@@ -79,7 +79,7 @@
         android:layout_marginTop="40dp"
         android:padding="8dp"
         android:id="@+id/show_licenses_button"
-        android:background="@drawable/button_background"
+        android:background="?buttonBackgroundDrawable"
         android:text="Visa licenser för öppen källkod"
         android:textColor="?attr/buttonColor" />
 
