@@ -1,5 +1,7 @@
 Download on Google Play Store:
 https://play.google.com/store/apps/details?id=se.oandell.riksdagen
+Download on F-Droid:
+https://f-droid.org/packages/se.oandell.riksdagen/
 
 # Riksdagskollen
 Android app to keep track of the Swedish parliament.
