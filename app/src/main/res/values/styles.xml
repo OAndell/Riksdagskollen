@@ -34,7 +34,7 @@
         <item name="secondaryDarkColor">@color/secondaryDarkColor</item>
 
         <item name="mainBackgroundColor">@color/black</item>
-        <item name="cardViewBorderColor">@color/white</item>
+        <item name="cardViewBorderColor">@color/black</item>
         <item name="cardViewBackgroundColor">@color/black</item>
         <item name="mainTitleTextColor">@color/white</item>
         <item name="mainBodyTextColor">@color/white</item>
