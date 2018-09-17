@@ -127,10 +127,10 @@ public class VoteActivity extends AppCompatActivity{
             app.getRequestManager().downloadHtmlPage("http://data.riksdagen.se/dokument/H501" + document.getBeteckning() + ".html", new StringRequestCallback() {
                 @Override
                 public void onResponse(String response) {
-                    Document doc = Jsoup.parse(response);
-                    Integer pointNumber = Integer.valueOf(document.getTitel().split("förslagspunkt ")[1]);
-                    Elements pointTitle =  doc.select("table:contains("+pointNumber+".)");
                     try {
+                        Document doc = Jsoup.parse(response);
+                        Integer pointNumber = Integer.valueOf(document.getTitel().split("förslagspunkt ")[1]);
+                        Elements pointTitle =  doc.select("table:contains("+pointNumber+".)");
                         Element next = pointTitle.get(0);
                         String pointName = pointTitle.get(0).text().substring(3);
 
@@ -212,16 +212,32 @@ public class VoteActivity extends AppCompatActivity{
     private void prepareGraphs(VoteResults results) {
         setupMainGraph(results);
         ArrayList<HorizontalBarChart> partyCharts = new ArrayList<>();
-        partyCharts.add((HorizontalBarChart) findViewById(R.id.chartS));
-        partyCharts.add((HorizontalBarChart) findViewById(R.id.chartM));
-        partyCharts.add((HorizontalBarChart) findViewById(R.id.chartSD));
-        partyCharts.add((HorizontalBarChart) findViewById(R.id.chartMP));
-        partyCharts.add((HorizontalBarChart) findViewById(R.id.chartC));
-        partyCharts.add((HorizontalBarChart) findViewById(R.id.chartV));
-        partyCharts.add((HorizontalBarChart) findViewById(R.id.chartL));
-        partyCharts.add((HorizontalBarChart) findViewById(R.id.chartKD));
-        String[] parties = {"S", "M", "SD", "MP", "C", "V", "L", "KD"};
-        setupPartyGraph(results, partyCharts, parties);
+        //TODO fix a better solution if a party is not in parliament for a vote.
+        //TODO this is hardcoded for votes before SD had any seats.
+        if(results.getPartyVotes("SD")!=null){
+            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartS));
+            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartM));
+            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartSD));
+            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartMP));
+            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartC));
+            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartV));
+            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartL));
+            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartKD));
+            String[] parties = {"S", "M", "SD", "MP", "C", "V", "L", "KD"};
+            setupPartyGraph(results, partyCharts, parties);
+        }
+        else {
+            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartS));
+            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartM));
+            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartMP));
+            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartC));
+            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartV));
+            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartL));
+            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartKD));
+            findViewById(R.id.chartSD).setVisibility(View.GONE);
+            String[] parties = {"S", "M", "MP", "C", "V", "L", "KD"};
+            setupPartyGraph(results, partyCharts, parties);
+        }
         graphLoaded = true;
         checkLoading();
     }
@@ -306,6 +322,11 @@ public class VoteActivity extends AppCompatActivity{
 
             ArrayList<BarEntry> yVals1 = new ArrayList<>();
 
+            //TODO fix this horrible mess with old votes. Changes L -> FP
+            System.out.println(parties[i]);
+            if(parties[i].equals("L") && voteResults.getPartyVotes("L") == null){
+                parties[i] = "FP";
+            }
             int[] partyResults = voteResults.getPartyVotes(parties[i]);
             yVals1.add(new BarEntry(0, new float[]{partyResults[0], partyResults[1], partyResults[2], partyResults[3]}));
 
@@ -367,7 +388,7 @@ public class VoteActivity extends AppCompatActivity{
                             Integer.valueOf(allVotesArr[i + 2]),
                             Integer.valueOf(allVotesArr[i + 3]),
                             Integer.valueOf(allVotesArr[i + 4])};
-                    voteResults.put(allVotesArr[i], data);
+                    voteResults.put(allVotesArr[i].toUpperCase(), data);
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
@@ -385,7 +406,7 @@ public class VoteActivity extends AppCompatActivity{
         }
 
         public int[] getTotal(){
-            return voteResults.get("Totalt");
+            return voteResults.get("TOTALT");
         }
 
     }
