@@ -22,7 +22,7 @@ public class ThemeManager {
     }
 
     public enum Theme {
-        DEFAULT("default", "Riksdags-blått", "motion_style.css", R.style.DefaultTheme, R.style.DefaultTheme_NoActionBar),
+        DEFAULT("default", "Standard", "motion_style.css", R.style.DefaultTheme, R.style.DefaultTheme_NoActionBar),
         BLACK("black", "AMOLED-svart", "motion_style_black.css", R.style.BlackTheme, R.style.BlackTheme_NoActionBar);
         int id;
         int noActionBarTheme;
