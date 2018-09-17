@@ -42,10 +42,6 @@
                     android:icon="@drawable/sdlogo"
                     android:title="@string/party_sd" />
                 <item
-                    android:id="@+id/mp_nav"
-                    android:icon="@drawable/mplogo"
-                    android:title="@string/party_mp" />
-                <item
                     android:id="@+id/c_nav"
                     android:icon="@drawable/clogo"
                     android:title="@string/party_c"
@@ -56,15 +52,20 @@
                     android:title="@string/party_v"
                     />
                 <item
+                    android:id="@+id/kd_nav"
+                    android:icon="@drawable/kdlogo"
+                    android:title="@string/party_kd"
+                    />
+                <item
                     android:id="@+id/l_nav"
                     android:icon="@drawable/llogo"
                     android:title="@string/party_l"
                     />
                 <item
-                    android:id="@+id/kd_nav"
-                    android:icon="@drawable/kdlogo"
-                    android:title="@string/party_kd"
-                    />
+                    android:id="@+id/mp_nav"
+                    android:icon="@drawable/mplogo"
+                    android:title="@string/party_mp" />
+
             </group>
         </menu>
     </item>
