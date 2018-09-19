@@ -25,6 +25,7 @@ import oscar.riksdagskollen.Util.Callback.PartyDocumentCallback;
 import oscar.riksdagskollen.Util.Callback.PartyLeadersCallback;
 import oscar.riksdagskollen.Util.Callback.ProtocolCallback;
 import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
+import oscar.riksdagskollen.Util.Callback.RepresentativeDocumentCallback;
 import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 import oscar.riksdagskollen.Util.Callback.VoteCallback;
 import oscar.riksdagskollen.Util.JSONModel.CurrentNews;
@@ -194,15 +195,32 @@ public class RiksdagenAPIManager {
          * @param callback
          */
         //Not sure if this even works with the API
-        public void getRepresentative(String fname, String ename, String partyID, final RepresentativeCallback callback){
-            String subURL = "/personlista/?iid=&fnamn"+fname+"&ename="+ename+"&parti="+partyID+"=&utformat=json";
+        public void getRepresentative(String fname, String ename, String partyID, final String sourceId, final RepresentativeCallback callback) {
+            String subURL = "/personlista/?iid=&fnamn=" + fname.trim() + "&ename=" + ename.trim() + "&parti=" + partyID + "&rdlstatus=samtliga&utformat=json";
             requestManager.doGetRequest(subURL, new JSONRequestCallback() {
                     @Override
                     public void onRequestSuccess(JSONObject response) {
                         try {
-                            JSONObject jsonDocuments = response.getJSONObject("personlista").getJSONObject("person");
-                            Representative representative = gson.fromJson(jsonDocuments.toString(),Representative.class);
-                            callback.onPersonFetched(representative);
+
+                            int hits = Integer.valueOf(response.getJSONObject("personlista").getString("@hits"));
+
+                            // Multiple hits, need to search for correct representative
+                            if (hits > 1) {
+                                JSONArray returnedHits = response.getJSONObject("personlista").getJSONArray("person");
+                                for (int i = 0; i < returnedHits.length(); i++) {
+                                    Representative representative = gson.fromJson(returnedHits.get(i).toString(), Representative.class);
+                                    if (representative.getSourceid().equals(sourceId)) {
+                                        callback.onPersonFetched(representative);
+                                        return;
+                                    }
+                                }
+                                callback.onFail(new VolleyError("Could not find representative"));
+                                // Single hit
+                            } else {
+                                JSONObject jsonDocuments = response.getJSONObject("personlista").getJSONObject("person");
+                                Representative representative = gson.fromJson(jsonDocuments.toString(), Representative.class);
+                                callback.onPersonFetched(representative);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                             callback.onFail(new VolleyError("Failed to parse JSON"));
@@ -344,6 +362,36 @@ public class RiksdagenAPIManager {
                 });
 
             }
+
+    public void getDocumentsForRepresentative(String intressentId, int page, final RepresentativeDocumentCallback callback) {
+
+        String subURL = "/dokumentlista/?avd=dokument&del=dokument&fcs=1&sort=datum&sortorder=desc&utformat=json"
+                + "&iid=" + intressentId
+                + "&p=" + page;
+
+        requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+            @Override
+            public void onRequestSuccess(JSONObject response) {
+                try {
+                    JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
+                    PartyDocument[] documents = gson.fromJson(jsonDocuments.toString(), PartyDocument[].class);
+                    String hits = response.getJSONObject("dokumentlista").getString("@traffar");
+                    callback.onDocumentsFetched(Arrays.asList(documents), hits);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    callback.onFail(new VolleyError("Failed to parse JSON"));
+                }
+            }
+
+            @Override
+            public void onRequestFail(VolleyError error) {
+                callback.onFail(error);
+            }
+        });
+
+    }
+
+
 
             public void searchForReply(PartyDocument document, final PartyDocumentCallback callback){
                 String subURL = "/dokumentlista/?sok="+document.getRm()+":"+ document.getBeteckning()+"&doktyp=frs&sort=datum&sortorder=desc&utformat=json";

@@ -123,6 +123,7 @@ public class RequestManager {
 
 
     private void queueStringRequest(final String url, final int method, final StringRequestCallback callback ){
+        System.out.println("Making string-request to: " + url);
         final StringRequest request = new StringRequest(method, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
