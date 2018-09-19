@@ -182,10 +182,19 @@ public class MotionActivity extends AppCompatActivity {
                 nameTv.setText(i.getNamn() + " (" + i.getPartibet() + ")");
 
 
+                final AppCompatActivity activity = this;
                 app.getRiksdagenAPIManager().getRepresentative(i.getIntressent_id(), new RepresentativeCallback() {
                     @Override
-                    public void onPersonFetched(Representative representative) {
+                    public void onPersonFetched(final Representative representative) {
                         portrait.setImageUrl(representative.getBild_url_192(),app.getRequestManager().getmImageLoader());
+                        portraitView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent repDetailsIntent = new Intent(activity, RepresentativeDetailActivity.class);
+                                repDetailsIntent.putExtra("representative", representative);
+                                startActivity(repDetailsIntent);
+                            }
+                        });
                     }
 
                     @Override

@@ -4,7 +4,10 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.ColorInt;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,10 +18,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
 
 import oscar.riksdagskollen.Fragment.AboutFragment;
 import oscar.riksdagskollen.Fragment.CurrentNewsListFragment;
@@ -30,6 +35,7 @@ import oscar.riksdagskollen.Fragment.VoteListFragment;
 import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.Util.AppBarStateChangeListener;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 
 public class MainActivity extends AppCompatActivity
@@ -57,9 +63,14 @@ public class MainActivity extends AppCompatActivity
     private PartyListFragment lPartyListFragment;
     private PartyListFragment kdPartyListFragment;
 
-    public static List<Party> parties;
+    public static HashMap<String, Party> parties;
     private NavigationView navigationView;
-
+    private AppBarLayout appBarLayout;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
+    private Toolbar toolbar;
+    private ActionBarDrawerToggle toggle;
+    private boolean emptyToolbar = false;
+    private ImageView collapsingLogo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +78,14 @@ public class MainActivity extends AppCompatActivity
         setTheme(RikdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
+        appBarLayout = findViewById(R.id.appbar);
+        collapsingToolbarLayout = findViewById(R.id.collapsing_layout);
+        collapsingLogo = findViewById(R.id.riksdagen_logo_collapsing);
+
         setSupportActionBar(toolbar);
-        parties = new ArrayList<>();
+
+        parties = new HashMap<>();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -80,9 +96,8 @@ public class MainActivity extends AppCompatActivity
             window.setNavigationBarColor(navColor);
         }
 
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
@@ -93,11 +108,21 @@ public class MainActivity extends AppCompatActivity
         initPartyFragments();
         initMenuOptions();
 
-        // Mark News-fragment as selected at startup
-        if(savedInstanceState == null) {
+        // Fresh start
+        if (savedInstanceState == null) {
+            startLauncherTransition();
+
+            // Mark News-fragment as selected at startup
             onNavigationItemSelected(navigationView.getMenu().getItem(0).getSubMenu().getItem(0));
             navigationView.getMenu().getItem(0).getSubMenu().getItem(0).setChecked(true);
+
+            // Apply theme
+        } else {
+            emptyToolbar = false;
+            toggle.setDrawerIndicatorEnabled(true);
+            invalidateOptionsMenu();
         }
+
     }
 
     @Override
@@ -116,6 +141,10 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        if (emptyToolbar) {
+            for (int i = 0; i < menu.size(); i++)
+                menu.getItem(i).setVisible(false);
+        }
         return true;
     }
 
@@ -131,7 +160,7 @@ public class MainActivity extends AppCompatActivity
                 final ThemeManager themeManager = RikdagskollenApp.getInstance().getThemeManager();
                 final ThemeManager.Theme[] themes = ThemeManager.Theme.values();
 
-                AlertDialog dialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom)
+                final AlertDialog dialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom)
                         .setTitle("Välj utseende")
                         .setSingleChoiceItems(
                                 ThemeManager.Theme.getDisplayNames(),
@@ -141,13 +170,48 @@ public class MainActivity extends AppCompatActivity
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         themeManager.setTheme(themes[i]);
                                         applyTheme();
+                                        dialogInterface.dismiss();
                                     }
                                 }).create();
-
                 dialog.show();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void startLauncherTransition() {
+        emptyToolbar = true;
+        toggle.setDrawerIndicatorEnabled(false);
+        collapsingToolbarLayout.setTitleEnabled(true);
+        collapsingLogo.setVisibility(View.VISIBLE);
+        collapsingToolbarLayout.setTitle(" ");
+
+        Handler handler = new Handler();
+        appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+            @Override
+            public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                if (state.equals(State.COLLAPSED)) {
+                    collapsingToolbarLayout.setTitleEnabled(false);
+                    collapsingLogo.setVisibility(View.GONE);
+                    emptyToolbar = false;
+                    toggle.setDrawerIndicatorEnabled(true);
+                    invalidateOptionsMenu();
+                }
+            }
+
+            @Override
+            public void onOffsetChange(AppBarLayout appBarLayout, int verticalOffset) {
+                float percentage = ((float) Math.abs(verticalOffset) / appBarLayout.getTotalScrollRange());
+                float alpha = 255 - (255 * percentage);
+                collapsingLogo.setImageAlpha((int) alpha);
+            }
+        });
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                appBarLayout.setExpanded(false, true);
+            }
+        }, 1500);
     }
 
     private void applyTheme() {
@@ -294,17 +358,21 @@ public class MainActivity extends AppCompatActivity
         lPartyFragment = PartyFragment.newInstance(lParty);
         lPartyFragment.setListFragment(lPartyListFragment);
 
-        parties.add(mParty);
-        parties.add(sParty);
-        parties.add(sdParty);
-        parties.add(kdParty);
-        parties.add(vParty);
-        parties.add(cParty);
-        parties.add(mpParty);
-        parties.add(lParty);
+        parties.put(mParty.getID(), mParty);
+        parties.put(sParty.getID(), sParty);
+        parties.put(sdParty.getID(), sdParty);
+        parties.put(kdParty.getID(), kdParty);
+        parties.put(vParty.getID(), vParty);
+        parties.put(cParty.getID(), cParty);
+        parties.put(mpParty.getID(), mpParty);
+        parties.put(lParty.getID(), lParty);
     }
 
-    public static List<Party> getParties() {
-        return parties;
+    public static Party getParty(String id) {
+        return parties.get(id);
+    }
+
+    public static Collection<Party> getParties() {
+        return parties.values();
     }
 }

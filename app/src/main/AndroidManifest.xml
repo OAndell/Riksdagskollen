@@ -50,6 +50,11 @@
             android:screenOrientation="portrait"
             android:configChanges="orientation"
             android:theme="@style/DefaultTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.RepresentativeDetailActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation"
+            android:theme="@style/DefaultTheme.NoActionBar" />
     </application>
 
 </manifest>

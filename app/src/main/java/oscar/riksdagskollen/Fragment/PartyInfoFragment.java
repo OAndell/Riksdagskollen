@@ -20,9 +20,11 @@ import com.google.android.flexbox.FlexboxLayout;
 
 import java.util.ArrayList;
 
+import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.PartyLeadersCallback;
+import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.Representative;
 
@@ -68,16 +70,37 @@ public class PartyInfoFragment extends Fragment {
         final RikdagskollenApp app = RikdagskollenApp.getInstance();
         app.getRiksdagenAPIManager().getPartyLeaders(party.getName(), new PartyLeadersCallback() {
             @Override
-            public void onPersonFetched(ArrayList<Representative> leaders) {
+            public void onPersonFetched(final ArrayList<Representative> leaders) {
                 for (int i =0; i < leaders.size(); i++) {
-                    View portraitView = LayoutInflater.from(getContext()).inflate(R.layout.intressent_layout_big,null);
+                    final Representative tmpRep = leaders.get(i);
+                    final View portraitView = LayoutInflater.from(getContext()).inflate(R.layout.intressent_layout_big, null);
+                    final NetworkImageView portrait = portraitView.findViewById(R.id.intressent_portait);
 
-                    NetworkImageView portrait = portraitView.findViewById(R.id.intressent_portait);
-                    portrait.setDefaultImageResId(R.drawable.ic_person);
-                    portrait.setImageUrl(leaders.get(i).getBild_url_192(),app.getRequestManager().getmImageLoader());
-                    TextView nameTv = portraitView.findViewById(R.id.intressent_name);
-                    nameTv.setText(leaders.get(i).getTilltalsnamn()+" "+leaders.get(i).getEfternamn() +"\n" + leaders.get(i).getRoll_kod());
-                    leadersLayout.addView(portraitView);
+                    app.getRiksdagenAPIManager().getRepresentative(tmpRep.getTilltalsnamn(), tmpRep.getEfternamn(), party.getID(), tmpRep.getSourceid(), new RepresentativeCallback() {
+                        @Override
+                        public void onPersonFetched(final Representative representative) {
+                            portrait.setDefaultImageResId(R.drawable.ic_person);
+                            portrait.setImageUrl(representative.getBild_url_192(), app.getRequestManager().getmImageLoader());
+
+                            portrait.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent repDetailsIntent = new Intent(getContext(), RepresentativeDetailActivity.class);
+                                    repDetailsIntent.putExtra("representative", representative);
+                                    startActivity(repDetailsIntent);
+                                }
+                            });
+                            TextView nameTv = portraitView.findViewById(R.id.intressent_name);
+                            nameTv.setText(representative.getTilltalsnamn() + " " + representative.getEfternamn() + "\n" + representative.getDescriptiveRole());
+                            leadersLayout.addView(portraitView);
+                        }
+
+                        @Override
+                        public void onFail(VolleyError error) {
+
+                        }
+                    });
+
                 }
                 loadingView.setVisibility(View.GONE);
             }

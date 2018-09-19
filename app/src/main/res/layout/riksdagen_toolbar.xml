@@ -3,13 +3,45 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:theme="@style/AppTheme.AppBarOverlay"
+    android:fitsSystemWindows="true"
+    android:id="@+id/appbar"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+
+    <android.support.design.widget.CollapsingToolbarLayout
+        app:layout_scrollFlags="scroll|exitUntilCollapsed"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
+        app:titleEnabled="false"
+        app:expandedTitleMarginTop="65dp"
+        app:expandedTitleMarginStart="16dp"
+        app:expandedTitleTextAppearance="@style/TextStyleExpandedToolbar"
+        app:expandedTitleGravity="start|top"
+        app:contentScrim="?colorPrimary"
+        app:statusBarScrim="?colorPrimary"
+        android:layout_height="match_parent"
+        android:id="@+id/collapsing_layout"
+        android:fitsSystemWindows="true">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/riksdagen_logo_collapsing"
+            android:visibility="gone"
+            android:src="@drawable/riksdagen_logo_yellow" />
+
+        <include
+            android:visibility="gone"
+            android:id="@+id/rep_header_layout"
+            layout="@layout/representative_header_layout" />
+
+    </android.support.design.widget.CollapsingToolbarLayout>
 
 </android.support.design.widget.AppBarLayout>
