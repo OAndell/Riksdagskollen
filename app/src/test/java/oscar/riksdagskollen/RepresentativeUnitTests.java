@@ -4,13 +4,13 @@ import org.junit.Test;
 
 import oscar.riksdagskollen.Util.JSONModel.Representative;
 
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 /**
  * Created by gustavaaro on 2018-09-19.
  */
-public class UnitTests {
+public class RepresentativeUnitTests {
 
     @Test
     public void sourceIdParsingFromImgUrl() {
