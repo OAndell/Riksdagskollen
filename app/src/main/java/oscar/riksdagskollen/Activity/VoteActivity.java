@@ -48,6 +48,7 @@ import oscar.riksdagskollen.Util.Callback.PartyDocumentCallback;
 import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
+import oscar.riksdagskollen.Util.VoteResults;
 
 /**
  * Created by oscar on 2018-06-16.
@@ -364,50 +365,5 @@ public class VoteActivity extends AppCompatActivity{
         }
     }
 
-    /**
-     * Class for parsing and getting the voteresults.
-     */
-    public static class VoteResults {
 
-        private HashMap<String, int[]> voteResults = new HashMap<>();
-
-        public VoteResults(HashMap<String, int[]> voteResults) {
-            this.voteResults = voteResults;
-        }
-
-        public VoteResults(String response) {
-            Document doc = Jsoup.parse(response);
-            //This is probably a really bad way of doing this.
-
-            String allVotesString = doc.getElementsByClass("vottabell").get(0).text().split("Frånvarande")[1];
-            String allVotesArr[] = allVotesString.split(" ");
-            for (int i = 1; i < allVotesArr.length; i=i+5) {
-                try {
-
-                    int[] data = {Integer.valueOf(allVotesArr[i + 1]),
-                            Integer.valueOf(allVotesArr[i + 2]),
-                            Integer.valueOf(allVotesArr[i + 3]),
-                            Integer.valueOf(allVotesArr[i + 4])};
-                    voteResults.put(allVotesArr[i].toUpperCase(), data);
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-        }
-
-        public HashMap<String, int[]> getVoteResults() {
-            return voteResults;
-        }
-
-        public int[] getPartyVotes(String party){
-            return voteResults.get(party);
-        }
-
-        public int[] getTotal(){
-            return voteResults.get("TOTALT");
-        }
-
-    }
 }

@@ -33,6 +33,7 @@ import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 import oscar.riksdagskollen.Util.DecicionCategory;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
+import oscar.riksdagskollen.Util.VoteResults;
 
 /**
  * Created by oscar on 2018-03-29.
@@ -210,7 +211,7 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
                 resultRequest = RikdagskollenApp.getInstance().getRequestManager().downloadHtmlPage("http:" + item.getDokument_url_html(), new StringRequestCallback() {
                     @Override
                     public void onResponse(String response) {
-                        VoteActivity.VoteResults results = new VoteActivity.VoteResults(response);
+                        VoteResults results = new VoteResults(response);
                         item.setVoteResults(results.getVoteResults());
                         arrangeVotes(results.getVoteResults());
                     }
