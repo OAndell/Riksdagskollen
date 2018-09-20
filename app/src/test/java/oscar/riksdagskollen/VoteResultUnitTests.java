@@ -9,7 +9,11 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import oscar.riksdagskollen.Activity.NewsReaderActivity;
+import oscar.riksdagskollen.Util.Adapter.CurrentNewsListAdapter;
+import oscar.riksdagskollen.Util.JSONModel.CurrentNews;
 import oscar.riksdagskollen.Util.VoteResults;
 
 import static org.junit.Assert.assertTrue;
