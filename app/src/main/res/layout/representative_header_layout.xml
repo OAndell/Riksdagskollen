@@ -4,9 +4,7 @@
     android:orientation="vertical"
     android:layout_marginTop="64dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?colorPrimary"
-    android:paddingBottom="16dp">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -85,13 +83,14 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/representative_published_documents"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:id="@+id/representative_published_documents"
                 android:gravity="center"
+                android:text=""
+                android:textColor="?secondaryLightColor"
                 android:textSize="25sp"
-                android:textColor="?secondaryLightColor" />
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -112,14 +111,15 @@
             android:layout_weight="10">
 
             <TextView
+                android:id="@+id/representative_age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
-                android:text=""
-                android:id="@+id/representative_age"
                 android:gravity="center"
+                android:text=""
+                android:textColor="?secondaryLightColor"
                 android:textSize="25sp"
-                android:textColor="?secondaryLightColor" />
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -134,5 +134,15 @@
 
 
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="?secondaryLightColor"
+        android:text="Ledamotsflöde" />
 
 </LinearLayout>

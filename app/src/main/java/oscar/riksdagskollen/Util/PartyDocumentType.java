@@ -13,7 +13,8 @@ public enum PartyDocumentType {
 
     Fraga("fr", "Skriftliga frågor"),
     Interpellation("ip", "Interpellationer"),
-    Motion("mot","Motioner");
+    Motion("mot", "Motioner"),
+    FragaSvar("frs", "Svar på fråga");
 
     private String docType;
     private String displayName;

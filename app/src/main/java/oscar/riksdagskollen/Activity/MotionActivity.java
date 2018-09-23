@@ -103,7 +103,7 @@ public class MotionActivity extends AppCompatActivity {
             public void onProgressChanged(WebView view, final int newProgress) {
                 if(newProgress == 100){
                     loadingView.setVisibility(View.GONE);
-                    }
+                }
             }
         });
         webView.setWebViewClient(webViewClient);
@@ -165,12 +165,40 @@ public class MotionActivity extends AppCompatActivity {
             public void onFail(VolleyError error) {
 
             }
-        });    
+        });
 
 
+        if (document.getDokintressent() != null) showSenders();
+
+        //Tries to find a response to the document if the doc has type = "fr"
+        if (document.getTyp().equals("fr")) {
+            app.getRiksdagenAPIManager().searchForReply(document, new PartyDocumentCallback() {
+                @Override
+                public void onDocumentsFetched(List<PartyDocument> documents) {
+                    final PartyDocument reply = documents.get(0);
+                    Button replyButton = findViewById(R.id.reply_button);
+                    replyButton.setVisibility(View.VISIBLE);
+                    replyButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(context, MotionActivity.class);
+                            intent.putExtra("document", (reply));
+                            startActivity(intent);
+                        }
+                    });
+                }
+
+                @Override
+                public void onFail(VolleyError error) {
+
+                }
+            });
+        }
+
+    }
+
+    private void showSenders() {
         LinearLayout portaitContainer = findViewById(R.id.act_doc_reader_portrait_container);
-
-
         for (Intressent i : document.getDokintressent().getIntressenter()){
             final View portraitView;
             TextView nameTv;
@@ -183,10 +211,10 @@ public class MotionActivity extends AppCompatActivity {
 
 
                 final AppCompatActivity activity = this;
-                app.getRiksdagenAPIManager().getRepresentative(i.getIntressent_id(), new RepresentativeCallback() {
+                RikdagskollenApp.getInstance().getRiksdagenAPIManager().getRepresentative(i.getIntressent_id(), new RepresentativeCallback() {
                     @Override
                     public void onPersonFetched(final Representative representative) {
-                        portrait.setImageUrl(representative.getBild_url_192(),app.getRequestManager().getmImageLoader());
+                        portrait.setImageUrl(representative.getBild_url_192(), RikdagskollenApp.getInstance().getRequestManager().getmImageLoader());
                         portraitView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -206,34 +234,8 @@ public class MotionActivity extends AppCompatActivity {
             }
 
         }
-
-
-        //Tries to find a response to the document if the doc has type = "fr"
-        if(document.getTyp().equals("fr")){
-            app.getRiksdagenAPIManager().searchForReply(document, new PartyDocumentCallback() {
-                @Override
-                public void onDocumentsFetched(List<PartyDocument> documents) {
-                    final PartyDocument reply = documents.get(0);
-                    Button replyButton = findViewById(R.id.reply_button);
-                    replyButton.setVisibility(View.VISIBLE);
-                    replyButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(context, MotionActivity.class);
-                            intent.putExtra("document",(reply));
-                            startActivity(intent);
-                        }
-                    });
-                }
-
-                @Override
-                public void onFail(VolleyError error) {
-
-                }
-            });
-        }
-
     }
+
 
 
     @Override

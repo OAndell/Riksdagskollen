@@ -14,8 +14,10 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import oscar.riksdagskollen.Fragment.RepresentativeFeedFragment;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.RepresentativeDocumentCallback;
@@ -82,6 +84,10 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
 
                     @Override
                     public void onDocumentsFetched(List<PartyDocument> documents, String numberOfHits) {
+                        ArrayList<PartyDocument> firstPage = new ArrayList<>();
+                        firstPage.addAll(documents);
+                        RepresentativeFeedFragment feedFragment = RepresentativeFeedFragment.newInstance(representative.getIntressent_id(), firstPage);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.rep_fragment_container, feedFragment).commit();
                         publishedDocuments.setText(numberOfHits);
                     }
 

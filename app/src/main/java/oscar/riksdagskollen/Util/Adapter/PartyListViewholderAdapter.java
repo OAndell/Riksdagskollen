@@ -20,6 +20,7 @@ import java.util.List;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RikdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
+import oscar.riksdagskollen.Util.JSONModel.DokIntressent;
 import oscar.riksdagskollen.Util.JSONModel.Intressent;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Representative;
@@ -94,9 +95,20 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
 
     @Override
     public long getItemId(int position) {
+
+        if (position < headers.size()) {
+            return 1;
+        } else if (position >= headers.size() + getObjectCount()) {
+            return 2;
+        }
+        return documentList.get(position - headers.size()).uniqueDocId();
+
+        /*
         // Give loading view id 1
         if (position == documentList.size()) return 1;
-        return documentList.get(position).uniqueDocId();
+        // Header and loading view visible
+        if (position > documentList.size()) return documentList.get(position-1).uniqueDocId();
+        return documentList.get(position).uniqueDocId();*/
     }
 
 
@@ -125,7 +137,7 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
             //add our view to a footer view and display it
             prepareHeaderFooter((HeaderFooterViewHolder) holder, v);
         } else {
-            PartyDocument document = documentList.get(position);
+            PartyDocument document = documentList.get(position - headers.size());
             ((MyViewHolder) holder).bind(document, clickListener);
         }
     }
@@ -215,7 +227,10 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
             });
 
 
-            final ArrayList<Intressent> i = item.getDokintressent().getIntressenter();
+            ArrayList<Intressent> i = new ArrayList<>();
+            DokIntressent dokIntressent = item.getDokintressent();
+            if (dokIntressent != null) i = item.getDokintressent().getIntressenter();
+
 
 
             int senderCount = 0;
@@ -223,7 +238,7 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
                 if (intressent.getRoll().equals("undertecknare")) senderCount++;
                 if (senderCount > 1) break;
             }
-            if (senderCount > 1) authorView.setVisibility(View.GONE);
+            if (senderCount != 1) authorView.setVisibility(View.GONE);
             else {
                 authorView.setVisibility(View.VISIBLE);
                 imageUrlRequest = app.getRiksdagenAPIManager().getRepresentative(i.get(0).getIntressent_id(), new RepresentativeCallback() {

@@ -379,7 +379,9 @@ public class RiksdagenAPIManager {
                     callback.onDocumentsFetched(Arrays.asList(documents), hits);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    callback.onFail(new VolleyError("Failed to parse JSON"));
+                    if (e.getMessage().equals("No value for dokument"))
+                        callback.onFail(new VolleyError("no_docs"));
+                    else callback.onFail(new VolleyError("Failed to parse JSON"));
                 }
             }
 
