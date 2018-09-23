@@ -173,7 +173,7 @@ public class MotionActivity extends AppCompatActivity {
         portaitContainer = findViewById(R.id.act_doc_reader_portrait_container);
 
 
-        if (!intresentId.isEmpty()) addSenderView(intresentId);
+        if (intresentId != null) addSenderView(intresentId);
         else if (document.getDokintressent() != null) showSenders();
 
 
@@ -185,6 +185,30 @@ public class MotionActivity extends AppCompatActivity {
                 public void onDocumentsFetched(List<PartyDocument> documents) {
                     final PartyDocument reply = documents.get(0);
                     Button replyButton = findViewById(R.id.reply_button);
+                    replyButton.setVisibility(View.VISIBLE);
+                    replyButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(context, MotionActivity.class);
+                            intent.putExtra("document", (reply));
+                            startActivity(intent);
+                        }
+                    });
+                }
+
+                @Override
+                public void onFail(VolleyError error) {
+
+                }
+            });
+        } else if (document.getTyp().equals("frs")) {
+
+            app.getRiksdagenAPIManager().searchForQuestion(document, new PartyDocumentCallback() {
+                @Override
+                public void onDocumentsFetched(List<PartyDocument> documents) {
+                    final PartyDocument reply = documents.get(0);
+                    Button replyButton = findViewById(R.id.reply_button);
+                    replyButton.setText("Läs fråga");
                     replyButton.setVisibility(View.VISIBLE);
                     replyButton.setOnClickListener(new View.OnClickListener() {
                         @Override
