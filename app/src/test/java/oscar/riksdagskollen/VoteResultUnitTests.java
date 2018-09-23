@@ -73,4 +73,10 @@ public class VoteResultUnitTests {
             assertTrue(parties.contains(correctParties[i]));
         }
     }
+
+    @Test
+    public void voteResult_hashMapCreated_ReturnsTrue(){
+        assertTrue(testVoteResult.getVoteResults()!=null);
+    }
+
 }

@@ -75,7 +75,7 @@ public class PartyInfoFragment extends Fragment {
                     final Representative tmpRep = leaders.get(i);
                     final View portraitView = LayoutInflater.from(getContext()).inflate(R.layout.intressent_layout_big, null);
                     final NetworkImageView portrait = portraitView.findViewById(R.id.intressent_portait);
-
+                    leadersLayout.addView(portraitView);
                     app.getRiksdagenAPIManager().getRepresentative(tmpRep.getTilltalsnamn(), tmpRep.getEfternamn(), party.getID(), tmpRep.getSourceid(), new RepresentativeCallback() {
                         @Override
                         public void onPersonFetched(final Representative representative) {
@@ -92,7 +92,6 @@ public class PartyInfoFragment extends Fragment {
                             });
                             TextView nameTv = portraitView.findViewById(R.id.intressent_name);
                             nameTv.setText(representative.getTilltalsnamn() + " " + representative.getEfternamn() + "\n" + representative.getDescriptiveRole());
-                            leadersLayout.addView(portraitView);
                         }
 
                         @Override

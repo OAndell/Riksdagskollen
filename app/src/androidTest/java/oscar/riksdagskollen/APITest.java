@@ -28,7 +28,7 @@ import static org.junit.Assert.fail;
 
 
 @SmallTest
-public class APITest { //
+public class APITest {
 
     private RiksdagenAPIManager apiManager;
 
