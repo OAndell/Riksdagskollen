@@ -10,9 +10,9 @@ import oscar.riksdagskollen.Manager.ThemeManager;
  * Created by gustavaaro on 2018-03-25.
  */
 
-public class RikdagskollenApp extends Application {
+public class RiksdagskollenApp extends Application {
 
-    private static RikdagskollenApp instance;
+    private static RiksdagskollenApp instance;
     private RequestManager requestManager;
     private RiksdagenAPIManager riksdagenAPIManager;
     private ThemeManager themeManager;
@@ -26,7 +26,7 @@ public class RikdagskollenApp extends Application {
         themeManager = new ThemeManager(this);
     }
 
-    public static RikdagskollenApp getInstance() {
+    public static RiksdagskollenApp getInstance() {
         return instance;
     }
 

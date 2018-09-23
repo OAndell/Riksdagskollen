@@ -25,10 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import oscar.riksdagskollen.Activity.MainActivity;
-import oscar.riksdagskollen.Activity.VoteActivity;
 import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 import oscar.riksdagskollen.Util.DecicionCategory;
 import oscar.riksdagskollen.Util.JSONModel.Party;
@@ -208,7 +207,7 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
             if (item.getVoteResults() != null) {
                 arrangeVotes(item.getVoteResults());
             } else {
-                resultRequest = RikdagskollenApp.getInstance().getRequestManager().downloadHtmlPage("http:" + item.getDokument_url_html(), new StringRequestCallback() {
+                resultRequest = RiksdagskollenApp.getInstance().getRequestManager().downloadHtmlPage("http:" + item.getDokument_url_html(), new StringRequestCallback() {
                     @Override
                     public void onResponse(String response) {
                         VoteResults results = new VoteResults(response);
@@ -225,7 +224,7 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
             }
 
             DecicionCategory decicionCategory = DecicionCategory.getCategoryFromBet(item.getBeteckning());
-            if (RikdagskollenApp.getInstance().getThemeManager().getCurrentTheme() != ThemeManager.Theme.BLACK) {
+            if (RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme() != ThemeManager.Theme.BLACK) {
                 catColor.setBackgroundColor(context.getResources().getColor(decicionCategory.getCategoryColor()));
             } else {
                 // Dont use colors for black theme

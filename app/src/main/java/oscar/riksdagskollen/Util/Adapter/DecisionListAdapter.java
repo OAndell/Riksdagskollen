@@ -32,7 +32,7 @@ import oscar.riksdagskollen.Activity.ProtocolReaderActivity;
 import oscar.riksdagskollen.Activity.SearchedVoteAcitivity;
 import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.DecisionsCallback;
 import oscar.riksdagskollen.Util.Callback.VoteCallback;
 import oscar.riksdagskollen.Util.DecicionCategory;
@@ -219,7 +219,7 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
             searchVote.setText("Visa voteringar");
 
             DecicionCategory decicionCategory = DecicionCategory.getCategoryFromBet(item.getBeteckning());
-            if (RikdagskollenApp.getInstance().getThemeManager().getCurrentTheme() != ThemeManager.Theme.BLACK) {
+            if (RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme() != ThemeManager.Theme.BLACK) {
                 catColor.setBackgroundColor(context.getResources().getColor(decicionCategory.getCategoryColor()));
             } else {
                 // Dont use colors for black theme
@@ -232,7 +232,7 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
             fullBet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    RikdagskollenApp.getInstance().getRiksdagenAPIManager().getDecisionWithId(
+                    RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getDecisionWithId(
                             new DecisionsCallback() {
                                 @Override
                                 public void onDecisionsFetched(List<DecisionDocument> decisions) {
@@ -324,7 +324,7 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
                 });
 
 
-                RikdagskollenApp.getInstance().getRiksdagenAPIManager().searchVotesForDecision(item, new VoteCallback() {
+                RiksdagskollenApp.getInstance().getRiksdagenAPIManager().searchVotesForDecision(item, new VoteCallback() {
                     @Override
                     public void onVotesFetched(final List<Vote> votes) {
                         if(!votes.isEmpty()){

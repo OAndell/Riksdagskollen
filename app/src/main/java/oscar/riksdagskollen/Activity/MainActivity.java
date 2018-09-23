@@ -34,7 +34,7 @@ import oscar.riksdagskollen.Fragment.ProtocolListFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
 import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.AppBarStateChangeListener;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(RikdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
+        setTheme(RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         setContentView(R.layout.activity_main);
 
         toolbar = findViewById(R.id.toolbar);
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity
 
         switch (item.getItemId()) {
             case R.id.menu_theme:
-                final ThemeManager themeManager = RikdagskollenApp.getInstance().getThemeManager();
+                final ThemeManager themeManager = RiksdagskollenApp.getInstance().getThemeManager();
                 final ThemeManager.Theme[] themes = ThemeManager.Theme.values();
 
                 final AlertDialog dialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom)
@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void applyTheme() {
-        setTheme(RikdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
+        setTheme(RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         recreate();
     }
 

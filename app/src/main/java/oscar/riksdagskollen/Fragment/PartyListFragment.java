@@ -21,7 +21,7 @@ import java.util.List;
 
 import oscar.riksdagskollen.Activity.MotionActivity;
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.PartyListViewholderAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Callback.PartyDocumentCallback;
@@ -159,7 +159,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
      */
     protected void loadNextPage(){
         setLoadingMoreItems(true);
-        RikdagskollenApp.getInstance().getRiksdagenAPIManager().getDocumentsForParty(party, getPageToLoad(), new PartyDocumentCallback() {
+        RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getDocumentsForParty(party, getPageToLoad(), new PartyDocumentCallback() {
             @Override
             public void onDocumentsFetched(List<PartyDocument> documents) {
                 documentList.addAll(documents);

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import oscar.riksdagskollen.Fragment.VoteListFragment;
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.JSONModel.DecisionDocument;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
 
@@ -27,7 +27,7 @@ public class SearchedVoteAcitivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(RikdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
+        setTheme(RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         setContentView(R.layout.activity_searched_votes);
 
 

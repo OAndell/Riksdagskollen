@@ -21,7 +21,7 @@ import java.util.List;
 
 import oscar.riksdagskollen.Activity.VoteActivity;
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Adapter.VoteAdapter;
 import oscar.riksdagskollen.Util.Callback.VoteCallback;
@@ -192,7 +192,7 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
 
         if(!isShowingSearchedVotes) {
             setLoadingMoreItems(true);
-            RikdagskollenApp.getInstance().getRiksdagenAPIManager().getVotes(new VoteCallback() {
+            RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getVotes(new VoteCallback() {
 
                 @Override
                 public void onVotesFetched(List<Vote> votes) {

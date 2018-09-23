@@ -43,7 +43,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.PartyDocumentCallback;
 import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
@@ -66,7 +66,7 @@ public class VoteActivity extends AppCompatActivity{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(RikdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
+        setTheme(RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         setContentView(R.layout.activity_vote);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -99,7 +99,7 @@ public class VoteActivity extends AppCompatActivity{
         final TextView title = findViewById(R.id.vote_title);
         title.setText(document.getTitel());
 
-        final RikdagskollenApp app = oscar.riksdagskollen.RikdagskollenApp.getInstance();
+        final RiksdagskollenApp app = RiksdagskollenApp.getInstance();
         if (document.getVoteResults() != null) {
             // Aldready downloaded results
             prepareGraphs(new VoteResults(document.getVoteResults()));

@@ -18,7 +18,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.JSONModel.DokIntressent;
 import oscar.riksdagskollen.Util.JSONModel.Intressent;
@@ -78,7 +78,7 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
     private Comparator<PartyDocument> mComparator = DEFAULT_COMPARATOR;
 
 
-    private final RikdagskollenApp app = RikdagskollenApp.getInstance();
+    private final RiksdagskollenApp app = RiksdagskollenApp.getInstance();
 
 
     public PartyListViewholderAdapter(List<PartyDocument> items, OnItemClickListener clickListener) {

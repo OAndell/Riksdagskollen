@@ -19,7 +19,7 @@ import java.util.List;
 
 import oscar.riksdagskollen.Fragment.RepresentativeFeedFragment;
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.RepresentativeDocumentCallback;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Representative;
@@ -39,7 +39,7 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(RikdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
+        setTheme(RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         setContentView(R.layout.activity_intressent_detail);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -72,12 +72,12 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
         ImageView partyLogo = findViewById(R.id.representative_portrait_party_logo);
 
         partyLogo.setImageResource(MainActivity.getParty(representative.getParti().toLowerCase()).getDrawableLogo());
-        portrait.setImageUrl(representative.getBild_url_192(), RikdagskollenApp.getInstance().getRequestManager().getmImageLoader());
+        portrait.setImageUrl(representative.getBild_url_192(), RiksdagskollenApp.getInstance().getRequestManager().getmImageLoader());
 
         age.setText(representative.getAge());
         status.setText(representative.getDescriptiveRole());
 
-        RikdagskollenApp.getInstance().getRiksdagenAPIManager().getDocumentsForRepresentative(
+        RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getDocumentsForRepresentative(
                 representative.getIntressent_id(),
                 1,
                 new RepresentativeDocumentCallback() {

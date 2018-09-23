@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.PartyLeadersCallback;
 import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.JSONModel.Party;
@@ -67,7 +67,7 @@ public class PartyInfoFragment extends Fragment {
 
         //Fill view with party leaders
         final FlexboxLayout leadersLayout = view.findViewById(R.id.leadersLayout);
-        final RikdagskollenApp app = RikdagskollenApp.getInstance();
+        final RiksdagskollenApp app = RiksdagskollenApp.getInstance();
         app.getRiksdagenAPIManager().getPartyLeaders(party.getName(), new PartyLeadersCallback() {
             @Override
             public void onPersonFetched(final ArrayList<Representative> leaders) {

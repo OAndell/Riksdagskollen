@@ -1,31 +1,13 @@
 package oscar.riksdagskollen;
 
-import android.os.Debug;
-import android.os.Parcel;
-import android.support.test.annotation.UiThreadTest;
 import android.test.suitebuilder.annotation.SmallTest;
-import android.util.Log;
-import android.util.Pair;
+
+import com.android.volley.VolleyError;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import static android.content.ContentValues.TAG;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-/**
- * Created by oscar on 2018-09-16.
- */
-import android.os.Parcel;
-import android.support.test.runner.AndroidJUnit4;
-
-import com.android.volley.VolleyError;
 
 import oscar.riksdagskollen.Manager.RiksdagenAPIManager;
 import oscar.riksdagskollen.Util.Callback.CurrentNewsCallback;
@@ -37,6 +19,13 @@ import oscar.riksdagskollen.Util.JSONModel.DecisionDocument;
 import oscar.riksdagskollen.Util.JSONModel.Protocol;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+/**
+ * Created by oscar on 2018-09-16.
+ */
+
 
 @SmallTest
 public class APITest { //
@@ -46,7 +35,7 @@ public class APITest { //
 
     @Before
     public void setup(){
-        RikdagskollenApp app = RikdagskollenApp.getInstance();
+        RiksdagskollenApp app = RiksdagskollenApp.getInstance();
         apiManager = app.getRiksdagenAPIManager();
     }
 

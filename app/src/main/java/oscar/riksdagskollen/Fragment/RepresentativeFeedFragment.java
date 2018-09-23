@@ -18,7 +18,7 @@ import java.util.List;
 
 import oscar.riksdagskollen.Activity.MotionActivity;
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.PartyListViewholderAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Callback.RepresentativeDocumentCallback;
@@ -149,7 +149,7 @@ public class RepresentativeFeedFragment extends RiksdagenAutoLoadingListFragment
      */
     protected void loadNextPage() {
         setLoadingMoreItems(true);
-        RikdagskollenApp.getInstance().getRiksdagenAPIManager().getDocumentsForRepresentative(iid, getPageToLoad(), new RepresentativeDocumentCallback() {
+        RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getDocumentsForRepresentative(iid, getPageToLoad(), new RepresentativeDocumentCallback() {
             @Override
             public void onDocumentsFetched(List<PartyDocument> documents, String hits) {
                 documentList.addAll(documents);

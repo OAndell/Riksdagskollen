@@ -24,7 +24,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 
 
@@ -40,7 +40,7 @@ public class ProtocolReaderActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(RikdagskollenApp.getInstance().getThemeManager().getCurrentTheme(false));
+        setTheme(RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme(false));
         setContentView(R.layout.activity_news_reader);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -77,7 +77,7 @@ public class ProtocolReaderActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptEnabled(true);
 
 
-        final RikdagskollenApp app = RikdagskollenApp.getInstance();
+        final RiksdagskollenApp app = RiksdagskollenApp.getInstance();
         app.getRequestManager().downloadHtmlPage("http:"+ url, new StringRequestCallback() {
             @Override
             public void onResponse(String response) {

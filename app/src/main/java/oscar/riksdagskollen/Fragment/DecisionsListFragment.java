@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.DecisionListAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Callback.DecisionsCallback;
@@ -221,7 +221,7 @@ public class DecisionsListFragment extends RiksdagenAutoLoadingListFragment impl
     }
 
     private void loadMoreSearchItems() {
-        RikdagskollenApp.getInstance().getRiksdagenAPIManager().searchForDecision(new DecisionsCallback() {
+        RiksdagskollenApp.getInstance().getRiksdagenAPIManager().searchForDecision(new DecisionsCallback() {
             @Override
             public void onDecisionsFetched(List<DecisionDocument> decisions) {
 
@@ -257,7 +257,7 @@ public class DecisionsListFragment extends RiksdagenAutoLoadingListFragment impl
     }
 
     private void loadMoreItems() {
-        RikdagskollenApp.getInstance().getRiksdagenAPIManager().getDecisions(new DecisionsCallback() {
+        RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getDecisions(new DecisionsCallback() {
             @Override
             public void onDecisionsFetched(List<DecisionDocument> documents) {
                 decisionDocuments.addAll(documents);

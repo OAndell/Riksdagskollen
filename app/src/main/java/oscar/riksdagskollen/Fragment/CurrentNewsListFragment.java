@@ -1,7 +1,6 @@
 package oscar.riksdagskollen.Fragment;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +15,7 @@ import java.util.List;
 
 import oscar.riksdagskollen.Activity.NewsReaderActivity;
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.CurrentNewsListAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Callback.CurrentNewsCallback;
@@ -71,7 +70,7 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
      */
     protected void loadNextPage(){
         setLoadingMoreItems(true);
-        RikdagskollenApp.getInstance().getRiksdagenAPIManager().getCurrentNews( new CurrentNewsCallback() {
+        RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getCurrentNews(new CurrentNewsCallback() {
             @Override
             public void onNewsFetched(List<CurrentNews> currentNews) {
                 setShowLoadingView(false);

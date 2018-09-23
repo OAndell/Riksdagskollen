@@ -39,7 +39,7 @@ import org.jsoup.nodes.Document;
 import java.util.List;
 
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.PartyDocumentCallback;
 import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
@@ -62,7 +62,7 @@ public class MotionActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(RikdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
+        setTheme(RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         setContentView(R.layout.activity_motion);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -125,7 +125,7 @@ public class MotionActivity extends AppCompatActivity {
         });
 
 
-        final RikdagskollenApp app = RikdagskollenApp.getInstance();
+        final RiksdagskollenApp app = RiksdagskollenApp.getInstance();
         app.getRiksdagenAPIManager().getDocumentBody( document, new StringRequestCallback() {
             @Override
             public void onResponse(String response) {
@@ -211,10 +211,10 @@ public class MotionActivity extends AppCompatActivity {
 
 
                 final AppCompatActivity activity = this;
-                RikdagskollenApp.getInstance().getRiksdagenAPIManager().getRepresentative(i.getIntressent_id(), new RepresentativeCallback() {
+                RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getRepresentative(i.getIntressent_id(), new RepresentativeCallback() {
                     @Override
                     public void onPersonFetched(final Representative representative) {
-                        portrait.setImageUrl(representative.getBild_url_192(), RikdagskollenApp.getInstance().getRequestManager().getmImageLoader());
+                        portrait.setImageUrl(representative.getBild_url_192(), RiksdagskollenApp.getInstance().getRequestManager().getmImageLoader());
                         portraitView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {

@@ -17,7 +17,7 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.CurrentNewsCallback;
 import oscar.riksdagskollen.Util.Callback.DecisionsCallback;
 import oscar.riksdagskollen.Util.Callback.JSONRequestCallback;
@@ -47,7 +47,7 @@ public class RiksdagenAPIManager {
             private final Gson gson;
 
 
-            public RiksdagenAPIManager(RikdagskollenApp app){
+    public RiksdagenAPIManager(RiksdagskollenApp app) {
                 requestManager = app.getRequestManager();
                 gson = new Gson();
             }

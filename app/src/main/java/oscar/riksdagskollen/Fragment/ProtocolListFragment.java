@@ -15,7 +15,7 @@ import java.util.List;
 
 import oscar.riksdagskollen.Activity.ProtocolReaderActivity;
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.ProtocolAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Callback.ProtocolCallback;
@@ -69,7 +69,7 @@ public class ProtocolListFragment extends RiksdagenAutoLoadingListFragment {
      */
     protected void loadNextPage(){
         setLoadingMoreItems(true);
-        RikdagskollenApp.getInstance().getRiksdagenAPIManager().getProtocols( new ProtocolCallback() {
+        RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getProtocols(new ProtocolCallback() {
 
             @Override
             public void onProtocolsFetched(List<Protocol> protocols) {

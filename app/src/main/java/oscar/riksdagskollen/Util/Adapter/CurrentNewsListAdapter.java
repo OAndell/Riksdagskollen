@@ -16,7 +16,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.JSONModel.CurrentNews;
 
 /**
@@ -178,7 +178,7 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
                 //Fix better default image... maybe
                 image.setDefaultImageResId(R.drawable.ic_placeholder_image_web);
                 image.setImageUrl("http://riksdagen.se" + item.getImg_url(),
-                        RikdagskollenApp.getInstance().getRequestManager().getmImageLoader());
+                        RiksdagskollenApp.getInstance().getRequestManager().getmImageLoader());
             }
             else {
                 image.setVisibility(View.GONE);

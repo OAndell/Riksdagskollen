@@ -26,7 +26,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.JSONRequestCallback;
 import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 
@@ -51,7 +51,7 @@ public class RequestManager {
     private final ImageLoader mImageLoader;
 
     public RequestManager(){
-        cache = new DiskBasedCache(RikdagskollenApp.getInstance().getCacheDir(), 1024 * 1024);
+        cache = new DiskBasedCache(RiksdagskollenApp.getInstance().getCacheDir(), 1024 * 1024);
         requestQueue = new RequestQueue(cache, network);
         requestQueue.start();
 

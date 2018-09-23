@@ -15,7 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RikdagskollenApp;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 import oscar.riksdagskollen.Util.JSONModel.Intressent;
@@ -30,7 +30,7 @@ public class DocumentReaderActivity extends AppCompatActivity{
 
     private PartyDocument document;
     private String docBody;
-    private RikdagskollenApp app;
+    private RiksdagskollenApp app;
     private LinearLayout portaitContainer;
     private ViewGroup loadingView;
     private LinearLayout contentView;
@@ -50,7 +50,7 @@ public class DocumentReaderActivity extends AppCompatActivity{
         loadingView = findViewById(R.id.loading_view);
         contentView = findViewById(R.id.act_doc_reader_content_container);
         contentView.setVisibility(View.GONE);
-        app = RikdagskollenApp.getInstance();
+        app = RiksdagskollenApp.getInstance();
 
         // Fetch the document body from the API
         app.getRiksdagenAPIManager().getDocumentBody(document, new StringRequestCallback() {
