@@ -86,6 +86,7 @@ public class RepresentativeFeedFragment extends RiksdagenAutoLoadingListFragment
             public void onItemClick(Object document) {
                 Intent intent = new Intent(getContext(), MotionActivity.class);
                 intent.putExtra("document", ((PartyDocument) document));
+                intent.putExtra("intressent", iid);
                 startActivity(intent);
             }
         });

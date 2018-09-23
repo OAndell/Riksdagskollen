@@ -57,6 +57,7 @@ public class MotionActivity extends AppCompatActivity {
     private ViewGroup loadingView;
     ProgressBar progress;
     private Context context;
+    private LinearLayout portaitContainer;
 
 
     @Override
@@ -75,6 +76,7 @@ public class MotionActivity extends AppCompatActivity {
         }
 
         document = getIntent().getParcelableExtra("document");
+        String intresentId = getIntent().getStringExtra("intressent");
 
         TextView titleTV = findViewById(R.id.act_doc_reader_title);
         TextView authorTV = findViewById(R.id.act_doc_reader_author);
@@ -146,6 +148,7 @@ public class MotionActivity extends AppCompatActivity {
                     try {
                         // Add title styling
                         doc.select("body>div>div>p").get(0).addClass("DokumentRubrik");
+                        doc.select("body>div>div>table.webbtabell").remove();
 
                         // Only show body of response
                         doc.body().replaceWith(doc.select("body>div>div").get(0));
@@ -167,8 +170,13 @@ public class MotionActivity extends AppCompatActivity {
             }
         });
 
+        portaitContainer = findViewById(R.id.act_doc_reader_portrait_container);
 
-        if (document.getDokintressent() != null) showSenders();
+
+        if (!intresentId.isEmpty()) addSenderView(intresentId);
+        else if (document.getDokintressent() != null) showSenders();
+
+
 
         //Tries to find a response to the document if the doc has type = "fr"
         if (document.getTyp().equals("fr")) {
@@ -198,42 +206,43 @@ public class MotionActivity extends AppCompatActivity {
     }
 
     private void showSenders() {
-        LinearLayout portaitContainer = findViewById(R.id.act_doc_reader_portrait_container);
         for (Intressent i : document.getDokintressent().getIntressenter()){
-            final View portraitView;
-            TextView nameTv;
             if(i.getRoll().equals("undertecknare") || (document.getDoktyp().equals("frs") && i.getRoll().equals("besvaradav"))){
-                portraitView = LayoutInflater.from(this).inflate(R.layout.intressent_layout,null);
-                final NetworkImageView portrait = portraitView.findViewById(R.id.intressent_portait);
-                portrait.setDefaultImageResId(R.drawable.ic_person);
-                nameTv = portraitView.findViewById(R.id.intressent_name);
-                nameTv.setText(i.getNamn() + " (" + i.getPartibet() + ")");
+                addSenderView(i.getIntressent_id());
+            }
+        }
+    }
+
+    private void addSenderView(String iid) {
+        final View portraitView = LayoutInflater.from(this).inflate(R.layout.intressent_layout, null);
+        final NetworkImageView portrait = portraitView.findViewById(R.id.intressent_portait);
+        portrait.setDefaultImageResId(R.drawable.ic_person);
+        final TextView nameTv = portraitView.findViewById(R.id.intressent_name);
 
 
-                final AppCompatActivity activity = this;
-                RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getRepresentative(i.getIntressent_id(), new RepresentativeCallback() {
+        final AppCompatActivity activity = this;
+        RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getRepresentative(iid, new RepresentativeCallback() {
+            @Override
+            public void onPersonFetched(final Representative representative) {
+                portrait.setImageUrl(representative.getBild_url_192(), RiksdagskollenApp.getInstance().getRequestManager().getmImageLoader());
+                portraitView.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onPersonFetched(final Representative representative) {
-                        portrait.setImageUrl(representative.getBild_url_192(), RiksdagskollenApp.getInstance().getRequestManager().getmImageLoader());
-                        portraitView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent repDetailsIntent = new Intent(activity, RepresentativeDetailActivity.class);
-                                repDetailsIntent.putExtra("representative", representative);
-                                startActivity(repDetailsIntent);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onFail(VolleyError error) {
-
+                    public void onClick(View view) {
+                        Intent repDetailsIntent = new Intent(activity, RepresentativeDetailActivity.class);
+                        repDetailsIntent.putExtra("representative", representative);
+                        startActivity(repDetailsIntent);
                     }
                 });
-                portaitContainer.addView(portraitView);
+                nameTv.setText(representative.getTilltalsnamn() + " " + representative.getEfternamn() + " (" + representative.getParti() + ")");
+
             }
 
-        }
+            @Override
+            public void onFail(VolleyError error) {
+
+            }
+        });
+        portaitContainer.addView(portraitView);
     }
 
 
