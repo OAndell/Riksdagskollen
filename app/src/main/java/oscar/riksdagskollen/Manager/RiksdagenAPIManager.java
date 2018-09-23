@@ -26,6 +26,7 @@ import oscar.riksdagskollen.Util.Callback.PartyLeadersCallback;
 import oscar.riksdagskollen.Util.Callback.ProtocolCallback;
 import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.Callback.RepresentativeDocumentCallback;
+import oscar.riksdagskollen.Util.Callback.RepresentativeListCallback;
 import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 import oscar.riksdagskollen.Util.Callback.VoteCallback;
 import oscar.riksdagskollen.Util.JSONModel.CurrentNews;
@@ -339,6 +340,50 @@ public class RiksdagenAPIManager {
                     }
                 });
             }
+
+    public void getAllCurrentRepresentatives(final RepresentativeListCallback callback) {
+        String subUrl = "/personlista/?utformat=json";
+        requestManager.doGetRequest(subUrl, new JSONRequestCallback() {
+            @Override
+            public void onRequestSuccess(JSONObject response) {
+                try {
+                    JSONArray jsonDocuments = response.getJSONObject("personlista").getJSONArray("person");
+                    Representative[] representatives = gson.fromJson(jsonDocuments.toString(), Representative[].class);
+                    callback.onPersonListFetched(Arrays.asList(representatives));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onRequestFail(VolleyError error) {
+                callback.onFail(error);
+            }
+        });
+    }
+
+    public void getRepresentativesInParty(String party, final RepresentativeListCallback callback) {
+        String subUrl = "/personlista/?parti=" + party + "&utformat=json";
+        requestManager.doGetRequest(subUrl, new JSONRequestCallback() {
+            @Override
+            public void onRequestSuccess(JSONObject response) {
+                try {
+                    JSONArray jsonDocuments = response.getJSONObject("personlista").getJSONArray("person");
+                    Representative[] representatives = gson.fromJson(jsonDocuments.toString(), Representative[].class);
+                    callback.onPersonListFetched(Arrays.asList(representatives));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onRequestFail(VolleyError error) {
+                callback.onFail(error);
+            }
+        });
+    }
 
 
     public void getMotionByID(String id, final PartyDocumentCallback callback){

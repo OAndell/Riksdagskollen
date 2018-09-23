@@ -1,22 +1,11 @@
 package oscar.riksdagskollen.Fragment;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.franmontiel.attributionpresenter.AttributionPresenter;
-import com.franmontiel.attributionpresenter.entities.Attribution;
-import com.franmontiel.attributionpresenter.entities.Library;
-import com.franmontiel.attributionpresenter.entities.License;
 
 import oscar.riksdagskollen.R;
 
