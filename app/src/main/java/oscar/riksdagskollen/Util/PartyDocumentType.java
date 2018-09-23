@@ -39,9 +39,18 @@ public enum PartyDocumentType {
         return null;
     }
 
+    public static CharSequence[] getPartyDisplayNames() {
+        CharSequence[] names = new CharSequence[getPartyDokTypes().size()];
+        for (int i = 0; i < names.length; i++) {
+            names[i] = getPartyDokTypes().get(i).displayName;
+        }
+
+        return names;
+    }
+
     public static CharSequence[] getDisplayNames(){
-        CharSequence[] names = new CharSequence[values().length];
-        for (int i = 0; i < values().length; i++) {
+        CharSequence[] names = new CharSequence[getAllDokTypes().size()];
+        for (int i = 0; i < names.length; i++) {
             names[i] = values()[i].displayName;
         }
 
@@ -58,10 +67,19 @@ public enum PartyDocumentType {
         return null;
     }
 
+    public static ArrayList<PartyDocumentType> getPartyDokTypes() {
+        ArrayList<PartyDocumentType> filter = new ArrayList<>();
+        filter.addAll(Arrays.asList(values()));
+        // Party documents do not have Answers for questions
+        filter.remove(FragaSvar);
+        return filter;
+    }
+
     public static ArrayList<PartyDocumentType> getAllDokTypes(){
         ArrayList<PartyDocumentType> filter = new ArrayList<>();
         filter.addAll(Arrays.asList(values()));
         return filter;
     }
+
 
 }

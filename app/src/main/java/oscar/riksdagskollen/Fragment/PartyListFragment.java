@@ -107,10 +107,10 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
 
         if(item.getItemId() == R.id.menu_filter){
             oldFilter = getFilter();
-            final CharSequence[] items = PartyDocumentType.getDisplayNames();
+            final CharSequence[] items = PartyDocumentType.getPartyDisplayNames();
             boolean[] checked = new boolean[items.length];
             for (int i = 0; i < items.length; i++){
-                checked[i] = preferences.getBoolean(PartyDocumentType.getAllDokTypes().get(i).getDocType(), true);
+                checked[i] = preferences.getBoolean(PartyDocumentType.getPartyDokTypes().get(i).getDocType(), true);
             }
 
             final SharedPreferences.Editor editor = preferences.edit();
@@ -121,7 +121,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
                     .setMultiChoiceItems(items, checked, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
-                            editor.putBoolean(PartyDocumentType.getAllDokTypes().get(indexSelected).getDocType(), isChecked);
+                            editor.putBoolean(PartyDocumentType.getPartyDokTypes().get(indexSelected).getDocType(), isChecked);
                         }
                     }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
@@ -194,7 +194,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
 
     private ArrayList<PartyDocumentType> getFilter(){
         ArrayList<PartyDocumentType> filter = new ArrayList<>();
-        for (PartyDocumentType documentType: PartyDocumentType.values()) {
+        for (PartyDocumentType documentType : PartyDocumentType.getPartyDokTypes()) {
             if (preferences.getBoolean(documentType.getDocType(), true)) filter.add(documentType);
         }
         return filter;
