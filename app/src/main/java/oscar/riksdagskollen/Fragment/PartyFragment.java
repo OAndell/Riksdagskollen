@@ -27,6 +27,7 @@ public class PartyFragment extends Fragment {
     private Party party;
     private PartyListFragment listFragment;
     private PartyInfoFragment infoFragment;
+    private PartyRepresentativeFragment representativeFragment;
 
     public static PartyFragment newInstance(Party party){
         Bundle args = new Bundle();
@@ -42,6 +43,7 @@ public class PartyFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.party = getArguments().getParcelable("party");
         infoFragment = PartyInfoFragment.newInstance(party);
+        representativeFragment = PartyRepresentativeFragment.newInstance();
     }
 
 
@@ -69,6 +71,7 @@ public class PartyFragment extends Fragment {
         Adapter adapter = new Adapter(getChildFragmentManager());
         adapter.addFragment(listFragment, "Flöde");
         adapter.addFragment(infoFragment, "Parti");
+        adapter.addFragment(representativeFragment,"Ledamöter");
         viewPager.setAdapter(adapter);
     }
 

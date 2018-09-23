@@ -16,6 +16,10 @@
                     android:id="@+id/dec_nav"
                     android:icon="@drawable/betlogo"
                     android:title="@string/decisions"/>
+                <item
+                    android:id="@+id/rep_nav"
+                    android:icon="@drawable/replogo"
+                    android:title="@string/representatives"/>
 
                 <item
                     android:id="@+id/prot_nav"
