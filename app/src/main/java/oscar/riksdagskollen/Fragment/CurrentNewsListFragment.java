@@ -19,6 +19,7 @@ import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.CurrentNewsListAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Callback.CurrentNewsCallback;
+import oscar.riksdagskollen.Util.CustomTabs;
 import oscar.riksdagskollen.Util.JSONModel.CurrentNews;
 
 
@@ -53,9 +54,11 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
                 CurrentNews newsDoc = (CurrentNews) document;
                 Intent intent;
                 try{
+
                     intent = new Intent(getContext(), NewsReaderActivity.class);
                     intent.putExtra("url",  newsDoc.getLinklista().getLink().getUrl());
-                    startActivity(intent);
+                    //startActivity(intent);
+                    CustomTabs.openTab(getContext(), "http://riksdagen.se" + newsDoc.getLinklista().getLink().getUrl());
                 }catch (NullPointerException e){ //Some news does not contain the LinkLista object
                     System.out.println("Could not open news url");
                 }
