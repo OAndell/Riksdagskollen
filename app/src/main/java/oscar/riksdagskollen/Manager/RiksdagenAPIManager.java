@@ -36,6 +36,7 @@ import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Protocol;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
+import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeInfo;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
 
 /**
@@ -171,10 +172,13 @@ public class RiksdagenAPIManager {
      * @param callback callback function which the a Representative JSON model is returned.
      */
     public Request getRepresentative(String iid, final RepresentativeCallback callback) {
-        String subURL = "/personlista/?iid=" + iid + "&utformat=json";
+        final String subURL = "/personlista/?iid=" + iid + "&utformat=json";
         return requestManager.doGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(RepresentativeInfo.class, new RepresentativeInfo.RepresentativeInfoDezerializer())
+                        .create();
                 try {
                     JSONObject jsonDocuments = response.getJSONObject("personlista").getJSONObject("person");
                     Representative representative = gson.fromJson(jsonDocuments.toString(), Representative.class);
@@ -202,13 +206,17 @@ public class RiksdagenAPIManager {
      */
     //Not sure if this even works with the API
     public void getRepresentative(String fname, String ename, String partyID, final String sourceId, final RepresentativeCallback callback) {
-        String subURL = "/personlista/?iid=&fnamn=" + fname.trim() + "&ename=" + ename.trim() + "&parti=" + partyID + "&rdlstatus=samtliga&utformat=json";
+        final String subURL = "/personlista/?iid=&fnamn=" + fname.trim() + "&ename=" + ename.trim() + "&parti=" + partyID + "&rdlstatus=samtliga&utformat=json";
         requestManager.doGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
 
                     int hits = Integer.valueOf(response.getJSONObject("personlista").getString("@hits"));
+
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(RepresentativeInfo.class, new RepresentativeInfo.RepresentativeInfoDezerializer())
+                            .create();
 
                     // Multiple hits, need to search for correct representative
                     if (hits > 1) {
@@ -374,6 +382,9 @@ public class RiksdagenAPIManager {
         requestManager.doGetRequest(subUrl, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(RepresentativeInfo.class, new RepresentativeInfo.RepresentativeInfoDezerializer())
+                        .create();
                 try {
                     JSONArray jsonDocuments = response.getJSONObject("personlista").getJSONArray("person");
                     Representative[] representatives = gson.fromJson(jsonDocuments.toString(), Representative[].class);

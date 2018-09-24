@@ -3,6 +3,19 @@ package oscar.riksdagskollen.Util.JSONModel.RepresentativeModels;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+
 /**
  * Created by oscar on 2018-09-24.
  */
@@ -21,14 +34,18 @@ public class RepresentativeInfo implements Parcelable {
         }
     };
     private String kod;
-    //private String[] uppgift;
+    private String[] uppgift;
     private String typ;
 
-    /*public String[] getUppgift() {
+    public String[] getUppgift() {
         return uppgift;
-    }*/
+    }
     private String intressent_id;
     private String hangar_id;
+
+    RepresentativeInfo() {
+
+    }
 
     protected RepresentativeInfo(Parcel in) {
         this.kod = in.readString();
@@ -66,6 +83,35 @@ public class RepresentativeInfo implements Parcelable {
         dest.writeString(this.typ);
         dest.writeString(this.intressent_id);
         dest.writeString(this.hangar_id);
+    }
+
+    public static class RepresentativeInfoDezerializer implements JsonDeserializer<RepresentativeInfo> {
+
+        @Override
+        public RepresentativeInfo deserialize(JsonElement json, Type typeOfT,
+                                              JsonDeserializationContext context) throws JsonParseException {
+
+            RepresentativeInfo representativeInfo = new RepresentativeInfo();
+
+            // Fix faulty json where uppgift:[""] sometimes would be uppgift:[{}]
+            try {
+                representativeInfo = new Gson().fromJson(json, RepresentativeInfo.class);
+            } catch (JsonSyntaxException e) {
+                try {
+                    JSONObject tmp = new JSONObject(json.toString());
+                    tmp.remove("uppgift");
+                    JSONArray emptyArray = new JSONArray();
+                    emptyArray.put("");
+                    tmp.put("uppgift", emptyArray);
+                    representativeInfo = new Gson().fromJson(tmp.toString(), RepresentativeInfo.class);
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+            }
+
+            return representativeInfo;
+        }
+
     }
 
 }
