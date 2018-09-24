@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Util.JSONModel;
+package oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -13,28 +13,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class CurrentNewsLinkList implements Parcelable {
 
-    @SerializedName("link")
-    private final CurrentNewsLink link;
-
-    public CurrentNewsLink getLink(){
-        return link;
-    }
-
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(this.link, flags);
-    }
-
-    CurrentNewsLinkList(Parcel in) {
-        this.link = in.readParcelable(CurrentNewsLink.class.getClassLoader());
-    }
-
     public static final Parcelable.Creator<CurrentNewsLinkList> CREATOR = new Parcelable.Creator<CurrentNewsLinkList>() {
         @Override
         public CurrentNewsLinkList createFromParcel(Parcel source) {
@@ -46,4 +24,25 @@ public class CurrentNewsLinkList implements Parcelable {
             return new CurrentNewsLinkList[size];
         }
     };
+    @SerializedName("link")
+    private final CurrentNewsLink link;
+
+
+    CurrentNewsLinkList(Parcel in) {
+        this.link = in.readParcelable(CurrentNewsLink.class.getClassLoader());
+    }
+
+    public CurrentNewsLink getLink(){
+        return link;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.link, flags);
+    }
 }

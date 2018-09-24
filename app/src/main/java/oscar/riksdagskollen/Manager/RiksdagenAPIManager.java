@@ -29,13 +29,13 @@ import oscar.riksdagskollen.Util.Callback.RepresentativeDocumentCallback;
 import oscar.riksdagskollen.Util.Callback.RepresentativeListCallback;
 import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 import oscar.riksdagskollen.Util.Callback.VoteCallback;
-import oscar.riksdagskollen.Util.JSONModel.CurrentNews;
-import oscar.riksdagskollen.Util.JSONModel.CurrentNewsLink;
+import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNews;
+import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNewsLink;
 import oscar.riksdagskollen.Util.JSONModel.DecisionDocument;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Protocol;
-import oscar.riksdagskollen.Util.JSONModel.Representative;
+import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
 
 /**

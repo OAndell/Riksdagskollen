@@ -16,7 +16,7 @@ import java.util.List;
 import oscar.riksdagskollen.Activity.MainActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
-import oscar.riksdagskollen.Util.JSONModel.Representative;
+import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.View.CircularNetworkImageView;
 
 /**

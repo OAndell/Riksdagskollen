@@ -2,7 +2,7 @@ package oscar.riksdagskollen.Util.Callback;
 
 import com.android.volley.VolleyError;
 
-import oscar.riksdagskollen.Util.JSONModel.Representative;
+import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 
 
 /**

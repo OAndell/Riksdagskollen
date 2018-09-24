@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Util.JSONModel;
+package oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -10,6 +10,17 @@ import android.os.Parcelable;
  */
 
 public class CurrentNews implements Parcelable {
+    public static final Creator<CurrentNews> CREATOR = new Creator<CurrentNews>() {
+        @Override
+        public CurrentNews createFromParcel(Parcel in) {
+            return new CurrentNews(in);
+        }
+
+        @Override
+        public CurrentNews[] newArray(int size) {
+            return new CurrentNews[size];
+        }
+    };
     private final String id;
     private final String titel;
     private final String publicerad;
@@ -21,6 +32,21 @@ public class CurrentNews implements Parcelable {
     private final String img_fotograf;
     private final String img_tumnagel_url;
     private final CurrentNewsLinkList linklista;
+
+    private CurrentNews(Parcel in) {
+        id = in.readString();
+        titel = in.readString();
+
+        publicerad = in.readString();
+        summary = in.readString();
+        url = in.readString();
+        img_url = in.readString();
+        img_text = in.readString();
+        img_fotograf = in.readString();
+        img_tumnagel_url = in.readString();
+        this.linklista = in.readParcelable(CurrentNewsLinkList.class.getClassLoader());
+
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -43,33 +69,6 @@ public class CurrentNews implements Parcelable {
         result = 31 * result + (linklista != null ? linklista.hashCode() : 0);
         return result;
     }
-
-    private CurrentNews(Parcel in) {
-        id = in.readString();
-        titel = in.readString();
-
-        publicerad = in.readString();
-        summary = in.readString();
-        url = in.readString();
-        img_url = in.readString();
-        img_text = in.readString();
-        img_fotograf = in.readString();
-        img_tumnagel_url = in.readString();
-        this.linklista = in.readParcelable(CurrentNewsLinkList.class.getClassLoader());
-
-    }
-
-    public static final Creator<CurrentNews> CREATOR = new Creator<CurrentNews>() {
-        @Override
-        public CurrentNews createFromParcel(Parcel in) {
-            return new CurrentNews(in);
-        }
-
-        @Override
-        public CurrentNews[] newArray(int size) {
-            return new CurrentNews[size];
-        }
-    };
 
     public String getId() {
         return id;

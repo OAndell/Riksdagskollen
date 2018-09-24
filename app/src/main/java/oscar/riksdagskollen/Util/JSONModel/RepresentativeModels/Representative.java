@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Util.JSONModel;
+package oscar.riksdagskollen.Util.JSONModel.RepresentativeModels;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -12,6 +12,35 @@ import java.util.Calendar;
  */
 public class Representative implements Parcelable {
 
+    public static final Creator<Representative> CREATOR = new Creator<Representative>() {
+        @Override
+        public Representative createFromParcel(Parcel source) {
+            return new Representative(source);
+        }
+
+        @Override
+        public Representative[] newArray(int size) {
+            return new Representative[size];
+        }
+    };
+    // An array of roles considered VIP. These should always be the main role of representative
+    private static final String[] VIP_ROLES = {"Statsminister"};
+    private String intressent_id;
+    private String sourceid;
+    private String hangar_id;
+    private String fodd_ar;
+    private String kon;
+    private String efternamn;
+    private String tilltalsnamn;
+    private String parti;
+    private String valkrets;
+    private String status;
+    private String bild_url_80;
+    private String bild_url_192;
+    private String bild_url_max;
+    private String roll_kod;
+    private PersonalMisson personuppdrag;
+    private RepresentativeInfoList personuppgift;
     public Representative(String tilltalsnamn, String efternamn, String roll_kod, String image){
         this.tilltalsnamn = tilltalsnamn;
         this.efternamn = efternamn;
@@ -20,8 +49,24 @@ public class Representative implements Parcelable {
         this.sourceid = getSourceIdFromImageUrl(image);
     }
 
-    // An array of roles considered VIP. These should always be the main role of representative
-    private static final String[] VIP_ROLES = {"Statsminister"};
+    protected Representative(Parcel in) {
+        this.intressent_id = in.readString();
+        this.sourceid = in.readString();
+        this.hangar_id = in.readString();
+        this.fodd_ar = in.readString();
+        this.kon = in.readString();
+        this.efternamn = in.readString();
+        this.tilltalsnamn = in.readString();
+        this.parti = in.readString();
+        this.valkrets = in.readString();
+        this.status = in.readString();
+        this.bild_url_80 = in.readString();
+        this.bild_url_192 = in.readString();
+        this.bild_url_max = in.readString();
+        this.roll_kod = in.readString();
+        this.personuppdrag = in.readParcelable(PersonalMisson.class.getClassLoader());
+        this.personuppgift = in.readParcelable(RepresentativeInfoList.class.getClassLoader());
+    }
 
     // Will parse a representative img url in either of the following forms:
     // http://data.riksdagen.se/filarkiv/bilder/ledamot/cb0336b4-54a8-4384-abe3-8d6cbebc63fa_80.jpg
@@ -40,22 +85,6 @@ public class Representative implements Parcelable {
     public String getSourceid() {
         return sourceid;
     }
-
-    private String intressent_id;
-    private String sourceid;
-    private String hangar_id;
-    private String fodd_ar;
-    private String kon;
-    private String efternamn;
-    private String tilltalsnamn;
-    private String parti;
-    private String valkrets;
-    private String status;
-    private String bild_url_80;
-    private String bild_url_192;
-    private String bild_url_max;
-    private String roll_kod;
-    private PersonalMisson personuppdrag;
 
     public String getIntressent_id() {
         return intressent_id;
@@ -107,6 +136,10 @@ public class Representative implements Parcelable {
 
     public String getRoll_kod() {
         return roll_kod;
+    }
+
+    public RepresentativeInfoList getPersonuppgift() {
+        return personuppgift;
     }
 
     public String getAge() {
@@ -161,7 +194,6 @@ public class Representative implements Parcelable {
         return mostRecent.roll_kod;
     }
 
-
     public ArrayList<Misson> getPersonuppdrag() {
         return personuppdrag.getUppdrag();
     }
@@ -188,35 +220,6 @@ public class Representative implements Parcelable {
         dest.writeString(this.bild_url_max);
         dest.writeString(this.roll_kod);
         dest.writeParcelable(this.personuppdrag, flags);
+        dest.writeParcelable(this.personuppgift, flags);
     }
-
-    protected Representative(Parcel in) {
-        this.intressent_id = in.readString();
-        this.sourceid = in.readString();
-        this.hangar_id = in.readString();
-        this.fodd_ar = in.readString();
-        this.kon = in.readString();
-        this.efternamn = in.readString();
-        this.tilltalsnamn = in.readString();
-        this.parti = in.readString();
-        this.valkrets = in.readString();
-        this.status = in.readString();
-        this.bild_url_80 = in.readString();
-        this.bild_url_192 = in.readString();
-        this.bild_url_max = in.readString();
-        this.roll_kod = in.readString();
-        this.personuppdrag = in.readParcelable(PersonalMisson.class.getClassLoader());
-    }
-
-    public static final Creator<Representative> CREATOR = new Creator<Representative>() {
-        @Override
-        public Representative createFromParcel(Parcel source) {
-            return new Representative(source);
-        }
-
-        @Override
-        public Representative[] newArray(int size) {
-            return new Representative[size];
-        }
-    };
 }

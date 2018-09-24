@@ -2,7 +2,7 @@ package oscar.riksdagskollen;
 
 import org.junit.Test;
 
-import oscar.riksdagskollen.Util.JSONModel.Representative;
+import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

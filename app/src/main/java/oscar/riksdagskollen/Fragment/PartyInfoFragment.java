@@ -26,7 +26,7 @@ import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.PartyLeadersCallback;
 import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.JSONModel.Party;
-import oscar.riksdagskollen.Util.JSONModel.Representative;
+import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 
 /**
  * Created by oscar on 2018-08-27.

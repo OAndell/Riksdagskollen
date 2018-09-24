@@ -22,7 +22,7 @@ import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.RepresentativeDocumentCallback;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
-import oscar.riksdagskollen.Util.JSONModel.Representative;
+import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.View.CircularNetworkImageView;
 
 /**

@@ -18,7 +18,7 @@ import oscar.riksdagskollen.Util.Adapter.RepresentativeAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Callback.RepresentativeListCallback;
 import oscar.riksdagskollen.Util.JSONModel.Party;
-import oscar.riksdagskollen.Util.JSONModel.Representative;
+import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 
 
 /**

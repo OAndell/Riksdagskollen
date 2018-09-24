@@ -17,13 +17,20 @@ import java.util.List;
 
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
-import oscar.riksdagskollen.Util.JSONModel.CurrentNews;
+import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNews;
 
 /**
  * Created by oscar on 2018-03-29.
  */
 
 public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
+    private static final Comparator<CurrentNews> DEFAULT_COMPARATOR = new Comparator<CurrentNews>() {
+        @Override
+        public int compare(CurrentNews a, CurrentNews b) {
+            return 0;
+        }
+    };
+    private Comparator<CurrentNews> mComparator = DEFAULT_COMPARATOR;
     private final SortedList<CurrentNews> newsList = new SortedList<>(CurrentNews.class, new SortedList.Callback<CurrentNews>() {
         @Override
         public int compare(CurrentNews o1, CurrentNews o2) {
@@ -60,15 +67,6 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
             notifyItemMoved(fromPosition, toPosition);
         }
     });
-
-
-    private static final Comparator<CurrentNews> DEFAULT_COMPARATOR = new Comparator<CurrentNews>() {
-        @Override
-        public int compare(CurrentNews a, CurrentNews b) {
-            return 0;
-        }
-    };
-    private Comparator<CurrentNews> mComparator = DEFAULT_COMPARATOR;
 
     public CurrentNewsListAdapter(List<CurrentNews> items, final OnItemClickListener listener) {
         super(listener);

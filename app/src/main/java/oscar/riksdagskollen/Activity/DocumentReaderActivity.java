@@ -20,7 +20,7 @@ import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 import oscar.riksdagskollen.Util.JSONModel.Intressent;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
-import oscar.riksdagskollen.Util.JSONModel.Representative;
+import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 
 /**
  * Created by gustavaaro on 2018-03-27.

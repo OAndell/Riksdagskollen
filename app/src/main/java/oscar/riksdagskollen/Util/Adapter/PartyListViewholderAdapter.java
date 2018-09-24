@@ -23,7 +23,7 @@ import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.JSONModel.DokIntressent;
 import oscar.riksdagskollen.Util.JSONModel.Intressent;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
-import oscar.riksdagskollen.Util.JSONModel.Representative;
+import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.View.CircularNetworkImageView;
 
 /**
@@ -31,6 +31,14 @@ import oscar.riksdagskollen.Util.View.CircularNetworkImageView;
  */
 
 public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
+    private static final Comparator<PartyDocument> DEFAULT_COMPARATOR = new Comparator<PartyDocument>() {
+        @Override
+        public int compare(PartyDocument a, PartyDocument b) {
+            return 0;
+        }
+    };
+    private final RiksdagskollenApp app = RiksdagskollenApp.getInstance();
+    private Comparator<PartyDocument> mComparator = DEFAULT_COMPARATOR;
     private final SortedList<PartyDocument> documentList = new SortedList<>(PartyDocument.class, new SortedList.Callback<PartyDocument>() {
         @Override
         public int compare(PartyDocument o1, PartyDocument o2) {
@@ -67,18 +75,6 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
             notifyItemMoved(fromPosition, toPosition);
         }
     });
-
-    private static final Comparator<PartyDocument> DEFAULT_COMPARATOR = new Comparator<PartyDocument>() {
-        @Override
-        public int compare(PartyDocument a, PartyDocument b) {
-            return 0;
-        }
-    };
-
-    private Comparator<PartyDocument> mComparator = DEFAULT_COMPARATOR;
-
-
-    private final RiksdagskollenApp app = RiksdagskollenApp.getInstance();
 
 
     public PartyListViewholderAdapter(List<PartyDocument> items, OnItemClickListener clickListener) {

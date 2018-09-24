@@ -45,7 +45,7 @@ import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 import oscar.riksdagskollen.Util.JSONModel.Intressent;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
-import oscar.riksdagskollen.Util.JSONModel.Representative;
+import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 
 /**
  * Created by gustavaaro on 2018-03-29.
@@ -53,9 +53,9 @@ import oscar.riksdagskollen.Util.JSONModel.Representative;
 
 public class MotionActivity extends AppCompatActivity {
 
+    ProgressBar progress;
     private PartyDocument document;
     private ViewGroup loadingView;
-    ProgressBar progress;
     private Context context;
     private LinearLayout portaitContainer;
 

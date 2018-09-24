@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Util.JSONModel;
+package oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -19,13 +19,6 @@ import java.lang.reflect.Type;
  */
 
 public class CurrentNewsLink  implements Parcelable {
-    private final String url;
-
-    protected CurrentNewsLink(Parcel in) {
-        url = in.readString();
-
-    }
-
     public static final Creator<CurrentNewsLink> CREATOR = new Creator<CurrentNewsLink>() {
         @Override
         public CurrentNewsLink createFromParcel(Parcel in) {
@@ -37,9 +30,25 @@ public class CurrentNewsLink  implements Parcelable {
             return new CurrentNewsLink[size];
         }
     };
+    private final String url;
+
+    protected CurrentNewsLink(Parcel in) {
+        url = in.readString();
+
+    }
 
     public String getUrl(){
         return url;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(url);
     }
 
     public static class CurrentNewsLinkDeserializer implements JsonDeserializer<CurrentNewsLink> {
@@ -55,16 +64,5 @@ public class CurrentNewsLink  implements Parcelable {
             return new Gson().fromJson(json, CurrentNewsLink.class);
         }
 
-    }
-
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(url);
     }
 }
