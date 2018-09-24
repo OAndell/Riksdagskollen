@@ -58,6 +58,8 @@ public class MotionActivity extends AppCompatActivity {
     private ViewGroup loadingView;
     private Context context;
     private LinearLayout portaitContainer;
+    private MenuItem notificationItem;
+    RiksdagskollenApp app;
 
 
     @Override
@@ -127,7 +129,7 @@ public class MotionActivity extends AppCompatActivity {
         });
 
 
-        final RiksdagskollenApp app = RiksdagskollenApp.getInstance();
+        app = RiksdagskollenApp.getInstance();
         app.getRiksdagenAPIManager().getDocumentBody( document, new StringRequestCallback() {
             @Override
             public void onResponse(String response) {
@@ -176,8 +178,9 @@ public class MotionActivity extends AppCompatActivity {
         if (intresentId != null) addSenderView(intresentId);
         else if (document.getDokintressent() != null) showSenders();
 
+    }
 
-
+    private void searchForReplyOrQuestion() {
         //Tries to find a response to the document if the doc has type = "fr"
         if (document.getTyp().equals("fr")) {
             app.getRiksdagenAPIManager().searchForReply(document, new PartyDocumentCallback() {
@@ -194,15 +197,16 @@ public class MotionActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                     });
+                    app.getAlertManager().setAlertEnabledForDoc(document, false);
                 }
 
                 @Override
                 public void onFail(VolleyError error) {
-
+                    notificationItem.setVisible(true);
+                    findViewById(R.id.notification_tip).setVisibility(View.VISIBLE);
                 }
             });
         } else if (document.getTyp().equals("frs")) {
-
             app.getRiksdagenAPIManager().searchForQuestion(document, new PartyDocumentCallback() {
                 @Override
                 public void onDocumentsFetched(List<PartyDocument> documents) {
@@ -222,11 +226,9 @@ public class MotionActivity extends AppCompatActivity {
 
                 @Override
                 public void onFail(VolleyError error) {
-
                 }
             });
         }
-
     }
 
     private void showSenders() {
@@ -242,7 +244,6 @@ public class MotionActivity extends AppCompatActivity {
         final NetworkImageView portrait = portraitView.findViewById(R.id.intressent_portait);
         portrait.setDefaultImageResId(R.drawable.ic_person);
         final TextView nameTv = portraitView.findViewById(R.id.intressent_name);
-
 
         final AppCompatActivity activity = this;
         RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getRepresentative(iid, new RepresentativeCallback() {
@@ -269,15 +270,21 @@ public class MotionActivity extends AppCompatActivity {
         portaitContainer.addView(portraitView);
     }
 
-
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        searchForReplyOrQuestion();
+        return super.onPrepareOptionsMenu(menu);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.motion_activity_menu,menu);
+        notificationItem = menu.findItem(R.id.notification_menu_item);
+        if (RiksdagskollenApp.getInstance().getAlertManager().isAlertEnabledForDoc(document)) {
+            notificationItem.setIcon(R.drawable.ic_notification_enabled);
+        }
         return super.onCreateOptionsMenu(menu);
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -291,6 +298,10 @@ public class MotionActivity extends AppCompatActivity {
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse("http:"+document.getDokument_url_html()));
                 startActivity(i);
+            case R.id.notification_menu_item:
+                boolean enabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForDoc(document);
+                if (enabled) item.setIcon(R.drawable.ic_notification_enabled);
+                else item.setIcon(R.drawable.ic_notifications_disabled);
                 break;
         }
         return super.onOptionsItemSelected(item);

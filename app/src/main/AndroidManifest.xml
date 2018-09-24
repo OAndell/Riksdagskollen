@@ -58,6 +58,7 @@
 
         <receiver android:name=".Util.CustomTabs$CopyBroadcastReceiver" />
 
+
     </application>
 
 

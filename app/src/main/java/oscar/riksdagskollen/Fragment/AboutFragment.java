@@ -87,6 +87,11 @@ public class AboutFragment extends Fragment {
                                 .addCopyrightNotice("Copyright 2017 Francisco José Montiel Navarro")
                                 .addLicense(License.APACHE)
                                 .setWebsite("https://github.com/franmontiel/AttributionPresenter")
+                                .build(),
+                        new Attribution.Builder("Android-Job")
+                                .addCopyrightNotice("Copyright (c) 2007-2017 by Evernote Corporation, All rights reserved.")
+                                .addLicense(License.APACHE)
+                                .setWebsite("https://github.com/evernote/android-job")
                                 .build()
                 )
                 .build();

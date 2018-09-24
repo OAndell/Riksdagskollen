@@ -42,6 +42,9 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.github.franmontiel:AttributionPresenter:1.0'
     implementation 'com.android.support:customtabs:27.1.1'
+    implementation 'com.evernote:android-job:1.2.4'
+    implementation "com.android.support:support-compat:27.1.1"
+
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:1.10.19'

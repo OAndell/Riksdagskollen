@@ -1,10 +1,20 @@
 package oscar.riksdagskollen;
 
 import android.app.Application;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
+import com.evernote.android.job.JobApi;
+import com.evernote.android.job.JobConfig;
+import com.evernote.android.job.JobManager;
+import com.evernote.android.job.util.JobLogger;
+
+import oscar.riksdagskollen.Manager.AlertManager;
 import oscar.riksdagskollen.Manager.RequestManager;
 import oscar.riksdagskollen.Manager.RiksdagenAPIManager;
 import oscar.riksdagskollen.Manager.ThemeManager;
+import oscar.riksdagskollen.Util.Job.AlertJobCreator;
+import oscar.riksdagskollen.Util.Job.CheckRepliesJob;
 
 /**
  * Created by gustavaaro on 2018-03-25.
@@ -16,6 +26,15 @@ public class RiksdagskollenApp extends Application {
     private RequestManager requestManager;
     private RiksdagenAPIManager riksdagenAPIManager;
     private ThemeManager themeManager;
+    private AlertManager alertManager;
+
+    class MyLogger implements JobLogger {
+        @Override
+        public void log(int priority, @NonNull String tag, @NonNull String message, @Nullable Throwable t) {
+            // log
+        }
+    }
+
 
     @Override
     public void onCreate() {
@@ -24,6 +43,28 @@ public class RiksdagskollenApp extends Application {
         requestManager = new RequestManager();
         riksdagenAPIManager = new RiksdagenAPIManager(this);
         themeManager = new ThemeManager(this);
+        alertManager = new AlertManager(this);
+        JobConfig.addLogger(new MyLogger());
+        JobConfig.setApiEnabled(JobApi.GCM, false);
+        JobManager.create(this).addJobCreator(new AlertJobCreator());
+        scheduleCheckRepliesJobIfNotRunning();
+    }
+
+    public void scheduleCheckRepliesJobIfNotRunning() {
+        if (!isCheckRepliesScheduled()) {
+            //Create jobs which will search for replies to tracked questions
+            System.out.println("Scheduled job");
+            CheckRepliesJob.scheduleJob();
+        }
+    }
+
+    public boolean isCheckRepliesScheduled() {
+        System.out.println("Checking if job is scheduled");
+        return !JobManager.instance().getAllJobRequestsForTag(CheckRepliesJob.TAG).isEmpty();
+    }
+
+    public AlertManager getAlertManager() {
+        return alertManager;
     }
 
     public static RiksdagskollenApp getInstance() {
@@ -41,4 +82,5 @@ public class RiksdagskollenApp extends Application {
     public ThemeManager getThemeManager() {
         return themeManager;
     }
+
 }
