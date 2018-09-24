@@ -1,6 +1,9 @@
 package oscar.riksdagskollen.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,6 +23,7 @@ import com.franmontiel.attributionpresenter.entities.Library;
 import com.franmontiel.attributionpresenter.entities.License;
 
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.RiksdagskollenApp;
 
 /**
  * Created by oscar on 2018-06-26.
@@ -95,5 +99,14 @@ public class AboutFragment extends Fragment {
                 attributionPresenter.showDialog("Programvara som hjälpt till att skapa Riksdagskollen");
             }
         });
+        try {
+            Context context = RiksdagskollenApp.getInstance();
+            PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            String version = pInfo.versionName;
+            TextView versionView = view.findViewById(R.id.version);
+            versionView.setText("Version " + version);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
