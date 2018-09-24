@@ -152,7 +152,7 @@ public class RequestManager {
         System.out.println(requestQueue);
     }
 
-    class HtmlDownloader extends AsyncTask<String, String, String> {
+    static class HtmlDownloader extends AsyncTask<String, String, String> {
 
         private final String url;
 

@@ -43,7 +43,7 @@ public class PartyFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.party = getArguments().getParcelable("party");
         infoFragment = PartyInfoFragment.newInstance(party);
-        representativeFragment = PartyRepresentativeFragment.newInstance();
+        representativeFragment = PartyRepresentativeFragment.newInstance(party);
     }
 
 
