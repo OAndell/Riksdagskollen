@@ -81,7 +81,7 @@
                         android:id="@+id/rep_card_title_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Titel"
+                        android:text="Yrkestitel"
                         android:textColor="?mainBodyTextColor"
                         android:textStyle="bold" />
 

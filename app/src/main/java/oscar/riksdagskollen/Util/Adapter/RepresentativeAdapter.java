@@ -132,6 +132,7 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
         private final TextView born;
         private final TextView valkrets;
         private final TextView title;
+        private final TextView titleLabel;
         private final CircularNetworkImageView portrait;
         private final ImageView partyLogo;
 
@@ -141,6 +142,7 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
             name = itemView.findViewById(R.id.rep_card_name);
             born = itemView.findViewById(R.id.rep_card_born);
             valkrets = itemView.findViewById(R.id.rep_card_valkrets);
+            titleLabel = itemView.findViewById(R.id.rep_card_title_label);
             title = itemView.findViewById(R.id.rep_card_title);
             portrait = itemView.findViewById(R.id.rep_card_portrait);
             partyLogo = itemView.findViewById(R.id.rep_card_party_logo);
@@ -151,7 +153,7 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
             name.setText(item.getTilltalsnamn() + " " + item.getEfternamn());
             valkrets.setText(item.getValkrets());
             born.setText(item.getFodd_ar());
-            title.setText("TO BE IMPLEMENTED");
+            setTitle(item);
             portrait.setImageUrl(item.getBild_url_192(), RiksdagskollenApp.getInstance().getRequestManager().getmImageLoader());
             try {
                 partyLogo.setImageResource(MainActivity.getParty(item.getParti().toLowerCase()).getDrawableLogo());
@@ -164,6 +166,17 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
                     listener.onItemClick(item);
                 }
             });
+        }
+
+        private void setTitle(Representative representative) {
+            String titleStr = representative.getTitle();
+            if (titleStr.equals("")) {
+                title.setVisibility(View.GONE);
+                titleLabel.setVisibility(View.GONE);
+            } else {
+                title.setText(titleStr);
+
+            }
         }
 
 

@@ -43,6 +43,21 @@ public class PartyRepresentativeFragment extends RiksdagenAutoLoadingListFragmen
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.party = getArguments().getParcelable("party");
+        RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getRepresentativesInParty(party.getID(), new RepresentativeListCallback() {
+            @Override
+            public void onPersonListFetched(List<Representative> representatives) {
+                setShowLoadingView(false);
+                representativeList.addAll(representatives);
+                getAdapter().addAll(representatives);
+                setLoadingMoreItems(false);
+            }
+
+            @Override
+            public void onFail(VolleyError error) {
+                setLoadingMoreItems(false);
+                decrementPage();
+            }
+        });
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -62,24 +77,10 @@ public class PartyRepresentativeFragment extends RiksdagenAutoLoadingListFragmen
     }
 
 
+    /**
+     * Not used for this fragment
+     */
     protected void loadNextPage() {
-        setLoadingMoreItems(true);
-        RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getRepresentativesInParty(party.getID(), new RepresentativeListCallback() {
-            @Override
-            public void onPersonListFetched(List<Representative> representatives) {
-                setShowLoadingView(false);
-                representativeList.addAll(representatives);
-                getAdapter().addAll(representatives);
-                setLoadingMoreItems(false);
-            }
-
-            @Override
-            public void onFail(VolleyError error) {
-                setLoadingMoreItems(false);
-                decrementPage();
-            }
-        });
-        incrementPage();
     }
 
     @Override
