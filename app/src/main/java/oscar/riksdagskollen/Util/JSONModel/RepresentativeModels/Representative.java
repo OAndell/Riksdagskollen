@@ -39,7 +39,7 @@ public class Representative implements Parcelable {
     private String bild_url_192;
     private String bild_url_max;
     private String roll_kod;
-    private PersonalMisson personuppdrag;
+    private RepresentativeMissionList personuppdrag;
     private RepresentativeInfoList personuppgift;
     public Representative(String tilltalsnamn, String efternamn, String roll_kod, String image){
         this.tilltalsnamn = tilltalsnamn;
@@ -64,7 +64,7 @@ public class Representative implements Parcelable {
         this.bild_url_192 = in.readString();
         this.bild_url_max = in.readString();
         this.roll_kod = in.readString();
-        this.personuppdrag = in.readParcelable(PersonalMisson.class.getClassLoader());
+        this.personuppdrag = in.readParcelable(RepresentativeMissionList.class.getClassLoader());
         this.personuppgift = in.readParcelable(RepresentativeInfoList.class.getClassLoader());
     }
 
@@ -138,6 +138,19 @@ public class Representative implements Parcelable {
         return roll_kod;
     }
 
+    /**
+     * @return the "Civilian" work title of the representative
+     */
+    public String getTitle() {
+        ArrayList<RepresentativeInfo> infoList = getPersonuppgift().getUppgift();
+        for (int i = 0; i < infoList.size(); i++) {
+            if (infoList.get(i).getKod().equals("sv")) {
+                return infoList.get(i).getUppgift()[0];
+            }
+        }
+        return "";
+    }
+
     public RepresentativeInfoList getPersonuppgift() {
         return personuppgift;
     }
@@ -152,7 +165,7 @@ public class Representative implements Parcelable {
 
     private String getCurrentPartyRole() {
         if (personuppdrag.getUppdrag().size() == 0) return null;
-        for (Misson mission : personuppdrag.getUppdrag()) {
+        for (RepresentativeMission mission : personuppdrag.getUppdrag()) {
             if (mission.typ.equals("partiuppdrag") && mission.tom == null) {
                 // Status can be "active" or "inactive" etc
                 if (mission.status != null) return mission.status + " " + mission.roll_kod;
@@ -180,7 +193,7 @@ public class Representative implements Parcelable {
 
     private String getCurrentOrMostRecentRole() {
         if (personuppdrag.getUppdrag().size() == 0) return "";
-        for (Misson mission : personuppdrag.getUppdrag()) {
+        for (RepresentativeMission mission : personuppdrag.getUppdrag()) {
             if (mission.tom == null) {
                 // Status can be "active" or "inactive" etc
                 if (mission.status != null) return mission.status + " " + mission.roll_kod;
@@ -189,12 +202,12 @@ public class Representative implements Parcelable {
         }
 
         // If all else fails, just return the first role in the list
-        Misson mostRecent = personuppdrag.getUppdrag().get(0);
+        RepresentativeMission mostRecent = personuppdrag.getUppdrag().get(0);
         if (mostRecent.status != null) return mostRecent.status + " " + mostRecent.roll_kod;
         return mostRecent.roll_kod;
     }
 
-    public ArrayList<Misson> getPersonuppdrag() {
+    public ArrayList<RepresentativeMission> getPersonuppdrag() {
         return personuppdrag.getUppdrag();
     }
 

@@ -61,10 +61,7 @@ public class PartyRepresentativeFragment extends RiksdagenAutoLoadingListFragmen
 
     }
 
-    /**
-     * Load the next page and add it to the adapter when downloaded and parsed.
-     * Hides the loading view.s
-     */
+
     protected void loadNextPage() {
         setLoadingMoreItems(true);
         RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getRepresentativesInParty(party.getID(), new RepresentativeListCallback() {

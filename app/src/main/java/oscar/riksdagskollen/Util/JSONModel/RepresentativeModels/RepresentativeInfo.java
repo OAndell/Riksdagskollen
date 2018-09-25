@@ -36,23 +36,22 @@ public class RepresentativeInfo implements Parcelable {
     private String kod;
     private String[] uppgift;
     private String typ;
-
-    public String[] getUppgift() {
-        return uppgift;
-    }
     private String intressent_id;
     private String hangar_id;
-
     RepresentativeInfo() {
 
     }
 
     protected RepresentativeInfo(Parcel in) {
         this.kod = in.readString();
-        //this.uppgift = in.createStringArray();
+        this.uppgift = in.createStringArray();
         this.typ = in.readString();
         this.intressent_id = in.readString();
         this.hangar_id = in.readString();
+    }
+
+    public String[] getUppgift() {
+        return uppgift;
     }
 
     public String getKod() {

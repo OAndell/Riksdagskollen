@@ -7,17 +7,17 @@ import android.os.Parcelable;
  * Created by gustavaaro on 2018-09-19.
  */
 
-public class Misson implements Parcelable {
+public class RepresentativeMission implements Parcelable {
 
-    public static final Creator<Misson> CREATOR = new Creator<Misson>() {
+    public static final Creator<RepresentativeMission> CREATOR = new Creator<RepresentativeMission>() {
         @Override
-        public Misson createFromParcel(Parcel source) {
-            return new Misson(source);
+        public RepresentativeMission createFromParcel(Parcel source) {
+            return new RepresentativeMission(source);
         }
 
         @Override
-        public Misson[] newArray(int size) {
-            return new Misson[size];
+        public RepresentativeMission[] newArray(int size) {
+            return new RepresentativeMission[size];
         }
     };
     String organ_kod;
@@ -27,10 +27,10 @@ public class Misson implements Parcelable {
     String from;
     String tom;
 
-    public Misson() {
+    public RepresentativeMission() {
     }
 
-    protected Misson(Parcel in) {
+    protected RepresentativeMission(Parcel in) {
         this.organ_kod = in.readString();
         this.roll_kod = in.readString();
         this.status = in.readString();
