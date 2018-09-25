@@ -78,7 +78,7 @@ public class RepresentativeInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.kod);
-        //dest.writeStringArray(this.uppgift);
+        dest.writeStringArray(this.uppgift);
         dest.writeString(this.typ);
         dest.writeString(this.intressent_id);
         dest.writeString(this.hangar_id);
