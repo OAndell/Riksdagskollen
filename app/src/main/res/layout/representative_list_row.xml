@@ -34,8 +34,8 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:layout_weight="20"
                 android:orientation="vertical">
 
 
@@ -50,49 +50,36 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <LinearLayout
+
+                <TextView
+                    android:id="@+id/rep_card_valkrets_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Valkrets"
+                    android:textColor="?mainBodyTextColor"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/rep_card_valkrets"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:text="Jönköping"
+                    android:textColor="?mainBodyTextColor" />
 
-                    <TextView
-                        android:id="@+id/rep_card_valkrets_label"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Valkrets"
-                        android:textColor="?mainBodyTextColor"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/rep_card_valkrets"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
-                        android:text="Jönköping"
-                        android:textColor="?mainBodyTextColor" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/rep_card_title_label"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:text="Yrkestitel"
+                    android:textColor="?mainBodyTextColor"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/rep_card_title_label"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Yrkestitel"
-                        android:textColor="?mainBodyTextColor"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/rep_card_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
-                        android:text="Lokförare"
-                        android:textColor="?mainBodyTextColor" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/rep_card_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Lokförare"
+                    android:textColor="?mainBodyTextColor" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -103,7 +90,7 @@
                         android:id="@+id/rep_card_born_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Född"
+                        android:text="Ålder"
                         android:textColor="?mainBodyTextColor"
                         android:textStyle="bold" />
 
@@ -112,7 +99,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="4dp"
-                        android:text="1965"
+                        android:text="69 år"
                         android:textColor="?mainBodyTextColor" />
                 </LinearLayout>
 
@@ -123,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:layout_weight="16"
-                android:gravity="right"
+                android:gravity="end"
                 android:orientation="vertical">
 
                 <FrameLayout
@@ -133,7 +120,7 @@
                     <oscar.riksdagskollen.Util.View.CircularNetworkImageView
                         android:id="@+id/rep_card_portrait"
                         android:layout_width="110dp"
-                        android:layout_height="110dp"
+                        android:layout_height="130dp"
                         android:layout_weight="10"
                         android:scaleType="fitCenter"
                         app:srcCompat="@drawable/ic_person_secondary" />

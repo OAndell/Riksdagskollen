@@ -152,7 +152,7 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
         public void bind(final Representative item, final RiksdagenViewHolderAdapter.OnItemClickListener listener) {
             name.setText(item.getTilltalsnamn() + " " + item.getEfternamn());
             valkrets.setText(item.getValkrets());
-            born.setText(item.getFodd_ar());
+            born.setText(item.getAge() + " år");
             setTitle(item);
             portrait.setImageUrl(item.getBild_url_192(), RiksdagskollenApp.getInstance().getRequestManager().getmImageLoader());
             try {
