@@ -34,6 +34,7 @@ public class CurrentNews implements Parcelable {
     private final CurrentNewsLinkList linklista;
 
     private CurrentNews(Parcel in) {
+
         id = in.readString();
         titel = in.readString();
 

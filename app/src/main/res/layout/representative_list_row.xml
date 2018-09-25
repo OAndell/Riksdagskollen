@@ -15,7 +15,8 @@
         card_view:cardUseCompatPadding="true"
         card_view:contentPaddingLeft="8dp"
         card_view:contentPaddingRight="20dp"
-        card_view:contentPaddingTop="8dp">
+        card_view:contentPaddingTop="8dp"
+        android:paddingBottom="8dp">
 
 
         <FrameLayout
@@ -33,9 +34,9 @@
             android:weightSum="20">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="20"
+                android:layout_weight="14"
                 android:orientation="vertical">
 
 
@@ -50,45 +51,64 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-
-                <TextView
-                    android:id="@+id/rep_card_valkrets_label"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Valkrets"
-                    android:textColor="?mainBodyTextColor"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/rep_card_valkrets"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Jönköping"
-                    android:textColor="?mainBodyTextColor" />
+                    <TextView
+                        android:id="@+id/rep_card_title_label"
+                        android:layout_width="65dp"
+                        android:layout_height="wrap_content"
+                        android:text="Yrkestitel"
+                        android:textColor="?mainBodyTextColor"
+                        android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/rep_card_title_label"
+                    <TextView
+                        android:id="@+id/rep_card_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:text="Jag var en gång en sjuksköterska men sen fick jag sparken ojdå. Nu är jag ensamstående mamma."
+                        android:textColor="?mainBodyTextColor" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Yrkestitel"
-                    android:textColor="?mainBodyTextColor"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/rep_card_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Lokförare"
-                    android:textColor="?mainBodyTextColor" />
+                    <TextView
+                        android:id="@+id/rep_card_valkrets_label"
+                        android:layout_width="65dp"
+                        android:layout_height="wrap_content"
+                        android:text="Valkrets"
+                        android:textColor="?mainBodyTextColor"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/rep_card_valkrets"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:text="Västra Götalands läns västra"
+                        android:textColor="?mainBodyTextColor" />
+
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/rep_card_born_label"
-                        android:layout_width="match_parent"
+                        android:layout_width="65dp"
                         android:layout_height="wrap_content"
                         android:text="Ålder"
                         android:textColor="?mainBodyTextColor"
@@ -106,10 +126,10 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_weight="16"
+                android:layout_gravity="center"
+                android:layout_weight="6"
                 android:gravity="end"
                 android:orientation="vertical">
 

@@ -175,7 +175,7 @@ public class MotionActivity extends AppCompatActivity {
         portaitContainer = findViewById(R.id.act_doc_reader_portrait_container);
 
 
-        if (intresentId != null) addSenderView(intresentId);
+        if (document.getDokintressent() == null && intresentId != null) addSenderView(intresentId);
         else if (document.getDokintressent() != null) showSenders();
 
     }
