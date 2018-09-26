@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
@@ -293,7 +294,10 @@ public class MotionActivity extends AppCompatActivity {
                 startActivity(i);
             case R.id.notification_menu_item:
                 boolean enabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForDoc(document);
-                if (enabled) item.setIcon(R.drawable.ic_notification_enabled);
+                if (enabled) {
+                    item.setIcon(R.drawable.ic_notification_enabled);
+                    Toast.makeText(getApplicationContext(), "Du kommer nu få en notis när ett svar publiceras på denna fråga", Toast.LENGTH_LONG).show();
+                }
                 else item.setIcon(R.drawable.ic_notifications_disabled);
                 break;
         }

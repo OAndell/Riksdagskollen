@@ -135,12 +135,14 @@
 
                 <FrameLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp">
 
                     <oscar.riksdagskollen.Util.View.CircularNetworkImageView
                         android:id="@+id/rep_card_portrait"
-                        android:layout_width="110dp"
-                        android:layout_height="130dp"
+                        android:layout_width="100dp"
+                        android:layout_height="120dp"
                         android:layout_weight="10"
                         android:scaleType="fitCenter"
                         app:srcCompat="@drawable/ic_person_secondary" />

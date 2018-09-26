@@ -17,59 +17,104 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/leadersLayout"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:weightSum="20">
+
+                <ImageView
+                    android:id="@+id/party_logo"
+                    android:layout_width="0dp"
+                    android:layout_height="90dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="8"
+                    app:srcCompat="@mipmap/ic_launcher_round" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="12"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Webbsida: "
+                            android:textStyle="bold"
+                            android:textSize="15sp"
+                            android:textColor="?mainTitleTextColor" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/website"
+                            android:textColor="?attr/mainTitleTextColor"
+                            android:textSize="15sp"
+                            android:text="www.example.se" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="?attr/mainTitleTextColor"
+                            android:layout_marginTop="10dp"
+                            android:text="Politisk ideologi:" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/ideology"
+                            android:textColor="?attr/mainTitleTextColor"
+                            android:textSize="15sp"
+                            android:text="Demokratisk socialism, Socialdemokrati, Tredje vägens politik, Feminism" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginLeft="16dp"
+                android:textColor="?attr/mainTitleTextColor"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="left"
+                android:text="Partiledning" />
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/leadersLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 app:flexWrap="wrap"
                 app:alignItems="center"
-                app:justifyContent="center">
-            </com.google.android.flexbox.FlexboxLayout>
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="?attr/mainTitleTextColor"
-                android:layout_marginTop="10dp"
-                android:layout_gravity="center"
-                android:text="Politisk ideologi"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ideology"
-                android:gravity="center"
-                android:textColor="?attr/mainTitleTextColor"
-                android:textSize="15sp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_gravity="center"
-                android:text="Demokratisk socialism, Socialdemokrati, Tredje vägens politik, Feminism"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/website"
-                android:gravity="center"
-                android:textColor="?attr/mainTitleTextColor"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp"
-                android:layout_gravity="center"
-                android:text="www.example.se"/>
-
-
-            <ImageView
-                android:id="@+id/party_logo"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                app:srcCompat="@mipmap/ic_launcher_round" />
-
+                app:alignContent="space_around"></com.google.android.flexbox.FlexboxLayout>
 
 
         </LinearLayout>
