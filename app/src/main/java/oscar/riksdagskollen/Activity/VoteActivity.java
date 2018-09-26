@@ -71,11 +71,7 @@ public class VoteActivity extends AppCompatActivity{
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
-            TypedValue typedValue = new TypedValue();
-            Resources.Theme theme = getTheme();
-            theme.resolveAttribute(R.attr.mainBackgroundColor, typedValue, true);
-            @ColorInt int navColor = typedValue.data;
-            window.setNavigationBarColor(navColor);
+            window.setNavigationBarColor(RiksdagskollenApp.getColorFromAttribute(R.attr.mainBackgroundColor, this));
         }
 
         loadingView = findViewById(R.id.loading_view);

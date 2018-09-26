@@ -1,6 +1,7 @@
 package oscar.riksdagskollen.Activity;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 
 import java.util.ArrayList;
 
@@ -29,6 +31,11 @@ public class SearchedVoteAcitivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setTheme(RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         setContentView(R.layout.activity_searched_votes);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.setNavigationBarColor(RiksdagskollenApp.getColorFromAttribute(R.attr.mainBackgroundColor, this));
+        }
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);

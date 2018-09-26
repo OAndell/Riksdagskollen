@@ -1,13 +1,10 @@
 package oscar.riksdagskollen.Fragment;
 
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 
 /**
@@ -67,16 +65,11 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         loadingView = view.findViewById(R.id.loading_view);
         noContentWarning = view.findViewById(R.id.no_content_warning);
 
-        TypedValue typedValue = new TypedValue();
-        Resources.Theme theme = getActivity().getTheme();
-        theme.resolveAttribute(R.attr.buttonColor, typedValue, true);
-        @ColorInt int buttoncolor = typedValue.data;
+        itemsLoadingView = loadingView.findViewById(R.id.progress_bar);
 
-
-        itemsLoadingView = new ProgressBar(getContext());
-        itemsLoadingView.getIndeterminateDrawable().setColorFilter(buttoncolor,
+        itemsLoadingView.getIndeterminateDrawable().setColorFilter(
+                RiksdagskollenApp.getColorFromAttribute(R.attr.secondaryLightColor, getContext()),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
-
 
         if (adapter.getItemCount() < MIN_DOC) loadNextPage();
         return view;
