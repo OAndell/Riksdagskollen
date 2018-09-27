@@ -14,6 +14,7 @@ import com.evernote.android.job.JobManager;
 import com.evernote.android.job.util.JobLogger;
 
 import oscar.riksdagskollen.Manager.AlertManager;
+import oscar.riksdagskollen.Manager.RepresentativeManager;
 import oscar.riksdagskollen.Manager.RequestManager;
 import oscar.riksdagskollen.Manager.RiksdagenAPIManager;
 import oscar.riksdagskollen.Manager.ThemeManager;
@@ -31,6 +32,7 @@ public class RiksdagskollenApp extends Application {
     private RiksdagenAPIManager riksdagenAPIManager;
     private ThemeManager themeManager;
     private AlertManager alertManager;
+    private RepresentativeManager representativeManager;
 
     class MyLogger implements JobLogger {
         @Override
@@ -52,6 +54,8 @@ public class RiksdagskollenApp extends Application {
         JobConfig.setApiEnabled(JobApi.GCM, false);
         JobManager.create(this).addJobCreator(new AlertJobCreator());
         scheduleCheckRepliesJobIfNotRunning();
+
+        representativeManager = new RepresentativeManager(this);
     }
 
     public void scheduleCheckRepliesJobIfNotRunning() {
@@ -95,4 +99,7 @@ public class RiksdagskollenApp extends Application {
         return themeManager;
     }
 
+    public RepresentativeManager getRepresentativeManager() {
+        return representativeManager;
+    }
 }

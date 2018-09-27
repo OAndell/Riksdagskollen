@@ -43,6 +43,11 @@ public class PartyRepresentativeFragment extends RiksdagenAutoLoadingListFragmen
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.party = getArguments().getParcelable("party");
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getRepresentativesInParty(party.getID(), new RepresentativeListCallback() {
             @Override
             public void onPersonListFetched(List<Representative> representatives) {
@@ -58,9 +63,8 @@ public class PartyRepresentativeFragment extends RiksdagenAutoLoadingListFragmen
                 decrementPage();
             }
         });
-        return super.onCreateView(inflater, container, savedInstanceState);
+        super.onViewCreated(view, savedInstanceState);
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

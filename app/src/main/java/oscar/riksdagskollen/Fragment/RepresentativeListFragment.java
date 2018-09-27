@@ -8,17 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.VolleyError;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
+import oscar.riksdagskollen.Manager.RepresentativeManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.RepresentativeAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
-import oscar.riksdagskollen.Util.Callback.RepresentativeListCallback;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 
 /**
@@ -38,6 +36,7 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.representatives);
+        /*
         RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getAllCurrentRepresentatives(new RepresentativeListCallback() {
             @Override
             public void onPersonListFetched(List<Representative> representatives) {
@@ -52,8 +51,32 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
                 setLoadingMoreItems(false);
                 decrementPage();
             }
-        });
+        });*/
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        RiksdagskollenApp app = RiksdagskollenApp.getInstance();
+
+        if (app.getRepresentativeManager().isRepresentativesDownloaded()) {
+            setShowLoadingView(false);
+            ArrayList<Representative> representatives = app.getRepresentativeManager().getRepresentatives();
+            representativeList.addAll(representatives);
+            getAdapter().addAll(representatives);
+            setLoadingMoreItems(false);
+        } else {
+            app.getRepresentativeManager().addDownloadListener(new RepresentativeManager.RepresentativeDownloadListener() {
+                @Override
+                public void onRepresentativesDownloaded(ArrayList<Representative> representatives) {
+                    setShowLoadingView(false);
+                    representativeList.addAll(representatives);
+                    getAdapter().addAll(representatives);
+                    setLoadingMoreItems(false);
+                }
+            });
+        }
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -172,28 +173,38 @@ public class RiksdagenAPIManager {
      * @param callback callback function which the a Representative JSON model is returned.
      */
     public Request getRepresentative(String iid, final RepresentativeCallback callback) {
-        final String subURL = "/personlista/?iid=" + iid + "&utformat=json";
-        return requestManager.doGetRequest(subURL, new JSONRequestCallback() {
-            @Override
-            public void onRequestSuccess(JSONObject response) {
-                Gson gson = new GsonBuilder()
-                        .registerTypeAdapter(RepresentativeInfo.class, new RepresentativeInfo.RepresentativeInfoDezerializer())
-                        .create();
-                try {
-                    JSONObject jsonDocuments = response.getJSONObject("personlista").getJSONObject("person");
-                    Representative representative = gson.fromJson(jsonDocuments.toString(), Representative.class);
-                    callback.onPersonFetched(representative);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    callback.onFail(new VolleyError("Failed to parse JSON"));
-                }
-            }
 
-            @Override
-            public void onRequestFail(VolleyError error) {
-                callback.onFail(error);
-            }
-        });
+        // Check if downloaded already
+        Representative downloadedRep = RiksdagskollenApp.getInstance().getRepresentativeManager().getRepresentative(iid, null);
+        if (downloadedRep != null) {
+            callback.onPersonFetched(downloadedRep);
+            // ugly fix to return a request if representative was already downloaded
+            return new JsonArrayRequest(null, null, null);
+        } else {
+            final String subURL = "/personlista/?iid=" + iid + "&utformat=json";
+            return requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+                @Override
+                public void onRequestSuccess(JSONObject response) {
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(RepresentativeInfo.class, new RepresentativeInfo.RepresentativeInfoDezerializer())
+                            .create();
+                    try {
+                        JSONObject jsonDocuments = response.getJSONObject("personlista").getJSONObject("person");
+                        Representative representative = gson.fromJson(jsonDocuments.toString(), Representative.class);
+                        callback.onPersonFetched(representative);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        callback.onFail(new VolleyError("Failed to parse JSON"));
+                    }
+                }
+
+                @Override
+                public void onRequestFail(VolleyError error) {
+                    callback.onFail(error);
+                }
+            });
+        }
+
     }
 
     /**
@@ -380,28 +391,34 @@ public class RiksdagenAPIManager {
     }
 
     public void getRepresentativesInParty(String party, final RepresentativeListCallback callback) {
-        String subUrl = "/personlista/?parti=" + party + "&utformat=json";
-        requestManager.doGetRequest(subUrl, new JSONRequestCallback() {
-            @Override
-            public void onRequestSuccess(JSONObject response) {
-                Gson gson = new GsonBuilder()
-                        .registerTypeAdapter(RepresentativeInfo.class, new RepresentativeInfo.RepresentativeInfoDezerializer())
-                        .create();
-                try {
-                    JSONArray jsonDocuments = response.getJSONObject("personlista").getJSONArray("person");
-                    Representative[] representatives = gson.fromJson(jsonDocuments.toString(), Representative[].class);
-                    callback.onPersonListFetched(Arrays.asList(representatives));
-                } catch (JSONException e) {
-                    e.printStackTrace();
+
+        ArrayList<Representative> repsForParty = RiksdagskollenApp.getInstance().getRepresentativeManager().getRepresentativesForParty(party);
+        if (repsForParty != null) {
+            callback.onPersonListFetched(repsForParty);
+        } else {
+            String subUrl = "/personlista/?parti=" + party + "&utformat=json";
+            requestManager.doGetRequest(subUrl, new JSONRequestCallback() {
+                @Override
+                public void onRequestSuccess(JSONObject response) {
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(RepresentativeInfo.class, new RepresentativeInfo.RepresentativeInfoDezerializer())
+                            .create();
+                    try {
+                        JSONArray jsonDocuments = response.getJSONObject("personlista").getJSONArray("person");
+                        Representative[] representatives = gson.fromJson(jsonDocuments.toString(), Representative[].class);
+                        callback.onPersonListFetched(Arrays.asList(representatives));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                 }
 
-            }
-
-            @Override
-            public void onRequestFail(VolleyError error) {
-                callback.onFail(error);
-            }
-        });
+                @Override
+                public void onRequestFail(VolleyError error) {
+                    callback.onFail(error);
+                }
+            });
+        }
     }
 
 
@@ -430,7 +447,7 @@ public class RiksdagenAPIManager {
 
     public void getDocumentsForRepresentative(String intressentId, int page, final RepresentativeDocumentCallback callback) {
 
-        String subURL = "/dokumentlista/?avd=dokument&del=dokument&fcs=1&sort=datum&sortorder=desc&utformat=json"
+        String subURL = "/dokumentlista/?avd=dokument&sort=datum&sortorder=datum&utformat=json"
                 + "&iid=" + intressentId
                 + "&p=" + page;
 
