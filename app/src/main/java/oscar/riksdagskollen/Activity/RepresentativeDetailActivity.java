@@ -84,7 +84,6 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
 
         partyLogo.setImageResource(MainActivity.getParty(representative.getParti().toLowerCase()).getDrawableLogo());
         portrait.setImageUrl(representative.getBild_url_192(), RiksdagskollenApp.getInstance().getRequestManager().getmImageLoader());
-
         age.setText(representative.getAge());
         status.setText(representative.getDescriptiveRole());
         RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getDocumentsForRepresentative(
@@ -100,7 +99,7 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
                         tabFragment = RepresentativeTabFragment.newInstance();
                         feedFragment = RepresentativeFeedFragment.newInstance(representative.getIntressent_id(), firstPage);
                         tabFragment.addTab(feedFragment, getString(R.string.rep_feed_tab_name));
-                        tabFragment.addTab(AboutFragment.newInstance(), "PLACEHOLDER");
+                        tabFragment.addTab(AboutFragment.newInstance(), "Om " + representative.getTilltalsnamn());
                         getSupportFragmentManager().beginTransaction().replace(R.id.rep_fragment_container, tabFragment).commit();
                     }
 
@@ -110,8 +109,6 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.rep_fragment_container, AboutFragment.newInstance()).commit();
                     }
                 });
-
-
     }
 
 
