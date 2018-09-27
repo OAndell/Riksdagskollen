@@ -28,7 +28,7 @@ public class DownloadRepresentativesJob extends Job {
         RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getAllCurrentRepresentatives(new RepresentativeListCallback() {
             @Override
             public void onPersonListFetched(List<Representative> representatives) {
-                RiksdagskollenApp.getInstance().getRepresentativeManager().addRepresentatives(representatives);
+                RiksdagskollenApp.getInstance().getRepresentativeManager().addCurrentRepresentatives(representatives);
                 latch.countDown();
             }
 

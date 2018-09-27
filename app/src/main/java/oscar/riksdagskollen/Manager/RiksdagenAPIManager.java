@@ -191,6 +191,8 @@ public class RiksdagenAPIManager {
                     try {
                         JSONObject jsonDocuments = response.getJSONObject("personlista").getJSONObject("person");
                         Representative representative = gson.fromJson(jsonDocuments.toString(), Representative.class);
+                        // Save to avoid re-download
+                        RiksdagskollenApp.getInstance().getRepresentativeManager().addRepresentative(representative);
                         callback.onPersonFetched(representative);
                     } catch (JSONException e) {
                         e.printStackTrace();

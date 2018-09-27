@@ -20,17 +20,17 @@ public class RepresentativeManager {
     private boolean representativesDownloaded;
     // Hashmap to store reps in according to partyId : {intressentid: representative }
     private HashMap<String, HashMap<String, Representative>> representatives;
-    private ArrayList<Representative> representativeArrayList;
+    private ArrayList<Representative> currentRepresentatives;
     private ArrayList<RepresentativeDownloadListener> listenerList;
 
-    private String[] partyIds = {"m", "s", "sd", "l", "c", "mp", "v", "kd"};
+    private String[] partyIds = {"m", "s", "sd", "l", "c", "mp", "v", "kd", "-"};
 
 
     public RepresentativeManager(Context appContext) {
         this.context = appContext;
         representatives = new HashMap<>();
         listenerList = new ArrayList<>();
-        representativeArrayList = new ArrayList<>();
+        currentRepresentatives = new ArrayList<>();
         DownloadRepresentativesJob.scheduleJob();
 
         for (String partyId : partyIds) {
@@ -39,27 +39,32 @@ public class RepresentativeManager {
     }
 
 
-    public void addRepresentatives(Collection<Representative> representatives) {
-        representativeArrayList.addAll(representatives);
+    public void addCurrentRepresentatives(Collection<Representative> representatives) {
+        currentRepresentatives.addAll(representatives);
         for (Representative rep : representatives) {
             addRepresentative(rep);
         }
-        System.out.println("REPS DOWNLOADED");
         notifyDownloaded();
         representativesDownloaded = true;
     }
 
-    public void addRepresentative(Representative representative) {
-        addRepresentiveToParty(representative.getParti(), representative);
-        representativeArrayList.add(representative);
+    public void addRepresentatives(Collection<Representative> representatives) {
+        for (Representative rep : representatives) {
+            addRepresentative(rep);
+        }
+        representativesDownloaded = true;
     }
 
-    private void addRepresentiveToParty(String party, Representative representative) {
+    public void addRepresentative(Representative representative) {
+        addRepresentativeToParty(representative.getParti(), representative);
+    }
+
+    private void addRepresentativeToParty(String party, Representative representative) {
         representatives.get(party.toLowerCase()).put(representative.getIntressent_id(), representative);
     }
 
-    public ArrayList<Representative> getRepresentatives() {
-        return representativeArrayList;
+    public ArrayList<Representative> getCurrentRepresentatives() {
+        return currentRepresentatives;
     }
 
     public Representative getRepresentative(String iid, @Nullable String party) {
@@ -77,12 +82,12 @@ public class RepresentativeManager {
     }
 
     public ArrayList<Representative> getRepresentativesForParty(String party) {
-        return new ArrayList<Representative>(representatives.get(party.toLowerCase()).values());
+        return new ArrayList<>(representatives.get(party.toLowerCase()).values());
     }
 
     private void notifyDownloaded() {
         for (RepresentativeDownloadListener listener : listenerList) {
-            listener.onRepresentativesDownloaded(getRepresentatives());
+            listener.onRepresentativesDownloaded(getCurrentRepresentatives());
         }
     }
 

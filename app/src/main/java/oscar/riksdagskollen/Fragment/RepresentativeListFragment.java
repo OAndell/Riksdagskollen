@@ -61,7 +61,7 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
 
         if (app.getRepresentativeManager().isRepresentativesDownloaded()) {
             setShowLoadingView(false);
-            ArrayList<Representative> representatives = app.getRepresentativeManager().getRepresentatives();
+            ArrayList<Representative> representatives = app.getRepresentativeManager().getCurrentRepresentatives();
             representativeList.addAll(representatives);
             getAdapter().addAll(representatives);
             setLoadingMoreItems(false);
