@@ -34,6 +34,7 @@
     <string name="github">https://github.com/OAndell/Riksdagskollen</string>
     <string name="view_reply_button">Denna fråga har besvarats: Läs svar</string>
     <string name="no_reply_tip">Denna fråga har ännu inte besvarats. Klicka på klockan i menyn om du vill få en notis när ett svar publiceras.</string>
+    <string name="rep_feed_tab_name">Ledamotsflöde</string>
 
     <string name="s_website">www.socialdemokraterna.se</string>
     <string name="m_website">www.moderaterna.se</string>

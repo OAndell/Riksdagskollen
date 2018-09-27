@@ -19,7 +19,9 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 
+import oscar.riksdagskollen.Fragment.AboutFragment;
 import oscar.riksdagskollen.Fragment.RepresentativeFeedFragment;
+import oscar.riksdagskollen.Fragment.RepresentativeTabFragment;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.RepresentativeDocumentCallback;
@@ -37,6 +39,9 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
     private AppBarLayout appBarLayout;
     private LinearLayout headerContainer;
     private Representative representative;
+    private RepresentativeFeedFragment feedFragment;
+
+    private RepresentativeTabFragment tabFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,7 +87,6 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
 
         age.setText(representative.getAge());
         status.setText(representative.getDescriptiveRole());
-
         RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getDocumentsForRepresentative(
                 representative.getIntressent_id(),
                 1,
@@ -92,18 +96,24 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
                     public void onDocumentsFetched(List<PartyDocument> documents, String numberOfHits) {
                         ArrayList<PartyDocument> firstPage = new ArrayList<>();
                         firstPage.addAll(documents);
-                        RepresentativeFeedFragment feedFragment = RepresentativeFeedFragment.newInstance(representative.getIntressent_id(), firstPage);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.rep_fragment_container, feedFragment).commit();
                         publishedDocuments.setText(numberOfHits);
+                        tabFragment = RepresentativeTabFragment.newInstance();
+                        feedFragment = RepresentativeFeedFragment.newInstance(representative.getIntressent_id(), firstPage);
+                        tabFragment.addTab(feedFragment, getString(R.string.rep_feed_tab_name));
+                        tabFragment.addTab(AboutFragment.newInstance(), "PLACEHOLDER");
+                        getSupportFragmentManager().beginTransaction().replace(R.id.rep_fragment_container, tabFragment).commit();
                     }
 
                     @Override
                     public void onFail(VolleyError error) {
                         publishedDocuments.setText("0");
+                        getSupportFragmentManager().beginTransaction().replace(R.id.rep_fragment_container, AboutFragment.newInstance()).commit();
                     }
                 });
 
+
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -115,4 +125,6 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }
