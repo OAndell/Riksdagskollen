@@ -107,9 +107,7 @@ public class Representative implements Parcelable {
     }
 
     public String getTilltalsnamn() {
-        //ClasGöran --> Clas Göran
-        //Fixes rare error in riksdagen api.
-        return tilltalsnamn.replaceAll("(.)([A-Z])", "$1 $2");
+        return tilltalsnamn;
     }
 
     public String getParti() {
