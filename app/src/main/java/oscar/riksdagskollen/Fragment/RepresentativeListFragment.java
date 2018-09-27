@@ -3,6 +3,7 @@ package oscar.riksdagskollen.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
+import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.RepresentativeAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
@@ -35,6 +37,7 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.representatives);
         RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getAllCurrentRepresentatives(new RepresentativeListCallback() {
             @Override
             public void onPersonListFetched(List<Representative> representatives) {
