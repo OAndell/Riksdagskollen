@@ -65,10 +65,13 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         loadingView = view.findViewById(R.id.loading_view);
         noContentWarning = view.findViewById(R.id.no_content_warning);
 
-        itemsLoadingView = loadingView.findViewById(R.id.progress_bar);
-
-        itemsLoadingView.getIndeterminateDrawable().setColorFilter(
+        ((ProgressBar) loadingView.findViewById(R.id.progress_bar)).getIndeterminateDrawable().setColorFilter(
                 RiksdagskollenApp.getColorFromAttribute(R.attr.secondaryLightColor, getContext()),
+                android.graphics.PorterDuff.Mode.MULTIPLY);
+
+        itemsLoadingView = new ProgressBar(getContext());
+        itemsLoadingView.getIndeterminateDrawable().setColorFilter(
+                RiksdagskollenApp.getColorFromAttribute(R.attr.buttonColor, getContext()),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
 
         if (adapter.getItemCount() < MIN_DOC) loadNextPage();
