@@ -360,6 +360,9 @@ public class RiksdagenAPIManager {
         requestManager.doGetRequest(subUrl, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(RepresentativeInfo.class, new RepresentativeInfo.RepresentativeInfoDezerializer())
+                        .create();
                 try {
                     JSONArray jsonDocuments = response.getJSONObject("personlista").getJSONArray("person");
                     Representative[] representatives = gson.fromJson(jsonDocuments.toString(), Representative[].class);
@@ -367,7 +370,6 @@ public class RiksdagenAPIManager {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override

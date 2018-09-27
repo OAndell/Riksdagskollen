@@ -28,6 +28,7 @@ import oscar.riksdagskollen.Fragment.DecisionsListFragment;
 import oscar.riksdagskollen.Fragment.PartyFragment;
 import oscar.riksdagskollen.Fragment.PartyListFragment;
 import oscar.riksdagskollen.Fragment.ProtocolListFragment;
+import oscar.riksdagskollen.Fragment.RepresentativeListFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
 import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.R;
@@ -38,9 +39,11 @@ import oscar.riksdagskollen.Util.JSONModel.Party;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static HashMap<String, Party> parties;
     private CurrentNewsListFragment currentNewsListFragment;
     private ProtocolListFragment protFragment;
     private DecisionsListFragment decisionsFragment;
+    private RepresentativeListFragment repFragment;
     private VoteListFragment voteListFragment;
     private AboutFragment aboutFragment;
     private PartyFragment sPartyFragment;
@@ -59,8 +62,6 @@ public class MainActivity extends AppCompatActivity
     private PartyListFragment vPartyListFragment;
     private PartyListFragment lPartyListFragment;
     private PartyListFragment kdPartyListFragment;
-
-    public static HashMap<String, Party> parties;
     private NavigationView navigationView;
     private AppBarLayout appBarLayout;
     private CollapsingToolbarLayout collapsingToolbarLayout;
@@ -68,6 +69,14 @@ public class MainActivity extends AppCompatActivity
     private ActionBarDrawerToggle toggle;
     private boolean emptyToolbar = false;
     private ImageView collapsingLogo;
+
+    public static Party getParty(String id) {
+        return parties.get(id);
+    }
+
+    public static Collection<Party> getParties() {
+        return parties.values();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +127,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -141,7 +149,6 @@ public class MainActivity extends AppCompatActivity
         }
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -231,6 +238,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.dec_nav:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,decisionsFragment).commit();
                 break;
+            case R.id.rep_nav:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, repFragment).commit();
+                break;
             case R.id.prot_nav:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,protFragment).commit();
                 break;
@@ -273,9 +283,9 @@ public class MainActivity extends AppCompatActivity
         protFragment = ProtocolListFragment.newInstance();
         voteListFragment = VoteListFragment.newInstance(null);
         decisionsFragment = DecisionsListFragment.newInstance();
+        repFragment = RepresentativeListFragment.newInstance();
         aboutFragment = AboutFragment.newInstance();
     }
-
 
     // Create all of the PartyFragments with new Party objects
     private void initPartyFragments(){
@@ -360,13 +370,5 @@ public class MainActivity extends AppCompatActivity
         parties.put(cParty.getID(), cParty);
         parties.put(mpParty.getID(), mpParty);
         parties.put(lParty.getID(), lParty);
-    }
-
-    public static Party getParty(String id) {
-        return parties.get(id);
-    }
-
-    public static Collection<Party> getParties() {
-        return parties.values();
     }
 }

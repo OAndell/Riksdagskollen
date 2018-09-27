@@ -53,7 +53,6 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         final View repHeaderLayout = findViewById(R.id.rep_header_layout);
         repHeaderLayout.setVisibility(View.VISIBLE);
         representative = getIntent().getParcelableExtra("representative");
