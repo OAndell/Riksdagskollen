@@ -19,7 +19,7 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 
-import oscar.riksdagskollen.Fragment.AboutFragment;
+import oscar.riksdagskollen.Fragment.RepresentativeBiographyFragment;
 import oscar.riksdagskollen.Fragment.RepresentativeFeedFragment;
 import oscar.riksdagskollen.Fragment.RepresentativeTabFragment;
 import oscar.riksdagskollen.R;
@@ -99,14 +99,14 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
                         tabFragment = RepresentativeTabFragment.newInstance();
                         feedFragment = RepresentativeFeedFragment.newInstance(representative.getIntressent_id(), firstPage);
                         tabFragment.addTab(feedFragment, getString(R.string.rep_feed_tab_name));
-                        tabFragment.addTab(AboutFragment.newInstance(), "Om " + representative.getTilltalsnamn());
+                        tabFragment.addTab(RepresentativeBiographyFragment.newInstance(representative), "Om " + representative.getTilltalsnamn());
                         getSupportFragmentManager().beginTransaction().replace(R.id.rep_fragment_container, tabFragment).commit();
                     }
 
                     @Override
                     public void onFail(VolleyError error) {
                         publishedDocuments.setText("0");
-                        getSupportFragmentManager().beginTransaction().replace(R.id.rep_fragment_container, AboutFragment.newInstance()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.rep_fragment_container, RepresentativeBiographyFragment.newInstance(representative)).commit();
                     }
                 });
     }
