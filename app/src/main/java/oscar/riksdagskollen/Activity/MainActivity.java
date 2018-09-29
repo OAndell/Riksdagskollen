@@ -149,8 +149,7 @@ public class MainActivity extends AppCompatActivity
 
 
     private void performSafetNetCheck() {
-        String api = "AIzaSyA6OlOD9-a5-OKCnBwAZ4riYyrvAxncKUU";
-        System.out.println(BuildConfig.APPLICATION_ID);
+        String api = BuildConfig.SafetyApiKey;
         byte[] nonce = new byte[16];
         new Random().nextBytes(nonce);
         if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
