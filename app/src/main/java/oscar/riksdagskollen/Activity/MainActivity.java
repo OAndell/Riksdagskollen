@@ -1,6 +1,7 @@
 package oscar.riksdagskollen.Activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,6 +36,7 @@ import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.AppBarStateChangeListener;
 import oscar.riksdagskollen.Util.JSONModel.Party;
+import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -125,6 +127,18 @@ public class MainActivity extends AppCompatActivity
             invalidateOptionsMenu();
         }
 
+        //Open app with notification
+        if (getIntent().hasExtra("document")) {
+            handleOpenWithNotification((PartyDocument) getIntent().getParcelableExtra("document"));
+        }
+
+
+    }
+
+    private void handleOpenWithNotification(PartyDocument document) {
+        Intent intent = new Intent(this, MotionActivity.class);
+        intent.putExtra("document", document);
+        startActivity(intent);
     }
 
     @Override

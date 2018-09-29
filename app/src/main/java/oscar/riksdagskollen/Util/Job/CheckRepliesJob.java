@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import oscar.riksdagskollen.Activity.MotionActivity;
+import oscar.riksdagskollen.Activity.MainActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.PartyDocumentCallback;
@@ -34,6 +34,15 @@ public class CheckRepliesJob extends Job {
     public static final String DOK_ID = "doc_id";
 
     private CountDownLatch countDownLatch;
+
+    public static void scheduleJob() {
+        // Check once every 6 hour
+        new JobRequest.Builder(CheckRepliesJob.TAG)
+                .setPeriodic(TimeUnit.HOURS.toMillis(6), JobRequest.MIN_FLEX)
+                .setUpdateCurrent(true)
+                .build()
+                .schedule();
+    }
 
     @Override
     @NonNull
@@ -55,6 +64,8 @@ public class CheckRepliesJob extends Job {
         return Result.SUCCESS;
     }
 
+    // Check for reply document trough documentid
+
     // Search for document trough documentid
     private void getDocument(String docid, final CountDownLatch countDownLatch) {
         RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getDocument(docid, new PartyDocumentCallback() {
@@ -69,8 +80,6 @@ public class CheckRepliesJob extends Job {
             }
         });
     }
-
-    // Check for reply document trough documentid
 
     private void checkForReplies(final PartyDocument document) {
         RiksdagskollenApp.getInstance().getRiksdagenAPIManager().searchForReply(document, new PartyDocumentCallback() {
@@ -94,18 +103,9 @@ public class CheckRepliesJob extends Job {
         countDownLatch.countDown();
     }
 
-    public static void scheduleJob() {
-        // Check once an hour
-        new JobRequest.Builder(CheckRepliesJob.TAG)
-                .setPeriodic(TimeUnit.HOURS.toMillis(6), JobRequest.MIN_FLEX)
-                .setUpdateCurrent(true)
-                .build()
-                .schedule();
-    }
-
     private void showNotification(PartyDocument document) {
 
-        Intent intent = new Intent(getContext(), MotionActivity.class);
+        Intent intent = new Intent(getContext(), MainActivity.class);
         intent.putExtra("document", document);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, 0);
