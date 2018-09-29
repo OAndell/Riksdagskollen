@@ -3,7 +3,8 @@
     package="oscar.riksdagskollen">
 
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    <!--uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /-->
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name=".RiksdagskollenApp"
@@ -54,7 +55,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/DefaultTheme.NoActionBar" />
 
-        <receiver android:name=".Util.CustomTabs$CopyBroadcastReceiver" />
+        <receiver android:name=".Util.Helper.CustomTabs$CopyBroadcastReceiver" />
 
 
     </application>

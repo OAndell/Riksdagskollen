@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
@@ -14,15 +15,26 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.safetynet.SafetyNet;
+import com.google.android.gms.safetynet.SafetyNetApi;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Random;
 
+import oscar.riksdagskollen.BuildConfig;
 import oscar.riksdagskollen.Fragment.AboutFragment;
 import oscar.riksdagskollen.Fragment.CurrentNewsListFragment;
 import oscar.riksdagskollen.Fragment.DecisionsListFragment;
@@ -35,6 +47,7 @@ import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.AppBarStateChangeListener;
+import oscar.riksdagskollen.Util.Helper.DeviceUuidFactory;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 
@@ -86,6 +99,8 @@ public class MainActivity extends AppCompatActivity
         setTheme(RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         setContentView(R.layout.activity_main);
 
+        DeviceUuidFactory.getDeviceUuid(this);
+
         toolbar = findViewById(R.id.toolbar);
         appBarLayout = findViewById(R.id.appbar);
         collapsingToolbarLayout = findViewById(R.id.collapsing_layout);
@@ -127,6 +142,47 @@ public class MainActivity extends AppCompatActivity
             invalidateOptionsMenu();
         }
 
+        //performSafetNetCheck();
+
+
+    }
+
+
+    private void performSafetNetCheck() {
+        String api = "AIzaSyA6OlOD9-a5-OKCnBwAZ4riYyrvAxncKUU";
+        System.out.println(BuildConfig.APPLICATION_ID);
+        byte[] nonce = new byte[16];
+        new Random().nextBytes(nonce);
+        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
+            SafetyNet.getClient(this).attest(nonce, api)
+                    .addOnSuccessListener(this,
+                            new OnSuccessListener<SafetyNetApi.AttestationResponse>() {
+                                @Override
+                                public void onSuccess(SafetyNetApi.AttestationResponse response) {
+
+                                    System.out.println("Nonce: " + response.getJwsResult().length());
+                                    System.out.println(response.getJwsResult().substring(0, 2000));
+                                    System.out.println(response.getJwsResult().substring(2000, 4000));
+                                    System.out.println(response.getJwsResult().substring(4000, response.getJwsResult().length()));
+
+                                    // Indicates communication with the service was successful.
+                                    // Use response.getJwsResult() to get the result data.
+                                }
+                            })
+                    .addOnFailureListener(this, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            if (e instanceof ApiException) {
+                                ApiException apiException = (ApiException) e;
+                                e.printStackTrace();
+                                System.out.println(e.getCause() + " " + ((ApiException) e).getStatusCode());
+                            } else {
+                                // A different, unknown type of error occurred.
+                                Log.d("main", "Error: " + e.getMessage());
+                            }
+                        }
+                    });
+        }
         //Open app with notification
         if (getIntent().hasExtra("document")) {
             handleOpenWithNotification((PartyDocument) getIntent().getParcelableExtra("document"));

@@ -15,16 +15,25 @@ android {
 
     }
     buildTypes {
+        debug {
+            // Add Google SafetyNet API key to project from local gradle.properties
+            buildConfigField 'String', "SafetyApiKey", SAFETY_API_KEY
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            // Add Google SafetyNet API key to project from local gradle.properties
+            buildConfigField 'String', "SafetyApiKey", SAFETY_API_KEY
         }
     }
 }
 
 allprojects {
     repositories {
-        maven { url 'https://jitpack.io' }
+        maven {
+            url 'https://jitpack.io'
+        }
     }
 }
 
@@ -44,6 +53,10 @@ dependencies {
     implementation 'com.android.support:customtabs:27.1.1'
     implementation 'com.evernote:android-job:1.2.4'
     implementation "com.android.support:support-compat:27.1.1"
+    implementation  'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
+
+
+    implementation "com.google.android.gms:play-services-safetynet:15.0.1"
 
 
     testImplementation 'junit:junit:4.12'
