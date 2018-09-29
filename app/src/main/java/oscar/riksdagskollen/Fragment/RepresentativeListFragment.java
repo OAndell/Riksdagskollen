@@ -97,16 +97,25 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sort_by_name:
-                setCurrentComparator(RepresentativeAdapter.NAME_COMPARATOR);
-                swapAdapter(RepresentativeAdapter.NAME_COMPARATOR);
+                swapAdapter(ascending ?
+                        RepresentativeAdapter.NAME_COMPARATOR :
+                        new ReverseOrder<>(RepresentativeAdapter.NAME_COMPARATOR));
                 break;
             case R.id.sort_by_surname:
-                setCurrentComparator(RepresentativeAdapter.SURNAME_COMPARATOR);
-                swapAdapter(RepresentativeAdapter.SURNAME_COMPARATOR);
+                swapAdapter(ascending ?
+                        RepresentativeAdapter.SURNAME_COMPARATOR :
+                        new ReverseOrder<>(RepresentativeAdapter.SURNAME_COMPARATOR));
                 break;
             case R.id.sort_by_age:
-                setCurrentComparator(RepresentativeAdapter.AGE_COMPARATOR);
-                swapAdapter(RepresentativeAdapter.AGE_COMPARATOR);
+                swapAdapter(ascending ?
+                        RepresentativeAdapter.AGE_COMPARATOR :
+                        new ReverseOrder<>(RepresentativeAdapter.AGE_COMPARATOR));
+                break;
+            case R.id.sort_by_district:
+                swapAdapter(ascending ?
+                        RepresentativeAdapter.DISTRICT_COMPARATOR :
+                        new ReverseOrder<>(RepresentativeAdapter.DISTRICT_COMPARATOR));
+                break;
             case R.id.sort_order_ascending:
                 setSortOrderAscending(false);
                 break;
@@ -172,7 +181,6 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
         this.ascending = ascending;
         getActivity().invalidateOptionsMenu();
         swapAdapter(new ReverseOrder<>(currentComparator));
-        setCurrentComparator(new ReverseOrder<>(currentComparator));
     }
 
     @Override
@@ -248,6 +256,7 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
 
 
     private void swapAdapter(Comparator<Representative> comparator) {
+        currentComparator = comparator;
         adapter = new RepresentativeAdapter(filter(representativeList), comparator, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {

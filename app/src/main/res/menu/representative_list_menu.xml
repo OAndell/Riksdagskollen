@@ -42,6 +42,12 @@
                 android:id="@+id/sort_by_age"
                 android:icon="@drawable/ic_format_list_numbered"
                 app:showAsAction="never" />
+
+            <item
+                android:title="Sortera efter valkrets"
+                android:id="@+id/sort_by_district"
+                android:icon="@drawable/ic_city"
+                app:showAsAction="never" />
         </menu>
 
     </item>

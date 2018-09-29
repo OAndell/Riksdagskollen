@@ -47,6 +47,13 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
         }
     };
 
+    public static Comparator<Representative> DISTRICT_COMPARATOR = new Comparator<Representative>() {
+        @Override
+        public int compare(Representative a, Representative b) {
+            return a.getValkrets().compareTo(b.getValkrets());
+        }
+    };
+
     //Sort alphabetically after first name
 
     private Comparator<Representative> mComparator;

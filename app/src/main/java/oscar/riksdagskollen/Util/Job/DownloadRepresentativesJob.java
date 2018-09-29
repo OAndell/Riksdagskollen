@@ -50,7 +50,6 @@ public class DownloadRepresentativesJob extends Job {
     public static int scheduleJob() {
         return new JobRequest.Builder(DownloadRepresentativesJob.TAG)
                 .startNow()
-                .setUpdateCurrent(true)
                 .build()
                 .schedule();
     }
