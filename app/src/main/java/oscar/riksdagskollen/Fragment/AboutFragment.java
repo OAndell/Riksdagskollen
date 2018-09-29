@@ -1,10 +1,8 @@
 package oscar.riksdagskollen.Fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,6 +22,7 @@ import com.franmontiel.attributionpresenter.entities.License;
 
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
+import oscar.riksdagskollen.Util.Helper.CustomTabs;
 
 /**
  * Created by oscar on 2018-06-26.
@@ -54,8 +53,7 @@ public class AboutFragment extends Fragment {
         gitHubLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.github)));
-                startActivity(browserIntent);
+                CustomTabs.openTab(getContext(), getResources().getString(R.string.github));
             }
         });
 

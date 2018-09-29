@@ -1,7 +1,5 @@
 package oscar.riksdagskollen.Fragment;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,6 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.Util.Helper.CustomTabs;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 
 /**
@@ -72,8 +71,7 @@ public class RepresentativeBiographyFragment extends Fragment {
             url.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(website));
-                    startActivity(browserIntent);
+                    CustomTabs.openTab(getContext(), website);
                 }
             });
         }
