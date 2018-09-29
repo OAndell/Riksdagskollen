@@ -3,6 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:title="Filtrera"
+        android:id="@+id/filter_rep"
+        android:icon="@drawable/ic_filter"
+        app:showAsAction="always" />
+
+    <item
+        android:title="Sortera ökande"
+        android:id="@+id/sort_order_ascending"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_sort_ascending" />
+    <item
+        android:title="Sortera fallande"
+        android:id="@+id/sort_order_descending"
+        app:showAsAction="always"
+        android:visible="false"
+        android:icon="@drawable/ic_sort_descending" />
+
+    <item
         android:title="Sortera"
         android:id="@+id/sort"
         android:icon="@drawable/ic_sort"
@@ -28,16 +46,5 @@
 
     </item>
 
-    <item
-        android:title="Sorteringsordning"
-        android:id="@+id/sort_order_ascending"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_order_ascending" />
-    <item
-        android:title="Sorteringsordning"
-        android:id="@+id/sort_order_descending"
-        app:showAsAction="always"
-        android:visible="false"
-        android:icon="@drawable/ic_order_descending" />
 
 </menu>

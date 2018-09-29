@@ -135,6 +135,7 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
         representativeList.beginBatchedUpdates();
         representativeList.clear();
         representativeList.addAll((Collection<Representative>) items);
+        representativeList.endBatchedUpdates();
     }
 
 

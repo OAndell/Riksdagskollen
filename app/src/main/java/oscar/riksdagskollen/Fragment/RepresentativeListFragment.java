@@ -1,8 +1,10 @@
 package oscar.riksdagskollen.Fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,14 +15,17 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
+import oscar.riksdagskollen.Activity.MainActivity;
 import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
 import oscar.riksdagskollen.Manager.RepresentativeManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.RepresentativeAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
+import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 
 /**
@@ -33,6 +38,8 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
     private RepresentativeAdapter adapter;
     private boolean ascending = true;
     private Comparator<Representative> currentComparator = RepresentativeAdapter.NAME_COMPARATOR;
+    private HashMap<String, Boolean> curentFilter = new HashMap<>();
+    private HashMap<String, Boolean> oldFilter = new HashMap<>();
 
     public static RepresentativeListFragment newInstance() {
         return new RepresentativeListFragment();
@@ -65,6 +72,10 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
                     setLoadingMoreItems(false);
                 }
             });
+        }
+
+        for (Party party : MainActivity.getParties()) {
+            curentFilter.put(party.getID(), true);
         }
 
         super.onViewCreated(view, savedInstanceState);
@@ -102,8 +113,59 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
             case R.id.sort_order_descending:
                 setSortOrderAscending(true);
                 break;
+            case R.id.filter_rep:
+                showFilterDialog();
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showFilterDialog() {
+        oldFilter = getFilter();
+        final ArrayList<Party> parties = new ArrayList<>(MainActivity.getParties());
+        final CharSequence[] items = new CharSequence[parties.size()];
+        for (int i = 0; i < parties.size(); i++) {
+            items[i] = parties.get(i).getName();
+        }
+
+        boolean[] checked = new boolean[parties.size()];
+        for (int i = 0; i < parties.size(); i++) {
+            checked[i] = oldFilter.get(parties.get(i).getID());
+        }
+
+        final HashMap<String, Boolean> changes = new HashMap<>();
+
+        AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom)
+                .setTitle("Filtrera ledamöter")
+                .setMultiChoiceItems(items, checked, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
+                        changes.put(parties.get(indexSelected).getID(), isChecked);
+                    }
+                }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        for (String partyID : changes.keySet()) {
+                            curentFilter.put(partyID, changes.get(partyID));
+                        }
+                        applyFilter();
+                    }
+                }).setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        changes.clear();
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        changes.clear();
+                    }
+                })
+                .create();
+
+        dialog.show();
     }
 
     private void setSortOrderAscending(boolean ascending) {
@@ -149,6 +211,27 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
 
     }
 
+    private HashMap<String, Boolean> getFilter() {
+        return curentFilter;
+    }
+
+    private List<Representative> filter(List<Representative> representatives) {
+        final List<Representative> filteredRepresentativeList = new ArrayList<>();
+        for (Representative representative : representatives) {
+            if (getFilter().get(representative.getParti().toLowerCase())) {
+                filteredRepresentativeList.add(representative);
+            }
+        }
+        return filteredRepresentativeList;
+    }
+
+    private void applyFilter() {
+        HashMap<String, Boolean> filter = getFilter();
+        getAdapter().replaceAll(filter(representativeList));
+        System.out.println("Filter size: " + filter(representativeList).size());
+        showNoContentWarning(filter.isEmpty());
+    }
+
 
     private class ReverseOrder<T> implements Comparator<T> {
         private Comparator<T> delegate;
@@ -165,7 +248,7 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
 
 
     private void swapAdapter(Comparator<Representative> comparator) {
-        adapter = new RepresentativeAdapter(representativeList, comparator, new RiksdagenViewHolderAdapter.OnItemClickListener() {
+        adapter = new RepresentativeAdapter(filter(representativeList), comparator, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {
                 Intent repDetailsIntent = new Intent(getContext(), RepresentativeDetailActivity.class);
