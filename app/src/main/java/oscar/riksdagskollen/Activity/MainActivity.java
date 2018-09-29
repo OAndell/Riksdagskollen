@@ -33,7 +33,7 @@ import oscar.riksdagskollen.Fragment.VoteListFragment;
 import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
-import oscar.riksdagskollen.Util.AppBarStateChangeListener;
+import oscar.riksdagskollen.Util.Helper.AppBarStateChangeListener;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 
 public class MainActivity extends AppCompatActivity
