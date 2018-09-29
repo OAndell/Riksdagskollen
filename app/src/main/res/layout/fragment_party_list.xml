@@ -14,6 +14,7 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scrollbarStyle="outsideOverlay"
         android:scrollbars="vertical" />
 
     <TextView
@@ -26,7 +27,7 @@
         android:gravity="center"
         android:textColor="?buttonColor"
         android:id="@+id/no_content_warning"
-        android:text="Det verkar inte finnas något här :( \n Testa att ändra dina filterinställningar" />
+        android:text="Det verkar inte finnas något här. \n Testa att ändra dina filterinställningar" />
 
 
 </RelativeLayout>

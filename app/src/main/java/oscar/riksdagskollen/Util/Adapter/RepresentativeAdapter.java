@@ -24,14 +24,34 @@ import oscar.riksdagskollen.Util.View.CircularNetworkImageView;
  */
 
 public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
-    private static final Comparator<Representative> DEFAULT_COMPARATOR = new Comparator<Representative>() {
+
+
+    public static Comparator<Representative> NAME_COMPARATOR = new Comparator<Representative>() {
         @Override
         public int compare(Representative a, Representative b) {
-            return 0;
+            return a.getTilltalsnamn().compareTo(b.getTilltalsnamn());
         }
     };
-    private Comparator<Representative> mComparator = DEFAULT_COMPARATOR;
-    private final SortedList<Representative> representativeList = new SortedList<Representative>(Representative.class, new SortedList.Callback<Representative>() {
+
+    public static Comparator<Representative> SURNAME_COMPARATOR = new Comparator<Representative>() {
+        @Override
+        public int compare(Representative a, Representative b) {
+            return a.getEfternamn().compareTo(b.getEfternamn());
+        }
+    };
+
+    public static Comparator<Representative> AGE_COMPARATOR = new Comparator<Representative>() {
+        @Override
+        public int compare(Representative a, Representative b) {
+            return a.getAge().compareTo(b.getAge());
+        }
+    };
+
+    //Sort alphabetically after first name
+
+    private Comparator<Representative> mComparator;
+
+    private final SortedList<Representative> representativeList = new SortedList<>(Representative.class, new SortedList.Callback<Representative>() {
         @Override
         public int compare(Representative o1, Representative o2) {
             return mComparator.compare(o1, o2);
@@ -66,11 +86,13 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
         public void onMoved(int fromPosition, int toPosition) {
             notifyItemMoved(fromPosition, toPosition);
         }
+
     });
 
 
-    public RepresentativeAdapter(List<Representative> items, final RiksdagenViewHolderAdapter.OnItemClickListener listener) {
+    public RepresentativeAdapter(List<Representative> items, Comparator<Representative> comparator, final RiksdagenViewHolderAdapter.OnItemClickListener listener) {
         super(listener);
+        this.mComparator = comparator;
         setSortedList(representativeList);
         addAll(items);
         this.clickListener = listener;
@@ -110,8 +132,11 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
 
     @Override
     public void replaceAll(List<?> items) {
-
+        representativeList.beginBatchedUpdates();
+        representativeList.clear();
+        representativeList.addAll((Collection<Representative>) items);
     }
+
 
     @Override
     public void addAll(List<?> items) {
@@ -120,9 +145,8 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
 
     @Override
     public void removeAll(List<?> items) {
-
+        representativeList.replaceAll((Collection<Representative>) items);
     }
-
 
     /**
      * Class for displaying individual items in the list.
@@ -155,6 +179,7 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
             born.setText(item.getAge() + " år");
             setTitle(item);
             portrait.setImageUrl(item.getBild_url_192(), RiksdagskollenApp.getInstance().getRequestManager().getmImageLoader());
+
             try {
                 partyLogo.setImageResource(MainActivity.getParty(item.getParti().toLowerCase()).getDrawableLogo());
             } catch (Exception e) {//No party found, Does not belong to a party
@@ -178,7 +203,7 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
 
             }
         }
-
-
     }
+
+
 }

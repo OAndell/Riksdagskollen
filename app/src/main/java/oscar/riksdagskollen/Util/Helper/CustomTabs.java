@@ -86,8 +86,8 @@ public class CustomTabs {
 
     /* Sets animations */
     private static void setAnimations(Context context, CustomTabsIntent.Builder builder) {
-        builder.setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left);
-        builder.setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right);
+        builder.setStartAnimations(context, R.anim.slide_in_left, R.anim.slide_out_left);
+        builder.setExitAnimations(context, R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
     /* Sets share action button that is displayed in the Toolbar */

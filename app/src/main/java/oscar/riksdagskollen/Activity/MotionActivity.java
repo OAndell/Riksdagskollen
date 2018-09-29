@@ -41,6 +41,7 @@ import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.PartyDocumentCallback;
 import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
+import oscar.riksdagskollen.Util.Helper.CustomTabs;
 import oscar.riksdagskollen.Util.JSONModel.Intressent;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
@@ -289,9 +290,8 @@ public class MotionActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.open_in_web:
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("http:"+document.getDokument_url_html()));
-                startActivity(i);
+                CustomTabs.openTab(this, Uri.parse("http:" + document.getDokument_url_html()).toString());
+                break;
             case R.id.notification_menu_item:
                 boolean enabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForDoc(document);
                 if (enabled) {

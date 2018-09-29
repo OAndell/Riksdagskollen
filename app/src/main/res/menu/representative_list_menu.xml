@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:title="Sortera"
+        android:id="@+id/sort"
+        android:icon="@drawable/ic_sort"
+        app:showAsAction="always">
+
+        <menu>
+            <item
+                android:title="Sortera efter förnamn"
+                android:id="@+id/sort_by_name"
+                android:icon="@drawable/ic_sort_by_alpha"
+                app:showAsAction="never" />
+            <item
+                android:title="Sortera efter efternamn"
+                android:id="@+id/sort_by_surname"
+                android:icon="@drawable/ic_sort_by_alpha"
+                app:showAsAction="never" />
+            <item
+                android:title="Sortera efter ålder"
+                android:id="@+id/sort_by_age"
+                android:icon="@drawable/ic_format_list_numbered"
+                app:showAsAction="never" />
+        </menu>
+
+    </item>
+
+    <item
+        android:title="Sorteringsordning"
+        android:id="@+id/sort_order_ascending"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_order_ascending" />
+    <item
+        android:title="Sorteringsordning"
+        android:id="@+id/sort_order_descending"
+        app:showAsAction="always"
+        android:visible="false"
+        android:icon="@drawable/ic_order_descending" />
+
+</menu>
