@@ -155,10 +155,12 @@ public class Representative implements Parcelable {
      * @return Returns the personal website url if it exists
      */
     public String getWebsite() {
-        ArrayList<RepresentativeInfo> infoList = getPersonuppgift().getUppgift();
-        for (int i = 0; i < infoList.size(); i++) {
-            if (infoList.get(i).getKod().equals("Webbsida")) {
-                return infoList.get(i).getUppgift()[0];
+        if (getPersonuppgift() != null) {
+            ArrayList<RepresentativeInfo> infoList = getPersonuppgift().getUppgift();
+            for (int i = 0; i < infoList.size(); i++) {
+                if (infoList.get(i).getKod().equals("Webbsida")) {
+                    return infoList.get(i).getUppgift()[0];
+                }
             }
         }
         return "";
@@ -171,10 +173,12 @@ public class Representative implements Parcelable {
      */
     public ArrayList<String[]> getBiography() {
         ArrayList<String[]> biography = new ArrayList<>();
-        ArrayList<RepresentativeInfo> infoList = getPersonuppgift().getUppgift();
-        for (int i = 0; i < infoList.size(); i++) {
-            if (infoList.get(i).getTyp().equals("biografi")) {
-                biography.add(new String[]{infoList.get(i).getKod(), infoList.get(i).getUppgift()[0]});
+        if (getPersonuppgift() != null) {
+            ArrayList<RepresentativeInfo> infoList = getPersonuppgift().getUppgift();
+            for (int i = 0; i < infoList.size(); i++) {
+                if (infoList.get(i).getTyp().equals("biografi")) {
+                    biography.add(new String[]{infoList.get(i).getKod(), infoList.get(i).getUppgift()[0]});
+                }
             }
         }
         return biography;
