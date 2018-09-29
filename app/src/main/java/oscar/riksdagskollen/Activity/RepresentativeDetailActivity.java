@@ -25,8 +25,10 @@ import oscar.riksdagskollen.Fragment.RepresentativeTabFragment;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.RepresentativeDocumentCallback;
+import oscar.riksdagskollen.Util.Callback.VoteStatisticsCallback;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
+import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeVoteStatistics;
 import oscar.riksdagskollen.Util.View.CircularNetworkImageView;
 
 /**
@@ -109,6 +111,26 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.rep_fragment_container, RepresentativeBiographyFragment.newInstance(representative)).commit();
                     }
                 });
+        getVoteAbsence();
+    }
+
+
+    private void getVoteAbsence() {
+        final TextView attendance = findViewById(R.id.representative_attendance);
+        final TextView attendance_desc = findViewById(R.id.representative_attendance_subtext);
+        RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getVoteStatisticsForRepresentative(representative.getIntressent_id(), new VoteStatisticsCallback() {
+            @Override
+            public void onStatisticsFetched(RepresentativeVoteStatistics stats) {
+                attendance.setText(stats.getAttendancePercent() + "%");
+            }
+
+            @Override
+            public void onFail(VolleyError error) {
+                attendance.setVisibility(View.GONE);
+                attendance_desc.setVisibility(View.GONE);
+
+            }
+        });
     }
 
 

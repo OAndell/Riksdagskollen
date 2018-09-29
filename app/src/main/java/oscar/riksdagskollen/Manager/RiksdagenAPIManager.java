@@ -30,6 +30,7 @@ import oscar.riksdagskollen.Util.Callback.RepresentativeDocumentCallback;
 import oscar.riksdagskollen.Util.Callback.RepresentativeListCallback;
 import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
 import oscar.riksdagskollen.Util.Callback.VoteCallback;
+import oscar.riksdagskollen.Util.Callback.VoteStatisticsCallback;
 import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNews;
 import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNewsLink;
 import oscar.riksdagskollen.Util.JSONModel.DecisionDocument;
@@ -38,6 +39,7 @@ import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Protocol;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeInfo;
+import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeVoteStatistics;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
 
 /**
@@ -580,6 +582,29 @@ public class RiksdagenAPIManager {
             }
         });
 
+
+    }
+
+    public void getVoteStatisticsForRepresentative(String iid, final VoteStatisticsCallback callback) {
+        String subUrl = "/voteringlista/?iid=" + iid + "&utformat=JSON&gruppering=namn";
+        requestManager.doGetRequest(subUrl, new JSONRequestCallback() {
+            @Override
+            public void onRequestSuccess(JSONObject response) {
+                try {
+                    JSONObject jsonObject = response.getJSONObject("voteringlista").getJSONObject("votering");
+                    RepresentativeVoteStatistics stats = gson.fromJson(jsonObject.toString(), RepresentativeVoteStatistics.class);
+                    callback.onStatisticsFetched(stats);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    callback.onFail(new VolleyError("Failed to parse JSON"));
+                }
+            }
+
+            @Override
+            public void onRequestFail(VolleyError error) {
+                callback.onFail(error);
+            }
+        });
 
     }
 
