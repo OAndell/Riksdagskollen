@@ -121,13 +121,14 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
         RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getVoteStatisticsForRepresentative(representative.getIntressent_id(), new VoteStatisticsCallback() {
             @Override
             public void onStatisticsFetched(RepresentativeVoteStatistics stats) {
+                attendance.setVisibility(View.VISIBLE);
+                attendance_desc.setVisibility(View.VISIBLE);
                 attendance.setText(stats.getAttendancePercent() + "%");
             }
 
             @Override
             public void onFail(VolleyError error) {
-                attendance.setVisibility(View.GONE);
-                attendance_desc.setVisibility(View.GONE);
+
 
             }
         });
