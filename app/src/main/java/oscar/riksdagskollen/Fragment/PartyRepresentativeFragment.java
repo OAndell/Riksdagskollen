@@ -7,16 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.VolleyError;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
+import oscar.riksdagskollen.Manager.RepresentativeManager;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.RepresentativeAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
-import oscar.riksdagskollen.Util.Callback.RepresentativeListCallback;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 
@@ -48,21 +46,26 @@ public class PartyRepresentativeFragment extends RiksdagenAutoLoadingListFragmen
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getRepresentativesInParty(party.getID(), new RepresentativeListCallback() {
-            @Override
-            public void onPersonListFetched(List<Representative> representatives) {
-                setShowLoadingView(false);
-                representativeList.addAll(representatives);
-                getAdapter().addAll(representatives);
-                setLoadingMoreItems(false);
-            }
+        final RiksdagskollenApp app = RiksdagskollenApp.getInstance();
+        if (app.getRepresentativeManager().isRepresentativesDownloaded()) {
+            setShowLoadingView(false);
+            ArrayList<Representative> representatives = app.getRepresentativeManager().getRepresentativesForParty(party.getID());
+            representativeList.addAll(representatives);
+            getAdapter().addAll(representatives);
+            setLoadingMoreItems(false);
+        } else {
+            app.getRepresentativeManager().addDownloadListener(new RepresentativeManager.RepresentativeDownloadListener() {
+                @Override
+                public void onRepresentativesDownloaded(ArrayList<Representative> representatives) {
+                    setShowLoadingView(false);
+                    ArrayList<Representative> partyReps = app.getRepresentativeManager().getRepresentativesForParty(party.getID());
+                    representativeList.addAll(partyReps);
+                    getAdapter().addAll(partyReps);
+                    setLoadingMoreItems(false);
+                }
+            });
+        }
 
-            @Override
-            public void onFail(VolleyError error) {
-                setLoadingMoreItems(false);
-                decrementPage();
-            }
-        });
         super.onViewCreated(view, savedInstanceState);
     }
 

@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Util;
+package oscar.riksdagskollen.Util.Helper;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

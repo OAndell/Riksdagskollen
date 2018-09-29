@@ -46,9 +46,9 @@ import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.PartyDocumentCallback;
 import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
+import oscar.riksdagskollen.Util.Helper.VoteResults;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
-import oscar.riksdagskollen.Util.VoteResults;
 
 /**
  * Created by oscar on 2018-06-16.

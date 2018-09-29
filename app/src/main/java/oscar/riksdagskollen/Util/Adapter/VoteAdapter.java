@@ -29,10 +29,10 @@ import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
-import oscar.riksdagskollen.Util.DecicionCategory;
+import oscar.riksdagskollen.Util.Enum.DecicionCategory;
+import oscar.riksdagskollen.Util.Helper.VoteResults;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
-import oscar.riksdagskollen.Util.VoteResults;
 
 /**
  * Created by oscar on 2018-03-29.

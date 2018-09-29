@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Util;
+package oscar.riksdagskollen.Util.Enum;
 
 import java.util.ArrayList;
 import java.util.Arrays;

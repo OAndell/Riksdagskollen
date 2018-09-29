@@ -19,7 +19,7 @@ import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.CurrentNewsListAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Callback.CurrentNewsCallback;
-import oscar.riksdagskollen.Util.CustomTabs;
+import oscar.riksdagskollen.Util.Helper.CustomTabs;
 import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNews;
 
 

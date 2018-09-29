@@ -35,7 +35,7 @@ import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Callback.DecisionsCallback;
 import oscar.riksdagskollen.Util.Callback.VoteCallback;
-import oscar.riksdagskollen.Util.DecicionCategory;
+import oscar.riksdagskollen.Util.Enum.DecicionCategory;
 import oscar.riksdagskollen.Util.JSONModel.DecisionDocument;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
 

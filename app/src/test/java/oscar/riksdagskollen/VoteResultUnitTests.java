@@ -10,7 +10,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import oscar.riksdagskollen.Util.VoteResults;
+import oscar.riksdagskollen.Util.Helper.VoteResults;
 
 import static org.junit.Assert.assertTrue;
 

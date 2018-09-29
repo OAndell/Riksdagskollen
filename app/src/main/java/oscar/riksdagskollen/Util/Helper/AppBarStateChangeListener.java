@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Util;
+package oscar.riksdagskollen.Util.Helper;
 
 import android.support.design.widget.AppBarLayout;
 

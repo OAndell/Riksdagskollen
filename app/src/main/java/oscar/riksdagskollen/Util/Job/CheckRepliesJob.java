@@ -97,7 +97,7 @@ public class CheckRepliesJob extends Job {
     public static void scheduleJob() {
         // Check once an hour
         new JobRequest.Builder(CheckRepliesJob.TAG)
-                .setPeriodic(TimeUnit.MINUTES.toMillis(60), JobRequest.MIN_FLEX)
+                .setPeriodic(TimeUnit.HOURS.toMillis(6), JobRequest.MIN_FLEX)
                 .setUpdateCurrent(true)
                 .build()
                 .schedule();
