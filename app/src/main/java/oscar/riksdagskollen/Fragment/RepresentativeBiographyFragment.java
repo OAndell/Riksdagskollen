@@ -51,5 +51,4 @@ public class RepresentativeBiographyFragment extends Fragment {
         }
     }
 
-
 }

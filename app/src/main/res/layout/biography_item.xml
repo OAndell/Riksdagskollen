@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginTop="4dp"
+        android:paddingBottom="8dp"
         android:text="Riksdagsledamot 02- (statsrådsersättare 020930-060220). Ledamot kulturutskottet 04-06, socialförsäkringsutskottet 06-10 och ordförande miljö- och jordbruksutskottet  10-. Suppleant kulturutskottet 02-04, arbetsmarknadsutskottet 02 och 07-10, bostadsutskottet 03-06 och näringsutskottet 14-. Ledamot krigsdelegationen 10"
         android:textColor="?attr/mainBodyTextColor"
         android:textSize="14sp" />
