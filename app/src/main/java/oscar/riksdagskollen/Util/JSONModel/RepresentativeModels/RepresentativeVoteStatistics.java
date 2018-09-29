@@ -31,9 +31,6 @@ public class RepresentativeVoteStatistics implements Parcelable {
     @SerializedName("Avstår")
     private String abstained;
 
-    public RepresentativeVoteStatistics() {
-    }
-
     protected RepresentativeVoteStatistics(Parcel in) {
         this.yes = in.readString();
         this.no = in.readString();
@@ -58,6 +55,9 @@ public class RepresentativeVoteStatistics implements Parcelable {
     }
 
     public int getAttendancePercent() {
+        if (getAbsent() == null) {
+            return 100;
+        }
         float totalVotes = Integer.valueOf(getYes())
                 + Integer.valueOf(getNo())
                 + Integer.valueOf(getAbsent())
