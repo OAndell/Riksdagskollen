@@ -6,20 +6,20 @@
     <!--uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /-->
 
     <application
+        android:name=".RiksdagskollenApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/DefaultTheme"
-        android:name=".RiksdagskollenApp"
         >
 
         <activity
             android:name=".Activity.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/DefaultTheme.NoActionBar"
-            android:screenOrientation="portrait"
             android:configChanges="orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/DefaultTheme.NoActionBar"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,22 +38,20 @@
             android:theme="@style/DefaultTheme.NoActionBar" />
         <activity android:name=".Activity.MotionActivity"
             android:theme="@style/DefaultTheme.NoActionBar" />
-        <activity android:name=".Activity.NewsReaderActivity"
-            android:theme="@style/DefaultTheme.NoActionBar" />
         <activity android:name=".Activity.ProtocolReaderActivity" />
         <activity android:name=".Activity.VoteActivity"
-            android:screenOrientation="portrait"
             android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:theme="@style/DefaultTheme.NoActionBar"
         />
         <activity android:name=".Activity.SearchedVoteAcitivity"
-            android:screenOrientation="portrait"
             android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:theme="@style/DefaultTheme.NoActionBar" />
         <activity
             android:name=".Activity.RepresentativeDetailActivity"
-            android:screenOrientation="portrait"
             android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:theme="@style/DefaultTheme.NoActionBar" />
 
         <receiver android:name=".Util.CustomTabs$CopyBroadcastReceiver" />
