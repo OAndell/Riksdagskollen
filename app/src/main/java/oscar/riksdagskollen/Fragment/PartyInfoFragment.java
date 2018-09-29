@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -59,7 +60,9 @@ public class PartyInfoFragment extends Fragment {
 
         final ViewGroup loadingView = view.findViewById(R.id.loading_view);
 
-
+        ((ProgressBar) loadingView.findViewById(R.id.progress_bar)).getIndeterminateDrawable().setColorFilter(
+                RiksdagskollenApp.getColorFromAttribute(R.attr.secondaryLightColor, getContext()),
+                android.graphics.PorterDuff.Mode.MULTIPLY);
 
         //Set party logo
         ImageView partyLogoView = view.findViewById(R.id.party_logo);
