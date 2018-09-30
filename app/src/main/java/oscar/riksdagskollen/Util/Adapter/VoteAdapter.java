@@ -2,7 +2,6 @@ package oscar.riksdagskollen.Util.Adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v7.util.SortedList;
@@ -16,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.android.flexbox.FlexboxLayout;
 
@@ -135,7 +135,7 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
             VoteViewHolder viewHolder = (VoteViewHolder) holder;
             viewHolder.noVoteContainer.removeAllViews();
             viewHolder.yesVoteContainer.removeAllViews();
-            if (viewHolder.resultRequest != null) viewHolder.resultRequest.cancel(true);
+            if (viewHolder.resultRequest != null) viewHolder.resultRequest.cancel();
         }
     }
 
@@ -181,7 +181,7 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
         private final TextView catName;
         final FlexboxLayout yesVoteContainer;
         final FlexboxLayout noVoteContainer;
-        AsyncTask resultRequest;
+        Request resultRequest;
         private LinearLayout yesSideContainer;
         private LinearLayout noSideContainer;
 
@@ -207,10 +207,12 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
             if (item.getVoteResults() != null) {
                 arrangeVotes(item.getVoteResults());
             } else {
-                resultRequest = RiksdagskollenApp.getInstance().getRequestManager().downloadHtmlPage("http:" + item.getDokument_url_html(), new StringRequestCallback() {
+
+                resultRequest = RiksdagskollenApp.getInstance().getRequestManager().getDownloadString("http:" + item.getDokument_url_html(), new StringRequestCallback() {
+                    VoteResults results;
                     @Override
                     public void onResponse(String response) {
-                        VoteResults results = new VoteResults(response);
+                        results = new VoteResults(response);
                         item.setVoteResults(results.getVoteResults());
                         arrangeVotes(results.getVoteResults());
                     }

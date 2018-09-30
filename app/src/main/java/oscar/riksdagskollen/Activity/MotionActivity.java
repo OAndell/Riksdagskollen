@@ -98,6 +98,16 @@ public class MotionActivity extends AppCompatActivity {
             authorTV.setText(document.getUndertitel());
         }
 
+        setUpWebView();
+        portaitContainer = findViewById(R.id.act_doc_reader_portrait_container);
+
+
+        if (document.getDokintressent() == null && intresentId != null) addSenderView(intresentId);
+        else if (document.getDokintressent() != null) showSenders();
+
+    }
+
+    private void setUpWebView() {
         WebViewClient webViewClient = new CustomWebViewClient();
 
         final WebView webView = findViewById(R.id.webview);
@@ -170,13 +180,6 @@ public class MotionActivity extends AppCompatActivity {
 
             }
         });
-
-        portaitContainer = findViewById(R.id.act_doc_reader_portrait_container);
-
-
-        if (document.getDokintressent() == null && intresentId != null) addSenderView(intresentId);
-        else if (document.getDokintressent() != null) showSenders();
-
     }
 
     private void searchForReplyOrQuestion() {
