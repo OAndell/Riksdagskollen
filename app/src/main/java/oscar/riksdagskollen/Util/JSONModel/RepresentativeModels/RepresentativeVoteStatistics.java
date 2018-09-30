@@ -39,25 +39,34 @@ public class RepresentativeVoteStatistics implements Parcelable {
     }
 
     public String getYes() {
+        if (yes == null) {
+            return "0";
+        }
         return yes;
     }
 
     public String getNo() {
+        if (no == null) {
+            return "0";
+        }
         return no;
     }
 
     public String getAbsent() {
+        if (absent == null) {
+            return "0";
+        }
         return absent;
     }
 
     public String getAbstained() {
+        if (abstained == null) {
+            return "0";
+        }
         return abstained;
     }
 
     public int getAttendancePercent() {
-        if (getAbsent() == null) {
-            return 100;
-        }
         float totalVotes = Integer.valueOf(getYes())
                 + Integer.valueOf(getNo())
                 + Integer.valueOf(getAbsent())
