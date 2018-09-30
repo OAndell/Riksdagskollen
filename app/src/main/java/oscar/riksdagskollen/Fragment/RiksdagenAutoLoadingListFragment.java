@@ -166,7 +166,7 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         return recyclerView;
     }
 
-    void setShowLoadingView(boolean loading){
+    void setShowLoadingView(final boolean loading) {
         if(loading) loadingView.setVisibility(View.VISIBLE);
         else loadingView.setVisibility(View.GONE);
     }

@@ -24,9 +24,9 @@ import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Adapter.VoteAdapter;
-import oscar.riksdagskollen.Util.Callback.VoteCallback;
 import oscar.riksdagskollen.Util.Enum.DecicionCategory;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
+import oscar.riksdagskollen.Util.RiksdagenCallback.VoteCallback;
 
 
 /**

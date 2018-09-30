@@ -44,7 +44,6 @@ public class RepresentativeManager {
         for (Representative rep : representatives) {
             addRepresentative(rep);
         }
-        System.out.println("Downloaded representatives");
         representativesDownloaded = true;
         notifyDownloaded();
     }

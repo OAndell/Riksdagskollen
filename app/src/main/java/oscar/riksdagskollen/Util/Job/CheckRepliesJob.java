@@ -20,8 +20,8 @@ import java.util.concurrent.TimeUnit;
 import oscar.riksdagskollen.Activity.MainActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
-import oscar.riksdagskollen.Util.Callback.PartyDocumentCallback;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
+import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
 
 /**
  * Created by gustavaaro on 2018-09-24.

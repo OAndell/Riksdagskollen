@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Util.Callback;
+package oscar.riksdagskollen.Util.RiksdagenCallback;
 
 import com.android.volley.VolleyError;
 

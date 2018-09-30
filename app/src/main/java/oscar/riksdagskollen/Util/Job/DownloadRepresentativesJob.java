@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import oscar.riksdagskollen.RiksdagskollenApp;
-import oscar.riksdagskollen.Util.Callback.RepresentativeListCallback;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
+import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeListCallback;
 
 /**
  * Created by gustavaaro on 2018-09-27.
@@ -25,6 +25,9 @@ public class DownloadRepresentativesJob extends Job {
     @Override
     protected Result onRunJob(@NonNull Params params) {
         final CountDownLatch latch = new CountDownLatch(1);
+        if (RiksdagskollenApp.getInstance().getRepresentativeManager().isRepresentativesDownloaded())
+            cancel();
+
         RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getAllCurrentRepresentatives(new RepresentativeListCallback() {
             @Override
             public void onPersonListFetched(List<Representative> representatives) {

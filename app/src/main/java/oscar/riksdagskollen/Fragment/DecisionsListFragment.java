@@ -25,9 +25,9 @@ import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.DecisionListAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
-import oscar.riksdagskollen.Util.Callback.DecisionsCallback;
 import oscar.riksdagskollen.Util.Enum.DecicionCategory;
 import oscar.riksdagskollen.Util.JSONModel.DecisionDocument;
+import oscar.riksdagskollen.Util.RiksdagenCallback.DecisionsCallback;
 
 /**
  * Created by gustavaaro on 2018-06-16.

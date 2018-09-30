@@ -23,7 +23,7 @@ import org.jsoup.nodes.Document;
 
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
-import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
 
 
 /**

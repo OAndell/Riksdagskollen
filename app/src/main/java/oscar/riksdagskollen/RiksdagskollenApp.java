@@ -4,13 +4,9 @@ import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.TypedValue;
 
-import com.evernote.android.job.JobConfig;
 import com.evernote.android.job.JobManager;
-import com.evernote.android.job.util.JobLogger;
 
 import oscar.riksdagskollen.Manager.AlertManager;
 import oscar.riksdagskollen.Manager.RepresentativeManager;
@@ -19,6 +15,7 @@ import oscar.riksdagskollen.Manager.RiksdagenAPIManager;
 import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.Util.Job.AlertJobCreator;
 import oscar.riksdagskollen.Util.Job.CheckRepliesJob;
+import oscar.riksdagskollen.Util.Job.DownloadRepresentativesJob;
 
 /**
  * Created by gustavaaro on 2018-03-25.
@@ -33,13 +30,6 @@ public class RiksdagskollenApp extends Application {
     private AlertManager alertManager;
     private RepresentativeManager representativeManager;
 
-    class MyLogger implements JobLogger {
-        @Override
-        public void log(int priority, @NonNull String tag, @NonNull String message, @Nullable Throwable t) {
-            // log
-        }
-    }
-
 
     @Override
     public void onCreate() {
@@ -49,7 +39,6 @@ public class RiksdagskollenApp extends Application {
         riksdagenAPIManager = new RiksdagenAPIManager(this);
         themeManager = new ThemeManager(this);
         alertManager = new AlertManager(this);
-        JobConfig.addLogger(new MyLogger());
         JobManager.create(this).addJobCreator(new AlertJobCreator());
         scheduleCheckRepliesJobIfNotRunning();
 
@@ -64,6 +53,12 @@ public class RiksdagskollenApp extends Application {
         }
     }
 
+    public void scheduleDownloadRepresentativesJobIfNotRunning() {
+        if (!isDownloadRepsRunningOrScheduled()) {
+            DownloadRepresentativesJob.scheduleJob();
+        }
+    }
+
     public static int getColorFromAttribute(int attr, Context activity) {
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = activity.getTheme();
@@ -75,6 +70,13 @@ public class RiksdagskollenApp extends Application {
     public boolean isCheckRepliesScheduled() {
         System.out.println("Checking if job is scheduled");
         return !JobManager.instance().getAllJobRequestsForTag(CheckRepliesJob.TAG).isEmpty();
+    }
+
+    public boolean isDownloadRepsRunningOrScheduled() {
+        return !(JobManager.instance().
+                getAllJobRequestsForTag(DownloadRepresentativesJob.TAG).isEmpty() &&
+                JobManager.instance()
+                        .getAllJobsForTag(DownloadRepresentativesJob.TAG).isEmpty());
     }
 
     public AlertManager getAlertManager() {

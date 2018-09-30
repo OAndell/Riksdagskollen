@@ -24,11 +24,11 @@ import oscar.riksdagskollen.Fragment.RepresentativeFeedFragment;
 import oscar.riksdagskollen.Fragment.RepresentativeTabFragment;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
-import oscar.riksdagskollen.Util.Callback.RepresentativeDocumentCallback;
-import oscar.riksdagskollen.Util.Callback.VoteStatisticsCallback;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeVoteStatistics;
+import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeDocumentCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.VoteStatisticsCallback;
 import oscar.riksdagskollen.Util.View.CircularNetworkImageView;
 
 /**

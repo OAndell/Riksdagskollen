@@ -63,6 +63,8 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
             getAdapter().addAll(representatives);
             setLoadingMoreItems(false);
         } else {
+            // Make sure to download representatives if job for some reason could not be scheduled at startup
+            app.scheduleDownloadRepresentativesJobIfNotRunning();
             app.getRepresentativeManager().addDownloadListener(new RepresentativeManager.RepresentativeDownloadListener() {
                 @Override
                 public void onRepresentativesDownloaded(ArrayList<Representative> representatives) {

@@ -18,8 +18,8 @@ import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.ProtocolAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
-import oscar.riksdagskollen.Util.Callback.ProtocolCallback;
 import oscar.riksdagskollen.Util.JSONModel.Protocol;
+import oscar.riksdagskollen.Util.RiksdagenCallback.ProtocolCallback;
 
 
 /**
