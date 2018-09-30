@@ -27,8 +27,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import oscar.riksdagskollen.RiksdagskollenApp;
-import oscar.riksdagskollen.Util.Callback.JSONRequestCallback;
-import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.JSONRequestCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
 
 
 /**
@@ -36,8 +36,6 @@ import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
  */
 
 public class RequestManager {
-
-    private final static String baseUrl = "http://data.riksdagen.se";
 
     private final static int POST = 1;
     private final static int GET = 0;
@@ -70,36 +68,36 @@ public class RequestManager {
         return mImageLoader;
     }
 
-    public Request doGetRequest(String subURL, JSONRequestCallback callback) {
-        return doJsonRequest(GET, null, subURL, callback);
+    public Request doGetRequest(String subURL, String host, JSONRequestCallback callback) {
+        return doJsonRequest(GET, null, subURL, host, callback);
     }
 
-    public void doStringGetRequest(String subURL, StringRequestCallback callback){
-        doStringRequest(GET,subURL,callback);
+    public void doStringGetRequest(String subURL, String host, StringRequestCallback callback) {
+        doStringRequest(GET, subURL, host, callback);
     }
 
-    public void doPostRequest(JSONObject jsonRequest, String subURL, JSONRequestCallback callback){
-        doJsonRequest(POST,jsonRequest,subURL,callback);
+    public void doPostRequest(JSONObject jsonRequest, String subURL, String host, JSONRequestCallback callback) {
+        doJsonRequest(POST, jsonRequest, subURL, host, callback);
     }
 
-    public void doPutRequest(JSONObject jsonRequest, String subURL, JSONRequestCallback callback){
-        doJsonRequest(PUT,jsonRequest,subURL,callback);
+    public void doPutRequest(JSONObject jsonRequest, String subURL, String host, JSONRequestCallback callback) {
+        doJsonRequest(PUT, jsonRequest, subURL, host, callback);
     }
 
-    public void doDeleteRequest(String subURL, JSONRequestCallback callback){
-        doJsonRequest(DELETE,null,subURL,callback);
+    public void doDeleteRequest(String subURL, String host, JSONRequestCallback callback) {
+        doJsonRequest(DELETE, null, subURL, host, callback);
     }
 
-    public void doPatchRequest(JSONObject jsonRequest, String subURL, JSONRequestCallback callback){
-        doJsonRequest(PATCH,jsonRequest,subURL,callback);
+    public void doPatchRequest(JSONObject jsonRequest, String subURL, String host, JSONRequestCallback callback) {
+        doJsonRequest(PATCH, jsonRequest, subURL, host, callback);
     }
 
-    private Request doJsonRequest(int method, JSONObject jsonRequest, String subURL, JSONRequestCallback callback) {
-        String url = baseUrl + subURL;
+    private Request doJsonRequest(int method, JSONObject jsonRequest, String subURL, String host, JSONRequestCallback callback) {
+        String url = host + subURL;
         return queueJSONRequest(jsonRequest, url, method, callback);
     }
 
-    private void doStringRequest(int method, String subURL, StringRequestCallback callback){
+    private void doStringRequest(int method, String subURL, String host, StringRequestCallback callback) {
         queueStringRequest(subURL,method,callback);
     }
 
@@ -146,14 +144,6 @@ public class RequestManager {
     public AsyncTask downloadHtmlPage(String url, StringRequestCallback callback){
         HtmlDownloader task = new HtmlDownloader(url,callback);
         return task.execute();
-    }
-
-    public void cancelRequestWithTag(String tag) {
-        System.out.println(requestQueue);
-        if (requestQueue != null) {
-            requestQueue.cancelAll(tag);
-        }
-        System.out.println(requestQueue);
     }
 
     static class HtmlDownloader extends AsyncTask<String, String, String> {

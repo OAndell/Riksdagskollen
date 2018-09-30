@@ -1,6 +1,10 @@
 package oscar.riksdagskollen.Manager;
 
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -19,18 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import oscar.riksdagskollen.RiksdagskollenApp;
-import oscar.riksdagskollen.Util.Callback.CurrentNewsCallback;
-import oscar.riksdagskollen.Util.Callback.DecisionsCallback;
-import oscar.riksdagskollen.Util.Callback.JSONRequestCallback;
-import oscar.riksdagskollen.Util.Callback.PartyDocumentCallback;
-import oscar.riksdagskollen.Util.Callback.PartyLeadersCallback;
-import oscar.riksdagskollen.Util.Callback.ProtocolCallback;
-import oscar.riksdagskollen.Util.Callback.RepresentativeCallback;
-import oscar.riksdagskollen.Util.Callback.RepresentativeDocumentCallback;
-import oscar.riksdagskollen.Util.Callback.RepresentativeListCallback;
-import oscar.riksdagskollen.Util.Callback.StringRequestCallback;
-import oscar.riksdagskollen.Util.Callback.VoteCallback;
-import oscar.riksdagskollen.Util.Callback.VoteStatisticsCallback;
 import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNews;
 import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNewsLink;
 import oscar.riksdagskollen.Util.JSONModel.DecisionDocument;
@@ -41,6 +33,18 @@ import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeInfo;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeVoteStatistics;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
+import oscar.riksdagskollen.Util.RiksdagenCallback.CurrentNewsCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.DecisionsCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.JSONRequestCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.PartyLeadersCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.ProtocolCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeDocumentCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeListCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.VoteCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.VoteStatisticsCallback;
 
 /**
  * Created by gustavaaro on 2018-03-25.
@@ -50,6 +54,7 @@ public class RiksdagenAPIManager {
 
     private final RequestManager requestManager;
     private final Gson gson;
+    private static final String HOST = "http://data.riksdagen.se";
 
 
     public RiksdagenAPIManager(RiksdagskollenApp app) {
@@ -57,15 +62,22 @@ public class RiksdagenAPIManager {
         gson = new Gson();
     }
 
+    private Request doApiGetRequest(String subURL, JSONRequestCallback callback) {
+        return requestManager.doGetRequest(subURL, HOST, callback);
+    }
+
+    private void doApiGetStringRequest(String subURL, StringRequestCallback callback) {
+        requestManager.doStringGetRequest(subURL, HOST, callback);
+    }
 
     public void getDocumentsForParty(Party party, int page, final PartyDocumentCallback callback) {
         String subURL = "/dokumentlista/?avd=dokument&del=dokument&fcs=1&sort=datum&sortorder=desc&utformat=json"
                 + "&parti=" + party.getID()
                 + "&p=" + page;
 
-        requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+        doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
-            public void onRequestSuccess(JSONObject response) {
+            public void onRequestSuccess(final JSONObject response) {
                 try {
                     JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
                     PartyDocument[] documents = gson.fromJson(jsonDocuments.toString(), PartyDocument[].class);
@@ -75,7 +87,6 @@ public class RiksdagenAPIManager {
                     callback.onFail(new VolleyError("Failed to parse JSON"));
                 }
             }
-
             @Override
             public void onRequestFail(VolleyError error) {
                 callback.onFail(error);
@@ -91,7 +102,7 @@ public class RiksdagenAPIManager {
     public void getCurrentNews(final CurrentNewsCallback callback, int page) {
         String subURL = "/dokumentlista/?avd=aktuellt&sort=datum&sortorder=desc&lang=sv&cmskategori=startsida&utformat=json"
                 + "&p=" + page;
-        requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+        doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -99,6 +110,7 @@ public class RiksdagenAPIManager {
                             .registerTypeAdapter(CurrentNewsLink.class, new CurrentNewsLink.CurrentNewsLinkDeserializer())
                             .create();
                     JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
+
                     CurrentNews[] news = gson.fromJson(jsonDocuments.toString(), CurrentNews[].class);
                     callback.onNewsFetched(Arrays.asList(news));
                 } catch (JSONException e) {
@@ -121,9 +133,9 @@ public class RiksdagenAPIManager {
      */
     public void getDecisions(final DecisionsCallback callback, int page) {
         String subURL = "/dokumentlista/?doktyp=bet&sort=datum&sortorder=desc&dokstat=beslutade&utformat=json" + "&p=" + page;
-        requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+        doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
-            public void onRequestSuccess(JSONObject response) {
+            public void onRequestSuccess(final JSONObject response) {
                 try {
                     JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
                     DecisionDocument[] decisionDocuments = gson.fromJson(jsonDocuments.toString(), DecisionDocument[].class);
@@ -148,7 +160,7 @@ public class RiksdagenAPIManager {
      */
     public void getDecisionWithId(final DecisionsCallback callback, String id) {
         String subURL = "/dokumentlista/?doktyp=bet&utformat=json&dok_id=" + id;
-        requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+        doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -184,9 +196,9 @@ public class RiksdagenAPIManager {
             return new JsonArrayRequest(null, null, null);
         } else {
             final String subURL = "/personlista/?iid=" + iid + "&utformat=json";
-            return requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+            return doApiGetRequest(subURL, new JSONRequestCallback() {
                 @Override
-                public void onRequestSuccess(JSONObject response) {
+                public void onRequestSuccess(final JSONObject response) {
                     Gson gson = new GsonBuilder()
                             .registerTypeAdapter(RepresentativeInfo.class, new RepresentativeInfo.RepresentativeInfoDezerializer())
                             .create();
@@ -225,17 +237,14 @@ public class RiksdagenAPIManager {
         String subURL = "/personlista/?iid=&fnamn=" + fname.trim() + "&ename=" + ename.trim() + "&parti=" + partyID + "&rdlstatus=samtliga&utformat=json";
         subURL = subURL.replaceAll(" ", "%20");
 
-        requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+        doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
-            public void onRequestSuccess(JSONObject response) {
+            public void onRequestSuccess(final JSONObject response) {
                 try {
-
                     int hits = Integer.valueOf(response.getJSONObject("personlista").getString("@hits"));
-
                     Gson gson = new GsonBuilder()
                             .registerTypeAdapter(RepresentativeInfo.class, new RepresentativeInfo.RepresentativeInfoDezerializer())
                             .create();
-
                     // Multiple hits, need to search for correct representative
                     if (hits > 1) {
                         JSONArray returnedHits = response.getJSONObject("personlista").getJSONArray("person");
@@ -273,7 +282,7 @@ public class RiksdagenAPIManager {
         } else if (document.isMotion()) {
             requestManager.downloadHtmlPage("http:" + document.getDokument_url_html(), callback);
         } else {
-            requestManager.doStringGetRequest("http:" + document.getDokument_url_html(), callback);
+            doApiGetStringRequest("http:" + document.getDokument_url_html(), callback);
         }
     }
 
@@ -287,7 +296,7 @@ public class RiksdagenAPIManager {
     public void getProtocols(final ProtocolCallback callback, int page) {
         String subURL = "/dokumentlista/?sok=&doktyp=prot&sort=datum&sortorder=desc&utformat=json" + "&p=" + page;
         ;
-        requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+        doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -309,7 +318,7 @@ public class RiksdagenAPIManager {
     public void getVotes(final VoteCallback callback, int page) {
         String subURL = "/dokumentlista/?sok=&doktyp=votering&sort=datum&sortorder=desc&utformat=json" + "&p=" + page;
         ;
-        requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+        doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -331,7 +340,7 @@ public class RiksdagenAPIManager {
 
     public void searchVotesForDecision(DecisionDocument decision, final VoteCallback callback) {
         String subURL = "/dokumentlista/?sok=" + decision.getRm() + ":" + decision.getBeteckning() + "&doktyp=votering&sort=datum&sortorder=desc&utformat=json";
-        requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+        doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -353,7 +362,7 @@ public class RiksdagenAPIManager {
 
     public void searchForDecision(final DecisionsCallback callback, String search, int pageToLoad) {
         String subURL = "/dokumentlista/?sok=" + search + "&sort=rel&sortorder=desc&doktyp=bet&utformat=json" + "&p=" + pageToLoad;
-        requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+        doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -375,7 +384,7 @@ public class RiksdagenAPIManager {
 
     public void getAllCurrentRepresentatives(final RepresentativeListCallback callback) {
         String subUrl = "/personlista/?utformat=json";
-        requestManager.doGetRequest(subUrl, new JSONRequestCallback() {
+        doApiGetRequest(subUrl, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(final JSONObject response) {
                 final Gson gson = new GsonBuilder()
@@ -383,18 +392,36 @@ public class RiksdagenAPIManager {
                         .create();
 
                 // Handle JSON-parsing on async thread to avoid lockup
-                new Thread() {
+
+                final Handler handler = new Handler(Looper.getMainLooper()) {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        Representative[] representatives = (Representative[]) msg.getData().getParcelableArray("representatives");
+                        if (representatives != null)
+                            callback.onPersonListFetched(Arrays.asList(representatives));
+                        else callback.onFail(new VolleyError("Could not get representatives"));
+                        super.handleMessage(msg);
+                    }
+                };
+
+                new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
                             JSONArray jsonDocuments = response.getJSONObject("personlista").getJSONArray("person");
                             Representative[] representatives = gson.fromJson(jsonDocuments.toString(), Representative[].class);
-                            callback.onPersonListFetched(Arrays.asList(representatives));
+                            Message msg = handler.obtainMessage();
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelableArray("representatives", representatives);
+                            msg.setData(bundle);
+                            handler.sendMessage(msg);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
                     }
-                }.start();
+                }).start();
+
 
             }
 
@@ -412,7 +439,7 @@ public class RiksdagenAPIManager {
             callback.onPersonListFetched(repsForParty);
         } else {
             String subUrl = "/personlista/?parti=" + party + "&utformat=json";
-            requestManager.doGetRequest(subUrl, new JSONRequestCallback() {
+            doApiGetRequest(subUrl, new JSONRequestCallback() {
                 @Override
                 public void onRequestSuccess(JSONObject response) {
                     Gson gson = new GsonBuilder()
@@ -439,7 +466,7 @@ public class RiksdagenAPIManager {
 
     public void getMotionByID(String id, final PartyDocumentCallback callback) {
         String subURL = "/dokumentlista/?sok=\"" + id + "\"&doktyp=mot&sort=datum&sortorder=desc&utformat=json";
-        requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+        doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -466,7 +493,7 @@ public class RiksdagenAPIManager {
                 + "&iid=" + intressentId
                 + "&p=" + page;
 
-        requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+        doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -492,7 +519,7 @@ public class RiksdagenAPIManager {
 
     public void searchForReply(PartyDocument document, final PartyDocumentCallback callback) {
         String subURL = "/dokumentlista/?sok=" + document.getRm() + ":" + document.getBeteckning() + "&doktyp=frs&sort=datum&sortorder=desc&utformat=json";
-        requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+        doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -515,7 +542,7 @@ public class RiksdagenAPIManager {
 
     public void searchForQuestion(PartyDocument document, final PartyDocumentCallback callback) {
         String subURL = "/dokumentlista/?sok=" + document.getRm() + ":" + document.getBeteckning() + "&doktyp=fr&sort=datum&sortorder=desc&utformat=json";
-        requestManager.doGetRequest(subURL, new JSONRequestCallback() {
+        doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -537,7 +564,7 @@ public class RiksdagenAPIManager {
 
     public void getDocument(String docId, final PartyDocumentCallback callback) {
         String subUrl = "/dokumentlista/?sok=" + docId + "&sort=rel&sortorder=desc&rapport=&utformat=json";
-        requestManager.doGetRequest(subUrl, new JSONRequestCallback() {
+        doApiGetRequest(subUrl, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -598,7 +625,7 @@ public class RiksdagenAPIManager {
 
     public void getVoteStatisticsForRepresentative(String iid, final VoteStatisticsCallback callback) {
         String subUrl = "/voteringlista/?iid=" + iid + "&utformat=JSON&gruppering=namn";
-        requestManager.doGetRequest(subUrl, new JSONRequestCallback() {
+        doApiGetRequest(subUrl, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
