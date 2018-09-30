@@ -377,17 +377,25 @@ public class RiksdagenAPIManager {
         String subUrl = "/personlista/?utformat=json";
         requestManager.doGetRequest(subUrl, new JSONRequestCallback() {
             @Override
-            public void onRequestSuccess(JSONObject response) {
-                Gson gson = new GsonBuilder()
+            public void onRequestSuccess(final JSONObject response) {
+                final Gson gson = new GsonBuilder()
                         .registerTypeAdapter(RepresentativeInfo.class, new RepresentativeInfo.RepresentativeInfoDezerializer())
                         .create();
-                try {
-                    JSONArray jsonDocuments = response.getJSONObject("personlista").getJSONArray("person");
-                    Representative[] representatives = gson.fromJson(jsonDocuments.toString(), Representative[].class);
-                    callback.onPersonListFetched(Arrays.asList(representatives));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+
+                // Handle JSON-parsing on async thread to avoid lockup
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            JSONArray jsonDocuments = response.getJSONObject("personlista").getJSONArray("person");
+                            Representative[] representatives = gson.fromJson(jsonDocuments.toString(), Representative[].class);
+                            callback.onPersonListFetched(Arrays.asList(representatives));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }.start();
+
             }
 
             @Override
