@@ -80,6 +80,10 @@ public class MotionActivity extends AppCompatActivity {
         loadingView = findViewById(R.id.loading_view);
         context = this;
 
+        ((ProgressBar) loadingView.findViewById(R.id.progress_bar)).getIndeterminateDrawable().setColorFilter(
+                RiksdagskollenApp.getColorFromAttribute(R.attr.secondaryLightColor, this),
+                android.graphics.PorterDuff.Mode.MULTIPLY);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(document.getDokumentnamn());
         setSupportActionBar(toolbar);

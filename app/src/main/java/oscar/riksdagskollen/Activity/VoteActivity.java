@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -76,6 +77,10 @@ public class VoteActivity extends AppCompatActivity{
 
         loadingView = findViewById(R.id.loading_view);
         mainContent = findViewById(R.id.main_content);
+
+        ((ProgressBar) loadingView.findViewById(R.id.progress_bar)).getIndeterminateDrawable().setColorFilter(
+                RiksdagskollenApp.getColorFromAttribute(R.attr.secondaryLightColor, this),
+                android.graphics.PorterDuff.Mode.MULTIPLY);
 
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = getTheme();
