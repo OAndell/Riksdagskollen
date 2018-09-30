@@ -99,7 +99,7 @@ public class PartyInfoFragment extends Fragment {
 
                         @Override
                         public void onFail(VolleyError error) {
-
+                            portraitView.setVisibility(View.GONE);
                         }
                     });
 

@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.TypedValue;
 
-import com.evernote.android.job.JobApi;
 import com.evernote.android.job.JobConfig;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.util.JobLogger;
@@ -51,7 +50,6 @@ public class RiksdagskollenApp extends Application {
         themeManager = new ThemeManager(this);
         alertManager = new AlertManager(this);
         JobConfig.addLogger(new MyLogger());
-        JobConfig.setApiEnabled(JobApi.GCM, false);
         JobManager.create(this).addJobCreator(new AlertJobCreator());
         scheduleCheckRepliesJobIfNotRunning();
 

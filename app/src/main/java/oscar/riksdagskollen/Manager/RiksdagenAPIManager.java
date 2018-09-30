@@ -221,7 +221,10 @@ public class RiksdagenAPIManager {
      */
     //Not sure if this even works with the API
     public void getRepresentative(String fname, String ename, String partyID, final String sourceId, final RepresentativeCallback callback) {
-        final String subURL = "/personlista/?iid=&fnamn=" + fname.trim() + "&ename=" + ename.trim() + "&parti=" + partyID + "&rdlstatus=samtliga&utformat=json";
+
+        String subURL = "/personlista/?iid=&fnamn=" + fname.trim() + "&ename=" + ename.trim() + "&parti=" + partyID + "&rdlstatus=samtliga&utformat=json";
+        subURL = subURL.replaceAll(" ", "%20");
+
         requestManager.doGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
