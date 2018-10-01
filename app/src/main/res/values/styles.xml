@@ -23,6 +23,8 @@
 
         <item name="loadingViewDrawable">@drawable/loading_view_default</item>
         <item name="buttonBackgroundDrawable">@drawable/button_background_default</item>
+
+        <item name="android:windowBackground">@color/riksdagBlue</item>
     </style>
 
     <style name="BlackTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -48,6 +50,7 @@
         <item name="loadingViewDrawable">@drawable/loading_view_black</item>
         <item name="buttonBackgroundDrawable">@drawable/button_background_black</item>
 
+        <item name="android:windowBackground">@color/black</item>
     </style>
 
     <style name="NavigationStyle" parent="ThemeOverlay.AppCompat">

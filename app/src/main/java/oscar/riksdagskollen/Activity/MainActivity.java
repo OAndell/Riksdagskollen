@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity
             public void run() {
                 appBarLayout.setExpanded(false, true);
             }
-        }, 1500);
+        }, 800);
     }
 
     private void applyTheme() {
