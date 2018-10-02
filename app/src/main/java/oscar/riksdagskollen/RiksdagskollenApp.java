@@ -9,9 +9,11 @@ import android.util.TypedValue;
 import com.evernote.android.job.JobManager;
 
 import oscar.riksdagskollen.Manager.AlertManager;
+import oscar.riksdagskollen.Manager.AnonymousAccountManager;
 import oscar.riksdagskollen.Manager.RepresentativeManager;
 import oscar.riksdagskollen.Manager.RequestManager;
 import oscar.riksdagskollen.Manager.RiksdagenAPIManager;
+import oscar.riksdagskollen.Manager.RiksdagskollenAPIManager;
 import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.Util.Job.AlertJobCreator;
 import oscar.riksdagskollen.Util.Job.CheckRepliesJob;
@@ -29,6 +31,8 @@ public class RiksdagskollenApp extends Application {
     private ThemeManager themeManager;
     private AlertManager alertManager;
     private RepresentativeManager representativeManager;
+    private AnonymousAccountManager accountManager;
+    private RiksdagskollenAPIManager riksdagskollenAPIManager;
 
 
     @Override
@@ -43,6 +47,8 @@ public class RiksdagskollenApp extends Application {
         scheduleCheckRepliesJobIfNotRunning();
 
         representativeManager = new RepresentativeManager(this);
+        riksdagskollenAPIManager = new RiksdagskollenAPIManager(this);
+        accountManager = new AnonymousAccountManager(this);
     }
 
     public void scheduleCheckRepliesJobIfNotRunning() {
@@ -77,6 +83,14 @@ public class RiksdagskollenApp extends Application {
                 getAllJobRequestsForTag(DownloadRepresentativesJob.TAG).isEmpty() &&
                 JobManager.instance()
                         .getAllJobsForTag(DownloadRepresentativesJob.TAG).isEmpty());
+    }
+
+    public RiksdagskollenAPIManager getRiksdagskollenAPIManager() {
+        return riksdagskollenAPIManager;
+    }
+
+    public AnonymousAccountManager getAccountManager() {
+        return accountManager;
     }
 
     public AlertManager getAlertManager() {

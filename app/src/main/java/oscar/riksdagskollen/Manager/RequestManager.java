@@ -27,6 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import oscar.riksdagskollen.RiksdagskollenApp;
+import oscar.riksdagskollen.Util.Helper.AuthenticatedJsonObjectRequest;
 import oscar.riksdagskollen.Util.RiksdagenCallback.JSONRequestCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
 
@@ -68,6 +69,14 @@ public class RequestManager {
         return mImageLoader;
     }
 
+    public Request doAuthenticatedGetRequest(String subURL, String host, String accessToken, JSONRequestCallback callback) {
+        return doAuthenticatedJsonRequest(GET, null, subURL, accessToken, host, callback);
+    }
+
+    public Request doAuthenticatedPostRequest(JSONObject jsonRequest, String subURL, String host, String accessToken, JSONRequestCallback callback) {
+        return doAuthenticatedJsonRequest(POST, jsonRequest, subURL, accessToken, host, callback);
+    }
+
     public Request doGetRequest(String subURL, String host, JSONRequestCallback callback) {
         return doJsonRequest(GET, null, subURL, host, callback);
     }
@@ -79,7 +88,6 @@ public class RequestManager {
     public void doPostRequest(JSONObject jsonRequest, String subURL, String host, JSONRequestCallback callback) {
         doJsonRequest(POST, jsonRequest, subURL, host, callback);
     }
-
     public void doPutRequest(JSONObject jsonRequest, String subURL, String host, JSONRequestCallback callback) {
         doJsonRequest(PUT, jsonRequest, subURL, host, callback);
     }
@@ -90,6 +98,11 @@ public class RequestManager {
 
     public void doPatchRequest(JSONObject jsonRequest, String subURL, String host, JSONRequestCallback callback) {
         doJsonRequest(PATCH, jsonRequest, subURL, host, callback);
+    }
+
+    private Request doAuthenticatedJsonRequest(int method, JSONObject jsonRequest, String subURL, String accessToken, String host, JSONRequestCallback callback) {
+        String url = host + subURL;
+        return queueAuthenticatedJSONRequest(jsonRequest, url, accessToken, method, callback);
     }
 
     private Request doJsonRequest(int method, JSONObject jsonRequest, String subURL, String host, JSONRequestCallback callback) {
@@ -104,6 +117,24 @@ public class RequestManager {
     private Request queueJSONRequest(final JSONObject jsonRequest, final String url, final int method, final JSONRequestCallback callback) {
         System.out.println("Making request to: " + url);
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(method, url, jsonRequest, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                callback.onRequestSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Requests", "onErrorResponse: " + (error == null ? "" : error.getMessage()));
+                callback.onRequestFail(error);
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+        return jsonObjectRequest;
+    }
+
+    private Request queueAuthenticatedJSONRequest(final JSONObject jsonRequest, final String url, String accessToken, final int method, final JSONRequestCallback callback) {
+        System.out.println("Making authenticated request to: " + url);
+        final JsonObjectRequest jsonObjectRequest = new AuthenticatedJsonObjectRequest(method, url, accessToken, jsonRequest, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 callback.onRequestSuccess(response);
