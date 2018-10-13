@@ -105,7 +105,7 @@ public class VoteActivity extends AppCompatActivity{
             // Aldready downloaded results
             prepareGraphs(new VoteResults(document.getVoteResults()));
         } else {
-            app.getRequestManager().downloadHtmlPage("http:" + document.getDokument_url_html(), new StringRequestCallback() {
+            app.getRequestManager().getDownloadString("http:" + document.getDokument_url_html(), new StringRequestCallback() {
                 @Override
                 public void onResponse(String response) {
                     VoteResults results = new VoteResults(response);
@@ -126,7 +126,7 @@ public class VoteActivity extends AppCompatActivity{
         final Context context = this;
         final TextView textBody = findViewById(R.id.point_title);
         final LinearLayout motionHolder = findViewById(R.id.motion_holder);
-            app.getRequestManager().downloadHtmlPage("http://data.riksdagen.se/dokument/H501" + document.getBeteckning() + ".html", new StringRequestCallback() {
+        app.getRequestManager().getDownloadString("http://data.riksdagen.se/dokument/H501" + document.getBeteckning() + ".html", new StringRequestCallback() {
                 @Override
                 public void onResponse(String response) {
                     try {

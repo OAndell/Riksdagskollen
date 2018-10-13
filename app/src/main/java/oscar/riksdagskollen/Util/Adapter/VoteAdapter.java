@@ -165,7 +165,6 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
     public void replaceAll(List<?> items) {
         voteList.beginBatchedUpdates();
         voteList.clear();
-        ;
         voteList.addAll((Collection<Vote>) items);
         voteList.endBatchedUpdates();
     }
@@ -258,7 +257,7 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
                         max = partyResult[i];
                     }
                 }
-                partyIcon = new ImageView(context);
+                partyIcon = new ImageView(context.getApplicationContext());
                 partyIcon.setImageResource(party.getDrawableLogo());
                 partyIcon.setLayoutParams(new LinearLayout.LayoutParams(80, 80));
 

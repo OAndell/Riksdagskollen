@@ -138,6 +138,10 @@ public class RequestManager {
     }
 
     public Request getDownloadString(String url, StringRequestCallback callback) {
+        //remove swedish chars
+        url = url.replaceAll("ö", "%C3%B6");
+        url = url.replaceAll("å", "%C3%A5");
+        url = url.replaceAll("ä", "%C3%A4");
         return queueStringRequest(url, GET, callback);
     }
 
@@ -187,6 +191,7 @@ public class RequestManager {
             return result;
 
         }
+
 
         @Override
         protected void onPostExecute(String result){

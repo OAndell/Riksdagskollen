@@ -18,13 +18,20 @@ public class VoteResults {
     private HashMap<String, int[]> voteResults = new HashMap<>();
     private ArrayList<String> partiesInVoteList = new ArrayList<>();
 
+    private final String votTableBegin = "<table class=\"vottabell\"";
+    private final String votTableEnd = "</table>";
+
     public VoteResults(HashMap<String, int[]> voteResults) {
         this.voteResults = voteResults;
     }
 
     public VoteResults(String response) {
-        Document doc = Jsoup.parse(response);
-        //This is probably a really bad way of doing this.
+
+        int tableBegin = response.indexOf(votTableBegin);
+        int tableEnd = response.indexOf(votTableEnd);
+        String tablePart = response.substring(tableBegin, tableEnd + votTableEnd.length());
+        Document doc = Jsoup.parse(tablePart);
+
         String allVotesString = doc.getElementsByClass("vottabell").get(0).text().split("Frånvarande")[1];
         String allVotesArr[] = allVotesString.split(" ");
         for (int i = 1; i < allVotesArr.length; i=i+5) {
