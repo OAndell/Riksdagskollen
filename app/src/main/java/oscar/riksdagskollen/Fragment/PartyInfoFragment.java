@@ -1,6 +1,7 @@
 package oscar.riksdagskollen.Fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -82,7 +83,10 @@ public class PartyInfoFragment extends Fragment {
                     app.getRiksdagenAPIManager().getRepresentative(tmpRep.getTilltalsnamn(), tmpRep.getEfternamn(), party.getID(), tmpRep.getSourceid(), new RepresentativeCallback() {
                         @Override
                         public void onPersonFetched(final Representative representative) {
-                            portrait.setDefaultImageResId(R.drawable.ic_person);
+
+                            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                                portrait.setDefaultImageResId(R.drawable.ic_person);
+                            }
                             portrait.setImageUrl(representative.getBild_url_192(), app.getRequestManager().getmImageLoader());
 
                             portrait.setOnClickListener(new View.OnClickListener() {

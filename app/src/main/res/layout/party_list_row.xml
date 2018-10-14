@@ -88,8 +88,7 @@
                     android:layout_width="90dp"
                     android:layout_height="90dp"
                     android:id="@+id/author_img"
-                    android:layout_gravity="center"
-                    card_view:srcCompat="@drawable/ic_person" />
+                    android:layout_gravity="center" />
 
             </LinearLayout>
 

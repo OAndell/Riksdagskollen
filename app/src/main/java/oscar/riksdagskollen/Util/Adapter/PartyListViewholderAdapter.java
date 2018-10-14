@@ -113,7 +113,7 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
         if (viewType == TYPE_ITEM) {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.party_list_row, parent, false);
-            return new MyViewHolder(itemView);
+            return new PartyListViewHolder(itemView);
         } else {
             FrameLayout frameLayout = new FrameLayout(parent.getContext());
             //make sure it fills the space
@@ -134,7 +134,7 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
             prepareHeaderFooter((HeaderFooterViewHolder) holder, v);
         } else {
             PartyDocument document = documentList.get(position - headers.size());
-            ((MyViewHolder) holder).bind(document, clickListener);
+            ((PartyListViewHolder) holder).bind(document, clickListener);
         }
     }
 
@@ -173,15 +173,13 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
-        if (holder instanceof MyViewHolder) {
-            MyViewHolder viewHolder = ((MyViewHolder) holder);
+        if (holder instanceof PartyListViewHolder) {
+            PartyListViewHolder viewHolder = ((PartyListViewHolder) holder);
             if (viewHolder.imageUrlRequest != null) viewHolder.imageUrlRequest.cancel();
-            viewHolder.authorView.setImageResource(R.drawable.ic_person);
-
         }
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class PartyListViewHolder extends RecyclerView.ViewHolder {
         final TextView documentTitle;
         final TextView published;
         final TextView author;
@@ -189,7 +187,7 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
         final CircularNetworkImageView authorView;
         Request imageUrlRequest;
 
-        public MyViewHolder(View partyView) {
+        public PartyListViewHolder(View partyView) {
             super(partyView);
             documentTitle = partyView.findViewById(R.id.document);
             published = partyView.findViewById(R.id.publicerad);
@@ -237,10 +235,10 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
             if (senderCount != 1) authorView.setVisibility(View.GONE);
             else {
                 authorView.setVisibility(View.VISIBLE);
-                imageUrlRequest = app.getRiksdagenAPIManager().getRepresentative(i.get(0).getIntressent_id(), new RepresentativeCallback() {
+                imageUrlRequest = RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getRepresentative(i.get(0).getIntressent_id(), new RepresentativeCallback() {
                     @Override
                     public void onPersonFetched(Representative representative) {
-                        authorView.setImageUrl(representative.getBild_url_192(), app.getRequestManager().getmImageLoader());
+                        authorView.setImageUrl(representative.getBild_url_192(), RiksdagskollenApp.getInstance().getRequestManager().getmImageLoader());
                     }
 
                     @Override

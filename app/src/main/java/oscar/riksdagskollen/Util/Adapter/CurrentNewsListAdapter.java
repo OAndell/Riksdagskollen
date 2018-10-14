@@ -148,7 +148,7 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
     /**
      * Class for displaying individual items in the list.
      */
-    public class NewsViewHolder extends RecyclerView.ViewHolder{
+    public static class NewsViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView body;
         private final TextView date;

@@ -102,7 +102,7 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
         if(viewType == TYPE_ITEM) {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.vote_list_item, parent, false);
-            return new VoteAdapter.VoteViewHolder(itemView);
+            return new VoteAdapter.VoteViewHolder(itemView, context);
         } else {
             FrameLayout frameLayout = new FrameLayout(parent.getContext());
             //make sure it fills the space
@@ -173,7 +173,7 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
     /**
      * Class for displaying individual items in the list.
      */
-    public class VoteViewHolder extends RecyclerView.ViewHolder{
+    public static class VoteViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView date;
         private final View catColor;
@@ -183,10 +183,12 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
         Request resultRequest;
         private LinearLayout yesSideContainer;
         private LinearLayout noSideContainer;
+        private Context context;
 
 
-        public VoteViewHolder(View textView) {
+        public VoteViewHolder(View textView, Context context) {
             super(textView);
+            this.context = context;
             title = textView.findViewById(R.id.title);
             date = textView.findViewById(R.id.date);
             catColor = itemView.findViewById(R.id.category_border);

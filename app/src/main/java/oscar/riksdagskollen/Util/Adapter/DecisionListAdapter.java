@@ -109,7 +109,7 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
         if (viewType == TYPE_ITEM) {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.decision_list_item, parent, false);
-            return new DecisionView(itemView);
+            return new DecisionView(itemView, context);
         } else {
             FrameLayout frameLayout = new FrameLayout(parent.getContext());
             //make sure it fills the space
@@ -170,7 +170,7 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
     /**
      * Class for displaying individual items in the list.
      */
-    public class DecisionView extends RecyclerView.ViewHolder {
+    public static class DecisionView extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView body;
         private final TextView justDate;
@@ -181,6 +181,7 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
         private final ImageView expandIcon;
         private final View catColor;
         private boolean isAnimating = false;
+        private Context context;
 
         private final Button fullBet;
         private final Button searchVote;
@@ -190,10 +191,10 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
         int rotationAngle = 0;
 
 
-
-        public DecisionView(final View view) {
+        public DecisionView(final View view, Context context) {
             super(view);
             this.itemView = view;
+            this.context = context;
             title = itemView.findViewById(R.id.title);
             body = itemView.findViewById(R.id.body_text);
             expandIcon = itemView.findViewById(R.id.expand_icon);
@@ -379,7 +380,7 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
     }
 
 
-    private void expand(final View v, Animation.AnimationListener listener) {
+    private static void expand(final View v, Animation.AnimationListener listener) {
         v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         final int targtetHeight = v.getMeasuredHeight();
 
@@ -406,7 +407,7 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
         v.startAnimation(a);
     }
 
-    private void collapse(final View v, Animation.AnimationListener listener) {
+    private static void collapse(final View v, Animation.AnimationListener listener) {
         final int initialHeight = v.getMeasuredHeight();
 
         Animation a = new Animation()

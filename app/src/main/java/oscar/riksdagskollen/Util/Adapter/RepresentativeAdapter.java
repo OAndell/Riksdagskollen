@@ -159,7 +159,7 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
     /**
      * Class for displaying individual items in the list.
      */
-    public class RepresentativeViewHolder extends RecyclerView.ViewHolder {
+    static class RepresentativeViewHolder extends RecyclerView.ViewHolder {
         private final TextView name;
         private final TextView born;
         private final TextView valkrets;

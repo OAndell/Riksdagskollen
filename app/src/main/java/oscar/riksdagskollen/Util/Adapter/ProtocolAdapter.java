@@ -140,7 +140,7 @@ public class ProtocolAdapter  extends RiksdagenViewHolderAdapter{
     /**
      * Class for displaying individual items in the list.
      */
-    public class ProtocolViewHolder extends RecyclerView.ViewHolder{
+    static class ProtocolViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView date;
 
