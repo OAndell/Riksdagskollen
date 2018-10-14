@@ -109,11 +109,71 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_gravity="start"
             android:layout_marginTop="8dp"
             android:text="Punktrubrik"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:textColor="?mainTitleTextColor"
-            android:textSize="16sp"
+            android:textSize="17sp"
             android:textStyle="bold"/>
 
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="Utskottets förslag: "
+            android:textAlignment="textStart"
+            android:textColor="?mainTitleTextColor"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/comitee_proposition"
+            android:layout_gravity="start"
+            android:text=""
+            android:textAlignment="textStart"
+            android:textColor="?mainTitleTextColor"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="Beslut: "
+                android:textAlignment="textStart"
+                android:textColor="?mainTitleTextColor"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/result_textview"
+                android:layout_gravity="start"
+                android:layout_marginLeft="4dp"
+                android:text=""
+                android:textAlignment="textStart"
+                android:textColor="?mainTitleTextColor"
+                android:textSize="16sp"
+                android:textStyle="normal" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?mainTitleTextColor"
+            android:layout_marginTop="4dp"
+            android:text="Behandlade dokument:"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/motion_holder"

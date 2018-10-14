@@ -465,7 +465,7 @@ public class RiksdagenAPIManager {
 
 
     public void getMotionByID(String id, final PartyDocumentCallback callback) {
-        String subURL = "/dokumentlista/?sok=\"" + id + "\"&doktyp=mot&sort=datum&sortorder=desc&utformat=json";
+        String subURL = "/dokumentlista/?sok=\"" + id + "\"&doktyp=mot,prop&sort=datum&sortorder=desc&utformat=json";
         doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
@@ -484,7 +484,6 @@ public class RiksdagenAPIManager {
                 callback.onFail(error);
             }
         });
-
     }
 
     public void getDocumentsForRepresentative(String intressentId, int page, final RepresentativeDocumentCallback callback) {

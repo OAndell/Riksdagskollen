@@ -2,7 +2,6 @@ package oscar.riksdagskollen.Activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,10 +33,8 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -63,6 +59,7 @@ public class VoteActivity extends AppCompatActivity{
     private ScrollView mainContent;
     @ColorInt
     private int titleColor;
+    private final String beslutStart = "<div id=\"step4\"";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,20 +79,14 @@ public class VoteActivity extends AppCompatActivity{
                 RiksdagskollenApp.getColorFromAttribute(R.attr.secondaryLightColor, this),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
 
-        TypedValue typedValue = new TypedValue();
-        Resources.Theme theme = getTheme();
-        theme.resolveAttribute(R.attr.mainBodyTextColor, typedValue, true);
-        titleColor = typedValue.data;
+        titleColor = RiksdagskollenApp.getColorFromAttribute(R.attr.mainBodyTextColor, this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.vote);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final Vote document = getIntent().getParcelableExtra("document");
-
-
 
         final TextView title = findViewById(R.id.vote_title);
         title.setText(document.getTitel());
@@ -125,7 +116,89 @@ public class VoteActivity extends AppCompatActivity{
 
         final Context context = this;
         final TextView textBody = findViewById(R.id.point_title);
+        final TextView result = findViewById(R.id.result_textview);
+        final TextView proposition = findViewById(R.id.comitee_proposition);
+
         final LinearLayout motionHolder = findViewById(R.id.motion_holder);
+
+        app.getRequestManager().getDownloadString(getBetUrl(document), new StringRequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                Document doc = Jsoup.parseBodyFragment(response.substring(response.indexOf(beslutStart)));
+                Integer pointNumber = Integer.valueOf(document.getTitel().split("förslagspunkt ")[1]);
+                Element pointTitle = doc.select("#step4 > div > div > h4.medium:contains(" + pointNumber + ".)").first();
+                String pointName = "Förslagspunkt " + pointNumber + ": " + pointTitle.text().substring(3).trim();
+                Element resultSpan = pointTitle.nextElementSibling();
+                Element propositionInfo = resultSpan.nextElementSibling();
+
+                textBody.setText(pointName);
+                result.setText(resultSpan.text().split("Beslut: ")[1].trim());
+                proposition.setText(propositionInfo.text().split("förslag: ")[1].trim());
+                motionLoaded = true;
+
+                Pattern motionPattern = Pattern.compile("[0-9]{4}\\/[0-9]{2}:[0-9]+");
+                Matcher matcher = motionPattern.matcher(propositionInfo.text());
+                final ArrayList<String> motions = new ArrayList<>();
+                int match = 0;
+                while (matcher.find()) {
+                    motions.add(matcher.group(match));
+                }
+
+                for (final String motionId : motions) {
+                    LayoutInflater layoutInflater = getLayoutInflater();
+                    final TextView motionTitle = (TextView) layoutInflater.inflate(R.layout.vote_button_row, null);
+                    final TextView lowerText = new TextView(context);
+                    final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(0, 0, 0, 25);
+                    ;
+                    lowerText.setLayoutParams(params);
+                    motionHolder.addView(motionTitle);
+                    motionHolder.addView(lowerText);
+
+                    app.getRiksdagenAPIManager().getMotionByID(motionId, new PartyDocumentCallback() {
+                        @Override
+                        public void onDocumentsFetched(List<PartyDocument> documents) {
+
+                            // Very uncommon case, for now we don't have a good method of comparing documents so skip it
+
+                            final PartyDocument motionDocument = documents.get(0);
+
+                            if (motionDocument.getDoktyp().equals("prop")) {
+                                motionHolder.removeView(lowerText);
+                                motionTitle.setLayoutParams(params);
+                            }
+                            SpannableString content = new SpannableString(motionDocument.getTitel());
+                            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                            motionTitle.setText(motionId + " " + content);
+                            motionTitle.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent = new Intent(context, MotionActivity.class);
+                                    intent.putExtra("document", ((PartyDocument) motionDocument));
+                                    startActivity(intent);
+                                }
+                            });
+                            lowerText.setText(motionDocument.getUndertitel());
+                            lowerText.setTextColor(titleColor);
+                            motionLoaded = true; //not true
+                            checkLoading();
+                        }
+
+                        @Override
+                        public void onFail(VolleyError error) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFail(VolleyError error) {
+
+            }
+        });
+
+        /*
 
         app.getRequestManager().getDownloadString("http://data.riksdagen.se/dokument/" + document.getSearchableBetId() + ".html", new StringRequestCallback() {
                 @Override
@@ -210,6 +283,7 @@ public class VoteActivity extends AppCompatActivity{
 
                 }
             });
+            */
     }
 
 
