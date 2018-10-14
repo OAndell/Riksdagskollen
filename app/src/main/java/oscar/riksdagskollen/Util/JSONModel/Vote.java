@@ -51,6 +51,14 @@ public class Vote implements Parcelable {
         return beteckning;
     }
 
+    public String getNummer() {
+        return nummer;
+    }
+
+    public String getOrgan() {
+        return organ;
+    }
+
     private String datum;
     private String id;
     private String publicerad;
@@ -60,7 +68,9 @@ public class Vote implements Parcelable {
     private String titel;
     private String summary;
     private String beteckning;
+    private String nummer;
     private String notis;
+    private String organ;
     private HashMap<String, int[]> voteResults;
 
     public void setVoteResults(HashMap<String, int[]> voteResults) {
@@ -69,6 +79,9 @@ public class Vote implements Parcelable {
 
     public HashMap<String, int[]> getVoteResults() {
         return voteResults;
+    }
+
+    public Vote() {
     }
 
     @Override
@@ -87,11 +100,10 @@ public class Vote implements Parcelable {
         dest.writeString(this.titel);
         dest.writeString(this.summary);
         dest.writeString(this.beteckning);
+        dest.writeString(this.nummer);
         dest.writeString(this.notis);
+        dest.writeString(this.organ);
         dest.writeSerializable(this.voteResults);
-    }
-
-    public Vote() {
     }
 
     protected Vote(Parcel in) {
@@ -104,7 +116,9 @@ public class Vote implements Parcelable {
         this.titel = in.readString();
         this.summary = in.readString();
         this.beteckning = in.readString();
+        this.nummer = in.readString();
         this.notis = in.readString();
+        this.organ = in.readString();
         this.voteResults = (HashMap<String, int[]>) in.readSerializable();
     }
 

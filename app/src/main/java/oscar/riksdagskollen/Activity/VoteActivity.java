@@ -126,7 +126,14 @@ public class VoteActivity extends AppCompatActivity{
         final Context context = this;
         final TextView textBody = findViewById(R.id.point_title);
         final LinearLayout motionHolder = findViewById(R.id.motion_holder);
-        app.getRequestManager().getDownloadString("http://data.riksdagen.se/dokument/H501" + document.getBeteckning() + ".html", new StringRequestCallback() {
+
+        String yearCode = document.getId().substring(0, 2);
+        String documentType = "01"; //Motion
+        String organ = document.getOrgan();
+        String nummer = document.getNummer();
+        String docSearchId = yearCode + documentType + organ + nummer;
+
+        app.getRequestManager().getDownloadString("http://data.riksdagen.se/dokument/" + docSearchId + ".html", new StringRequestCallback() {
                 @Override
                 public void onResponse(String response) {
                     try {
