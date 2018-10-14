@@ -190,10 +190,11 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
             });
         }
 
-        //Maybe do this better......
         private String parseString(String s){
             s = Html.fromHtml(s).toString();
             s = s.replaceAll("&nbsp;"," ");
+            s = s.replaceAll("<span(.*?)>", "");
+            s = s.replaceAll("</span>", "");
             s = s.substring(3,s.length()-4); //remove <p> and </p>
             return s;
         }
