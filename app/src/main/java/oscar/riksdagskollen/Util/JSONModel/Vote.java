@@ -59,6 +59,11 @@ public class Vote implements Parcelable {
         return organ;
     }
 
+    public String getSearchableBetId() {
+        String yearCode = id.substring(0, 2);
+        String documentType = "01"; //Betänkande
+        return yearCode + documentType + organ + nummer;
+    }
     private String datum;
     private String id;
     private String publicerad;

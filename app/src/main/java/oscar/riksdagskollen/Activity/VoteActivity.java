@@ -127,19 +127,13 @@ public class VoteActivity extends AppCompatActivity{
         final TextView textBody = findViewById(R.id.point_title);
         final LinearLayout motionHolder = findViewById(R.id.motion_holder);
 
-        String yearCode = document.getId().substring(0, 2);
-        String documentType = "01"; //Motion
-        String organ = document.getOrgan();
-        String nummer = document.getNummer();
-        String docSearchId = yearCode + documentType + organ + nummer;
-
-        app.getRequestManager().getDownloadString("http://data.riksdagen.se/dokument/" + docSearchId + ".html", new StringRequestCallback() {
+        app.getRequestManager().getDownloadString("http://data.riksdagen.se/dokument/" + document.getSearchableBetId() + ".html", new StringRequestCallback() {
                 @Override
                 public void onResponse(String response) {
                     try {
                         Document doc = Jsoup.parse(response);
                         Integer pointNumber = Integer.valueOf(document.getTitel().split("förslagspunkt ")[1]);
-                        Elements pointTitle =  doc.select("table:contains("+pointNumber+".)");
+                        Elements pointTitle = doc.select("table:contains(" + pointNumber + ".)");
                         Element next = pointTitle.get(0);
                         String pointName = pointTitle.get(0).text().substring(3);
 
@@ -216,6 +210,12 @@ public class VoteActivity extends AppCompatActivity{
 
                 }
             });
+    }
+
+
+    public static String getBetUrl(Vote document) {
+        String baseURL = "http://riksdagen.se/sv/dokument-lagar/arende/betankande/";
+        return baseURL + "_" + document.getSearchableBetId();
     }
 
     private void prepareGraphs(VoteResults results) {
