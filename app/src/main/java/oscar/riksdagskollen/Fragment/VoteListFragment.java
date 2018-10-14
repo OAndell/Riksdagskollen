@@ -1,5 +1,6 @@
 package oscar.riksdagskollen.Fragment;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -57,15 +58,15 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if(!isShowingSearchedVotes){
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.votes);
+            applyFilter();
         }
-        applyFilter();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        setHasOptionsMenu(true);
+        if (!isShowingSearchedVotes) setHasOptionsMenu(true);
         preferences.registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -80,14 +81,15 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
 
         if(getArguments() != null) {
             voteList = getArguments().getParcelableArrayList("votes");
             if(voteList != null && !voteList.isEmpty()) isShowingSearchedVotes = true;
         }
 
-        preferences = getActivity().getSharedPreferences("vote_settings", getActivity().MODE_PRIVATE);
+        if (!isShowingSearchedVotes) setHasOptionsMenu(true);
+
+        preferences = getActivity().getSharedPreferences("vote_settings", Context.MODE_PRIVATE);
         adapter = new VoteAdapter(voteList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {

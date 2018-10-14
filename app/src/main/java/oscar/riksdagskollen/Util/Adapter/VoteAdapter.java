@@ -149,8 +149,11 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
 
     @Override
     public void addAll(List<?> items) {
+        voteList.beginBatchedUpdates();
         voteList.addAll((Collection<Vote>) items);
+        voteList.endBatchedUpdates();
     }
+
 
     @Override
     public void removeAll(List<?> items) {
