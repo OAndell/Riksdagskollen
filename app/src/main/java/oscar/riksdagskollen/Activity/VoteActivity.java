@@ -68,10 +68,8 @@ public class VoteActivity extends AppCompatActivity{
     @ColorInt
     private int titleColor;
     private final String beslutStart = "<div id=\"step4\"";
-
     private LinearLayout motionHolder;
     private LinearLayout partyVotesHolder;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -579,6 +577,3 @@ public class VoteActivity extends AppCompatActivity{
 
 
 }
-
-
-
