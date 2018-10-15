@@ -162,7 +162,7 @@ public class VoteActivity extends AppCompatActivity{
                 while (matcher.find()) {
                     String motionString = matcher.group(match);
                     motions.add(motionString);
-                    propositionString = propositionString.replaceAll(motionString+"(.*?)\\(", "["+listID+"] (");
+                    propositionString = cleanupPropositionText(propositionString, motionString, listID);
                     listID++;
                 }
                 proposition.setText(boldKeywordsWithHTMl(propositionString));
@@ -322,6 +322,33 @@ public class VoteActivity extends AppCompatActivity{
             input = input.replaceAll(keywords[i], "<b>" + keywords[i] + "</b>");
         }
         return Html.fromHtml(input);
+    }
+
+    private String cleanupPropositionText(String text, String motionID, int listID) {
+        //find yrkande
+        Pattern pattern1 = Pattern.compile("(" + motionID + ")+(.*?)(yrkande)*\\d+");
+        Matcher matcher1 = pattern1.matcher(text);
+
+        Pattern pattern2 = Pattern.compile("(" + motionID + ")+(.*?)((yrkande)*\\d+(\\soch\\s|-)\\d+)");
+        Matcher matcher2 = pattern2.matcher(text);
+
+        Pattern pattern3 = Pattern.compile("(" + motionID + ")+(.*?)\\)");
+        Matcher matcher3 = pattern3.matcher(text);
+
+        if (matcher1.find()) {
+            text = text.replace(matcher1.group(0), "[" + listID + "]");
+            String yrkande = matcher1.group(3);
+        } else if (matcher2.find()) {
+            text = text.replace(matcher2.group(0), "[" + listID + "]");
+            String yrkande = matcher2.group(3);
+        } else if (matcher3.find()) {
+            text = text.replace(matcher3.group(0), "[" + listID + "]");
+            String yrkande = "-1";
+        } else {
+            text = text.replace(motionID, "[" + listID + "]");
+        }
+
+        return text;
     }
 
     private void setUpCollapsibleViews() {
