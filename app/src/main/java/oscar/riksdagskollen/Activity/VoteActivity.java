@@ -330,10 +330,10 @@ public class VoteActivity extends AppCompatActivity{
     private String cleanupPropositionText(String text, String motionID, int listID) {
 
         //TODO learn regex
-        Pattern pattern1 = Pattern.compile("(" + motionID + ").{0,60}(yrkandena)\\b.(\\d+(\\soch\\s|-)\\d+)");
+        Pattern pattern1 = Pattern.compile("(" + motionID + "\\D).{0,60}(yrkandena)\\b.([\\d,\\s]+(och\\s|-)\\d+)");
         Matcher matcher1 = pattern1.matcher(text);
 
-        Pattern pattern2 = Pattern.compile("(" + motionID + ").{0,60}\\b(yrkande)\\b.(\\d+)");
+        Pattern pattern2 = Pattern.compile("(" + motionID + "\\D).{0,60}\\b(yrkande)\\b.(\\d+)");
         Matcher matcher2 = pattern2.matcher(text);
 
         Pattern pattern3 = Pattern.compile("(" + motionID + ")+(.{0,60}?)\\)");
