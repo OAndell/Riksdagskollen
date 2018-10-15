@@ -10,7 +10,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -133,11 +135,12 @@ public class VoteActivity extends AppCompatActivity{
 
                 textBody.setText(pointName);
                 result.setText(resultSpan.text().split("Beslut:")[1].trim());
+                String propositionString;
                 try {
-                    proposition.setText(propositionInfo.text().split("förslag:")[1].trim());
+                    propositionString = propositionInfo.text().split("förslag:")[1].trim();
                 } catch (IndexOutOfBoundsException e) {
                     // Weird formatting
-                    proposition.setText("");
+                    propositionString = "";
                 }
                 motionLoaded = true;
 
@@ -296,6 +299,14 @@ public class VoteActivity extends AppCompatActivity{
                 }
             });
             */
+    }
+
+    private Spanned boldKeywordsWithHTMl(String input) {
+        String[] keywords = {"avslår", "bifaller", "godkänner"};
+        for (int i = 0; i < keywords.length; i++) {
+            input = input.replaceAll(keywords[i], "<b>" + keywords[i] + "</b>");
+        }
+        return Html.fromHtml(input);
     }
 
 
