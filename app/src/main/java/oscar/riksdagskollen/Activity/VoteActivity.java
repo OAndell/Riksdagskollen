@@ -159,6 +159,7 @@ public class VoteActivity extends AppCompatActivity{
                 Pattern motionPattern = Pattern.compile("[0-9]{4}\\/[0-9]{2}:[0-9]+");
                 Matcher matcher = motionPattern.matcher(propositionInfo.text());
                 //final ArrayList<String> motions = new ArrayList<>();
+                System.out.println(propositionString);
                 int match = 0;
                 int listID = 1;
                 while (matcher.find()) {
@@ -327,27 +328,33 @@ public class VoteActivity extends AppCompatActivity{
     }
 
     private String cleanupPropositionText(String text, String motionID, int listID) {
-        Pattern pattern1 = Pattern.compile("(" + motionID + ").*?\\b(yrkandena)\\b.(\\d+(\\soch\\s|-)\\d+)");
+
+        //TODO learn regex
+        Pattern pattern1 = Pattern.compile("(" + motionID + ").{0,60}(yrkandena)\\b.(\\d+(\\soch\\s|-)\\d+)");
         Matcher matcher1 = pattern1.matcher(text);
 
-        Pattern pattern2 = Pattern.compile("(" + motionID + ").*?\\b(yrkande)\\b.(\\d+)");
+        Pattern pattern2 = Pattern.compile("(" + motionID + ").{0,60}\\b(yrkande)\\b.(\\d+)");
         Matcher matcher2 = pattern2.matcher(text);
 
-        Pattern pattern3 = Pattern.compile("(" + motionID + ")+(.*?)\\)");
+        Pattern pattern3 = Pattern.compile("(" + motionID + ")+(.{0,60}?)\\)");
         Matcher matcher3 = pattern3.matcher(text);
         String proposalPoint;
         if (matcher1.find()) {
             text = text.replace(matcher1.group(0), "[" + listID + "]");
             proposalPoint = ", Förslag " + matcher1.group(3);
+            //System.out.println(motionID + "NUMER 1");
         } else if (matcher2.find()) {
             text = text.replace(matcher2.group(0), "[" + listID + "]");
             proposalPoint = ", Förslag " + matcher2.group(3);
+            //System.out.println("NUMER 2");
         } else if (matcher3.find()) {
             text = text.replace(matcher3.group(0), "[" + listID + "]");
             proposalPoint = "";
+            //System.out.println("NUMER 3");
         } else {
             text = text.replace(motionID, "[" + listID + "]");
             proposalPoint = "";
+            //System.out.println(motionID + "NUMER 4");
         }
         motions.add(new MotionDetails(motionID, proposalPoint, listID));
 
