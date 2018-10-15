@@ -35,7 +35,7 @@
                 android:text="Rubrik"
                 android:textAlignment="center"
                 android:textColor="?mainTitleTextColor"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -114,7 +114,7 @@
                 android:text="Punktrubrik"
                 android:textAlignment="textStart"
                 android:textColor="?mainTitleTextColor"
-                android:textSize="17sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
 
@@ -123,6 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:text="Utskottets förslag: "
+                android:layout_marginTop="8dp"
                 android:textAlignment="textStart"
                 android:textColor="?mainTitleTextColor"
                 android:textSize="16sp"
@@ -143,7 +144,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -160,10 +161,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:layout_marginLeft="4dp"
                     android:text=""
                     android:textAlignment="textStart"
-                    android:textColor="?mainTitleTextColor"
+                    android:textColor="?mainBodyTextColor"
                     android:textSize="16sp"
                     android:textStyle="normal" />
 
