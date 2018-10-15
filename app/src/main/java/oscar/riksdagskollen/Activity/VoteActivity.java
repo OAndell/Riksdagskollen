@@ -17,6 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -55,8 +58,11 @@ public class VoteActivity extends AppCompatActivity{
 
     private Boolean graphLoaded = false;
     private Boolean motionLoaded = false;
+    private Boolean motionHolderExpanded = false;
+
     private ViewGroup loadingView;
     private ScrollView mainContent;
+    private ImageView expandMotionsHolder;
     @ColorInt
     private int titleColor;
     private final String beslutStart = "<div id=\"step4\"";
@@ -120,6 +126,25 @@ public class VoteActivity extends AppCompatActivity{
         final TextView proposition = findViewById(R.id.comitee_proposition);
 
         final LinearLayout motionHolder = findViewById(R.id.motion_holder);
+        expandMotionsHolder = findViewById(R.id.expand_icon);
+        expandMotionsHolder.setRotation(180);
+        findViewById(R.id.vote_document_header).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (motionHolderExpanded) {
+                    System.out.println("Collapse");
+                    collapse(motionHolder, null);
+                    motionHolderExpanded = false;
+                    expandMotionsHolder.animate().rotation(180).setDuration(125).start();
+                } else {
+                    System.out.println("Expand");
+                    motionHolderExpanded = true;
+                    expand(motionHolder, null);
+                    expandMotionsHolder.animate().rotation(0).setDuration(125).start();
+                }
+            }
+        });
 
         app.getRequestManager().getDownloadString(getBetUrl(document), new StringRequestCallback() {
             @Override
@@ -132,16 +157,21 @@ public class VoteActivity extends AppCompatActivity{
                 Element propositionInfo = resultSpan.nextElementSibling();
 
                 textBody.setText(pointName);
-                result.setText(resultSpan.text().split("Beslut: ")[1].trim());
-                proposition.setText(propositionInfo.text().split("förslag: ")[1].trim());
+                result.setText(resultSpan.text().split("Beslut:")[1].trim());
+                try {
+                    proposition.setText(propositionInfo.text().split("förslag:")[1].trim());
+                } catch (IndexOutOfBoundsException e) {
+                    // Weird formatting
+                    proposition.setText("");
+                }
                 motionLoaded = true;
 
                 Pattern motionPattern = Pattern.compile("[0-9]{4}\\/[0-9]{2}:[0-9]+");
                 Matcher matcher = motionPattern.matcher(propositionInfo.text());
                 final ArrayList<String> motions = new ArrayList<>();
-                int match = 0;
+
                 while (matcher.find()) {
-                    motions.add(matcher.group(match));
+                    motions.add(matcher.group(0));
                 }
 
                 for (final String motionId : motions) {
@@ -189,6 +219,12 @@ public class VoteActivity extends AppCompatActivity{
 
                         }
                     });
+                }
+                collapse(motionHolder, null);
+
+                if (motions.isEmpty()) {
+                    motionLoaded = true;
+                    checkLoading();
                 }
             }
 
@@ -448,4 +484,59 @@ public class VoteActivity extends AppCompatActivity{
     }
 
 
+    private static void expand(final View v, Animation.AnimationListener listener) {
+        v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        final int targtetHeight = v.getMeasuredHeight();
+
+        v.getLayoutParams().height = 0;
+        v.setVisibility(View.VISIBLE);
+        Animation a = new Animation() {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                v.getLayoutParams().height = interpolatedTime == 1
+                        ? ViewGroup.LayoutParams.WRAP_CONTENT
+                        : (int) (targtetHeight * interpolatedTime);
+                v.requestLayout();
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        a.setDuration(125);
+        a.setAnimationListener(listener);
+        v.startAnimation(a);
+    }
+
+    private static void collapse(final View v, Animation.AnimationListener listener) {
+        final int initialHeight = v.getMeasuredHeight();
+
+        Animation a = new Animation() {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                if (interpolatedTime == 1) {
+                    v.setVisibility(View.GONE);
+                } else {
+                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
+                    v.requestLayout();
+                }
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        a.setDuration(125);
+        a.setAnimationListener(listener);
+        v.startAnimation(a);
+    }
+
+
 }
+
+
+
