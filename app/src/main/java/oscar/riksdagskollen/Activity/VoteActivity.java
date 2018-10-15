@@ -156,6 +156,7 @@ public class VoteActivity extends AppCompatActivity{
 
                 Pattern motionPattern = Pattern.compile("[0-9]{4}\\/[0-9]{2}:[0-9]+");
                 Matcher matcher = motionPattern.matcher(propositionInfo.text());
+                System.out.println(propositionString);
                 final ArrayList<String> motions = new ArrayList<>();
                 int match = 0;
                 int listID = 1;
@@ -326,10 +327,10 @@ public class VoteActivity extends AppCompatActivity{
 
     private String cleanupPropositionText(String text, String motionID, int listID) {
         //find yrkande
-        Pattern pattern1 = Pattern.compile("(" + motionID + ")+(.*?)(yrkande)*\\d+");
+        Pattern pattern1 = Pattern.compile("(" + motionID + ").*?\\b(yrkandena)\\b.(\\d+(\\soch\\s|-)\\d+)");
         Matcher matcher1 = pattern1.matcher(text);
 
-        Pattern pattern2 = Pattern.compile("(" + motionID + ")+(.*?)((yrkande)*\\d+(\\soch\\s|-)\\d+)");
+        Pattern pattern2 = Pattern.compile("(" + motionID + ").*?\\b(yrkande)\\b.(\\d+)");
         Matcher matcher2 = pattern2.matcher(text);
 
         Pattern pattern3 = Pattern.compile("(" + motionID + ")+(.*?)\\)");
@@ -346,6 +347,7 @@ public class VoteActivity extends AppCompatActivity{
             String yrkande = "-1";
         } else {
             text = text.replace(motionID, "[" + listID + "]");
+            String yrkande = "-1";
         }
 
         return text;
@@ -509,7 +511,6 @@ public class VoteActivity extends AppCompatActivity{
             ArrayList<BarEntry> yVals1 = new ArrayList<>();
 
             //TODO fix this horrible mess with old votes. Changes L -> FP
-            System.out.println(parties[i]);
             if(parties[i].equals("L") && voteResults.getPartyVotes("L") == null){
                 parties[i] = "FP";
             }
