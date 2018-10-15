@@ -75,7 +75,7 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/expand_icon"
+                    android:id="@+id/attended_documents_expand_icon"
                     android:layout_width="0dp"
                     android:layout_height="25dp"
                     android:layout_weight="3"

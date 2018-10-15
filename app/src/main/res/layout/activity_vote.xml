@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?mainBackgroundColor"
     android:orientation="vertical">
 
     <include layout="@layout/riksdagen_toolbar"></include>
-    <include layout="@layout/loading_view" android:visibility="visible"></include>
+
+    <include
+        layout="@layout/loading_view"
+        android:visibility="visible"></include>
 
 
     <ScrollView
@@ -16,70 +19,70 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_height="match_parent"
         android:visibility="gone">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:paddingBottom="8dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/vote_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginTop="8dp"
-            android:text="Rubrik"
-            android:textAlignment="center"
-            android:textColor="?mainTitleTextColor"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:paddingBottom="20dp">
+
+            <TextView
+                android:id="@+id/vote_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="8dp"
+                android:text="Rubrik"
+                android:textAlignment="center"
+                android:textColor="?mainTitleTextColor"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="20dp"
-                    android:text="@string/vote_yes"
-                    android:textAlignment="center"
-                    android:textColor="?mainTitleTextColor"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="20dp"
-                    android:text="@string/vote_no"
-                    android:textAlignment="center"
-                    android:textColor="?mainTitleTextColor"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="20dp"
+                        android:text="@string/vote_yes"
+                        android:textAlignment="center"
+                        android:textColor="?mainTitleTextColor"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="20dp"
-                    android:text="@string/vote_novote"
-                    android:textAlignment="center"
-                    android:textColor="?mainTitleTextColor"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="20dp"
+                        android:text="@string/vote_no"
+                        android:textAlignment="center"
+                        android:textColor="?mainTitleTextColor"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="20dp"
+                        android:text="@string/vote_novote"
+                        android:textAlignment="center"
+                        android:textColor="?mainTitleTextColor"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/textView4"
@@ -95,286 +98,320 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <com.github.mikephil.charting.charts.HorizontalBarChart
-                android:id="@+id/chart"
+                <com.github.mikephil.charting.charts.HorizontalBarChart
+                    android:id="@+id/chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/point_title"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="8dp"
+                android:text="Punktrubrik"
+                android:textAlignment="textStart"
+                android:textColor="?mainTitleTextColor"
+                android:textSize="17sp"
+                android:textStyle="bold" />
 
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/point_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginTop="8dp"
-            android:text="Punktrubrik"
-            android:textAlignment="textStart"
-            android:textColor="?mainTitleTextColor"
-            android:textSize="17sp"
-            android:textStyle="bold"/>
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:text="Utskottets förslag: "
-            android:textAlignment="textStart"
-            android:textColor="?mainTitleTextColor"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/comitee_proposition"
-            android:layout_gravity="start"
-            android:text=""
-            android:textColor="?attr/mainBodyTextColor"
-            android:textAlignment="textStart"
-            android:textSize="16sp"
-            android:textStyle="normal" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:text="Beslut: "
+                android:text="Utskottets förslag: "
                 android:textAlignment="textStart"
                 android:textColor="?mainTitleTextColor"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/comitee_proposition"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/result_textview"
                 android:layout_gravity="start"
-                android:layout_marginLeft="4dp"
                 android:text=""
                 android:textAlignment="textStart"
                 android:textColor="?mainTitleTextColor"
                 android:textSize="16sp"
                 android:textStyle="normal" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/vote_document_header"
-            android:padding="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/expandable_header_background"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="20"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="?mainTitleTextColor"
-                android:gravity="center_vertical"
-                android:text="Behandlade dokument:"
-                android:layout_weight="19"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/expand_icon"
-                android:layout_width="0dp"
-                android:layout_height="15dp"
-                android:adjustViewBounds="true"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:text="Beslut: "
+                    android:textAlignment="textStart"
+                    android:textColor="?mainTitleTextColor"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/result_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginLeft="4dp"
+                    android:text=""
+                    android:textAlignment="textStart"
+                    android:textColor="?mainTitleTextColor"
+                    android:textSize="16sp"
+                    android:textStyle="normal" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/attended_documents_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:scaleType="center"
-                app:srcCompat="@drawable/ic_expand" />
+                android:layout_marginTop="8dp"
+                android:layout_weight="20"
+                android:background="@drawable/expandable_header_background"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="19"
+                    android:gravity="center_vertical"
+                    android:text="Behandlade dokument:"
+                    android:textColor="?mainTitleTextColor"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/attended_documents_expand_icon"
+                    android:layout_width="0dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:scaleType="center"
+                    app:srcCompat="@drawable/ic_expand" />
 
 
-        </LinearLayout>
+            </LinearLayout>
 
 
-        <LinearLayout
-            android:id="@+id/motion_holder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:background="@drawable/expandable_body_background"
-            android:orientation="vertical"></LinearLayout>
-
-        <TextView
-            android:id="@+id/vote_title2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginTop="8dp"
-            android:text="@string/vote_partyvotes_title"
-            android:textAlignment="center"
-            android:textColor="?mainTitleTextColor"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="5dp"
-                app:srcCompat="@drawable/slogo" />
-
-            <com.github.mikephil.charting.charts.HorizontalBarChart
-                android:id="@+id/chartS"
+            <LinearLayout
+                android:id="@+id/motion_holder"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
+                android:layout_height="wrap_content"
+                android:background="@drawable/expandable_body_background"
+                android:orientation="vertical"
+                android:padding="8dp" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="5dp"
-                app:srcCompat="@drawable/mlogo" />
-
-            <com.github.mikephil.charting.charts.HorizontalBarChart
-                android:id="@+id/chartM"
+            <LinearLayout
+                android:id="@+id/party_votes_header"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="8dp"
+                android:layout_weight="20"
+                android:background="@drawable/expandable_header_background"
+                android:orientation="horizontal"
+                android:padding="8dp">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/vote_title2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_weight="19"
+                    android:text="@string/vote_partyvotes_title"
+                    android:textAlignment="textStart"
+                    android:textColor="?mainTitleTextColor"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/party_votes_expand_icon"
+                    android:layout_width="0dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:scaleType="center"
+                    app:srcCompat="@drawable/ic_expand" />
 
-            <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="5dp"
-                app:srcCompat="@drawable/sdlogo" />
+            </LinearLayout>
 
-            <com.github.mikephil.charting.charts.HorizontalBarChart
-                android:id="@+id/chartSD"
+
+            <LinearLayout
+                android:id="@+id/party_votes_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
+                android:layout_height="wrap_content"
+                android:background="@drawable/expandable_body_background"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="5dp"
+                        app:srcCompat="@drawable/slogo" />
+
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/chartS"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="5dp"
+                        app:srcCompat="@drawable/mlogo" />
+
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/chartM"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="5dp"
+                        app:srcCompat="@drawable/sdlogo" />
+
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/chartSD"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView5"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="5dp"
+                        app:srcCompat="@drawable/mplogo" />
+
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/chartMP"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="5dp"
+                        app:srcCompat="@drawable/clogo" />
+
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/chartC"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView7"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="5dp"
+                        app:srcCompat="@drawable/vlogo" />
+
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/chartV"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView8"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="5dp"
+                        app:srcCompat="@drawable/llogo" />
+
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/chartL"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView9"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="5dp"
+                        app:srcCompat="@drawable/kdlogo" />
+
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/chartKD"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imageView5"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="5dp"
-                app:srcCompat="@drawable/mplogo" />
-
-            <com.github.mikephil.charting.charts.HorizontalBarChart
-                android:id="@+id/chartMP"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imageView6"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="5dp"
-                app:srcCompat="@drawable/clogo" />
-
-            <com.github.mikephil.charting.charts.HorizontalBarChart
-                android:id="@+id/chartC"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imageView7"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="5dp"
-                app:srcCompat="@drawable/vlogo" />
-
-            <com.github.mikephil.charting.charts.HorizontalBarChart
-                android:id="@+id/chartV"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imageView8"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="5dp"
-                app:srcCompat="@drawable/llogo" />
-
-            <com.github.mikephil.charting.charts.HorizontalBarChart
-                android:id="@+id/chartL"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imageView9"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="5dp"
-                app:srcCompat="@drawable/kdlogo" />
-
-            <com.github.mikephil.charting.charts.HorizontalBarChart
-                android:id="@+id/chartKD"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
-
-        </LinearLayout>
-
-
-    </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

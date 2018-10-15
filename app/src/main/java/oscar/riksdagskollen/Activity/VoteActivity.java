@@ -19,6 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -55,13 +58,19 @@ import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
 
 public class VoteActivity extends AppCompatActivity{
 
-    private Boolean graphLoaded = false;
-    private Boolean motionLoaded = false;
+    private boolean graphLoaded = false;
+    private boolean motionLoaded = false;
+    private boolean motionHolderExpanded = false;
+    private boolean partyVotesExpanded = false;
+
     private ViewGroup loadingView;
     private ScrollView mainContent;
     @ColorInt
     private int titleColor;
     private final String beslutStart = "<div id=\"step4\"";
+
+    private LinearLayout motionHolder;
+    private LinearLayout partyVotesHolder;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,7 +130,10 @@ public class VoteActivity extends AppCompatActivity{
         final TextView result = findViewById(R.id.result_textview);
         final TextView proposition = findViewById(R.id.comitee_proposition);
 
-        final LinearLayout motionHolder = findViewById(R.id.motion_holder);
+        motionHolder = findViewById(R.id.motion_holder);
+        partyVotesHolder = findViewById(R.id.party_votes_container);
+        setUpCollapsibleViews();
+
 
         app.getRequestManager().getDownloadString(getBetUrl(document), new StringRequestCallback() {
             @Override
@@ -204,6 +216,11 @@ public class VoteActivity extends AppCompatActivity{
 
                         }
                     });
+                }
+
+                if (motions.isEmpty()) {
+                    motionLoaded = true;
+                    checkLoading();
                 }
             }
 
@@ -309,6 +326,44 @@ public class VoteActivity extends AppCompatActivity{
         return Html.fromHtml(input);
     }
 
+    private void setUpCollapsibleViews() {
+        final ImageView expandMotionsHolder = findViewById(R.id.attended_documents_expand_icon);
+        expandMotionsHolder.setRotation(180);
+        findViewById(R.id.attended_documents_header).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (motionHolderExpanded) {
+                    collapse(motionHolder, null);
+                    motionHolderExpanded = false;
+                    expandMotionsHolder.animate().rotation(180).setDuration(125).start();
+                } else {
+                    motionHolderExpanded = true;
+                    expand(motionHolder, null);
+                    expandMotionsHolder.animate().rotation(0).setDuration(125).start();
+                }
+            }
+        });
+        collapse(motionHolder, null);
+
+        final ImageView expandPartyVotes = findViewById(R.id.party_votes_expand_icon);
+        expandPartyVotes.setRotation(180);
+        findViewById(R.id.party_votes_header).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (partyVotesExpanded) {
+                    collapse(partyVotesHolder, null);
+                    partyVotesExpanded = false;
+                    expandPartyVotes.animate().rotation(180).setDuration(125).start();
+                } else {
+                    partyVotesExpanded = true;
+                    expand(partyVotesHolder, null);
+                    expandPartyVotes.animate().rotation(0).setDuration(125).start();
+                }
+            }
+        });
+        collapse(partyVotesHolder, null);
+
+    }
 
     public static String getBetUrl(Vote document) {
         String baseURL = "http://riksdagen.se/sv/dokument-lagar/arende/betankande/";
@@ -471,4 +526,59 @@ public class VoteActivity extends AppCompatActivity{
     }
 
 
+    private static void expand(final View v, Animation.AnimationListener listener) {
+        v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        final int targtetHeight = v.getMeasuredHeight();
+
+        v.getLayoutParams().height = 0;
+        v.setVisibility(View.VISIBLE);
+        Animation a = new Animation() {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                v.getLayoutParams().height = interpolatedTime == 1
+                        ? ViewGroup.LayoutParams.WRAP_CONTENT
+                        : (int) (targtetHeight * interpolatedTime);
+                v.requestLayout();
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        a.setDuration(125);
+        a.setAnimationListener(listener);
+        v.startAnimation(a);
+    }
+
+    private static void collapse(final View v, Animation.AnimationListener listener) {
+        final int initialHeight = v.getMeasuredHeight();
+
+        Animation a = new Animation() {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                if (interpolatedTime == 1) {
+                    v.setVisibility(View.GONE);
+                } else {
+                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
+                    v.requestLayout();
+                }
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        a.setDuration(125);
+        a.setAnimationListener(listener);
+        v.startAnimation(a);
+    }
+
+
 }
+
+
+

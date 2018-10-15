@@ -197,7 +197,7 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
             this.context = context;
             title = itemView.findViewById(R.id.title);
             body = itemView.findViewById(R.id.body_text);
-            expandIcon = itemView.findViewById(R.id.expand_icon);
+            expandIcon = itemView.findViewById(R.id.attended_documents_expand_icon);
             justDate = itemView.findViewById(R.id.justering_date);
             debateDate = itemView.findViewById(R.id.debatt_date);
             decisionDate = itemView.findViewById(R.id.beslut_date);
