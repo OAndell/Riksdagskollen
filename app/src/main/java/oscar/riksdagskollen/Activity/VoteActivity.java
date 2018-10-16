@@ -160,16 +160,11 @@ public class VoteActivity extends AppCompatActivity{
                 Matcher matcher = motionPattern.matcher(propositionInfo.text());
                 final ArrayList<String> motionsIDs = new ArrayList<>();
                 int match = 0;
-                //int listID = 1;
                 while (matcher.find()) {
                     String motionString = matcher.group(match);
                     motionsIDs.add(motionString);
-                    //propositionString = cleanupPropositionText(propositionString, motionString, listID);
-                    //listID++;
                 }
                 propositionString = createMotionItemsAndCleanupPropositionText(propositionString, motionsIDs);
-
-
                 proposition.setText(boldKeywordsWithHTMl(propositionString));
 
 
@@ -184,7 +179,6 @@ public class VoteActivity extends AppCompatActivity{
                     motionHolder.addView(motionTitle);
                     motionHolder.addView(lowerText);
 
-                    //final int finalI = i;
                     app.getRiksdagenAPIManager().getMotionByID(motion.id, new PartyDocumentCallback() {
                         @Override
                         public void onDocumentsFetched(List<PartyDocument> documents) {
@@ -199,7 +193,7 @@ public class VoteActivity extends AppCompatActivity{
                             }
                             SpannableString content = new SpannableString(motionDocument.getTitel());
                             content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                            motionTitle.setText("[" + (motion.listPosition) + "] " + motion.id + " " + content + " " + motion.proposalPoint);
+                            motionTitle.setText("[" + (motion.getListPosition()) + "] " + motion.getId() + " " + content + " " + motion.getProposalPoint());
                             motionTitle.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -330,7 +324,7 @@ public class VoteActivity extends AppCompatActivity{
     }
 
     private String createMotionItemsAndCleanupPropositionText(String text, ArrayList<String> motionIDs) {
-        String originalText = text;
+        String originalText = text; //Save original to display if error occurs
         try {
             for (int i = 0; i < motionIDs.size(); i++) {
                 int beginIndex = text.indexOf(motionIDs.get(i));
@@ -338,24 +332,33 @@ public class VoteActivity extends AppCompatActivity{
                 if (motionIDs.size() > i + 1) {
                     endIndex = text.indexOf(motionIDs.get(i + 1));
                 }
+                //Cuts out string of interest ex "2017/18:3887 av Martin Kinnunen och Runar Filper (båda SD) yrkande 15 och "
                 String relevantSubstring = text.substring(beginIndex, endIndex);
                 if (relevantSubstring.contains("yrkande")) {
                     beginIndex = relevantSubstring.indexOf("yrkande");
+                    //Cut out EX: "yrkande 15""
                     if (relevantSubstring.endsWith(", ")) {
                         endIndex = relevantSubstring.lastIndexOf(", ");
                     } else if (relevantSubstring.endsWith(" och ")) {
                         endIndex = relevantSubstring.lastIndexOf(" och ");
                     } else {
+                        //Cut out the entire substring.
+                        //This path often called when parsing the last motion.
                         endIndex = relevantSubstring.length() - 1;
                     }
-                    String proposalPoint = relevantSubstring.substring(beginIndex, endIndex);
+                    String proposalPoint = relevantSubstring.substring(beginIndex, endIndex); //Get the "yrkande" points
                     motions.add(new MotionDetails(motionIDs.get(i), proposalPoint, i + 1));
                     text = text.replace(relevantSubstring.subSequence(0, endIndex), "[" + (i + 1) + "]");
-                } else {
+                }
+                //No "yrkanden"
+                else {
+                    //Replace until Ex".... (V)"
                     if (relevantSubstring.contains(")")) {
                         endIndex = relevantSubstring.lastIndexOf(")") + 1;
                         text = text.replace(relevantSubstring.subSequence(0, endIndex), "[" + (i + 1) + "]");
-                    } else {
+                    }
+                    //Just replace the ID.
+                    else {
                         text = text.replace(motionIDs.get(i), "[" + (i + 1) + "]");
                     }
                     motions.add(new MotionDetails(motionIDs.get(i), "", i + 1));
@@ -372,40 +375,6 @@ public class VoteActivity extends AppCompatActivity{
         }
         return text;
     }
-
-    /*private String cleanupPropositionText(String text, String motionID, int listID) {
-
-        //TODO learn regex
-        Pattern pattern1 = Pattern.compile("(" + motionID + "\\D).{0,60}(yrkandena)\\b.([\\d,\\s]+(och\\s|-)\\d+)");
-        Matcher matcher1 = pattern1.matcher(text);
-
-        Pattern pattern2 = Pattern.compile("(" + motionID + "\\D).{0,60}\\b(yrkande)\\b.(\\d+)");
-        Matcher matcher2 = pattern2.matcher(text);
-
-        Pattern pattern3 = Pattern.compile("(" + motionID + ")+(.{0,60}?)\\)");
-        Matcher matcher3 = pattern3.matcher(text);
-        String proposalPoint;
-        if (matcher1.find()) {
-            text = text.replace(matcher1.group(0), "[" + listID + "]");
-            proposalPoint = ", Förslag " + matcher1.group(3);
-            //System.out.println(motionID + "NUMER 1");
-        } else if (matcher2.find()) {
-            text = text.replace(matcher2.group(0), "[" + listID + "]");
-            proposalPoint = ", Förslag " + matcher2.group(3);
-            //System.out.println("NUMER 2");
-        } else if (matcher3.find()) {
-            text = text.replace(matcher3.group(0), "[" + listID + "]");
-            proposalPoint = "";
-            //System.out.println("NUMER 3");
-        } else {
-            text = text.replace(motionID, "[" + listID + "]");
-            proposalPoint = "";
-            //System.out.println(motionID + "NUMER 4");
-        }
-        motions.add(new MotionDetails(motionID, proposalPoint, listID));
-
-        return text;
-    }*/
 
     private void setUpCollapsibleViews() {
         final ImageView expandMotionsHolder = findViewById(R.id.attended_documents_expand_icon);
