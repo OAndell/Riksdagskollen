@@ -38,6 +38,7 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +70,7 @@ public class VoteActivity extends AppCompatActivity{
     private ScrollView mainContent;
     @ColorInt
     private int titleColor;
-    private final String beslutStart = "<div id=\"step4\"";
+    private final String parseStart = "<section class=\"component-case-content";
     private LinearLayout motionHolder;
     private LinearLayout partyVotesHolder;
     @Override
@@ -129,6 +130,7 @@ public class VoteActivity extends AppCompatActivity{
         final TextView textBody = findViewById(R.id.point_title);
         final TextView result = findViewById(R.id.result_textview);
         final TextView proposition = findViewById(R.id.comitee_proposition);
+        final TextView abstractTv = findViewById(R.id.vote_abstract);
 
         motionHolder = findViewById(R.id.motion_holder);
         partyVotesHolder = findViewById(R.id.party_votes_container);
@@ -138,7 +140,20 @@ public class VoteActivity extends AppCompatActivity{
         app.getRequestManager().getDownloadString(getBetUrl(document), new StringRequestCallback() {
             @Override
             public void onResponse(String response) {
-                Document doc = Jsoup.parseBodyFragment(response.substring(response.indexOf(beslutStart)));
+                Document doc = Jsoup.parseBodyFragment(response.substring(response.indexOf(parseStart)));
+
+                Element abstractContainer = doc.select("section.component-case-content.component-case-section--plate > div.row.component-case-content > div").first();
+                Elements abstractParagraphs = abstractContainer.select("p,li");
+
+                StringBuilder abstractString = new StringBuilder();
+                for (Element element : abstractParagraphs) {
+                    if (element.is("li")) abstractString.append("\t\t \u2022");
+                    if (element.text().trim().length() > 0)
+                        abstractString.append(element.text()).append("\n\n");
+                }
+
+                abstractTv.setText(abstractString.toString());
+
                 Integer pointNumber = Integer.valueOf(document.getTitel().split("förslagspunkt ")[1]);
                 Element pointTitle = doc.select("#step4 > div > div > h4.medium:contains(" + pointNumber + ".)").first();
                 String pointName = "Förslagspunkt " + pointNumber + ": " + pointTitle.text().substring(3).trim();

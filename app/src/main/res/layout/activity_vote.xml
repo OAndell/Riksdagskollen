@@ -101,7 +101,7 @@
                 <com.github.mikephil.charting.charts.HorizontalBarChart
                     android:id="@+id/chart"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
+                    android:layout_height="match_parent" />
 
             </LinearLayout>
 
@@ -110,7 +110,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:text="Punktrubrik"
                 android:textAlignment="textStart"
                 android:textColor="?mainTitleTextColor"
@@ -409,6 +409,24 @@
                 </LinearLayout>
 
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="Om ämnet:"
+                android:layout_marginTop="8dp"
+                android:textAlignment="textStart"
+                android:textColor="?mainTitleTextColor"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/vote_abstract"
+                android:textColor="?attr/mainBodyTextColor" />
+
 
         </LinearLayout>
 
