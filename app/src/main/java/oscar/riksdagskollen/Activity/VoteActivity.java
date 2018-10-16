@@ -158,16 +158,18 @@ public class VoteActivity extends AppCompatActivity{
 
                 Pattern motionPattern = Pattern.compile("[0-9]{4}\\/[0-9]{2}:[0-9]+");
                 Matcher matcher = motionPattern.matcher(propositionInfo.text());
-                //final ArrayList<String> motions = new ArrayList<>();
-                System.out.println(propositionString);
+                final ArrayList<String> motionsIDs = new ArrayList<>();
                 int match = 0;
-                int listID = 1;
+                //int listID = 1;
                 while (matcher.find()) {
                     String motionString = matcher.group(match);
-                    //motions.add(motionString);
-                    propositionString = cleanupPropositionText(propositionString, motionString, listID);
-                    listID++;
+                    motionsIDs.add(motionString);
+                    //propositionString = cleanupPropositionText(propositionString, motionString, listID);
+                    //listID++;
                 }
+                propositionString = createMotionItemsAndCleanupPropositionText(propositionString, motionsIDs);
+
+
                 proposition.setText(boldKeywordsWithHTMl(propositionString));
 
 
@@ -327,7 +329,51 @@ public class VoteActivity extends AppCompatActivity{
         return Html.fromHtml(input);
     }
 
-    private String cleanupPropositionText(String text, String motionID, int listID) {
+    private String createMotionItemsAndCleanupPropositionText(String text, ArrayList<String> motionIDs) {
+        String originalText = text;
+        try {
+            for (int i = 0; i < motionIDs.size(); i++) {
+                int beginIndex = text.indexOf(motionIDs.get(i));
+                int endIndex = text.length();
+                if (motionIDs.size() > i + 1) {
+                    endIndex = text.indexOf(motionIDs.get(i + 1));
+                }
+                String relevantSubstring = text.substring(beginIndex, endIndex);
+                if (relevantSubstring.contains("yrkande")) {
+                    beginIndex = relevantSubstring.indexOf("yrkande");
+                    if (relevantSubstring.endsWith(", ")) {
+                        endIndex = relevantSubstring.lastIndexOf(", ");
+                    } else if (relevantSubstring.endsWith(" och ")) {
+                        endIndex = relevantSubstring.lastIndexOf(" och ");
+                    } else {
+                        endIndex = relevantSubstring.length() - 1;
+                    }
+                    String proposalPoint = relevantSubstring.substring(beginIndex, endIndex);
+                    motions.add(new MotionDetails(motionIDs.get(i), proposalPoint, i + 1));
+                    text = text.replace(relevantSubstring.subSequence(0, endIndex), "[" + (i + 1) + "]");
+                } else {
+                    if (relevantSubstring.contains(")")) {
+                        endIndex = relevantSubstring.lastIndexOf(")") + 1;
+                        text = text.replace(relevantSubstring.subSequence(0, endIndex), "[" + (i + 1) + "]");
+                    } else {
+                        text = text.replace(motionIDs.get(i), "[" + (i + 1) + "]");
+                    }
+                    motions.add(new MotionDetails(motionIDs.get(i), "", i + 1));
+                }
+
+            }
+        } catch (Exception e) {
+            //If all else fails
+            motions.clear();
+            for (int i = 0; i < motionIDs.size(); i++) {
+                motions.add(new MotionDetails(motionIDs.get(i), "", i + 1));
+            }
+            return originalText;
+        }
+        return text;
+    }
+
+    /*private String cleanupPropositionText(String text, String motionID, int listID) {
 
         //TODO learn regex
         Pattern pattern1 = Pattern.compile("(" + motionID + "\\D).{0,60}(yrkandena)\\b.([\\d,\\s]+(och\\s|-)\\d+)");
@@ -359,7 +405,7 @@ public class VoteActivity extends AppCompatActivity{
         motions.add(new MotionDetails(motionID, proposalPoint, listID));
 
         return text;
-    }
+    }*/
 
     private void setUpCollapsibleViews() {
         final ImageView expandMotionsHolder = findViewById(R.id.attended_documents_expand_icon);
