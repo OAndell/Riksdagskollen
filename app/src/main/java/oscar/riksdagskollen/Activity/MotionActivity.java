@@ -154,7 +154,6 @@ public class MotionActivity extends AppCompatActivity {
                 doc.select("head>style").remove();
                 doc.select("body>div>br").remove();
 
-
                 if(document.getDoktyp().equals("frs")){
                     try {
                         // Add title styling
@@ -336,5 +335,29 @@ public class MotionActivity extends AppCompatActivity {
             builder.show();
         }
     }
+
+    //For html debugging purposes
+    /*
+    private void writeToFile(String data) {
+
+        try {
+            System.out.println("Trying to write to SD Card");
+            File myFile = new File(Environment.getExternalStorageDirectory() + "/config.html");
+            myFile.createNewFile();
+            FileOutputStream fOut = new FileOutputStream(myFile);
+            OutputStreamWriter myOutWriter =new OutputStreamWriter(fOut);
+            myOutWriter.append(data);
+            myOutWriter.close();
+            fOut.close();
+
+            Toast.makeText(this,"Done writing SD 'mysdfile.txt'", Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Failed to write " + e.getMessage());
+            Toast.makeText(this, e.getMessage(),Toast.LENGTH_SHORT).show();
+        }
+
+    }*/
 
 }

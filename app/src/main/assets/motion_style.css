@@ -98,10 +98,13 @@ a:visited {
 }
 
 img {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    max-width: 100%;
+    height: auto;
+    width: auto;
+}
 
 table {
         display: block;
@@ -112,40 +115,39 @@ table {
         table-layout: fixed;
     }
 
+td {
+    padding: 5px;
+    word-wrap: break-word;
+    text-align: left;
+}
 
-    td {
-        padding: 5px;
-        word-wrap: break-word;
-        text-align: left;
-    }
-
-    th {
-        font-weight: bold;
-        word-wrap: break-word;
-        text-align: left;
-    }
+th {
+    font-weight: bold;
+    word-wrap: break-word;
+    text-align: left;
+}
 
 
-    table caption {
-      background: transparent;
-      font-weight: bold;
-    }
+table caption {
+  background: transparent;
+  font-weight: bold;
+}
 
-    table thead {
-      background: #F5F5F5;
-    }
+table thead {
+  background: #F5F5F5;
+}
 
-    table thead tr th,
-    table thead tr td {
-      font-weight: bold;
-    }
+table thead tr th,
+table thead tr td {
+  font-weight: bold;
+}
 
-    table tfoot {
-      background: #F5F5F5;
-    }
+table tfoot {
+  background: #F5F5F5;
+}
 
-    table tfoot tr th,
-    table tfoot tr td {
-      font-weight: bold;
+table tfoot tr th,
+table tfoot tr td {
+  font-weight: bold;
 
-    }
+}
