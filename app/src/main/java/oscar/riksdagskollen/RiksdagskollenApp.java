@@ -39,7 +39,6 @@ public class RiksdagskollenApp extends Application {
 
         //Only use Crashlytics in release mode
         if (!BuildConfig.DEBUG) {
-            System.out.println("DEBUG");
             Fabric.with(this, new Crashlytics());
         }
 

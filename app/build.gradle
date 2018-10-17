@@ -33,7 +33,6 @@ android {
         debug {
             // Add API keys to project from local gradle.properties
             buildConfigField 'String', "SafetyApiKey", SAFETY_API_KEY
-            resValue 'string', "fabricApiKey", fabricApiKey
         }
         release {
             minifyEnabled false
@@ -41,7 +40,6 @@ android {
 
             // Add API keys to project from local gradle.properties
             buildConfigField 'String', "SafetyApiKey", SAFETY_API_KEY
-            resValue 'string', "fabricApiKey", fabricApiKey
         }
     }
 }
