@@ -6,8 +6,10 @@ import android.content.res.Resources;
 import android.support.annotation.ColorInt;
 import android.util.TypedValue;
 
+import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 
+import io.fabric.sdk.android.Fabric;
 import oscar.riksdagskollen.Manager.AlertManager;
 import oscar.riksdagskollen.Manager.RepresentativeManager;
 import oscar.riksdagskollen.Manager.RequestManager;
@@ -34,6 +36,13 @@ public class RiksdagskollenApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        //Only use Crashlytics in release mode
+        if (!BuildConfig.DEBUG) {
+            System.out.println("DEBUG");
+            Fabric.with(this, new Crashlytics());
+        }
+
         instance = this;
         requestManager = new RequestManager();
         riksdagenAPIManager = new RiksdagenAPIManager(this);
