@@ -63,6 +63,8 @@ public class VoteActivity extends AppCompatActivity{
     private boolean motionLoaded = false;
     private boolean motionHolderExpanded = false;
     private boolean partyVotesExpanded = false;
+    private Context context;
+    private RiksdagskollenApp app;
 
     private ArrayList<MotionDetails> motions = new ArrayList<>();
 
@@ -78,6 +80,8 @@ public class VoteActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setTheme(RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         setContentView(R.layout.activity_vote);
+        context = this;
+        app = RiksdagskollenApp.getInstance();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -98,17 +102,16 @@ public class VoteActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final Vote document = getIntent().getParcelableExtra("document");
+        final Vote voteDocument = getIntent().getParcelableExtra("document");
 
         final TextView title = findViewById(R.id.vote_title);
-        title.setText(document.getTitel());
+        title.setText(voteDocument.getTitel());
 
-        final RiksdagskollenApp app = RiksdagskollenApp.getInstance();
-        if (document.getVoteResults() != null) {
+        if (voteDocument.getVoteResults() != null) {
             // Aldready downloaded results
-            prepareGraphs(new VoteResults(document.getVoteResults()));
+            prepareGraphs(new VoteResults(voteDocument.getVoteResults()));
         } else {
-            app.getRequestManager().getDownloadString("http:" + document.getDokument_url_html(), new StringRequestCallback() {
+            app.getRequestManager().getDownloadString("http:" + voteDocument.getDokument_url_html(), new StringRequestCallback() {
                 @Override
                 public void onResponse(String response) {
                     VoteResults results = new VoteResults(response);
@@ -123,21 +126,20 @@ public class VoteActivity extends AppCompatActivity{
             });
         }
 
+        motionHolder = findViewById(R.id.motion_holder);
+        partyVotesHolder = findViewById(R.id.party_votes_container);
+        setUpCollapsibleViews();
+        setUpTextAndGetMotions(voteDocument);
 
 
+    }
 
-        final Context context = this;
+    private void setUpTextAndGetMotions(final Vote voteDocument) {
         final TextView textBody = findViewById(R.id.point_title);
         final TextView result = findViewById(R.id.result_textview);
         final TextView proposition = findViewById(R.id.comitee_proposition);
         final TextView abstractTv = findViewById(R.id.vote_abstract);
-
-        motionHolder = findViewById(R.id.motion_holder);
-        partyVotesHolder = findViewById(R.id.party_votes_container);
-        setUpCollapsibleViews();
-
-
-        app.getRequestManager().getDownloadString(getBetUrl(document), new StringRequestCallback() {
+        app.getRequestManager().getDownloadString(getBetUrl(voteDocument), new StringRequestCallback() {
             @Override
             public void onResponse(String response) {
                 Document doc = Jsoup.parseBodyFragment(response.substring(response.indexOf(parseStart)));
@@ -151,10 +153,9 @@ public class VoteActivity extends AppCompatActivity{
                     if (element.text().trim().length() > 0)
                         abstractString.append(element.text()).append("\n\n");
                 }
-
                 abstractTv.setText(abstractString.toString());
 
-                Integer pointNumber = Integer.valueOf(document.getTitel().split("förslagspunkt ")[1]);
+                Integer pointNumber = Integer.valueOf(voteDocument.getTitel().split("förslagspunkt ")[1]);
                 Element pointTitle = doc.select("#step4 > div > div > h4.medium:contains(" + pointNumber + ".)").first();
                 String pointName = "Förslagspunkt " + pointNumber + ": " + pointTitle.text().substring(3).trim();
                 Element resultSpan = pointTitle.nextElementSibling();
@@ -181,54 +182,7 @@ public class VoteActivity extends AppCompatActivity{
                 }
                 propositionString = createMotionItemsAndCleanupPropositionText(propositionString, motionsIDs);
                 proposition.setText(boldKeywordsWithHTMl(propositionString));
-
-
-                for (final MotionDetails motion : motions) {
-                    LayoutInflater layoutInflater = getLayoutInflater();
-                    final TextView motionTitle = (TextView) layoutInflater.inflate(R.layout.vote_button_row, null);
-                    final TextView lowerText = new TextView(context);
-                    final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.setMargins(0, 0, 0, 25);
-                    ;
-                    lowerText.setLayoutParams(params);
-                    motionHolder.addView(motionTitle);
-                    motionHolder.addView(lowerText);
-
-                    app.getRiksdagenAPIManager().getMotionByID(motion.id, new PartyDocumentCallback() {
-                        @Override
-                        public void onDocumentsFetched(List<PartyDocument> documents) {
-
-                            // Very uncommon case, for now we don't have a good method of comparing documents so skip it
-
-                            final PartyDocument motionDocument = documents.get(0);
-
-                            if (motionDocument.getDoktyp().equals("prop")) {
-                                motionHolder.removeView(lowerText);
-                                motionTitle.setLayoutParams(params);
-                            }
-                            SpannableString content = new SpannableString(motionDocument.getTitel());
-                            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                            motionTitle.setText("[" + (motion.getListPosition()) + "] " + motion.getId() + " " + content + " " + motion.getProposalPoint());
-                            motionTitle.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Intent intent = new Intent(context, MotionActivity.class);
-                                    intent.putExtra("document", ((PartyDocument) motionDocument));
-                                    startActivity(intent);
-                                }
-                            });
-                            lowerText.setText(motionDocument.getUndertitel());
-                            lowerText.setTextColor(titleColor);
-                            motionLoaded = true; //not true
-                            checkLoading();
-                        }
-
-                        @Override
-                        public void onFail(VolleyError error) {
-
-                        }
-                    });
-                }
+                displayMotions();
 
                 if (motions.isEmpty()) {
                     motionLoaded = true;
@@ -241,85 +195,46 @@ public class VoteActivity extends AppCompatActivity{
 
             }
         });
+    }
 
-        /*
+    //Loop through motions and display, fetch docs and make them clickable.
+    private void displayMotions() {
+        for (final MotionDetails motion : motions) {
+            LayoutInflater layoutInflater = getLayoutInflater();
+            final TextView motionTitle = (TextView) layoutInflater.inflate(R.layout.vote_button_row, null);
+            final TextView lowerText = new TextView(context);
+            final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0, 0, 0, 25);
+            ;
+            lowerText.setLayoutParams(params);
+            motionHolder.addView(motionTitle);
+            motionHolder.addView(lowerText);
 
-        app.getRequestManager().getDownloadString("http://data.riksdagen.se/dokument/" + document.getSearchableBetId() + ".html", new StringRequestCallback() {
+            app.getRiksdagenAPIManager().getMotionByID(motion.id, new PartyDocumentCallback() {
                 @Override
-                public void onResponse(String response) {
-                    try {
-                        Document doc = Jsoup.parse(response);
-                        Integer pointNumber = Integer.valueOf(document.getTitel().split("förslagspunkt ")[1]);
-                        Elements pointTitle = doc.select("table:contains(" + pointNumber + ".)");
-                        Element next = pointTitle.get(0);
-                        String pointName = pointTitle.get(0).text().substring(3);
+                public void onDocumentsFetched(List<PartyDocument> documents) {
+                    // Very uncommon case, for now we don't have a good method of comparing documents so skip it
+                    final PartyDocument motionDocument = documents.get(0);
 
-                        final HashMap<String, String> motions = new HashMap<>();
-                        for (int i = 0; i < 10; i++) {
-                            next = next.nextElementSibling();
-                            if(next.text().contains(":") && next.text().contains("/") && next.text().indexOf(':') == 7){
-                                Pattern propositionPattern = Pattern.compile("yrkande.* [0-9,–]*");
-                                Matcher matcher = propositionPattern.matcher(next.text());
-                                String prop = "";
-                                if (matcher.find()){
-                                    prop = matcher.group(0);
-                                    prop = prop.replace("yrkandena", ": Förslag");
-                                    prop = prop.replace("yrkande", ": Förslag");
-                                }
-                                motions.put(next.text().split(" ")[0], prop);
-                            }
-                            else if(next.toString().contains("Reservation")){
-                                break;
-                            }
-                        }
-                        textBody.setText(pointName);
-                        for (final String key : motions.keySet()) {
-                            app.getRiksdagenAPIManager().getMotionByID(key, new PartyDocumentCallback() {
-                                @Override
-                                public void onDocumentsFetched(List<PartyDocument> documents) {
-
-                                    // Very uncommon case, for now we don't have a good method of comparing documents so skip it
-                                    if (documents.size() > 1) {
-                                        return;
-                                    }
-
-                                    final PartyDocument motionDocument = documents.get(0);
-
-
-                                    LayoutInflater layoutInflater = getLayoutInflater();
-                                    TextView motionTitle = (TextView) layoutInflater.inflate(R.layout.vote_button_row, null);
-                                    SpannableString content = new SpannableString(motionDocument.getTitel());
-                                    content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                                    motionTitle.setText(content + motions.get(key));
-                                    motionTitle.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            Intent intent = new Intent(context, MotionActivity.class);
-                                            intent.putExtra("document",((PartyDocument)motionDocument));
-                                            startActivity(intent);
-                                        }
-                                    });
-                                    motionHolder.addView(motionTitle);
-                                    TextView lowerText = new TextView(context);
-                                    lowerText.setText(motionDocument.getUndertitel()+ "\n");
-                                    motionHolder.addView(lowerText);
-                                    lowerText.setTextColor(titleColor);
-                                    motionLoaded = true; //not true
-                                    checkLoading();
-                                }
-
-                                @Override
-                                public void onFail(VolleyError error) {
-
-                                }
-                            });
-                        }
-                    //We could not find the vote point for some reason
-                    }catch (Exception e){
-                        motionLoaded = true;
-                        checkLoading();
-                        textBody.setText("");
+                    if (motionDocument.getDoktyp().equals("prop")) {
+                        motionHolder.removeView(lowerText);
+                        motionTitle.setLayoutParams(params);
                     }
+                    SpannableString content = new SpannableString(motionDocument.getTitel());
+                    content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                    motionTitle.setText("[" + (motion.getListPosition()) + "] " + motion.getId() + " " + content + " " + motion.getProposalPoint());
+                    motionTitle.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(context, MotionActivity.class);
+                            intent.putExtra("document", ((PartyDocument) motionDocument));
+                            startActivity(intent);
+                        }
+                    });
+                    lowerText.setText(motionDocument.getUndertitel());
+                    lowerText.setTextColor(titleColor);
+                    motionLoaded = true; //not true
+                    checkLoading();
                 }
 
                 @Override
@@ -327,7 +242,7 @@ public class VoteActivity extends AppCompatActivity{
 
                 }
             });
-            */
+        }
     }
 
     private Spanned boldKeywordsWithHTMl(String input) {
@@ -338,6 +253,7 @@ public class VoteActivity extends AppCompatActivity{
         return Html.fromHtml(input);
     }
 
+    //Create a motionDetail object for each document and replace it in the text with [x]
     private String createMotionItemsAndCleanupPropositionText(String text, ArrayList<String> motionIDs) {
         String originalText = text; //Save original to display if error occurs
         try {
