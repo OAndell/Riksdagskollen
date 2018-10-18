@@ -71,8 +71,12 @@ public class RiksdagenAPIManager {
     }
 
     public void getDocumentsForParty(Party party, int page, final PartyDocumentCallback callback) {
+        getDocumentsForParty(party.getID(), page, callback);
+    }
+
+    public void getDocumentsForParty(String partyid, int page, final PartyDocumentCallback callback) {
         String subURL = "/dokumentlista/?avd=dokument&del=dokument&fcs=1&sort=datum&sortorder=desc&utformat=json"
-                + "&parti=" + party.getID()
+                + "&parti=" + partyid
                 + "&p=" + page;
 
         doApiGetRequest(subURL, new JSONRequestCallback() {
@@ -87,6 +91,7 @@ public class RiksdagenAPIManager {
                     callback.onFail(new VolleyError("Failed to parse JSON"));
                 }
             }
+
             @Override
             public void onRequestFail(VolleyError error) {
                 callback.onFail(error);

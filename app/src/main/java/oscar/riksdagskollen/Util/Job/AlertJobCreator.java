@@ -18,8 +18,8 @@ public class AlertJobCreator implements com.evernote.android.job.JobCreator {
 
 
         switch (tag) {
-            case CheckRepliesJob.TAG:
-                return new CheckRepliesJob();
+            case CheckAlertsJob.TAG:
+                return new CheckAlertsJob();
             case DownloadRepresentativesJob.TAG:
                 return new DownloadRepresentativesJob();
             default:

@@ -36,7 +36,6 @@ import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.AppBarStateChangeListener;
 import oscar.riksdagskollen.Util.JSONModel.Party;
-import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -124,17 +123,49 @@ public class MainActivity extends AppCompatActivity
             invalidateOptionsMenu();
         }
 
-        //Open app with notification
-        if (getIntent().hasExtra("document")) {
-            handleOpenWithNotification((PartyDocument) getIntent().getParcelableExtra("document"));
-        }
     }
 
 
-    private void handleOpenWithNotification(PartyDocument document) {
-        Intent intent = new Intent(this, MotionActivity.class);
-        intent.putExtra("document", document);
-        startActivity(intent);
+    private void handleOpenWithNotification() {
+        Intent incoming = getIntent();
+        if (incoming.hasExtra("document")) {
+            Intent intent = new Intent(this, MotionActivity.class);
+            intent.putExtra("document", incoming.getParcelableExtra("document"));
+            startActivity(intent);
+        } else if (incoming.hasExtra("section")) {
+            switch (incoming.getStringExtra("section")) {
+                case "m":
+                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.m_nav));
+                    break;
+                case "s":
+                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.s_nav));
+                    break;
+                case "c":
+                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.c_nav));
+                    break;
+                case "l":
+                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.l_nav));
+                    break;
+                case "mp":
+                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.mp_nav));
+                    break;
+                case "kd":
+                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.kd_nav));
+                    break;
+                case "sd":
+                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.sd_nav));
+                    break;
+                case "v":
+                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.v_nav));
+                    break;
+                case VoteListFragment.sectionName:
+                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.votes_nav));
+                    break;
+                default:
+                    break;
+            }
+        }
+
     }
 
     @Override
@@ -221,6 +252,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void run() {
                 appBarLayout.setExpanded(false, true);
+                handleOpenWithNotification();
             }
         }, 800);
     }

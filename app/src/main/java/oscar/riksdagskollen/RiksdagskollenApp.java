@@ -40,15 +40,15 @@ public class RiksdagskollenApp extends Application {
         themeManager = new ThemeManager(this);
         alertManager = new AlertManager(this);
         JobManager.create(this).addJobCreator(new AlertJobCreator());
-        scheduleCheckRepliesJobIfNotRunning();
+        scheduleCheckAlertsJobIfNotRunning();
 
         representativeManager = new RepresentativeManager(this);
     }
 
-    public void scheduleCheckRepliesJobIfNotRunning() {
+    public void scheduleCheckAlertsJobIfNotRunning() {
         if (!isCheckRepliesScheduled()) {
+            System.out.println("Scheduling job");
             //Create jobs which will search for replies to tracked questions
-            System.out.println("Scheduled job");
             CheckAlertsJob.scheduleJob();
         }
     }

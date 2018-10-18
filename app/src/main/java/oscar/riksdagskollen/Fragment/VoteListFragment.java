@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import oscar.riksdagskollen.Activity.VoteActivity;
+import oscar.riksdagskollen.Manager.AlertManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
@@ -41,13 +43,15 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
     private VoteAdapter adapter;
     private boolean isShowingSearchedVotes = false;
     private SharedPreferences preferences;
+    private MenuItem notificationItem;
+    public static final String sectionName = "vote";
 
 
-    public static VoteListFragment newInstance(@Nullable ArrayList<Vote> votes){
+    public static VoteListFragment newInstance(@Nullable ArrayList<Vote> votes) {
         VoteListFragment newInstance = new VoteListFragment();
-        if(votes != null) {
+        if (votes != null) {
             Bundle args = new Bundle();
-            args.putParcelableArrayList("votes",votes);
+            args.putParcelableArrayList("votes", votes);
             newInstance.setArguments(args);
         }
         return newInstance;
@@ -56,7 +60,7 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if(!isShowingSearchedVotes){
+        if (!isShowingSearchedVotes) {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.votes);
             applyFilter();
         }
@@ -82,9 +86,9 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(getArguments() != null) {
+        if (getArguments() != null) {
             voteList = getArguments().getParcelableArrayList("votes");
-            if(voteList != null && !voteList.isEmpty()) isShowingSearchedVotes = true;
+            if (voteList != null && !voteList.isEmpty()) isShowingSearchedVotes = true;
         }
 
         if (!isShowingSearchedVotes) setHasOptionsMenu(true);
@@ -138,7 +142,13 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (item.getItemId() == R.id.menu_filter) {
+        if (item.getItemId() == R.id.notification_menu_item) {
+            boolean enabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForPage(sectionName, voteList.get(0).getId());
+            if (enabled) {
+                item.setIcon(R.drawable.ic_notification_enabled);
+                Toast.makeText(getContext(), "Du kommer nu få en notis när en ny votering publiceras", Toast.LENGTH_LONG).show();
+            } else item.setIcon(R.drawable.ic_notifications_disabled);
+        } else if (item.getItemId() == R.id.menu_filter) {
             oldFilter = getFilter();
             final CharSequence[] items = DecicionCategory.getCategoryNames();
             boolean[] checked = new boolean[items.length];
@@ -180,9 +190,17 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.filter, menu);
+        inflater.inflate(R.menu.party_feed_menu, menu);
+        notificationItem = menu.findItem(R.id.notification_menu_item);
+        if (RiksdagskollenApp.getInstance().getAlertManager().isAlertEnabledForSection(sectionName)) {
+            notificationItem.setIcon(R.drawable.ic_notification_enabled);
+        }
+        if (voteList.size() > 0) {
+            notificationItem.setVisible(true);
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -190,9 +208,9 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
      * Load the next page and add it to the adapter when downloaded and parsed.
      * Hides the loading view.s
      */
-    protected void loadNextPage(){
+    protected void loadNextPage() {
 
-        if(!isShowingSearchedVotes) {
+        if (!isShowingSearchedVotes) {
             setLoadingMoreItems(true);
             RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getVotes(new VoteCallback() {
 
@@ -201,6 +219,10 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
                     voteList.addAll(votes);
                     List<Vote> filteredDocuments = filter(votes);
                     getAdapter().addAll(filteredDocuments);
+
+                    if (getPageToLoad() <= 2) {
+                        updateAlerts();
+                    }
 
                     // Load next page if the requested page does not contain any documents matching the filter
                     // or if there are too few documents in the list
@@ -213,6 +235,7 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
                     }
                     if (!isLoadingUntilFull()) setLoadingMoreItems(false);
                     setShowLoadingView(false);
+                    notificationItem.setVisible(true);
                 }
 
                 @Override
@@ -234,5 +257,11 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         onFilterChanged();
+    }
+
+    private void updateAlerts() {
+        if (AlertManager.getInstance().isAlertEnabledForSection(sectionName)) {
+            AlertManager.getInstance().setAlertEnabledForSection(sectionName, voteList.get(0).getId(), true);
+        }
     }
 }

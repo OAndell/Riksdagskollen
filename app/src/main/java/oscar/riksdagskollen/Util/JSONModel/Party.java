@@ -77,4 +77,22 @@ public class Party implements Parcelable {
             return new Party[size];
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Party party = (Party) o;
+
+        if (!id.equals(party.id)) return false;
+        return name.equals(party.name);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + name.hashCode();
+        return result;
+    }
 }

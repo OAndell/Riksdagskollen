@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import oscar.riksdagskollen.Activity.MotionActivity;
+import oscar.riksdagskollen.Manager.AlertManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.PartyListViewholderAdapter;
@@ -40,6 +42,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
     private PartyListViewholderAdapter adapter;
     private SharedPreferences preferences;
     private ArrayList<PartyDocumentType> oldFilter;
+    private MenuItem notificationItem;
 
     /**
      *
@@ -105,7 +108,13 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId() == R.id.menu_filter){
+        if (item.getItemId() == R.id.notification_menu_item) {
+            boolean enabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForParty(party.getID(), documentList.get(0));
+            if (enabled) {
+                item.setIcon(R.drawable.ic_notification_enabled);
+                Toast.makeText(getContext(), String.format("Du kommer nu få en notis när %s publicerar ett nytt dokument", party.getName()), Toast.LENGTH_LONG).show();
+            } else item.setIcon(R.drawable.ic_notifications_disabled);
+        } else if (item.getItemId() == R.id.menu_filter) {
             oldFilter = getFilter();
             final CharSequence[] items = PartyDocumentType.getPartyDisplayNames();
             boolean[] checked = new boolean[items.length];
@@ -149,9 +158,17 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.filter, menu);
+        inflater.inflate(R.menu.party_feed_menu, menu);
+        notificationItem = menu.findItem(R.id.notification_menu_item);
+        if (RiksdagskollenApp.getInstance().getAlertManager().isAlertEnabledForParty(party.getID())) {
+            notificationItem.setIcon(R.drawable.ic_notification_enabled);
+        }
+        if (documentList.size() > 0) {
+            notificationItem.setVisible(true);
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
+
 
     /**
      * Load the next page and add it to the adapter when downloaded and parsed.
@@ -168,6 +185,10 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
                 int itemCountBeforeLoad = getAdapter().getItemCount();
                 getAdapter().addAll(filteredDocuments);
 
+                if (getPageToLoad() <= 2) {
+                    updateAlerts();
+                }
+
                 // Unpretty fix for a bug where recyclerview sometimes scrolls to the bottom after initial filter
                 if (itemCountBeforeLoad <= 1) getRecyclerView().scrollToPosition(0);
 
@@ -181,6 +202,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
                 }
                 if (!isLoadingUntilFull()) setLoadingMoreItems(false);
                 setShowLoadingView(false);
+                notificationItem.setVisible(true);
             }
 
             @Override
@@ -234,6 +256,12 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         onFilterChanged();
+    }
+
+    private void updateAlerts() {
+        if (AlertManager.getInstance().isAlertEnabledForParty(party.getID())) {
+            AlertManager.getInstance().setAlertEnabledForPartyDocuments(party.getID(), documentList.get(0), true);
+        }
     }
 }
 
