@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.Collection;
@@ -284,7 +283,6 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.votes_nav:
                 fireBase.setCurrentScreen(this, "votes", null);
-                Crashlytics.getInstance().crash();
                 if (voteListFragment == null) voteListFragment = VoteListFragment.newInstance(null);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,voteListFragment).commit();
                 break;
