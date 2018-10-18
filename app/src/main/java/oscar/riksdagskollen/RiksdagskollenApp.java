@@ -7,6 +7,7 @@ import android.support.annotation.ColorInt;
 import android.util.TypedValue;
 
 import com.evernote.android.job.JobManager;
+import com.google.firebase.FirebaseApp;
 
 import oscar.riksdagskollen.Manager.AlertManager;
 import oscar.riksdagskollen.Manager.RepresentativeManager;
@@ -35,6 +36,8 @@ public class RiksdagskollenApp extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        FirebaseApp.initializeApp(this);
+
         requestManager = new RequestManager();
         riksdagenAPIManager = new RiksdagenAPIManager(this);
         themeManager = new ThemeManager(this);
@@ -43,6 +46,7 @@ public class RiksdagskollenApp extends Application {
         scheduleCheckAlertsJobIfNotRunning();
 
         representativeManager = new RepresentativeManager(this);
+
     }
 
     public void scheduleCheckAlertsJobIfNotRunning() {

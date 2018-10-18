@@ -20,6 +20,9 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 
+import com.crashlytics.android.Crashlytics;
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -70,6 +73,7 @@ public class MainActivity extends AppCompatActivity
     private ActionBarDrawerToggle toggle;
     private boolean emptyToolbar = false;
     private ImageView collapsingLogo;
+    private FirebaseAnalytics fireBase;
 
     public static Party getParty(String id) {
         return parties.get(id);
@@ -89,6 +93,7 @@ public class MainActivity extends AppCompatActivity
         appBarLayout = findViewById(R.id.appbar);
         collapsingToolbarLayout = findViewById(R.id.collapsing_layout);
         collapsingLogo = findViewById(R.id.riksdagen_logo_collapsing);
+        fireBase = FirebaseAnalytics.getInstance(this);
 
         setSupportActionBar(toolbar);
 
@@ -272,28 +277,35 @@ public class MainActivity extends AppCompatActivity
 
         switch (id){
             case R.id.news_nav:
+                fireBase.setCurrentScreen(this, "news", null);
                 if (currentNewsListFragment == null)
                     currentNewsListFragment = CurrentNewsListFragment.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,currentNewsListFragment).commit();
                 break;
             case R.id.votes_nav:
+                fireBase.setCurrentScreen(this, "votes", null);
+                Crashlytics.getInstance().crash();
                 if (voteListFragment == null) voteListFragment = VoteListFragment.newInstance(null);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,voteListFragment).commit();
                 break;
             case R.id.dec_nav:
+                fireBase.setCurrentScreen(this, "decisions", null);
                 if (decisionsFragment == null)
                     decisionsFragment = DecisionsListFragment.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,decisionsFragment).commit();
                 break;
             case R.id.rep_nav:
+                fireBase.setCurrentScreen(this, "reps", null);
                 if (repFragment == null) repFragment = RepresentativeListFragment.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, repFragment).commit();
                 break;
             case R.id.prot_nav:
+                fireBase.setCurrentScreen(this, "protocol", null);
                 if (protFragment == null) protFragment = ProtocolListFragment.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,protFragment).commit();
                 break;
             case R.id.s_nav:
+                fireBase.setCurrentScreen(this, "s", null);
                 if (sPartyFragment == null) {
                     sPartyFragment = PartyFragment.newInstance(parties.get(("s")));
                     sPartyListFragment = PartyListFragment.newInstance(parties.get("s"));
@@ -302,6 +314,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,sPartyFragment).commit();
                 break;
             case R.id.m_nav:
+                fireBase.setCurrentScreen(this, "m", null);
                 if (mPartyFragment == null) {
                     mPartyFragment = PartyFragment.newInstance(parties.get(("m")));
                     mPartyListFragment = PartyListFragment.newInstance(parties.get("m"));
@@ -310,6 +323,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,mPartyFragment).commit();
                 break;
             case R.id.sd_nav:
+                fireBase.setCurrentScreen(this, "sd", null);
                 if (sdPartyFragment == null) {
                     sdPartyFragment = PartyFragment.newInstance(parties.get(("sd")));
                     sdPartyListFragment = PartyListFragment.newInstance(parties.get("sd"));
@@ -318,6 +332,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,sdPartyFragment).commit();
                 break;
             case R.id.mp_nav:
+                fireBase.setCurrentScreen(this, "mp", null);
                 if (mpPartyFragment == null) {
                     mpPartyFragment = PartyFragment.newInstance(parties.get(("mp")));
                     mpPartyListFragment = PartyListFragment.newInstance(parties.get("mp"));
@@ -326,6 +341,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,mpPartyFragment).commit();
                 break;
             case R.id.c_nav:
+                fireBase.setCurrentScreen(this, "c", null);
                 if (cPartyFragment == null) {
                     cPartyFragment = PartyFragment.newInstance(parties.get(("c")));
                     cPartyListFragment = PartyListFragment.newInstance(parties.get("c"));
@@ -334,6 +350,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,cPartyFragment).commit();
                 break;
             case R.id.v_nav:
+                fireBase.setCurrentScreen(this, "v", null);
                 if (vPartyFragment == null) {
                     vPartyFragment = PartyFragment.newInstance(parties.get(("v")));
                     vPartyListFragment = PartyListFragment.newInstance(parties.get("v"));
@@ -342,6 +359,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,vPartyFragment).commit();
                 break;
             case R.id.l_nav:
+                fireBase.setCurrentScreen(this, "l", null);
                 if (lPartyFragment == null) {
                     lPartyFragment = PartyFragment.newInstance(parties.get(("l")));
                     lPartyListFragment = PartyListFragment.newInstance(parties.get("l"));
@@ -350,6 +368,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,lPartyFragment).commit();
                 break;
             case R.id.kd_nav:
+                fireBase.setCurrentScreen(this, "kd", null);
                 if (kdPartyFragment == null) {
                     kdPartyFragment = PartyFragment.newInstance(parties.get(("kd")));
                     kdPartyListFragment = PartyListFragment.newInstance(parties.get("kd"));
@@ -358,6 +377,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,kdPartyFragment).commit();
                 break;
             case R.id.about_nav:
+                fireBase.setCurrentScreen(this, "about", null);
                 if (aboutFragment == null) aboutFragment = AboutFragment.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,aboutFragment).commit();
                 break;
