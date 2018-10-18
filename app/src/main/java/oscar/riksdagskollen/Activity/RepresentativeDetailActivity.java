@@ -95,20 +95,19 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
 
                     @Override
                     public void onDocumentsFetched(List<PartyDocument> documents, String numberOfHits) {
-                        ArrayList<PartyDocument> firstPage = new ArrayList<>();
-                        firstPage.addAll(documents);
+                        ArrayList<PartyDocument> firstPage = new ArrayList<>(documents);
                         publishedDocuments.setText(numberOfHits);
                         tabFragment = RepresentativeTabFragment.newInstance();
                         feedFragment = RepresentativeFeedFragment.newInstance(representative.getIntressent_id(), firstPage);
                         tabFragment.addTab(feedFragment, getString(R.string.rep_feed_tab_name));
                         tabFragment.addTab(RepresentativeBiographyFragment.newInstance(representative), "Om " + representative.getTilltalsnamn());
-                        getSupportFragmentManager().beginTransaction().replace(R.id.rep_fragment_container, tabFragment).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.rep_fragment_container, tabFragment).commitAllowingStateLoss();
                     }
 
                     @Override
                     public void onFail(VolleyError error) {
                         publishedDocuments.setText("0");
-                        getSupportFragmentManager().beginTransaction().replace(R.id.rep_fragment_container, RepresentativeBiographyFragment.newInstance(representative)).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.rep_fragment_container, RepresentativeBiographyFragment.newInstance(representative)).commitAllowingStateLoss();
                     }
                 });
         getVoteAbsence();
