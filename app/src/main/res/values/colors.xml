@@ -10,7 +10,7 @@
 
     <color name="secondaryLightColor">#ffffff</color>
     <color name="secondaryDarkColor">#cccccc</color>
-    <color name="darkText">#424242</color>
+    <color name="darkText">#212121</color>
 
     <color name="yesVoteColor">#3cb44b</color>
     <color name="yesVoteColorLight">#d9f2dc</color>

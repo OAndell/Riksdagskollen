@@ -35,7 +35,6 @@ import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.AppBarStateChangeListener;
-import oscar.riksdagskollen.Util.Helper.DeviceUuidFactory;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 
@@ -87,8 +86,6 @@ public class MainActivity extends AppCompatActivity
         setTheme(RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         setContentView(R.layout.activity_main);
 
-        DeviceUuidFactory.getDeviceUuid(this);
-
         toolbar = findViewById(R.id.toolbar);
         appBarLayout = findViewById(R.id.appbar);
         collapsingToolbarLayout = findViewById(R.id.collapsing_layout);
@@ -112,17 +109,14 @@ public class MainActivity extends AppCompatActivity
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
-        initPartyFragments();
-        initMenuOptions();
+        initParties();
 
         // Fresh start
         if (savedInstanceState == null) {
             startLauncherTransition();
-
             // Mark News-fragment as selected at startup
             onNavigationItemSelected(navigationView.getMenu().getItem(0).getSubMenu().getItem(0));
             navigationView.getMenu().getItem(0).getSubMenu().getItem(0).setChecked(true);
-
             // Apply theme
         } else {
             emptyToolbar = false;
@@ -246,45 +240,93 @@ public class MainActivity extends AppCompatActivity
 
         switch (id){
             case R.id.news_nav:
+                if (currentNewsListFragment == null)
+                    currentNewsListFragment = CurrentNewsListFragment.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,currentNewsListFragment).commit();
                 break;
             case R.id.votes_nav:
+                if (voteListFragment == null) voteListFragment = VoteListFragment.newInstance(null);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,voteListFragment).commit();
                 break;
             case R.id.dec_nav:
+                if (decisionsFragment == null)
+                    decisionsFragment = DecisionsListFragment.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,decisionsFragment).commit();
                 break;
             case R.id.rep_nav:
+                if (repFragment == null) repFragment = RepresentativeListFragment.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, repFragment).commit();
                 break;
             case R.id.prot_nav:
+                if (protFragment == null) protFragment = ProtocolListFragment.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,protFragment).commit();
                 break;
             case R.id.s_nav:
+                if (sPartyFragment == null) {
+                    sPartyFragment = PartyFragment.newInstance(parties.get(("s")));
+                    sPartyListFragment = PartyListFragment.newInstance(parties.get("s"));
+                    sPartyFragment.setListFragment(sPartyListFragment);
+                }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,sPartyFragment).commit();
                 break;
             case R.id.m_nav:
+                if (mPartyFragment == null) {
+                    mPartyFragment = PartyFragment.newInstance(parties.get(("m")));
+                    mPartyListFragment = PartyListFragment.newInstance(parties.get("m"));
+                    mPartyFragment.setListFragment(mPartyListFragment);
+                }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,mPartyFragment).commit();
                 break;
             case R.id.sd_nav:
+                if (sdPartyFragment == null) {
+                    sdPartyFragment = PartyFragment.newInstance(parties.get(("sd")));
+                    sdPartyListFragment = PartyListFragment.newInstance(parties.get("sd"));
+                    sdPartyFragment.setListFragment(sdPartyListFragment);
+                }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,sdPartyFragment).commit();
                 break;
             case R.id.mp_nav:
+                if (mpPartyFragment == null) {
+                    mpPartyFragment = PartyFragment.newInstance(parties.get(("mp")));
+                    mpPartyListFragment = PartyListFragment.newInstance(parties.get("mp"));
+                    mpPartyFragment.setListFragment(mpPartyListFragment);
+                }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,mpPartyFragment).commit();
                 break;
             case R.id.c_nav:
+                if (cPartyFragment == null) {
+                    cPartyFragment = PartyFragment.newInstance(parties.get(("c")));
+                    cPartyListFragment = PartyListFragment.newInstance(parties.get("c"));
+                    cPartyFragment.setListFragment(cPartyListFragment);
+                }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,cPartyFragment).commit();
                 break;
             case R.id.v_nav:
+                if (vPartyFragment == null) {
+                    vPartyFragment = PartyFragment.newInstance(parties.get(("v")));
+                    vPartyListFragment = PartyListFragment.newInstance(parties.get("v"));
+                    vPartyFragment.setListFragment(vPartyListFragment);
+                }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,vPartyFragment).commit();
                 break;
             case R.id.l_nav:
+                if (lPartyFragment == null) {
+                    lPartyFragment = PartyFragment.newInstance(parties.get(("l")));
+                    lPartyListFragment = PartyListFragment.newInstance(parties.get("l"));
+                    lPartyFragment.setListFragment(lPartyListFragment);
+                }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,lPartyFragment).commit();
                 break;
             case R.id.kd_nav:
+                if (kdPartyFragment == null) {
+                    kdPartyFragment = PartyFragment.newInstance(parties.get(("kd")));
+                    kdPartyListFragment = PartyListFragment.newInstance(parties.get("kd"));
+                    kdPartyFragment.setListFragment(kdPartyListFragment);
+                }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,kdPartyFragment).commit();
                 break;
             case R.id.about_nav:
+                if (aboutFragment == null) aboutFragment = AboutFragment.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,aboutFragment).commit();
                 break;
         }
@@ -294,89 +336,56 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void initMenuOptions(){
-        currentNewsListFragment = CurrentNewsListFragment.newInstance();
-        protFragment = ProtocolListFragment.newInstance();
-        voteListFragment = VoteListFragment.newInstance(null);
-        decisionsFragment = DecisionsListFragment.newInstance();
-        repFragment = RepresentativeListFragment.newInstance();
-        aboutFragment = AboutFragment.newInstance();
-    }
+    // Create all of the Party objects
+    private void initParties() {
 
-    // Create all of the PartyFragments with new Party objects
-    private void initPartyFragments(){
         Party mParty = new Party(
                 getString(R.string.party_m),
                 "m",R.drawable.mlogo,
                 getString(R.string.m_website),
                 getString(R.string.m_ideology));
-        mPartyListFragment = PartyListFragment.newInstance(mParty);
-        mPartyFragment = PartyFragment.newInstance(mParty);
-        mPartyFragment.setListFragment(mPartyListFragment);
-
 
         Party sParty = new Party(
                 getString(R.string.party_s),
                 "s",R.drawable.slogo,
                 getString(R.string.s_website),
                 getString(R.string.s_ideology));
-        sPartyListFragment = PartyListFragment.newInstance(sParty);
-        sPartyFragment = PartyFragment.newInstance(sParty);
-        sPartyFragment.setListFragment(sPartyListFragment);
 
         Party sdParty = new Party(
                 getString(R.string.party_sd),
                 "sd",R.drawable.sdlogo,
                 getString(R.string.sd_website),
                 getString(R.string.sd_ideology));
-        sdPartyListFragment = PartyListFragment.newInstance(sdParty);
-        sdPartyFragment = PartyFragment.newInstance(sdParty);
-        sdPartyFragment.setListFragment(sdPartyListFragment);
 
         Party kdParty = new Party(
                 getString(R.string.party_kd),
                 "kd",R.drawable.kdlogo,
                 getString(R.string.kd_website),
                 getString(R.string.kd_ideology));
-        kdPartyListFragment = PartyListFragment.newInstance(kdParty);
-        kdPartyFragment = PartyFragment.newInstance(kdParty);
-        kdPartyFragment.setListFragment(kdPartyListFragment);
 
         Party vParty = new Party(
                 getString(R.string.party_v),
                 "v",R.drawable.vlogo,
                 getString(R.string.v_website),
                 getString(R.string.v_ideology));
-        vPartyListFragment = PartyListFragment.newInstance(vParty);
-        vPartyFragment = PartyFragment.newInstance(vParty);
-        vPartyFragment.setListFragment(vPartyListFragment);
 
         Party cParty = new Party(
                 getString(R.string.party_c),
                 "c",R.drawable.clogo,
                 getString(R.string.c_website),
                 getString(R.string.c_ideology));
-        cPartyListFragment = PartyListFragment.newInstance(cParty);
-        cPartyFragment = PartyFragment.newInstance(cParty);
-        cPartyFragment.setListFragment(cPartyListFragment);
 
         Party mpParty = new Party(
                 getString(R.string.party_mp),
                 "mp",R.drawable.mplogo,
                 getString(R.string.mp_website),
                 getString(R.string.mp_ideology));
-        mpPartyListFragment = PartyListFragment.newInstance(mpParty);
-        mpPartyFragment = PartyFragment.newInstance(mpParty);
-        mpPartyFragment.setListFragment(mpPartyListFragment);
 
         Party lParty = new Party(
                 getString(R.string.party_l),
                 "l",R.drawable.llogo,
                 getString(R.string.l_website),
                 getString(R.string.l_ideology));
-        lPartyListFragment = PartyListFragment.newInstance(lParty);
-        lPartyFragment = PartyFragment.newInstance(lParty);
-        lPartyFragment.setListFragment(lPartyListFragment);
 
         parties.put(mParty.getID(), mParty);
         parties.put(sParty.getID(), sParty);
