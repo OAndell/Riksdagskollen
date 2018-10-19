@@ -1,5 +1,6 @@
 package oscar.riksdagskollen.Util.Adapter;
 
+import android.support.v4.app.Fragment;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,15 +10,16 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
 import oscar.riksdagskollen.Activity.MainActivity;
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
-import oscar.riksdagskollen.Util.View.CircularNetworkImageView;
+import oscar.riksdagskollen.Util.View.CircularImageView;
 
 /**
  * Created by oscar on 2018-09-24.
@@ -57,6 +59,7 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
     //Sort alphabetically after first name
 
     private Comparator<Representative> mComparator;
+    private Fragment fragment;
 
     private final SortedList<Representative> representativeList = new SortedList<>(Representative.class, new SortedList.Callback<Representative>() {
         @Override
@@ -97,8 +100,9 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
     });
 
 
-    public RepresentativeAdapter(List<Representative> items, Comparator<Representative> comparator, final RiksdagenViewHolderAdapter.OnItemClickListener listener) {
+    public RepresentativeAdapter(List<Representative> items, Comparator<Representative> comparator, Fragment fragment, final RiksdagenViewHolderAdapter.OnItemClickListener listener) {
         super(listener);
+        this.fragment = fragment;
         this.mComparator = comparator;
         setSortedList(representativeList);
         addAll(items);
@@ -110,7 +114,7 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
         if (viewType == TYPE_ITEM) {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.representative_list_row, parent, false);
-            return new RepresentativeAdapter.RepresentativeViewHolder(itemView);
+            return new RepresentativeAdapter.RepresentativeViewHolder(itemView, fragment);
         } else {
 
             FrameLayout frameLayout = new FrameLayout(parent.getContext());
@@ -165,12 +169,13 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
         private final TextView valkrets;
         private final TextView title;
         private final TextView titleLabel;
-        private final CircularNetworkImageView portrait;
+        private final CircularImageView portrait;
         private final ImageView partyLogo;
+        private Fragment fragment;
 
-
-        public RepresentativeViewHolder(View itemView) {
+        public RepresentativeViewHolder(View itemView, Fragment fragment) {
             super(itemView);
+            this.fragment = fragment;
             name = itemView.findViewById(R.id.rep_card_name);
             born = itemView.findViewById(R.id.rep_card_born);
             valkrets = itemView.findViewById(R.id.rep_card_valkrets);
@@ -186,7 +191,9 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
             valkrets.setText(item.getValkrets());
             born.setText(item.getAge() + " år");
             setTitle(item);
-            portrait.setImageUrl(item.getBild_url_192(), RiksdagskollenApp.getInstance().getRequestManager().getmImageLoader());
+            Glide.with(fragment)
+                    .load(item.getBild_url_80())
+                    .into(portrait);
 
             try {
                 partyLogo.setImageResource(MainActivity.getParty(item.getParti().toLowerCase()).getDrawableLogo());

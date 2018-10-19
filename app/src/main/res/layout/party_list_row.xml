@@ -84,7 +84,7 @@
                 android:orientation="vertical"
                 android:layout_weight="16">
 
-                <oscar.riksdagskollen.Util.View.CircularNetworkImageView
+                <oscar.riksdagskollen.Util.View.CircularImageView
                     android:layout_width="90dp"
                     android:layout_height="90dp"
                     android:id="@+id/author_img"

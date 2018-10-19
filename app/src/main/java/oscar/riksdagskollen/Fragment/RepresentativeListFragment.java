@@ -259,7 +259,7 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
 
     private void swapAdapter(Comparator<Representative> comparator) {
         currentComparator = comparator;
-        adapter = new RepresentativeAdapter(filter(representativeList), comparator, new RiksdagenViewHolderAdapter.OnItemClickListener() {
+        adapter = new RepresentativeAdapter(filter(representativeList), comparator, this, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {
                 Intent repDetailsIntent = new Intent(getContext(), RepresentativeDetailActivity.class);

@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <oscar.riksdagskollen.Util.View.CircularNetworkImageView
+            <oscar.riksdagskollen.Util.View.CircularImageView
                 android:id="@+id/representative_portrait"
                 android:layout_width="130dp"
                 android:layout_height="130dp"

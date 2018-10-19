@@ -72,7 +72,7 @@ public class PartyRepresentativeFragment extends RiksdagenAutoLoadingListFragmen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new RepresentativeAdapter(representativeList, RepresentativeAdapter.NAME_COMPARATOR, new RiksdagenViewHolderAdapter.OnItemClickListener() {
+        adapter = new RepresentativeAdapter(representativeList, RepresentativeAdapter.NAME_COMPARATOR, this, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {
                 Intent repDetailsIntent = new Intent(getContext(), RepresentativeDetailActivity.class);

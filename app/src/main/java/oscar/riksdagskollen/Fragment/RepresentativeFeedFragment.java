@@ -89,7 +89,7 @@ public class RepresentativeFeedFragment extends RiksdagenAutoLoadingListFragment
                 intent.putExtra("intressent", iid);
                 startActivity(intent);
             }
-        });
+        }, this);
         getAdapter().setHasStableIds(true);
     }
 

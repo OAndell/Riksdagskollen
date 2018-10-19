@@ -101,7 +101,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
                 intent.putExtra("document",((PartyDocument)document));
                 startActivity(intent);
             }
-        });
+        }, this);
         getAdapter().setHasStableIds(true);
     }
 

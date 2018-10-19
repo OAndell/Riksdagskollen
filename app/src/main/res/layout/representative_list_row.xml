@@ -139,7 +139,7 @@
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp">
 
-                    <oscar.riksdagskollen.Util.View.CircularNetworkImageView
+                    <oscar.riksdagskollen.Util.View.CircularImageView
                         android:id="@+id/rep_card_portrait"
                         android:layout_width="100dp"
                         android:layout_height="120dp"

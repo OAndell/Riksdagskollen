@@ -170,4 +170,6 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         if(loading) loadingView.setVisibility(View.VISIBLE);
         else loadingView.setVisibility(View.GONE);
     }
+
+
 }

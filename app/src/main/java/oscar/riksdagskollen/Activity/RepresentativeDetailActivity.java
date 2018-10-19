@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeVoteStatistics;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeDocumentCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.VoteStatisticsCallback;
-import oscar.riksdagskollen.Util.View.CircularNetworkImageView;
+import oscar.riksdagskollen.Util.View.CircularImageView;
 
 /**
  * Created by gustavaaro on 2018-09-19.
@@ -81,11 +82,14 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
         TextView status = findViewById(R.id.representative_detail_status);
         TextView age = findViewById(R.id.representative_age);
         final TextView publishedDocuments = findViewById(R.id.representative_published_documents);
-        CircularNetworkImageView portrait = findViewById(R.id.representative_portrait);
+        CircularImageView portrait = findViewById(R.id.representative_portrait);
         ImageView partyLogo = findViewById(R.id.representative_portrait_party_logo);
 
         partyLogo.setImageResource(MainActivity.getParty(representative.getParti().toLowerCase()).getDrawableLogo());
-        portrait.setImageUrl(representative.getBild_url_192(), RiksdagskollenApp.getInstance().getRequestManager().getmImageLoader());
+        Glide
+                .with(this)
+                .load(representative.getBild_url_192())
+                .into(portrait);
         age.setText(representative.getAge());
         status.setText(representative.getDescriptiveRole());
         RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getDocumentsForRepresentative(

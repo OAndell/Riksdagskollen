@@ -16,7 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.NetworkImageView;
+import com.bumptech.glide.Glide;
 import com.google.android.flexbox.FlexboxLayout;
 
 import java.util.ArrayList;
@@ -72,22 +72,27 @@ public class PartyInfoFragment extends Fragment {
         //Fill view with party leaders
         final FlexboxLayout leadersLayout = view.findViewById(R.id.leadersLayout);
         final RiksdagskollenApp app = RiksdagskollenApp.getInstance();
+        final Fragment fragment = this;
         app.getRiksdagenAPIManager().getPartyLeaders(party.getName(), new PartyLeadersCallback() {
             @Override
             public void onPersonFetched(final ArrayList<Representative> leaders) {
                 for (int i =0; i < leaders.size(); i++) {
                     final Representative tmpRep = leaders.get(i);
                     final View portraitView = LayoutInflater.from(getContext()).inflate(R.layout.intressent_layout_big, null);
-                    final NetworkImageView portrait = portraitView.findViewById(R.id.intressent_portait);
+                    final ImageView portrait = portraitView.findViewById(R.id.intressent_portait);
+
                     leadersLayout.addView(portraitView);
                     app.getRiksdagenAPIManager().getRepresentative(tmpRep.getTilltalsnamn(), tmpRep.getEfternamn(), party.getID(), tmpRep.getSourceid(), new RepresentativeCallback() {
                         @Override
                         public void onPersonFetched(final Representative representative) {
 
                             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                                portrait.setDefaultImageResId(R.drawable.ic_person);
+                                portrait.setImageResource(R.drawable.ic_person);
                             }
-                            portrait.setImageUrl(representative.getBild_url_192(), app.getRequestManager().getmImageLoader());
+                            Glide
+                                    .with(fragment)
+                                    .load(representative.getBild_url_192())
+                                    .into(portrait);
 
                             portrait.setOnClickListener(new View.OnClickListener() {
                                 @Override

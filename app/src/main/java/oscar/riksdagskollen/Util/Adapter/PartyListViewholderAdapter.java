@@ -1,6 +1,7 @@
 package oscar.riksdagskollen.Util.Adapter;
 
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +26,7 @@ import oscar.riksdagskollen.Util.JSONModel.Intressent;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
-import oscar.riksdagskollen.Util.View.CircularNetworkImageView;
+import oscar.riksdagskollen.Util.View.CircularImageView;
 
 /**
  * Created by shelbot on 2018-03-27.
@@ -75,10 +77,12 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
             notifyItemMoved(fromPosition, toPosition);
         }
     });
+    Fragment fragment;
 
 
-    public PartyListViewholderAdapter(List<PartyDocument> items, OnItemClickListener clickListener) {
+    public PartyListViewholderAdapter(List<PartyDocument> items, OnItemClickListener clickListener, Fragment fragment) {
         super(clickListener);
+        this.fragment = fragment;
         setSortedList(documentList);
         addAll(items);
 
@@ -113,7 +117,7 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
         if (viewType == TYPE_ITEM) {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.party_list_row, parent, false);
-            return new PartyListViewHolder(itemView);
+            return new PartyListViewHolder(itemView, fragment);
         } else {
             FrameLayout frameLayout = new FrameLayout(parent.getContext());
             //make sure it fills the space
@@ -184,11 +188,13 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
         final TextView published;
         final TextView author;
         final TextView dokName;
-        final CircularNetworkImageView authorView;
+        final CircularImageView authorView;
         Request imageUrlRequest;
+        final Fragment fragment;
 
-        public PartyListViewHolder(View partyView) {
+        public PartyListViewHolder(View partyView, Fragment fragment) {
             super(partyView);
+            this.fragment = fragment;
             documentTitle = partyView.findViewById(R.id.document);
             published = partyView.findViewById(R.id.publicerad);
             author = partyView.findViewById(R.id.författare);
@@ -238,7 +244,12 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
                 imageUrlRequest = RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getRepresentative(i.get(0).getIntressent_id(), new RepresentativeCallback() {
                     @Override
                     public void onPersonFetched(Representative representative) {
-                        authorView.setImageUrl(representative.getBild_url_192(), RiksdagskollenApp.getInstance().getRequestManager().getmImageLoader());
+                        Glide
+                                .with(fragment)
+                                .load(representative.getBild_url_80())
+                                .into(authorView);
+
+                        //authorView.setImageUrl(representative.getBild_url_80(), RiksdagskollenApp.getInstance().getRequestManager().getmImageLoader());
                     }
 
                     @Override

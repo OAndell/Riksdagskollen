@@ -14,43 +14,63 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
-import com.android.volley.toolbox.NetworkImageView;
-
-public class CircularNetworkImageView extends NetworkImageView {
+public class CircularImageView extends android.support.v7.widget.AppCompatImageView {
     Context mContext;
 
-    public CircularNetworkImageView(Context context) {
+    public CircularImageView(Context context) {
         super(context);
         mContext = context;
     }
 
-    public CircularNetworkImageView(Context context, AttributeSet attrs) {
+    public CircularImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
         mContext = context;
     }
 
-    public CircularNetworkImageView(Context context, AttributeSet attrs,
-                                    int defStyle) {
+    public CircularImageView(Context context, AttributeSet attrs,
+                             int defStyle) {
         super(context, attrs, defStyle);
         mContext = context;
     }
 
-    public Context getmContext() {
-        return mContext;
-    }
+
 
     @Override
-    public void setImageBitmap(Bitmap bm) {
-        if(bm==null) return;
-        setImageDrawable(new BitmapDrawable(mContext.getResources(),
-                getCircularBitmap(bm)));
+    public void setImageDrawable(@Nullable Drawable drawable) {
+        if (mContext != null && drawable != null) {
+            super.setImageDrawable(new BitmapDrawable(mContext.getResources(), getCircularBitmap(getBitmapFromDrawable(drawable))));
+        } else super.setImageDrawable(drawable);
+
     }
 
-    @Override
-    public void setImageResource(int resId) {
-        super.setImageResource(resId);
+
+    private Bitmap getBitmapFromDrawable(Drawable drawable) {
+        if (drawable == null) {
+            return null;
+        }
+
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+
+        try {
+            Bitmap bitmap;
+
+
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+            return bitmap;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

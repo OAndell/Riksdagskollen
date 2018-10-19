@@ -22,6 +22,7 @@ import android.widget.ImageView;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import java.lang.ref.SoftReference;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -43,28 +44,20 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static HashMap<String, Party> parties;
-    private CurrentNewsListFragment currentNewsListFragment;
-    private ProtocolListFragment protFragment;
-    private DecisionsListFragment decisionsFragment;
-    private RepresentativeListFragment repFragment;
-    private VoteListFragment voteListFragment;
-    private AboutFragment aboutFragment;
-    private PartyFragment sPartyFragment;
-    private PartyFragment mPartyFragment;
-    private PartyFragment sdPartyFragment;
-    private PartyFragment mpPartyFragment;
-    private PartyFragment cPartyFragment;
-    private PartyFragment vPartyFragment;
-    private PartyFragment lPartyFragment;
-    private PartyFragment kdPartyFragment;
-    private PartyListFragment sPartyListFragment;
-    private PartyListFragment mPartyListFragment;
-    private PartyListFragment sdPartyListFragment;
-    private PartyListFragment mpPartyListFragment;
-    private PartyListFragment cPartyListFragment;
-    private PartyListFragment vPartyListFragment;
-    private PartyListFragment lPartyListFragment;
-    private PartyListFragment kdPartyListFragment;
+    private SoftReference<CurrentNewsListFragment> currentNewsListFragment;
+    private SoftReference<ProtocolListFragment> protFragment;
+    private SoftReference<DecisionsListFragment> decisionsFragment;
+    private SoftReference<RepresentativeListFragment> repFragment;
+    private SoftReference<VoteListFragment> voteListFragment;
+    private SoftReference<AboutFragment> aboutFragment;
+    private SoftReference<PartyFragment> sPartyFragment;
+    private SoftReference<PartyFragment> mPartyFragment;
+    private SoftReference<PartyFragment> sdPartyFragment;
+    private SoftReference<PartyFragment> mpPartyFragment;
+    private SoftReference<PartyFragment> cPartyFragment;
+    private SoftReference<PartyFragment> vPartyFragment;
+    private SoftReference<PartyFragment> lPartyFragment;
+    private SoftReference<PartyFragment> kdPartyFragment;
     private NavigationView navigationView;
     private AppBarLayout appBarLayout;
     private CollapsingToolbarLayout collapsingToolbarLayout;
@@ -238,7 +231,7 @@ public class MainActivity extends AppCompatActivity
             public void onStateChanged(AppBarLayout appBarLayout, State state) {
                 if (state.equals(State.COLLAPSED)) {
                     collapsingToolbarLayout.setTitleEnabled(false);
-                    collapsingLogo.setVisibility(View.GONE);
+                    appBarLayout.removeView(collapsingLogo);
                     emptyToolbar = false;
                     toggle.setDrawerIndicatorEnabled(true);
                     invalidateOptionsMenu();
@@ -277,107 +270,111 @@ public class MainActivity extends AppCompatActivity
         switch (id){
             case R.id.news_nav:
                 fireBase.setCurrentScreen(this, "news", null);
-                if (currentNewsListFragment == null)
-                    currentNewsListFragment = CurrentNewsListFragment.newInstance();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,currentNewsListFragment).commit();
+                if (currentNewsListFragment == null || currentNewsListFragment.get() == null)
+                    currentNewsListFragment = new SoftReference<>(CurrentNewsListFragment.newInstance());
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, currentNewsListFragment.get()).commit();
                 break;
             case R.id.votes_nav:
                 fireBase.setCurrentScreen(this, "votes", null);
-                if (voteListFragment == null) voteListFragment = VoteListFragment.newInstance(null);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,voteListFragment).commit();
+                if (voteListFragment == null || voteListFragment.get() == null)
+                    voteListFragment = new SoftReference<>(VoteListFragment.newInstance(null));
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, voteListFragment.get()).commit();
                 break;
             case R.id.dec_nav:
                 fireBase.setCurrentScreen(this, "decisions", null);
-                if (decisionsFragment == null)
-                    decisionsFragment = DecisionsListFragment.newInstance();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,decisionsFragment).commit();
+                if (decisionsFragment == null || decisionsFragment.get() == null)
+                    decisionsFragment = new SoftReference<>(DecisionsListFragment.newInstance());
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, decisionsFragment.get()).commit();
                 break;
             case R.id.rep_nav:
                 fireBase.setCurrentScreen(this, "reps", null);
-                if (repFragment == null) repFragment = RepresentativeListFragment.newInstance();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, repFragment).commit();
+                if (repFragment == null || repFragment.get() == null)
+                    repFragment = new SoftReference<>(RepresentativeListFragment.newInstance());
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, repFragment.get()).commit();
                 break;
             case R.id.prot_nav:
                 fireBase.setCurrentScreen(this, "protocol", null);
-                if (protFragment == null) protFragment = ProtocolListFragment.newInstance();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,protFragment).commit();
+                if (protFragment == null || protFragment.get() == null)
+                    protFragment = new SoftReference<>(ProtocolListFragment.newInstance());
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, protFragment.get()).commit();
                 break;
             case R.id.s_nav:
                 fireBase.setCurrentScreen(this, "s", null);
-                if (sPartyFragment == null) {
-                    sPartyFragment = PartyFragment.newInstance(parties.get(("s")));
-                    sPartyListFragment = PartyListFragment.newInstance(parties.get("s"));
-                    sPartyFragment.setListFragment(sPartyListFragment);
+                if (sPartyFragment == null || sPartyFragment.get() == null) {
+                    sPartyFragment = new SoftReference<>(PartyFragment.newInstance(parties.get(("s"))));
+                    PartyListFragment sPartyListFragment = PartyListFragment.newInstance(parties.get("s"));
+                    sPartyFragment.get().setListFragment(sPartyListFragment);
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,sPartyFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, sPartyFragment.get()).commit();
                 break;
             case R.id.m_nav:
                 fireBase.setCurrentScreen(this, "m", null);
-                if (mPartyFragment == null) {
-                    mPartyFragment = PartyFragment.newInstance(parties.get(("m")));
-                    mPartyListFragment = PartyListFragment.newInstance(parties.get("m"));
-                    mPartyFragment.setListFragment(mPartyListFragment);
+                if (mPartyFragment == null || mPartyFragment.get() == null) {
+                    mPartyFragment = new SoftReference<>(PartyFragment.newInstance(parties.get(("m"))));
+                    PartyListFragment mPartyListFragment = PartyListFragment.newInstance(parties.get("m"));
+                    mPartyFragment.get().setListFragment(mPartyListFragment);
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,mPartyFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mPartyFragment.get()).commit();
                 break;
             case R.id.sd_nav:
                 fireBase.setCurrentScreen(this, "sd", null);
-                if (sdPartyFragment == null) {
-                    sdPartyFragment = PartyFragment.newInstance(parties.get(("sd")));
-                    sdPartyListFragment = PartyListFragment.newInstance(parties.get("sd"));
-                    sdPartyFragment.setListFragment(sdPartyListFragment);
+                if (sdPartyFragment == null || sdPartyFragment.get() == null) {
+                    sdPartyFragment = new SoftReference<>(PartyFragment.newInstance(parties.get(("sd"))));
+                    PartyListFragment sdPartyListFragment = PartyListFragment.newInstance(parties.get("sd"));
+                    sdPartyFragment.get().setListFragment(sdPartyListFragment);
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,sdPartyFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, sdPartyFragment.get()).commit();
                 break;
             case R.id.mp_nav:
                 fireBase.setCurrentScreen(this, "mp", null);
-                if (mpPartyFragment == null) {
-                    mpPartyFragment = PartyFragment.newInstance(parties.get(("mp")));
-                    mpPartyListFragment = PartyListFragment.newInstance(parties.get("mp"));
-                    mpPartyFragment.setListFragment(mpPartyListFragment);
+                if (mpPartyFragment == null || mpPartyFragment.get() == null) {
+                    mpPartyFragment = new SoftReference<>(PartyFragment.newInstance(parties.get(("mp"))));
+                    PartyListFragment mpPartyListFragment = PartyListFragment.newInstance(parties.get("mp"));
+                    mpPartyFragment.get().setListFragment(mpPartyListFragment);
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,mpPartyFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mpPartyFragment.get()).commit();
                 break;
             case R.id.c_nav:
                 fireBase.setCurrentScreen(this, "c", null);
-                if (cPartyFragment == null) {
-                    cPartyFragment = PartyFragment.newInstance(parties.get(("c")));
-                    cPartyListFragment = PartyListFragment.newInstance(parties.get("c"));
-                    cPartyFragment.setListFragment(cPartyListFragment);
+                if (cPartyFragment == null || cPartyFragment.get() == null) {
+                    cPartyFragment = new SoftReference<>(PartyFragment.newInstance(parties.get(("c"))));
+                    PartyListFragment cPartyListFragment = PartyListFragment.newInstance(parties.get("c"));
+                    cPartyFragment.get().setListFragment(cPartyListFragment);
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,cPartyFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, cPartyFragment.get()).commit();
                 break;
             case R.id.v_nav:
                 fireBase.setCurrentScreen(this, "v", null);
-                if (vPartyFragment == null) {
-                    vPartyFragment = PartyFragment.newInstance(parties.get(("v")));
-                    vPartyListFragment = PartyListFragment.newInstance(parties.get("v"));
-                    vPartyFragment.setListFragment(vPartyListFragment);
+                if (vPartyFragment == null || vPartyFragment.get() == null) {
+                    vPartyFragment = new SoftReference<>(PartyFragment.newInstance(parties.get(("v"))));
+                    PartyListFragment vPartyListFragment = PartyListFragment.newInstance(parties.get("v"));
+                    vPartyFragment.get().setListFragment(vPartyListFragment);
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,vPartyFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, vPartyFragment.get()).commit();
                 break;
             case R.id.l_nav:
                 fireBase.setCurrentScreen(this, "l", null);
-                if (lPartyFragment == null) {
-                    lPartyFragment = PartyFragment.newInstance(parties.get(("l")));
-                    lPartyListFragment = PartyListFragment.newInstance(parties.get("l"));
-                    lPartyFragment.setListFragment(lPartyListFragment);
+                if (lPartyFragment == null || lPartyFragment.get() == null) {
+                    lPartyFragment = new SoftReference<>(PartyFragment.newInstance(parties.get(("l"))));
+                    PartyListFragment lPartyListFragment = PartyListFragment.newInstance(parties.get("l"));
+                    lPartyFragment.get().setListFragment(lPartyListFragment);
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,lPartyFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, lPartyFragment.get()).commit();
                 break;
             case R.id.kd_nav:
                 fireBase.setCurrentScreen(this, "kd", null);
-                if (kdPartyFragment == null) {
-                    kdPartyFragment = PartyFragment.newInstance(parties.get(("kd")));
-                    kdPartyListFragment = PartyListFragment.newInstance(parties.get("kd"));
-                    kdPartyFragment.setListFragment(kdPartyListFragment);
+                if (kdPartyFragment == null || kdPartyFragment.get() == null) {
+                    kdPartyFragment = new SoftReference<>(PartyFragment.newInstance(parties.get(("kd"))));
+                    PartyListFragment kdPartyListFragment = PartyListFragment.newInstance(parties.get("kd"));
+                    kdPartyFragment.get().setListFragment(kdPartyListFragment);
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,kdPartyFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, kdPartyFragment.get()).commit();
                 break;
             case R.id.about_nav:
                 fireBase.setCurrentScreen(this, "about", null);
-                if (aboutFragment == null) aboutFragment = AboutFragment.newInstance();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,aboutFragment).commit();
+                if (aboutFragment == null || aboutFragment.get() == null)
+                    aboutFragment = new SoftReference<>(AboutFragment.newInstance());
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, aboutFragment.get()).commit();
                 break;
         }
 
