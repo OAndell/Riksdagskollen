@@ -6,9 +6,11 @@ import android.content.res.Resources;
 import android.support.annotation.ColorInt;
 import android.util.TypedValue;
 
+import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 import com.google.firebase.FirebaseApp;
 
+import io.fabric.sdk.android.Fabric;
 import oscar.riksdagskollen.Manager.AlertManager;
 import oscar.riksdagskollen.Manager.RepresentativeManager;
 import oscar.riksdagskollen.Manager.RequestManager;
@@ -17,6 +19,7 @@ import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.Util.Job.AlertJobCreator;
 import oscar.riksdagskollen.Util.Job.CheckAlertsJob;
 import oscar.riksdagskollen.Util.Job.DownloadRepresentativesJob;
+
 
 /**
  * Created by gustavaaro on 2018-03-25.
@@ -37,6 +40,7 @@ public class RiksdagskollenApp extends Application {
         super.onCreate();
         instance = this;
         FirebaseApp.initializeApp(this);
+        Fabric.with(this, new Crashlytics());
 
         requestManager = new RequestManager();
         riksdagenAPIManager = new RiksdagenAPIManager(this);
