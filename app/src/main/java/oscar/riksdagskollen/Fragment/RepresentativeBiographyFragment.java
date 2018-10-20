@@ -79,7 +79,7 @@ public class RepresentativeBiographyFragment extends Fragment {
         if (website.equals("") && bioList.isEmpty()) {
             View bioItem = LayoutInflater.from(getContext()).inflate(R.layout.biography_item, null);
             TextView bioItemTitle = bioItem.findViewById(R.id.bioitem_title);
-            bioItemTitle.setText("Det verkar inte finnat något här.");
+            bioItemTitle.setText(R.string.no_content_string);
             TextView bioItemText = bioItem.findViewById(R.id.bioitem_text);
             bioItemText.setText("");
             bioHolder.addView(bioItem);
