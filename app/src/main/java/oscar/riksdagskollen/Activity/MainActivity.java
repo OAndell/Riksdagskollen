@@ -232,7 +232,14 @@ public class MainActivity extends AppCompatActivity
             public void onStateChanged(AppBarLayout appBarLayout, State state) {
                 if (state.equals(State.COLLAPSED)) {
                     collapsingToolbarLayout.setTitleEnabled(false);
-                    ((ViewGroup) collapsingLogo.getParent()).removeView(collapsingLogo);
+
+                    try {
+                        ((ViewGroup) collapsingLogo.getParent()).removeView(collapsingLogo);
+                    } catch (NullPointerException e) {
+                        //TODO FIGURE out why collapsingLogo.getParent() is null sometimes
+                    }
+
+
                     emptyToolbar = false;
                     toggle.setDrawerIndicatorEnabled(true);
                     invalidateOptionsMenu();
