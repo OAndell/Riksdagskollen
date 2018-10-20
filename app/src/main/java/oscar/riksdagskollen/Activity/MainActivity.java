@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 
@@ -231,7 +232,7 @@ public class MainActivity extends AppCompatActivity
             public void onStateChanged(AppBarLayout appBarLayout, State state) {
                 if (state.equals(State.COLLAPSED)) {
                     collapsingToolbarLayout.setTitleEnabled(false);
-                    appBarLayout.removeView(collapsingLogo);
+                    ((ViewGroup) collapsingLogo.getParent()).removeView(collapsingLogo);
                     emptyToolbar = false;
                     toggle.setDrawerIndicatorEnabled(true);
                     invalidateOptionsMenu();

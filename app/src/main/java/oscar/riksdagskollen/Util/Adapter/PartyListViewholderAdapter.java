@@ -244,10 +244,12 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
                 imageUrlRequest = RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getRepresentative(i.get(0).getIntressent_id(), new RepresentativeCallback() {
                     @Override
                     public void onPersonFetched(Representative representative) {
-                        Glide
-                                .with(fragment)
-                                .load(representative.getBild_url_80())
-                                .into(authorView);
+                        if (fragment.getActivity() != null) {
+                            Glide
+                                    .with(fragment)
+                                    .load(representative.getBild_url_80())
+                                    .into(authorView);
+                        }
 
                         //authorView.setImageUrl(representative.getBild_url_80(), RiksdagskollenApp.getInstance().getRequestManager().getmImageLoader());
                     }

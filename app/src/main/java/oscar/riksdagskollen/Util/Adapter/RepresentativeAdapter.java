@@ -191,9 +191,13 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
             valkrets.setText(item.getValkrets());
             born.setText(item.getAge() + " år");
             setTitle(item);
-            Glide.with(fragment)
-                    .load(item.getBild_url_80())
-                    .into(portrait);
+
+            if (fragment.getActivity() != null) {
+                Glide
+                        .with(fragment)
+                        .load(item.getBild_url_80())
+                        .into(portrait);
+            }
 
             try {
                 partyLogo.setImageResource(MainActivity.getParty(item.getParti().toLowerCase()).getDrawableLogo());

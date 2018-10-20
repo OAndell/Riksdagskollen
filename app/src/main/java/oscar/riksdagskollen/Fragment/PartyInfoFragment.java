@@ -89,10 +89,12 @@ public class PartyInfoFragment extends Fragment {
                             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
                                 portrait.setImageResource(R.drawable.ic_person);
                             }
-                            Glide
-                                    .with(fragment)
-                                    .load(representative.getBild_url_192())
-                                    .into(portrait);
+                            if (fragment.getActivity() != null) {
+                                Glide
+                                        .with(fragment)
+                                        .load(representative.getBild_url_192())
+                                        .into(portrait);
+                            }
 
                             portrait.setOnClickListener(new View.OnClickListener() {
                                 @Override
