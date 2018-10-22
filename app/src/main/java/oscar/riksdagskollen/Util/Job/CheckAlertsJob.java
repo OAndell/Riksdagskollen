@@ -59,7 +59,7 @@ public class CheckAlertsJob extends Job {
     public static void scheduleJob() {
         // Check once every 6 hour, be flexible within 30 minutes
         new JobRequest.Builder(CheckAlertsJob.TAG)
-                .setPeriodic(TimeUnit.HOURS.toMillis(6), TimeUnit.MINUTES.toMillis(30))
+                .setPeriodic(TimeUnit.HOURS.toMillis(3), TimeUnit.MINUTES.toMillis(30))
                 .setUpdateCurrent(true)
                 .build()
                 .schedule();
@@ -72,14 +72,13 @@ public class CheckAlertsJob extends Job {
         AlertManager manager = AlertManager.getInstance();
 
         int alerts = manager.getAlertCount();
-        countDownLatch = new CountDownLatch(alerts);
-
         Log.d(TAG, "onRunJob: alert count: " + alerts);
+
         if (alerts == 0) {
             cancel();
             return Result.SUCCESS;
         }
-
+        countDownLatch = new CountDownLatch(alerts);
 
         for (String dokId : manager.getReplyAlerts()) {
             getDocument(dokId, countDownLatch);
@@ -94,8 +93,8 @@ public class CheckAlertsJob extends Job {
         }
 
         try {
-            //Do not wait longer than a minute
-            countDownLatch.await(60, TimeUnit.SECONDS);
+            //Do not wait longer than 30 seconds
+            countDownLatch.await(30, TimeUnit.SECONDS);
         } catch (InterruptedException ignored) {
         }
 
@@ -188,7 +187,6 @@ public class CheckAlertsJob extends Job {
     @Override
     protected void onCancel() {
         super.onCancel();
-        countDownLatch.countDown();
     }
 
     private void showReplyNotification(PartyDocument document) {
