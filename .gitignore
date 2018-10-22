@@ -9,4 +9,4 @@
 .externalNativeBuild
 .idea/
 fabric.properties
-google-service.json
+google-services.json
