@@ -43,7 +43,7 @@ public class PartyVoteView extends LinearLayout {
             resultText += "Ja: " + partyResults[0];
         }
         if (partyResults[1] > 0) {
-            resultText += "  Nej:  " + partyResults[1];
+            resultText += "  Nej: " + partyResults[1];
         }
         if (partyResults[2] > 0) {
             resultText += "  Avståendende: " + partyResults[2];
