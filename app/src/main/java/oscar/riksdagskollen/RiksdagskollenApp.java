@@ -7,6 +7,7 @@ import android.support.annotation.ColorInt;
 import android.util.TypedValue;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.evernote.android.job.JobManager;
 import com.google.firebase.FirebaseApp;
 
@@ -39,8 +40,16 @@ public class RiksdagskollenApp extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        FirebaseApp.initializeApp(this);
-        Fabric.with(this, new Crashlytics());
+        if (!BuildConfig.DEBUG) {
+            FirebaseApp.initializeApp(this);
+            // Set up Crashlytics, disabled for debug builds
+            Crashlytics crashlyticsKit = new Crashlytics.Builder()
+                    .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+                    .build();
+            // Initialize Fabric with the debug-disabled crashlytics.
+            Fabric.with(this, crashlyticsKit);
+        }
+
 
         requestManager = new RequestManager();
         riksdagenAPIManager = new RiksdagenAPIManager(this);

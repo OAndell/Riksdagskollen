@@ -33,7 +33,6 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.jsoup.Jsoup;
@@ -53,6 +52,7 @@ import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
+import oscar.riksdagskollen.Util.View.PartyVoteView;
 
 /**
  * Created by oscar on 2018-06-16.
@@ -92,6 +92,8 @@ public class VoteActivity extends AppCompatActivity{
 
         loadingView = findViewById(R.id.loading_view);
         mainContent = findViewById(R.id.main_content);
+        motionHolder = findViewById(R.id.motion_holder);
+        partyVotesHolder = findViewById(R.id.party_votes_container);
 
         ((ProgressBar) loadingView.findViewById(R.id.progress_bar)).getIndeterminateDrawable().setColorFilter(
                 RiksdagskollenApp.getColorFromAttribute(R.attr.secondaryLightColor, this),
@@ -130,8 +132,6 @@ public class VoteActivity extends AppCompatActivity{
             });
         }
 
-        motionHolder = findViewById(R.id.motion_holder);
-        partyVotesHolder = findViewById(R.id.party_votes_container);
         setUpCollapsibleViews();
         setUpTextAndGetMotions(voteDocument);
 
@@ -357,32 +357,15 @@ public class VoteActivity extends AppCompatActivity{
 
     private void prepareGraphs(VoteResults results) {
         setupMainGraph(results);
-        ArrayList<HorizontalBarChart> partyCharts = new ArrayList<>();
         //TODO fix a better solution if a party is not in parliament for a vote.
         //TODO this is hardcoded for votes before SD had any seats.
         if(results.getPartyVotes("SD")!=null){
-            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartS));
-            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartM));
-            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartSD));
-            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartMP));
-            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartC));
-            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartV));
-            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartL));
-            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartKD));
             String[] parties = {"S", "M", "SD", "MP", "C", "V", "L", "KD"};
-            setupPartyGraph(results, partyCharts, parties);
+            setupPartyGraph(results, parties);
         }
         else {
-            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartS));
-            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartM));
-            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartMP));
-            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartC));
-            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartV));
-            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartL));
-            partyCharts.add((HorizontalBarChart) findViewById(R.id.chartKD));
-            findViewById(R.id.chartSD).setVisibility(View.GONE);
             String[] parties = {"S", "M", "MP", "C", "V", "L", "KD"};
-            setupPartyGraph(results, partyCharts, parties);
+            setupPartyGraph(results, parties);
         }
         graphLoaded = true;
         checkLoading();
@@ -456,56 +439,14 @@ public class VoteActivity extends AppCompatActivity{
 
     }
 
-    private void setupPartyGraph(VoteResults voteResults, ArrayList<HorizontalBarChart> charts, String[] parties){
-        ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(ContextCompat.getColor(this, R.color.yesVoteColor));
-        colors.add(ContextCompat.getColor(this, R.color.noVoteColor));
-        colors.add(ContextCompat.getColor(this, R.color.refrainVoteColor));
-        colors.add(ContextCompat.getColor(this, R.color.absentVoteColor));
-
-        for (int i = 0; i < charts.size(); i++) {
-            HorizontalBarChart chart =  charts.get(i);
-
-            ArrayList<BarEntry> yVals1 = new ArrayList<>();
-
+    private void setupPartyGraph(VoteResults voteResults, String[] parties) {
+        for (int i = 0; i < parties.length; i++) {
+            int partyLogo = MainActivity.getParty(parties[i]).getDrawableLogo();
             //TODO fix this horrible mess with old votes. Changes L -> FP
             if(parties[i].equals("L") && voteResults.getPartyVotes("L") == null){
                 parties[i] = "FP";
             }
-            int[] partyResults = voteResults.getPartyVotes(parties[i]);
-            yVals1.add(new BarEntry(0, new float[]{partyResults[0], partyResults[1], partyResults[2], partyResults[3]}));
-
-
-            BarDataSet set1 = new BarDataSet(yVals1, "");
-            set1.setDrawIcons(false);
-            set1.setColors(colors);
-            ArrayList<IBarDataSet> dataSets = new ArrayList<>();
-            dataSets.add(set1);
-
-            BarData data = new BarData(dataSets);
-            //data.setValueTextColor(Color.BLACK);
-            //TODO find a nice way of showing values, something with onclick seems best
-            data.setDrawValues(false);
-
-            chart.setData(data);
-
-            chart.getXAxis().setDrawAxisLine(false);
-            chart.getXAxis().setDrawGridLines(false);
-            chart.getXAxis().setDrawLabels(false);
-
-            chart.getAxisLeft().setDrawLabels(false);
-            chart.getAxisLeft().setDrawGridLines(false);
-            chart.getAxisLeft().setDrawAxisLine(false);
-            chart.getAxisRight().setDrawLabels(false);
-            chart.getAxisRight().setDrawGridLines(false);
-            chart.getAxisRight().setDrawAxisLine(false);
-
-            chart.getLegend().setEnabled(false);
-            chart.setDrawValueAboveBar(false);
-            chart.setFitBars(true);
-            chart.setDescription(null);
-            chart.setTouchEnabled(false); //Remove interactivity.
-            chart.invalidate();
+            partyVotesHolder.addView(new PartyVoteView(context, partyLogo, voteResults.getPartyVotes(parties[i])));
         }
     }
 

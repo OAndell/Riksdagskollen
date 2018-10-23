@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAnalytics fireBase;
 
     public static Party getParty(String id) {
-        return parties.get(id);
+        return parties.get(id.toLowerCase());
     }
 
     public static Collection<Party> getParties() {
