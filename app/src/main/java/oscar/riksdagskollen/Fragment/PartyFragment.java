@@ -1,11 +1,14 @@
 package oscar.riksdagskollen.Fragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -28,6 +31,8 @@ public class PartyFragment extends Fragment {
     private PartyListFragment listFragment;
     private PartyInfoFragment infoFragment;
     private PartyRepresentativeFragment representativeFragment;
+    private AppBarLayout appBarLayout;
+    private float defaultElevation = 0;
 
     public static PartyFragment newInstance(Party party){
         Bundle args = new Bundle();
@@ -36,6 +41,25 @@ public class PartyFragment extends Fragment {
         newInstance.setArguments(args);
         newInstance.setRetainInstance(true);
         return newInstance;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        defaultElevation = ViewCompat.getElevation(appBarLayout);
+        ViewCompat.setElevation(appBarLayout, 0);
+    }
+
+    @Override
+    public void onPause() {
+        ViewCompat.setElevation(appBarLayout, defaultElevation);
+        super.onPause();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        appBarLayout = getActivity().findViewById(R.id.appbar);
     }
 
     @Override
