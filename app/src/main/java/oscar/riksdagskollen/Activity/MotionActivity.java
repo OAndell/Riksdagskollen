@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -73,6 +74,10 @@ public class MotionActivity extends AppCompatActivity {
         }
 
         document = getIntent().getParcelableExtra("document");
+
+        FirebaseAnalytics analytics = FirebaseAnalytics.getInstance(this);
+        analytics.setCurrentScreen(this, "Motion doc: " + document.getId(), null);
+
         String intresentId = getIntent().getStringExtra("intressent");
 
         TextView titleTV = findViewById(R.id.act_doc_reader_title);

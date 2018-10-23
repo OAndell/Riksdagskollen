@@ -17,6 +17,7 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 
 import com.android.volley.VolleyError;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -48,6 +49,9 @@ public class ProtocolReaderActivity extends AppCompatActivity {
 
         url = getIntent().getStringExtra("url");
         title = getIntent().getStringExtra("title");
+
+        FirebaseAnalytics analytics = FirebaseAnalytics.getInstance(this);
+        analytics.setCurrentScreen(this, "Protocol doc: " + title, null);
 
         final ViewGroup loadingView = findViewById(R.id.loading_view);
 

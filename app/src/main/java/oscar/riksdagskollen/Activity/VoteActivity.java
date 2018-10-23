@@ -34,6 +34,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -78,6 +79,7 @@ public class VoteActivity extends AppCompatActivity{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setTheme(RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         setContentView(R.layout.activity_vote);
         context = this;
@@ -103,6 +105,8 @@ public class VoteActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final Vote voteDocument = getIntent().getParcelableExtra("document");
+        FirebaseAnalytics analytics = FirebaseAnalytics.getInstance(this);
+        analytics.setCurrentScreen(this, "Vote doc: " + voteDocument.getId(), null);
 
         final TextView title = findViewById(R.id.vote_title);
         title.setText(voteDocument.getTitel());

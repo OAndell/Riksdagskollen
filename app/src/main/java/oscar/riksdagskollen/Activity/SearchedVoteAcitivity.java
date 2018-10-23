@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import java.util.ArrayList;
 
 import oscar.riksdagskollen.Fragment.VoteListFragment;
@@ -44,6 +46,10 @@ public class SearchedVoteAcitivity extends AppCompatActivity{
 
         ArrayList<Vote> votes = getIntent().getParcelableArrayListExtra("votes");
         DecisionDocument document = getIntent().getParcelableExtra("document");
+
+        FirebaseAnalytics analytics = FirebaseAnalytics.getInstance(this);
+        analytics.setCurrentScreen(this, "Searched vote activity: " + document.getDok_id(), null);
+
         VoteListFragment fragment = VoteListFragment.newInstance(votes);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).commit();
 

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +65,9 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
         final View repHeaderLayout = findViewById(R.id.rep_header_layout);
         repHeaderLayout.setVisibility(View.VISIBLE);
         representative = getIntent().getParcelableExtra("representative");
+
+        FirebaseAnalytics analytics = FirebaseAnalytics.getInstance(this);
+        analytics.setCurrentScreen(this, "Representative: " + representative.getIntressent_id(), null);
 
         collapsingToolbarLayout = findViewById(R.id.collapsing_layout);
         collapsingToolbarLayout.setTitleEnabled(true);
