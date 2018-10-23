@@ -2,8 +2,10 @@ package oscar.riksdagskollen.Util.View;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.data.BarData;
@@ -19,6 +21,7 @@ public class PartyVoteView extends LinearLayout {
 
     private ImageView logo;
     private HorizontalBarChart chart;
+    private TextView resultDetailsText;
 
 
     public PartyVoteView(Context context, int imgRes, int[] partyResults) {
@@ -26,8 +29,42 @@ public class PartyVoteView extends LinearLayout {
         inflate(context, R.layout.party_vote, this);
         logo = findViewById(R.id.party_vote_partylogo);
         chart = findViewById(R.id.party_vote_chart);
+        resultDetailsText = findViewById(R.id.party_vote_text);
         logo.setImageResource(imgRes);
         setUpChart(partyResults);
+        setResultDetailsText(partyResults);
+        setOnClick();
+
+    }
+
+    private void setResultDetailsText(int[] partyResults) {
+        String resultText = "";
+        if (partyResults[0] > 0) {
+            resultText += "Ja: " + partyResults[0];
+        }
+        if (partyResults[1] > 0) {
+            resultText += "  Nej:  " + partyResults[1];
+        }
+        if (partyResults[2] > 0) {
+            resultText += "  Avståendende: " + partyResults[2];
+        }
+        if (partyResults[3] > 0) {
+            resultText += "  Frånvarande: " + partyResults[3];
+        }
+        resultDetailsText.setText(resultText);
+    }
+
+    private void setOnClick() {
+        this.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (resultDetailsText.getVisibility() == VISIBLE) {
+                    resultDetailsText.setVisibility(GONE);
+                } else {
+                    resultDetailsText.setVisibility(VISIBLE);
+                }
+            }
+        });
     }
 
 
@@ -47,8 +84,6 @@ public class PartyVoteView extends LinearLayout {
         dataSets.add(set1);
 
         BarData data = new BarData(dataSets);
-        //data.setValueTextColor(Color.BLACK);
-        //TODO find a nice way of showing values, something with onclick seems best
         data.setDrawValues(false);
 
         chart.setData(data);
@@ -70,7 +105,6 @@ public class PartyVoteView extends LinearLayout {
         chart.setDescription(null);
         chart.setTouchEnabled(false); //Remove interactivity.
         chart.invalidate();
-
     }
 
 
