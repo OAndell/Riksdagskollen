@@ -2,6 +2,7 @@ package oscar.riksdagskollen.Activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,6 +28,7 @@ import java.lang.ref.SoftReference;
 import java.util.Collection;
 import java.util.HashMap;
 
+import oscar.riksdagskollen.BuildConfig;
 import oscar.riksdagskollen.Fragment.AboutFragment;
 import oscar.riksdagskollen.Fragment.CurrentNewsListFragment;
 import oscar.riksdagskollen.Fragment.DecisionsListFragment;
@@ -383,6 +385,16 @@ public class MainActivity extends AppCompatActivity
                 if (aboutFragment == null || aboutFragment.get() == null)
                     aboutFragment = new SoftReference<>(AboutFragment.newInstance());
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, aboutFragment.get()).commit();
+                break;
+            case R.id.feedback_nav:
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto", "oscar@andell.eu", null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Tankar kring Riksdagskollen");
+                emailIntent.putExtra(Intent.EXTRA_TEXT,
+                        "\n\nSysteminformation:" +
+                                "\nApp-version: " + BuildConfig.VERSION_NAME +
+                                "\nSdk-version: " + Build.VERSION.SDK_INT);
+                startActivity(Intent.createChooser(emailIntent, "Skicka ett mail"));
                 break;
         }
 

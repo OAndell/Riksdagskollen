@@ -79,6 +79,12 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
+                    android:id="@+id/feedback_nav"
+                    android:icon="@drawable/ic_menu_message"
+                    android:title="@string/feedback" />
+            </group>
+            <group android:checkableBehavior="single">
+                <item
                     android:id="@+id/about_nav"
                     android:icon="@drawable/abouticon"
                     android:title="@string/about" />
