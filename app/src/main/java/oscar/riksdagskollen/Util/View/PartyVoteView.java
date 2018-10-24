@@ -34,7 +34,6 @@ public class PartyVoteView extends LinearLayout {
         setUpChart(partyResults);
         setResultDetailsText(partyResults);
         setOnClick();
-
     }
 
     private void setResultDetailsText(int[] partyResults) {

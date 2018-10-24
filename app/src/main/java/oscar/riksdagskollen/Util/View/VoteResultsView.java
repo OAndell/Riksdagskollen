@@ -25,13 +25,11 @@ public class VoteResultsView extends LinearLayout {
         super(context);
         inflate(context, R.layout.vote_result_chart, this);
         chart = findViewById(R.id.vote_result_chart_chart);
-
         setupMainGraph(voteResults);
     }
 
 
     private void setupMainGraph(VoteResults voteResults) {
-
 
         BarData data = new BarData(createDataSet(voteResults.getTotal()));
         data.setValueTextSize(14f);
@@ -75,8 +73,6 @@ public class VoteResultsView extends LinearLayout {
         entries.add(new BarEntry(2, totalVotes[2]));
         entries.add(new BarEntry(3, totalVotes[1]));
         entries.add(new BarEntry(4, totalVotes[0]));
-        ;
-
         BarDataSet dataset = new BarDataSet(entries, "");
         dataset.setColors(colors);
         dataset.setDrawValues(true);
