@@ -50,7 +50,8 @@ public class RepresentativeTabFragment extends Fragment {
         setupViewPager(viewPager);
 
         // Set Tabs inside Toolbar
-        TabLayout tabs = view.findViewById(R.id.result_tabs);
+        TabLayout tabs = getActivity().findViewById(R.id.result_tabs);
+        tabs.setVisibility(View.VISIBLE);
         tabs.setupWithViewPager(viewPager);
         //init tab lists
         return view;

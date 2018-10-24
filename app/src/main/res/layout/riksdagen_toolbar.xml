@@ -15,6 +15,7 @@
         app:expandedTitleMarginTop="65dp"
         app:expandedTitleMarginStart="16dp"
         app:expandedTitleTextAppearance="@style/TextStyleExpandedToolbar"
+        app:collapsedTitleTextAppearance="@style/TextStyleExpandedToolbar"
         app:expandedTitleGravity="start|top"
         app:contentScrim="?colorPrimary"
         app:statusBarScrim="?colorPrimary"
