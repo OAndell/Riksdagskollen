@@ -2,6 +2,7 @@ package oscar.riksdagskollen.Fragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -97,6 +98,7 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Animatable animatable;
         switch (item.getItemId()) {
             case R.id.sort_by_name:
                 swapAdapter(ascending ?
@@ -189,9 +191,11 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
     public void onPrepareOptionsMenu(Menu menu) {
 
         if (ascending) {
+            ((Animatable) menu.findItem(R.id.sort_order_ascending).getIcon()).start();
             menu.findItem(R.id.sort_order_ascending).setVisible(true);
             menu.findItem(R.id.sort_order_descending).setVisible(false);
         } else {
+            ((Animatable) menu.findItem(R.id.sort_order_descending).getIcon()).start();
             menu.findItem(R.id.sort_order_ascending).setVisible(false);
             menu.findItem(R.id.sort_order_descending).setVisible(true);
         }
