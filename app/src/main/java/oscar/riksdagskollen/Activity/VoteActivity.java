@@ -2,12 +2,10 @@ package oscar.riksdagskollen.Activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -28,11 +26,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.github.mikephil.charting.charts.HorizontalBarChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.jsoup.Jsoup;
@@ -53,6 +46,7 @@ import oscar.riksdagskollen.Util.JSONModel.Vote;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
 import oscar.riksdagskollen.Util.View.PartyVoteView;
+import oscar.riksdagskollen.Util.View.VoteResultsView;
 
 /**
  * Created by oscar on 2018-06-16.
@@ -76,6 +70,7 @@ public class VoteActivity extends AppCompatActivity{
     private final String parseStart = "<section class=\"component-case-content";
     private LinearLayout motionHolder;
     private LinearLayout partyVotesHolder;
+    private LinearLayout voteResultChartHolder;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +89,7 @@ public class VoteActivity extends AppCompatActivity{
         mainContent = findViewById(R.id.main_content);
         motionHolder = findViewById(R.id.motion_holder);
         partyVotesHolder = findViewById(R.id.party_votes_container);
+        voteResultChartHolder = findViewById(R.id.vote_activity_chart_holder);
 
         ((ProgressBar) loadingView.findViewById(R.id.progress_bar)).getIndeterminateDrawable().setColorFilter(
                 RiksdagskollenApp.getColorFromAttribute(R.attr.secondaryLightColor, this),
@@ -166,7 +162,11 @@ public class VoteActivity extends AppCompatActivity{
                 Element propositionInfo = resultSpan.nextElementSibling();
 
                 textBody.setText(pointName);
-                result.setText(resultSpan.text().split("Beslut:")[1].trim());
+                try {
+                    result.setText(resultSpan.text().split("Beslut:")[1].trim());
+                } catch (IndexOutOfBoundsException e) {
+                    result.setText(resultSpan.text());
+                }
                 String propositionString;
                 try {
                     propositionString = propositionInfo.text().split("förslag:")[1].trim();
@@ -356,7 +356,7 @@ public class VoteActivity extends AppCompatActivity{
     }
 
     private void prepareGraphs(VoteResults results) {
-        setupMainGraph(results);
+        voteResultChartHolder.addView(new VoteResultsView(context, results));
         //TODO fix a better solution if a party is not in parliament for a vote.
         //TODO this is hardcoded for votes before SD had any seats.
         if(results.getPartyVotes("SD")!=null){
@@ -380,38 +380,6 @@ public class VoteActivity extends AppCompatActivity{
 
     }
 
-    private void setupMainGraph(VoteResults voteResults){
-        BarData data = new BarData(getDataSet(voteResults.getTotal()));
-        data.setValueTextSize(14f);
-        data.setValueTextColor(Color.BLACK);
-
-        HorizontalBarChart chart =  findViewById(R.id.chart);
-        chart.setData(data);
-        chart.setDescription(null);
-
-        //X-axis settings
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(false);
-        xAxis.setDrawLabels(false);
-        xAxis.setAxisLineWidth(2);
-        xAxis.setAxisLineColor(titleColor);
-
-        chart.getAxisLeft().setDrawLabels(false);
-        chart.getAxisLeft().setDrawGridLines(false);
-        chart.getAxisLeft().setDrawAxisLine(false);
-        chart.getAxisRight().setDrawLabels(false);
-        chart.getAxisRight().setDrawGridLines(false);
-        chart.getAxisRight().setDrawAxisLine(false);
-
-        chart.getLegend().setEnabled(false);
-        chart.setDrawValueAboveBar(true);
-        chart.setFitBars(true);
-        chart.setTouchEnabled(false); //Remove ability to zoom n stuff
-
-        //chart.setDrawBorders(true); //Looks nice to have this on, but values get outside the border
-        chart.invalidate();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -419,25 +387,6 @@ public class VoteActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    private BarDataSet getDataSet(int[] totalVotes){
-        ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(ContextCompat.getColor(this, R.color.absentVoteColor));
-        colors.add(ContextCompat.getColor(this, R.color.refrainVoteColor));
-        colors.add(ContextCompat.getColor(this, R.color.noVoteColor));
-        colors.add(ContextCompat.getColor(this, R.color.yesVoteColor));
-
-        ArrayList<BarEntry> entries = new ArrayList();
-        entries.add(new BarEntry(1, totalVotes[3]));
-        entries.add(new BarEntry(2, totalVotes[2]));
-        entries.add(new BarEntry(3, totalVotes[1]));
-        entries.add(new BarEntry(4, totalVotes[0]));;
-
-        BarDataSet dataset = new BarDataSet(entries,"");
-        dataset.setColors(colors);
-        dataset.setDrawValues(true);
-        return dataset;
-
-    }
 
     private void setupPartyGraph(VoteResults voteResults, String[] parties) {
         for (int i = 0; i < parties.length; i++) {
