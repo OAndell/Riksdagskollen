@@ -10,7 +10,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/DefaultTheme"
+        android:theme="@style/WhiteTheme"
         >
 
         <activity
@@ -18,7 +18,7 @@
             android:configChanges="orientation"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/DefaultTheme.NoActionBar"
+            android:theme="@style/InitialTheme"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

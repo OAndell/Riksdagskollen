@@ -8,6 +8,7 @@
         android:icon="@drawable/ic_search"
         app:showAsAction="always|collapseActionView"
         android:visible="true"
+
         app:actionViewClass="android.support.v7.widget.SearchView"
         android:title="Sök beslut" />
 

@@ -60,6 +60,7 @@ public class RiksdagskollenApp extends Application {
 
         representativeManager = new RepresentativeManager(this);
 
+
     }
 
     public void scheduleCheckAlertsJobIfNotRunning() {

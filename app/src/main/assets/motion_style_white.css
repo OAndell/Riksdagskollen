@@ -1,0 +1,153 @@
+h1 {
+    font-size: 1.2em;
+    color: #4e7c9d;
+}
+
+h2 {
+    font-size: 1.1em;
+    color: #4e7c9d;
+}
+
+h3 {
+    font-size: 1.1em;
+    color: #4e7c9d;
+}
+
+h4 {
+    font-size: 1.1em;
+    color: #4e7c9d;
+}
+
+.Innehllsfrteckning {
+    margin-top: 1.2em;
+}
+
+.Avsnittsrubrik {
+    margin-top: 1.2em;
+}
+
+.tSidrubrikJA {
+    font-size: 1.1em;
+    color: #4e7c9d;
+    font-weight: bold;
+    padding-top: 10px;
+}
+
+.DokumentRubrik{
+   font-size: 1.2em;
+   color:#4e7c9d;
+   font-weight: bold;
+}
+
+.RubrikFrslagTIllRiksdagsbeslut {
+   font-size: 1.2em;
+   color: #4e7c9d;
+   font-weight: bold;
+}
+
+.Rubrik1Dokumentinformation {
+    font-size: 1.2em;
+    color: #4e7c9d;
+    font-weight: bold;
+}
+
+.Hyperlink {
+    text-decoration: underline;
+}
+
+p {
+    display: block;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+li {
+    font-size: 1.0em;
+    font-family: 'Sans-serif';
+
+}
+
+span {
+    font-size: 1.0em;
+    font-family: 'Sans-serif';
+}
+
+td {
+    height: 35px;
+}
+
+body {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top -10px;
+    padding: 0;
+    overflow-x:hidden;
+    word-wrap: break-word;
+}
+
+a:link {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:visited {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    max-width: 100%;
+    height: auto;
+    width: auto;
+}
+
+table {
+        display: block;
+        overflow-x: scroll;
+        border-spacing: 10px;
+        border-collapse: collapse;
+        margin-bottom: 1.25rem;
+        table-layout: fixed;
+    }
+
+td {
+    padding: 5px;
+    word-wrap: break-word;
+    text-align: left;
+}
+
+th {
+    font-weight: bold;
+    word-wrap: break-word;
+    text-align: left;
+}
+
+
+table caption {
+  background: transparent;
+  font-weight: bold;
+}
+
+table thead {
+  background: #F5F5F5;
+}
+
+table thead tr th,
+table thead tr td {
+  font-weight: bold;
+}
+
+table tfoot {
+  background: #F5F5F5;
+}
+
+table tfoot tr th,
+table tfoot tr td {
+  font-weight: bold;
+
+}

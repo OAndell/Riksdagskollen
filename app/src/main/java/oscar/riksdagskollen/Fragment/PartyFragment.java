@@ -1,14 +1,11 @@
 package oscar.riksdagskollen.Fragment;
 
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -31,8 +28,8 @@ public class PartyFragment extends Fragment {
     private PartyListFragment listFragment;
     private PartyInfoFragment infoFragment;
     private PartyRepresentativeFragment representativeFragment;
-    private AppBarLayout appBarLayout;
-    private float defaultElevation = 0;
+    private TabLayout tabLayout;
+
 
     public static PartyFragment newInstance(Party party){
         Bundle args = new Bundle();
@@ -43,24 +40,13 @@ public class PartyFragment extends Fragment {
         return newInstance;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        defaultElevation = ViewCompat.getElevation(appBarLayout);
-        ViewCompat.setElevation(appBarLayout, 0);
-    }
 
     @Override
-    public void onPause() {
-        ViewCompat.setElevation(appBarLayout, defaultElevation);
-        super.onPause();
+    public void onDetach() {
+        super.onDetach();
+        tabLayout.setVisibility(View.GONE);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        appBarLayout = getActivity().findViewById(R.id.appbar);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +56,6 @@ public class PartyFragment extends Fragment {
         representativeFragment = PartyRepresentativeFragment.newInstance(party);
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(party.getName());
@@ -78,13 +63,14 @@ public class PartyFragment extends Fragment {
         // Setting ViewPager for each Tabs
         ViewPager viewPager = view.findViewById(R.id.viewpager);
         setupViewPager(viewPager);
-
         // Set Tabs inside Toolbar
-        TabLayout tabs = view.findViewById(R.id.result_tabs);
-        tabs.setupWithViewPager(viewPager);
+        tabLayout = getActivity().findViewById(R.id.result_tabs);
+        tabLayout.setVisibility(View.VISIBLE);
+        tabLayout.setupWithViewPager(viewPager);
         return view;
 
     }
+
 
     public void setListFragment(PartyListFragment listFragment) {
         this.listFragment = listFragment;

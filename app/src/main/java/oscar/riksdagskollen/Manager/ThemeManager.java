@@ -23,7 +23,8 @@ public class ThemeManager {
 
     public enum Theme {
         DEFAULT("default", "Standard", "motion_style.css", R.style.DefaultTheme, R.style.DefaultTheme_NoActionBar),
-        BLACK("black", "AMOLED-svart", "motion_style_black.css", R.style.BlackTheme, R.style.BlackTheme_NoActionBar);
+        BLACK("black", "AMOLED-svart", "motion_style_black.css", R.style.BlackTheme, R.style.BlackTheme_NoActionBar),
+        WHITE("white", "Ljust", "motion_style_white.css", R.style.WhiteTheme, R.style.WhiteTheme_NoActionBar);
         int id;
         int noActionBarTheme;
         String name;
@@ -44,6 +45,8 @@ public class ThemeManager {
                     return Theme.DEFAULT;
                 case "black":
                     return Theme.BLACK;
+                case "white":
+                    return Theme.WHITE;
                 default:
                     return DEFAULT;
             }

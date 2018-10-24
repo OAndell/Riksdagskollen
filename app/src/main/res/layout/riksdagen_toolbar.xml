@@ -27,7 +27,10 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            app:titleTextColor="?attr/toolbarTitleTextColor"
             app:layout_collapseMode="pin"
+            android:theme="@style/ToolbarTheme"
+            style="@style/ToolbarStyle"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         <ImageView
@@ -45,5 +48,18 @@
             layout="@layout/representative_header_layout" />
 
     </android.support.design.widget.CollapsingToolbarLayout>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/result_tabs"
+        android:background="?colorPrimary"
+        android:visibility="gone"
+        app:tabTextColor="?attr/secondaryDarkColor"
+        app:tabSelectedTextColor="?attr/secondaryLightColor"
+        app:tabIndicatorColor="?attr/secondaryLightColor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabMaxWidth="0dp"
+        app:tabGravity="fill"
+        app:tabMode="fixed" />
 
 </android.support.design.widget.AppBarLayout>

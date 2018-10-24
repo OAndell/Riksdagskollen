@@ -3,6 +3,9 @@
     <attr name="mainBackgroundColor" format="color" />
     <attr name="cardViewBackgroundColor" format="color" />
     <attr name="cardViewBorderColor" format="color" />
+
+    <attr name="toolbarTitleTextColor" format="color" />
+
     <attr name="mainTitleTextColor" format="color" />
     <attr name="mainBodyTextColor" format="color" />
     <attr name="buttonColor" format="color" />
