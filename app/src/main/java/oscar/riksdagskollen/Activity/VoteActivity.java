@@ -130,8 +130,6 @@ public class VoteActivity extends AppCompatActivity{
 
         setUpCollapsibleViews();
         setUpTextAndGetMotions(voteDocument);
-
-
     }
 
     private void setUpTextAndGetMotions(final Vote voteDocument) {
@@ -149,8 +147,9 @@ public class VoteActivity extends AppCompatActivity{
 
                 StringBuilder abstractString = new StringBuilder();
                 for (Element element : abstractParagraphs) {
-                    if (element.is("li")) abstractString.append("\t\t \u2022");
-                    if (element.text().trim().length() > 0)
+                    if (element.is("li") && !element.text().contains("Teckenspråk"))
+                        abstractString.append("\t\t \u2022");
+                    if (element.text().trim().length() > 0 && !element.text().contains("Teckenspråk"))
                         abstractString.append(element.text()).append("\n\n");
                 }
                 abstractTv.setText(abstractString.toString());
