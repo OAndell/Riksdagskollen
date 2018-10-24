@@ -92,6 +92,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
+                    android:id="@+id/vote_activity_beslut_label"
                     android:text="Beslut: "
                     android:textAlignment="textStart"
                     android:textColor="?mainTitleTextColor"

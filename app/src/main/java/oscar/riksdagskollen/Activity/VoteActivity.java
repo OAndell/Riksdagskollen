@@ -165,7 +165,8 @@ public class VoteActivity extends AppCompatActivity{
                 try {
                     result.setText(resultSpan.text().split("Beslut:")[1].trim());
                 } catch (IndexOutOfBoundsException e) {
-                    result.setText(resultSpan.text());
+                    //Beslut string does not exist yet. Do not show.
+                    findViewById(R.id.vote_activity_beslut_label).setVisibility(View.GONE);
                 }
                 String propositionString;
                 try {
