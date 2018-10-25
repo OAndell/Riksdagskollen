@@ -16,6 +16,7 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import java.util.ArrayList;
 
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.Util.Helper.AnimUtil;
 
 public class PartyVoteView extends LinearLayout {
 
@@ -57,11 +58,7 @@ public class PartyVoteView extends LinearLayout {
         this.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (resultDetailsText.getVisibility() == VISIBLE) {
-                    resultDetailsText.setVisibility(GONE);
-                } else {
-                    resultDetailsText.setVisibility(VISIBLE);
-                }
+                AnimUtil.toggleExpansion(resultDetailsText, null);
             }
         });
     }

@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -38,6 +37,9 @@ import oscar.riksdagskollen.Util.JSONModel.DecisionDocument;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
 import oscar.riksdagskollen.Util.RiksdagenCallback.DecisionsCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.VoteCallback;
+
+import static oscar.riksdagskollen.Util.Helper.AnimUtil.collapse;
+import static oscar.riksdagskollen.Util.Helper.AnimUtil.expand;
 
 /**
  * Created by oscar on 2018-03-29.
@@ -379,57 +381,4 @@ public class DecisionListAdapter extends RiksdagenViewHolderAdapter {
 
     }
 
-
-    private static void expand(final View v, Animation.AnimationListener listener) {
-        v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        final int targtetHeight = v.getMeasuredHeight();
-
-        v.getLayoutParams().height = 0;
-        v.setVisibility(View.VISIBLE);
-        Animation a = new Animation()
-        {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                v.getLayoutParams().height = interpolatedTime == 1
-                        ? ViewGroup.LayoutParams.WRAP_CONTENT
-                        : (int)(targtetHeight * interpolatedTime);
-                v.requestLayout();
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-
-        a.setDuration(125);
-        a.setAnimationListener(listener);
-        v.startAnimation(a);
-    }
-
-    private static void collapse(final View v, Animation.AnimationListener listener) {
-        final int initialHeight = v.getMeasuredHeight();
-
-        Animation a = new Animation()
-        {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if(interpolatedTime == 1){
-                    v.setVisibility(View.GONE);
-                }else{
-                    v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
-                    v.requestLayout();
-                }
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-
-        a.setDuration(125);
-        a.setAnimationListener(listener);
-        v.startAnimation(a);
-    }
 }
