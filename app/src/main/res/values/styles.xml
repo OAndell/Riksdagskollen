@@ -105,6 +105,8 @@
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorControlNormal">?attr/secondaryLightColor</item>
         <item name="android:textColorSecondary">?attr/secondaryLightColor</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="ToolbarStyle" parent="ThemeOverlay.AppCompat.Dark.ActionBar">

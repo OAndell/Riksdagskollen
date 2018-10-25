@@ -30,6 +30,7 @@
             android:background="?attr/colorPrimary"
             app:titleTextColor="?attr/toolbarTitleTextColor"
             app:layout_collapseMode="pin"
+            app:titleTextAppearance="@style/ToolbarTheme"
             android:theme="@style/ToolbarTheme"
             style="@style/ToolbarStyle"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
