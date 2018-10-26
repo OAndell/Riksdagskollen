@@ -148,9 +148,9 @@ public class VoteActivity extends AppCompatActivity{
 
                 StringBuilder abstractString = new StringBuilder();
                 for (Element element : abstractParagraphs) {
-                    if (element.is("li") && !element.text().contains("Teckenspråk"))
+                    if (element.is("li") && !element.text().contains("Teckenspråk") && !element.text().contains("Lättläst"))
                         abstractString.append("\t\t \u2022");
-                    if (element.text().trim().length() > 0 && !element.text().contains("Teckenspråk"))
+                    if (element.text().trim().length() > 0 && !element.text().contains("Teckenspråk") && !element.text().contains("Lättläst"))
                         abstractString.append(element.text()).append("\n\n");
                 }
                 abstractTv.setText(abstractString.toString());
@@ -167,6 +167,7 @@ public class VoteActivity extends AppCompatActivity{
                 } catch (IndexOutOfBoundsException e) {
                     //Beslut string does not exist yet. Do not show.
                     findViewById(R.id.vote_activity_beslut_label).setVisibility(View.GONE);
+                    result.setVisibility(View.GONE);
                 }
                 String propositionString;
                 try {
@@ -299,7 +300,6 @@ public class VoteActivity extends AppCompatActivity{
                     }
                     motions.add(new MotionDetails(motionIDs.get(i), "", i + 1));
                 }
-
             }
         } catch (Exception e) {
             //If all else fails
@@ -361,11 +361,11 @@ public class VoteActivity extends AppCompatActivity{
         //TODO fix a better solution if a party is not in parliament for a vote.
         //TODO this is hardcoded for votes before SD had any seats.
         if(results.getPartyVotes("SD")!=null){
-            String[] parties = {"S", "M", "SD", "MP", "C", "V", "L", "KD"};
+            String[] parties = {"S", "M", "SD", "C", "V", "KD", "L", "MP"};
             setupPartyGraph(results, parties);
         }
         else {
-            String[] parties = {"S", "M", "MP", "C", "V", "L", "KD"};
+            String[] parties = {"S", "M", "C", "V", "KD", "L", "MP"};
             setupPartyGraph(results, parties);
         }
         graphLoaded = true;

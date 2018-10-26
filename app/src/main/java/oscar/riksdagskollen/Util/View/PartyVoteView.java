@@ -18,13 +18,20 @@ import java.util.ArrayList;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.Util.Helper.AnimUtil;
 
+/**
+ * View for displaying how a single party voted in a vote
+ */
 public class PartyVoteView extends LinearLayout {
 
     private ImageView logo;
     private HorizontalBarChart chart;
     private TextView resultDetailsText;
 
-
+    /**
+     * @param context      context
+     * @param imgRes       party logo
+     * @param partyResults vote result for party
+     */
     public PartyVoteView(Context context, int imgRes, int[] partyResults) {
         super(context);
         inflate(context, R.layout.party_vote, this);

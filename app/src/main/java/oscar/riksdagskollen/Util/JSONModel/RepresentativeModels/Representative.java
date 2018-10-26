@@ -9,6 +9,12 @@ import java.util.Calendar;
 /**
  * Created by oscar on 2018-03-27.
  * Hold useful information about a Representative (Ledamot)
+ *
+ * Representative
+ *       -> RepresentativeMissionList ( There mission in parliament etc)
+ *          -> RepresentativeMission
+ *       -> RepresentativeInfoList (Personal information)
+ *          -> RepresentativeInfo
  */
 public class Representative implements Parcelable {
 

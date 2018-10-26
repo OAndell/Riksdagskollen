@@ -20,8 +20,8 @@ import oscar.riksdagskollen.Util.JSONModel.Party;
 
 /**
  * Created by oscar on 2018-08-28.
+ * This fragment holds 3 other fragments in tabs.
  */
-
 public class PartyFragment extends Fragment {
 
     private Party party;
