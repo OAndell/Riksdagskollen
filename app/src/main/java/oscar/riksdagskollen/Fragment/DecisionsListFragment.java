@@ -13,6 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -130,7 +132,7 @@ public class DecisionsListFragment extends RiksdagenAutoLoadingListFragment impl
         inflater.inflate(R.menu.dec_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.menu_search);
         searchView = (SearchView) searchItem.getActionView();
-
+        changeSearchViewTextColor(searchView);
         searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem menuItem) {
@@ -217,6 +219,22 @@ public class DecisionsListFragment extends RiksdagenAutoLoadingListFragment impl
         } else {
             loadMoreItems();
             incrementPage();
+        }
+    }
+
+    private void changeSearchViewTextColor(View view) {
+        if (view != null) {
+            if (view instanceof TextView) {
+                ((TextView) view).setTextColor(RiksdagskollenApp.getColorFromAttribute(R.attr.secondaryLightColor, getActivity()));
+                if (view instanceof EditText)
+                    ((EditText) view).setHintTextColor(RiksdagskollenApp.getColorFromAttribute(R.attr.secondaryLightColor, getActivity()));
+                return;
+            } else if (view instanceof ViewGroup) {
+                ViewGroup viewGroup = (ViewGroup) view;
+                for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                    changeSearchViewTextColor(viewGroup.getChildAt(i));
+                }
+            }
         }
     }
 

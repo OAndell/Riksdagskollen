@@ -68,7 +68,7 @@
         <item name="android:windowBackground">@color/black</item>
     </style>
 
-    <style name="WhiteTheme" parent="Theme.AppCompat.Light">
+    <style name="WhiteTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">@color/riksdagBlueLight</item>
@@ -97,9 +97,6 @@
         <item name="buttonBackgroundDrawable">@drawable/button_background_white</item>
 
         <item name="android:windowBackground">@color/white</item>
-
-        <item name="android:editTextColor">@color/riksdagBlueLight</item>
-
     </style>
 
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -112,7 +109,6 @@
     <style name="ToolbarStyle" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:background">?attr/colorPrimary</item>
     </style>
-
 
     <style name="NavigationStyle" parent="ThemeOverlay.AppCompat">
         <item name="android:textColorPrimary">?mainBodyTextColor</item>
