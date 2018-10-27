@@ -71,10 +71,10 @@ public class AlertManager {
         return sectionAlerts.containsKey(section);
     }
 
-    public void setAlertEnabledForPartyDocuments(String partyId, PartyDocument latest, boolean enabled) {
+    public void setAlertEnabledForPartyDocuments(String partyId, String latestId, boolean enabled) {
         if (enabled) {
-            partyAlertPreferences.edit().putString(partyId, latest.getId()).apply();
-            partyAlerts.put(partyId, latest.getId());
+            partyAlertPreferences.edit().putString(partyId, latestId).apply();
+            partyAlerts.put(partyId, latestId);
             // Start tracking job if not already started
             RiksdagskollenApp.getInstance().scheduleCheckAlertsJobIfNotRunning();
         } else {
@@ -83,13 +83,13 @@ public class AlertManager {
         }
     }
 
-    public boolean toggleEnabledForParty(String partyid, PartyDocument latest) {
+    public boolean toggleEnabledForParty(String partyid, String latestId) {
         boolean enabled;
         if (partyAlerts.containsKey(partyid)) {
-            setAlertEnabledForPartyDocuments(partyid, latest, false);
+            setAlertEnabledForPartyDocuments(partyid, latestId, false);
             enabled = false;
         } else {
-            setAlertEnabledForPartyDocuments(partyid, latest, true);
+            setAlertEnabledForPartyDocuments(partyid, latestId, true);
             enabled = true;
         }
         return enabled;

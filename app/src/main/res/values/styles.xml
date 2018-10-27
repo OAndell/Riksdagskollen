@@ -91,7 +91,7 @@
         <item name="yesindicatorcolor">@color/riksdagBlueAlpha</item>
         <item name="noindicatorcolor">@color/riksdagBlueAlpha</item>
 
-        <item name="navigationDrawerHighlight">@color/secondaryDarkColor</item>
+        <item name="navigationDrawerHighlight">@color/riksdagBlueLight</item>
 
         <item name="loadingViewDrawable">@drawable/loading_view_white</item>
         <item name="buttonBackgroundDrawable">@drawable/button_background_white</item>

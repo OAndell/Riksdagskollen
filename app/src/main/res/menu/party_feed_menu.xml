@@ -13,7 +13,7 @@
         android:id="@+id/notification_menu_item"
         android:title="Bevaka parti"
         android:icon="@drawable/ic_notifications_disabled"
-        android:visible="false"
-        app:showAsAction="ifRoom" />
+        android:visible="true"
+        app:showAsAction="always" />
 
 </menu>

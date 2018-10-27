@@ -75,7 +75,12 @@ public abstract class RiksdagenViewHolderAdapter extends RecyclerView.Adapter<Re
     void prepareHeaderFooter(HeaderFooterViewHolder vh, View view){
         //empty out our FrameLayout and replace with our header/footer
         vh.base.removeAllViews();
-        vh.base.addView(view);
+        try {
+            vh.base.addView(view);
+        } catch (IllegalStateException e) {
+            ViewGroup parentViewGroup = (ViewGroup) view.getParent();
+            if (parentViewGroup != null) parentViewGroup.removeView(view);
+        }
     }
 
     //add a header to the adapter

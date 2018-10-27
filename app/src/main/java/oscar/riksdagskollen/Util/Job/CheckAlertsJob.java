@@ -111,7 +111,7 @@ public class CheckAlertsJob extends Job {
                     showMonitorNotification(partyId, true);
                     RiksdagskollenApp.getInstance()
                             .getAlertManager()
-                            .setAlertEnabledForPartyDocuments(partyId, documents.get(0), true);
+                            .setAlertEnabledForPartyDocuments(partyId, documents.get(0).getId(), true);
                     countDownLatch.countDown();
                 } else {
                     countDownLatch.countDown();

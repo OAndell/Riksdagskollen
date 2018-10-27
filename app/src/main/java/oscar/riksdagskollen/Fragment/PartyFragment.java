@@ -9,6 +9,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 
 /**
@@ -29,6 +33,11 @@ public class PartyFragment extends Fragment {
     private PartyInfoFragment infoFragment;
     private PartyRepresentativeFragment representativeFragment;
     private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private int currentPage = 0;
+    private Menu menu;
+
+    private static final String TAG = "Partyfragment";
 
 
     public static PartyFragment newInstance(Party party){
@@ -54,6 +63,8 @@ public class PartyFragment extends Fragment {
         this.party = getArguments().getParcelable("party");
         infoFragment = PartyInfoFragment.newInstance(party);
         representativeFragment = PartyRepresentativeFragment.newInstance(party);
+
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -61,8 +72,8 @@ public class PartyFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(party.getName());
         View view = inflater.inflate(R.layout.fragment_party,container, false);
         // Setting ViewPager for each Tabs
-        ViewPager viewPager = view.findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+        viewPager = view.findViewById(R.id.viewpager);
+        setupViewPager();
         // Set Tabs inside Toolbar
         tabLayout = getActivity().findViewById(R.id.result_tabs);
         tabLayout.setVisibility(View.VISIBLE);
@@ -76,13 +87,64 @@ public class PartyFragment extends Fragment {
         this.listFragment = listFragment;
     }
 
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        updateMenuItemAlpha(0);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.party_feed_menu, menu);
+        this.menu = menu;
+        if (RiksdagskollenApp.getInstance().getAlertManager().isAlertEnabledForParty(party.getID())) {
+            menu.findItem(R.id.notification_menu_item).setIcon(R.drawable.ic_notification_enabled);
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
     // Add Fragments to Tabs
-    private void setupViewPager(ViewPager viewPager) {
+    private void setupViewPager() {
         Adapter adapter = new Adapter(getChildFragmentManager());
         adapter.addFragment(listFragment, "Flöde");
         adapter.addFragment(infoFragment, "Parti");
         adapter.addFragment(representativeFragment,"Ledamöter");
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                currentPage = position;
+                updateMenuItemAlpha(positionOffset);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
         viewPager.setAdapter(adapter);
+    }
+
+    private void updateMenuItemAlpha(float positionOffset) {
+        if (menu == null) return;
+        MenuItem filter = menu.findItem(R.id.menu_filter);
+        MenuItem notif = menu.findItem(R.id.notification_menu_item);
+
+        if (notif != null && filter != null) {
+            int alpha = (int) (255 - positionOffset * 255 - 255 * currentPage);
+            filter.getIcon().setAlpha(alpha);
+            notif.getIcon().setAlpha(alpha);
+            if (currentPage > 0 && notif.isVisible() && filter.isVisible()) {
+                notif.setVisible(false);
+                filter.setVisible(false);
+            } else if (currentPage == 0 && !notif.isVisible() && !filter.isVisible()) {
+                notif.setVisible(true);
+                filter.setVisible(true);
+            }
+
+        }
     }
 
     static class Adapter extends FragmentPagerAdapter {

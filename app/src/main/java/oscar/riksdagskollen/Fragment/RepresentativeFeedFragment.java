@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -73,7 +71,6 @@ public class RepresentativeFeedFragment extends RiksdagenAutoLoadingListFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         this.iid = getArguments().getString("iid");
         ArrayList<PartyDocument> firstPage = getArguments().getParcelableArrayList("firstPage");
         if (firstPage != null && !firstPage.isEmpty()) {
@@ -138,11 +135,6 @@ public class RepresentativeFeedFragment extends RiksdagenAutoLoadingListFragment
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.filter, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
 
     /**
      * Load the next page and add it to the adapter when downloaded and parsed.
