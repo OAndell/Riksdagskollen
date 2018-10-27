@@ -71,6 +71,10 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAnalytics fireBase;
 
     public static Party getParty(String id) {
+        if (parties == null) {
+            parties = new HashMap<>();
+            initParties();
+        }
         return parties.get(id.toLowerCase());
     }
 
@@ -403,56 +407,57 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+
     // Create all of the Party objects
-    private void initParties() {
+    private static void initParties() {
 
         Party mParty = new Party(
-                getString(R.string.party_m),
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.party_m),
                 "m",R.drawable.mlogo,
-                getString(R.string.m_website),
-                getString(R.string.m_ideology));
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.m_website),
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.m_ideology));
 
         Party sParty = new Party(
-                getString(R.string.party_s),
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.party_s),
                 "s",R.drawable.slogo,
-                getString(R.string.s_website),
-                getString(R.string.s_ideology));
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.s_website),
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.s_ideology));
 
         Party sdParty = new Party(
-                getString(R.string.party_sd),
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.party_sd),
                 "sd",R.drawable.sdlogo,
-                getString(R.string.sd_website),
-                getString(R.string.sd_ideology));
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.sd_website),
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.sd_ideology));
 
         Party kdParty = new Party(
-                getString(R.string.party_kd),
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.party_kd),
                 "kd",R.drawable.kdlogo,
-                getString(R.string.kd_website),
-                getString(R.string.kd_ideology));
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.kd_website),
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.kd_ideology));
 
         Party vParty = new Party(
-                getString(R.string.party_v),
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.party_v),
                 "v",R.drawable.vlogo,
-                getString(R.string.v_website),
-                getString(R.string.v_ideology));
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.v_website),
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.v_ideology));
 
         Party cParty = new Party(
-                getString(R.string.party_c),
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.party_c),
                 "c",R.drawable.clogo,
-                getString(R.string.c_website),
-                getString(R.string.c_ideology));
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.c_website),
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.c_ideology));
 
         Party mpParty = new Party(
-                getString(R.string.party_mp),
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.party_mp),
                 "mp",R.drawable.mplogo,
-                getString(R.string.mp_website),
-                getString(R.string.mp_ideology));
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.mp_website),
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.mp_ideology));
 
         Party lParty = new Party(
-                getString(R.string.party_l),
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.party_l),
                 "l",R.drawable.llogo,
-                getString(R.string.l_website),
-                getString(R.string.l_ideology));
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.l_website),
+                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.l_ideology));
 
         parties.put(mParty.getID(), mParty);
         parties.put(sParty.getID(), sParty);

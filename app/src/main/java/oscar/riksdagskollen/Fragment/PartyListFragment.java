@@ -202,7 +202,8 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
                 }
                 if (!isLoadingUntilFull()) setLoadingMoreItems(false);
                 setShowLoadingView(false);
-                notificationItem.setVisible(true);
+
+                if (notificationItem != null) notificationItem.setVisible(true);
             }
 
             @Override
