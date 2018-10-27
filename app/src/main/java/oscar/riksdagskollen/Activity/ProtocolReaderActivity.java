@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,8 +39,8 @@ public class ProtocolReaderActivity extends AppCompatActivity {
     private String title;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        setTheme(RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         super.onCreate(savedInstanceState);
-        setTheme(RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme(false));
         setContentView(R.layout.activity_news_reader);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -58,6 +59,9 @@ public class ProtocolReaderActivity extends AppCompatActivity {
         ((ProgressBar) loadingView.findViewById(R.id.progress_bar)).getIndeterminateDrawable().setColorFilter(
                 RiksdagskollenApp.getColorFromAttribute(R.attr.secondaryLightColor, this),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -80,7 +84,7 @@ public class ProtocolReaderActivity extends AppCompatActivity {
 
 
         final RiksdagskollenApp app = RiksdagskollenApp.getInstance();
-        app.getRequestManager().downloadHtmlPage("http:"+ url, new StringRequestCallback() {
+        app.getRequestManager().getDownloadString("http:" + url, new StringRequestCallback() {
             @Override
             public void onResponse(String response) {
                 Document doc = Jsoup.parse(response);
@@ -103,12 +107,11 @@ public class ProtocolReaderActivity extends AppCompatActivity {
                 String result = doc.toString().replaceAll("style=\"[A-Öa-ö-_:;\\s0-9.%'#:space:/]+\"","");
                 result = result.replaceAll("&nbsp;","");
                 webView.loadDataWithBaseURL("file:///android_asset/", result, "text/html", "UTF-8", null);
-
+                System.out.println(result);
             }
 
             @Override
             public void onFail(VolleyError error) {
-
             }
         });
     }

@@ -3,8 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:background="@color/white">
+    android:background="?attr/mainBackgroundColor"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/riksdagen_toolbar"
+        android:visibility="visible"></include>
 
     <include layout="@layout/loading_view"></include>
 

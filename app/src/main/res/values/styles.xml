@@ -68,7 +68,7 @@
         <item name="android:windowBackground">@color/black</item>
     </style>
 
-    <style name="WhiteTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="WhiteTheme" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">@color/riksdagBlueLight</item>
@@ -91,7 +91,7 @@
         <item name="yesindicatorcolor">@color/riksdagBlueAlpha</item>
         <item name="noindicatorcolor">@color/riksdagBlueAlpha</item>
 
-        <item name="navigationDrawerHighlight">@color/riksdagBlueLight</item>
+        <item name="navigationDrawerHighlight">@color/riksdagBlueAlpha</item>
 
         <item name="loadingViewDrawable">@drawable/loading_view_white</item>
         <item name="buttonBackgroundDrawable">@drawable/button_background_white</item>
@@ -124,7 +124,6 @@
     <style name="WhiteTheme.NoActionBar" parent="WhiteTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:textColorPrimaryInverse">@color/cat_blue</item>
     </style>
 
     <style name="BlackTheme.NoActionBar" parent="BlackTheme">
