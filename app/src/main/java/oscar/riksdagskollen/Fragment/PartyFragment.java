@@ -54,6 +54,8 @@ public class PartyFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         tabLayout.setVisibility(View.GONE);
+        currentPage = 0;
+        updateMenuItemAlpha(0);
     }
 
 
