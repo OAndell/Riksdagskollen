@@ -15,9 +15,11 @@ public class Party implements Parcelable {
     private final String website;
     private final String ideology;
     private final int drawableLogo;
+    private final String wikiUrl;
 
-    public Party(String name, String id, int drawableLogo, String website, String ideology) {
+    public Party(String name, String id, int drawableLogo, String website, String ideology, String wikiUrl) {
         this.name = name;
+        this.wikiUrl = wikiUrl;
         this.id = id;
         this.drawableLogo = drawableLogo;
         this.ideology = ideology;
@@ -44,39 +46,9 @@ public class Party implements Parcelable {
         return ideology;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getWikiUrl() {
+        return wikiUrl;
     }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
-        dest.writeString(this.name);
-        dest.writeInt(this.drawableLogo);
-        dest.writeString(this.website);
-        dest.writeString(this.ideology);
-    }
-
-    private Party(Parcel in) {
-        this.id = in.readString();
-        this.name = in.readString();
-        this.drawableLogo = in.readInt();
-        this.website = in.readString();
-        this.ideology = in.readString();
-    }
-
-    public static final Parcelable.Creator<Party> CREATOR = new Parcelable.Creator<Party>() {
-        @Override
-        public Party createFromParcel(Parcel source) {
-            return new Party(source);
-        }
-
-        @Override
-        public Party[] newArray(int size) {
-            return new Party[size];
-        }
-    };
 
     @Override
     public boolean equals(Object o) {
@@ -95,4 +67,40 @@ public class Party implements Parcelable {
         result = 31 * result + name.hashCode();
         return result;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.name);
+        dest.writeString(this.website);
+        dest.writeString(this.ideology);
+        dest.writeInt(this.drawableLogo);
+        dest.writeString(this.wikiUrl);
+    }
+
+    protected Party(Parcel in) {
+        this.id = in.readString();
+        this.name = in.readString();
+        this.website = in.readString();
+        this.ideology = in.readString();
+        this.drawableLogo = in.readInt();
+        this.wikiUrl = in.readString();
+    }
+
+    public static final Creator<Party> CREATOR = new Creator<Party>() {
+        @Override
+        public Party createFromParcel(Parcel source) {
+            return new Party(source);
+        }
+
+        @Override
+        public Party[] newArray(int size) {
+            return new Party[size];
+        }
+    };
 }

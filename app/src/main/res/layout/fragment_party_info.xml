@@ -5,8 +5,10 @@
     android:background="?mainBackgroundColor"
     android:layout_height="match_parent">
 
-    <include layout="@layout/loading_view" android:visibility="visible"></include>
-    
+    <include
+        layout="@layout/loading_view"
+        android:visibility="gone"></include>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,8 +22,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="8dp"
+                android:orientation="horizontal"
                 android:weightSum="20">
 
                 <ImageView
@@ -35,9 +37,9 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="12"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
+                    android:layout_weight="12"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -49,17 +51,17 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Webbsida: "
-                            android:textStyle="bold"
+                            android:textColor="?mainTitleTextColor"
                             android:textSize="15sp"
-                            android:textColor="?mainTitleTextColor" />
+                            android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/website"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/website"
+                            android:text="www.example.se"
                             android:textColor="?attr/mainTitleTextColor"
-                            android:textSize="15sp"
-                            android:text="www.example.se" />
+                            android:textSize="15sp" />
 
                     </LinearLayout>
 
@@ -72,19 +74,30 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:textColor="?attr/mainTitleTextColor"
                             android:layout_marginTop="10dp"
-                            android:text="Politisk ideologi:" />
+                            android:text="Politisk ideologi:"
+                            android:textColor="?attr/mainTitleTextColor"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/ideology"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Demokratisk socialism, Socialdemokrati, Tredje vägens politik, Feminism"
+                            android:textColor="?attr/mainTitleTextColor"
+                            android:textSize="15sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/ideology"
+                            android:layout_gravity="end"
+                            android:gravity="end"
+                            android:text="Källa: Wikipedia"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginTop="4dp"
                             android:textColor="?attr/mainTitleTextColor"
-                            android:textSize="15sp"
-                            android:text="Demokratisk socialism, Socialdemokrati, Tredje vägens politik, Feminism" />
+                            android:textSize="12sp" />
 
                     </LinearLayout>
 
@@ -98,23 +111,56 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginLeft="16dp"
-                android:textColor="?attr/mainTitleTextColor"
-                android:layout_marginTop="10dp"
                 android:layout_gravity="left"
-                android:text="Partiledning" />
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Partiledning"
+                android:textColor="?attr/mainTitleTextColor"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/leadersLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                app:flexWrap="wrap"
+                app:alignContent="space_around"
                 app:alignItems="center"
-                app:alignContent="space_around"></com.google.android.flexbox.FlexboxLayout>
+                app:flexWrap="wrap"></com.google.android.flexbox.FlexboxLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Om partiet"
+                android:textColor="?attr/mainTitleTextColor"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/about_party_wiki"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:textColor="?mainBodyTextColor"
+                android:textSize="15sp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:text="Källa: Wikipedia"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="4dp"
+                android:textColor="?attr/mainBodyTextColor"
+                android:textSize="12sp" />
 
 
         </LinearLayout>

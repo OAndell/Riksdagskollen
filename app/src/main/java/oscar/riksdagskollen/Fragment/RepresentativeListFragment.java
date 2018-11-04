@@ -19,13 +19,13 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-import oscar.riksdagskollen.Activity.MainActivity;
 import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
 import oscar.riksdagskollen.Manager.RepresentativeManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.RepresentativeAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
+import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 
@@ -77,7 +77,7 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
             });
         }
 
-        for (Party party : MainActivity.getParties()) {
+        for (Party party : CurrentParties.getParties()) {
             curentFilter.put(party.getID(), true);
         }
 
@@ -135,7 +135,7 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
 
     private void showFilterDialog() {
         oldFilter = getFilter();
-        final ArrayList<Party> parties = new ArrayList<>(MainActivity.getParties());
+        final ArrayList<Party> parties = new ArrayList<>(CurrentParties.getParties());
         final CharSequence[] items = new CharSequence[parties.size()];
         for (int i = 0; i < parties.size(); i++) {
             items[i] = parties.get(i).getName();

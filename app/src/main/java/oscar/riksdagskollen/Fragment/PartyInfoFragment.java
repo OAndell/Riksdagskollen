@@ -19,6 +19,10 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.google.android.flexbox.FlexboxLayout;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
 import java.util.ArrayList;
 
 import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
@@ -29,6 +33,7 @@ import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyLeadersCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
 
 /**
  * Created by oscar on 2018-08-27.
@@ -73,6 +78,39 @@ public class PartyInfoFragment extends Fragment {
         final FlexboxLayout leadersLayout = view.findViewById(R.id.leadersLayout);
         final RiksdagskollenApp app = RiksdagskollenApp.getInstance();
         final Fragment fragment = this;
+        final TextView partyWikiInfo = view.findViewById(R.id.about_party_wiki);
+
+        app.getRequestManager().getDownloadString(party.getWikiUrl(), new StringRequestCallback() {
+            @Override
+            public void onResponse(String response) {
+                int startIndex = response.indexOf("id=\"firstHeading\"");
+                int endIndex = response.indexOf("id=\"toc\"");
+                response = response.substring(startIndex, endIndex);
+                Document doc = Jsoup.parseBodyFragment(response);
+
+                StringBuilder partyInfo = new StringBuilder();
+                final int paragraphLimit = 3;
+                int paragraphCount = 0;
+                Element introBody = doc.select("#mw-content-text > div").first();
+                for (Element element : introBody.children()) {
+                    System.out.println("loop");
+                    if (element.is("p")) {
+                        String elText = element.text();
+                        elText = elText.replaceAll("\\[[0-9A-ö ]+\\]", "");
+                        partyInfo.append(elText).append("\n\n");
+                        paragraphCount++;
+                    }
+                    if (paragraphCount == paragraphLimit) break;
+                }
+                partyWikiInfo.setText(partyInfo.toString());
+            }
+
+            @Override
+            public void onFail(VolleyError error) {
+
+            }
+        });
+
         app.getRiksdagenAPIManager().getPartyLeaders(party.getName(), new PartyLeadersCallback() {
             @Override
             public void onPersonFetched(final ArrayList<Representative> leaders) {
@@ -142,4 +180,6 @@ public class PartyInfoFragment extends Fragment {
 
 
     }
+
+
 }

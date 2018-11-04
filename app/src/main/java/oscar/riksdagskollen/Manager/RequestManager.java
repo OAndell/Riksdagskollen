@@ -27,6 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import oscar.riksdagskollen.RiksdagskollenApp;
+import oscar.riksdagskollen.Util.Helper.DesktopStringRequest;
 import oscar.riksdagskollen.Util.RiksdagenCallback.JSONRequestCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
 
@@ -122,7 +123,7 @@ public class RequestManager {
 
     private Request queueStringRequest(final String url, final int method, final StringRequestCallback callback) {
         System.out.println("Making string-request to: " + url);
-        final StringRequest request = new StringRequest(method, url, new Response.Listener<String>() {
+        final StringRequest request = new DesktopStringRequest(method, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 callback.onResponse(response);
