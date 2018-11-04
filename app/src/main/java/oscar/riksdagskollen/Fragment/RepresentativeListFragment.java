@@ -33,13 +33,13 @@ import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
  * Created by oscar on 2018-09-27.
  */
 
-public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment {
+public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment implements RepresentativeManager.RepresentativeDownloadListener {
 
     private final List<Representative> representativeList = new ArrayList<>();
     private RepresentativeAdapter adapter;
     private boolean ascending = true;
     private Comparator<Representative> currentComparator = RepresentativeAdapter.NAME_COMPARATOR;
-    private HashMap<String, Boolean> curentFilter = new HashMap<>();
+    private HashMap<String, Boolean> currentFilter = new HashMap<>();
     private HashMap<String, Boolean> oldFilter = new HashMap<>();
 
     public static RepresentativeListFragment newInstance() {
@@ -66,19 +66,11 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
         } else {
             // Make sure to download representatives if job for some reason could not be scheduled at startup
             app.scheduleDownloadRepresentativesJobIfNotRunning();
-            app.getRepresentativeManager().addDownloadListener(new RepresentativeManager.RepresentativeDownloadListener() {
-                @Override
-                public void onRepresentativesDownloaded(ArrayList<Representative> representatives) {
-                    setShowLoadingView(false);
-                    representativeList.addAll(representatives);
-                    getAdapter().addAll(representatives);
-                    setLoadingMoreItems(false);
-                }
-            });
+            app.getRepresentativeManager().addDownloadListener(this);
         }
 
         for (Party party : CurrentParties.getParties()) {
-            curentFilter.put(party.getID(), true);
+            currentFilter.put(party.getID(), true);
         }
 
         super.onViewCreated(view, savedInstanceState);
@@ -159,7 +151,7 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         for (String partyID : changes.keySet()) {
-                            curentFilter.put(partyID, changes.get(partyID));
+                            currentFilter.put(partyID, changes.get(partyID));
                         }
                         applyFilter();
                     }
@@ -226,7 +218,7 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
     }
 
     private HashMap<String, Boolean> getFilter() {
-        return curentFilter;
+        return currentFilter;
     }
 
     private List<Representative> filter(List<Representative> representatives) {
@@ -242,8 +234,20 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
     private void applyFilter() {
         HashMap<String, Boolean> filter = getFilter();
         getAdapter().replaceAll(filter(representativeList));
-        System.out.println("Filter size: " + filter(representativeList).size());
         showNoContentWarning(filter.isEmpty());
+    }
+
+    @Override
+    public void onRepresentativesDownloaded(ArrayList<Representative> representatives) {
+        setShowLoadingView(false);
+        representativeList.addAll(representatives);
+        getAdapter().addAll(representatives);
+        setLoadingMoreItems(false);
+    }
+
+    @Override
+    public void onFail() {
+        onLoadFail();
     }
 
 
@@ -260,6 +264,11 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
         }
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        RiksdagskollenApp.getInstance().getRepresentativeManager().removeDownloadListener(this);
+    }
 
     private void swapAdapter(Comparator<Representative> comparator) {
         currentComparator = comparator;
@@ -275,7 +284,22 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
     }
 
     @Override
+    protected void clearItems() {
+    }
+
+    @Override
     RiksdagenViewHolderAdapter getAdapter() {
         return adapter;
+    }
+
+    @Override
+    protected void refresh() {
+        showNoConnectionWarning(false);
+        if (adapter.getItemCount() == 0 && !RiksdagskollenApp.getInstance().isDownloadRepsRunningOrScheduled()) {
+            RiksdagskollenApp.getInstance().scheduleDownloadRepresentativesJobIfNotRunning();
+        }
+        if (!RiksdagskollenApp.getInstance().isDownloadRepsRunningOrScheduled()) {
+            setLoadingMoreItems(false);
+        }
     }
 }

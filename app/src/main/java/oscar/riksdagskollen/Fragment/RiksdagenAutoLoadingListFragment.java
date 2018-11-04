@@ -3,6 +3,7 @@ package oscar.riksdagskollen.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,20 +22,23 @@ import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 
 public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
 
+    private boolean loading;
+    private boolean loadingUntilFull = false;
+    private boolean isSearching = false;
+
+    private int pageToLoad = 1;
+    private int searchPageToLoad = 1;
+    private int pastVisiblesItems;
+
+    protected static final int MIN_DOC = 6;
+
     private RiksdagenViewHolderAdapter adapter;
     private ViewGroup loadingView;
     private RecyclerView recyclerView;
-    private boolean loading;
-    private boolean loadingUntilFull = false;
-    private int pageToLoad = 1;
-    private int searchPageToLoad = 1;
-    private boolean isSearching = false;
     private ProgressBar itemsLoadingView;
-    private int pastVisiblesItems;
+    private SwipeRefreshLayout refreshLayout;
     protected TextView noContentWarning;
-    protected static final int MIN_DOC = 6;
-
-
+    private ViewGroup noConnectionWarning;
 
     @Nullable
     @Override
@@ -44,6 +48,15 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         adapter = getAdapter();
         recyclerView.setAdapter(adapter);
         recyclerView.setNestedScrollingEnabled(true);
+        refreshLayout = view.findViewById(R.id.refreshLayout);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
+        noConnectionWarning = view.findViewById(R.id.no_connection_warning);
+
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -96,6 +109,8 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
 
     protected abstract void loadNextPage();
 
+    protected abstract void clearItems();
+
     public boolean isLoading() {
         return loading;
     }
@@ -132,6 +147,10 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         searchPageToLoad = 1;
     }
 
+    protected void resetPageToLoad() {
+        pageToLoad = 1;
+    }
+
     public int getSearchPageToLoad() {
         return searchPageToLoad;
     }
@@ -144,7 +163,7 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
 
     void setLoadingMoreItems(Boolean loading){
         this.loading = loading;
-
+        showNoConnectionWarning(false);
         // The runnables are apparently needed to avoid long warnings
         if(loading && pageToLoad > 1){
             recyclerView.post(new Runnable() {
@@ -153,13 +172,13 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
                 }
             });
         } else {
+            refreshLayout.setRefreshing(false);
             recyclerView.post(new Runnable() {
                 public void run() {
                     adapter.removeFooter(itemsLoadingView);
                 }
             });
         }
-
     }
 
     RecyclerView getRecyclerView() {
@@ -167,8 +186,36 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
     }
 
     void setShowLoadingView(final boolean loading) {
-        if(loading) loadingView.setVisibility(View.VISIBLE);
+        showNoConnectionWarning(false);
+
+        if (loading) {
+            loadingView.setVisibility(View.VISIBLE);
+            refreshLayout.setRefreshing(false);
+        }
         else loadingView.setVisibility(View.GONE);
+    }
+
+    protected void showNoConnectionWarning(boolean show) {
+        if (show) noConnectionWarning.setVisibility(View.VISIBLE);
+        else noConnectionWarning.setVisibility(View.GONE);
+    }
+
+    protected void refresh() {
+        showNoConnectionWarning(false);
+        clearItems();
+        resetPageToLoad();
+        loadNextPage();
+    }
+
+    protected void onLoadFail() {
+        setShowLoadingView(false);
+        setLoadingMoreItems(false);
+        decrementPage();
+
+        // Most likely a network failure
+        if (adapter != null && adapter.getItemCount() == 0) {
+            showNoConnectionWarning(true);
+        }
     }
 
 

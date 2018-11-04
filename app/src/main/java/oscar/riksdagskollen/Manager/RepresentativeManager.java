@@ -91,6 +91,12 @@ public class RepresentativeManager {
         }
     }
 
+    public void notifyError() {
+        for (RepresentativeDownloadListener listener : listenerList) {
+            listener.onFail();
+        }
+    }
+
     public boolean isRepresentativesDownloaded() {
         return representativesDownloaded;
     }
@@ -99,7 +105,13 @@ public class RepresentativeManager {
         listenerList.add(listener);
     }
 
+    public void removeDownloadListener(RepresentativeDownloadListener listener) {
+        listenerList.remove(listener);
+    }
+
     public interface RepresentativeDownloadListener {
         void onRepresentativesDownloaded(ArrayList<Representative> representatives);
+
+        void onFail();
     }
 }

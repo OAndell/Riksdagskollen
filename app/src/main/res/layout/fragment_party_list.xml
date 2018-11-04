@@ -9,25 +9,37 @@
 
     <include layout="@layout/loading_view" />
 
+    <include
+        layout="@layout/no_internet_view"
+        android:id="@+id/no_connection_warning"
+        android:visibility="gone" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbarStyle="outsideOverlay"
-        android:scrollbars="vertical" />
+        android:layout_height="match_parent"
+        android:id="@+id/refreshLayout">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:visibility="gone"
-        android:gravity="center"
-        android:textColor="?buttonColor"
-        android:id="@+id/no_content_warning"
-        android:text="Det verkar inte finnas något här. \n Testa att ändra dina filterinställningar" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbars="vertical" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:gravity="center"
+            android:textColor="?buttonColor"
+            android:id="@+id/no_content_warning"
+            android:text="Det verkar inte finnas något här. \n Testa att ändra dina filterinställningar" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
 </RelativeLayout>

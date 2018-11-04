@@ -240,13 +240,17 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
 
                 @Override
                 public void onFail(VolleyError error) {
-                    setLoadingMoreItems(false);
-                    decrementPage();
+                    onLoadFail();
                 }
             }, getPageToLoad());
 
             incrementPage();
         }
+    }
+
+    @Override
+    protected void clearItems() {
+        voteList.clear();
     }
 
     @Override

@@ -23,7 +23,7 @@ import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
  * Created by oscar on 2018-03-29.
  */
 
-public class PartyRepresentativeFragment extends RiksdagenAutoLoadingListFragment {
+public class PartyRepresentativeFragment extends RiksdagenAutoLoadingListFragment implements RepresentativeManager.RepresentativeDownloadListener {
 
     private final List<Representative> representativeList = new ArrayList<>();
     private RepresentativeAdapter adapter;
@@ -54,16 +54,8 @@ public class PartyRepresentativeFragment extends RiksdagenAutoLoadingListFragmen
             getAdapter().addAll(representatives);
             setLoadingMoreItems(false);
         } else {
-            app.getRepresentativeManager().addDownloadListener(new RepresentativeManager.RepresentativeDownloadListener() {
-                @Override
-                public void onRepresentativesDownloaded(ArrayList<Representative> representatives) {
-                    setShowLoadingView(false);
-                    ArrayList<Representative> partyReps = app.getRepresentativeManager().getRepresentativesForParty(party.getID());
-                    representativeList.addAll(partyReps);
-                    getAdapter().addAll(partyReps);
-                    setLoadingMoreItems(false);
-                }
-            });
+            app.scheduleDownloadRepresentativesJobIfNotRunning();
+            app.getRepresentativeManager().addDownloadListener(this);
         }
 
         super.onViewCreated(view, savedInstanceState);
@@ -83,7 +75,6 @@ public class PartyRepresentativeFragment extends RiksdagenAutoLoadingListFragmen
 
     }
 
-
     /**
      * Not used for this fragment
      */
@@ -91,7 +82,42 @@ public class PartyRepresentativeFragment extends RiksdagenAutoLoadingListFragmen
     }
 
     @Override
+    protected void clearItems() {
+    }
+
+    @Override
     RiksdagenViewHolderAdapter getAdapter() {
         return adapter;
+    }
+
+    @Override
+    protected void refresh() {
+        showNoConnectionWarning(false);
+        if (adapter.getItemCount() == 0 && !RiksdagskollenApp.getInstance().isDownloadRepsRunningOrScheduled()) {
+            RiksdagskollenApp.getInstance().scheduleDownloadRepresentativesJobIfNotRunning();
+        }
+        if (!RiksdagskollenApp.getInstance().isDownloadRepsRunningOrScheduled()) {
+            setLoadingMoreItems(false);
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        RiksdagskollenApp.getInstance().getRepresentativeManager().removeDownloadListener(this);
+    }
+
+    @Override
+    public void onRepresentativesDownloaded(ArrayList<Representative> representatives) {
+        setShowLoadingView(false);
+        ArrayList<Representative> partyReps = RiksdagskollenApp.getInstance().getRepresentativeManager().getRepresentativesForParty(party.getID());
+        representativeList.addAll(partyReps);
+        getAdapter().addAll(partyReps);
+        setLoadingMoreItems(false);
+    }
+
+    @Override
+    public void onFail() {
+        onLoadFail();
     }
 }

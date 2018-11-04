@@ -1,6 +1,5 @@
 package oscar.riksdagskollen.Manager;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -589,12 +588,12 @@ public class RiksdagenAPIManager {
     }
 
 
-    public AsyncTask getPartyLeaders(String partyName, final PartyLeadersCallback callback) {
+    public Request getPartyLeaders(String partyName, final PartyLeadersCallback callback) {
         //need to remove swedish chars
         partyName = partyName.replace("ö", "o");
         partyName = partyName.replace("ä", "a");
         String partyInfoUrl = "http://riksdagen.se/sv/ledamoter-partier/" + partyName;
-        return requestManager.downloadHtmlPage(partyInfoUrl, new StringRequestCallback() {
+        return requestManager.getDownloadString(partyInfoUrl, new StringRequestCallback() {
             @Override
             public void onResponse(String response) {
                 ArrayList<Representative> representatives = new ArrayList<>();

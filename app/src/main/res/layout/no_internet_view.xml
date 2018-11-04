@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_margin="16dp"
+    android:layout_height="wrap_content">
+
+
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:srcCompat="@drawable/ic_cloud_off_24dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="?mainTitleTextColor"
+        android:textSize="18sp"
+        android:layout_marginLeft="16dp"
+        android:layout_gravity="center_vertical"
+        android:text="Något gick fel. Kontrollera att telefonen är ansluten till internet och dra ner för att försöka igen." />
+
+</LinearLayout>

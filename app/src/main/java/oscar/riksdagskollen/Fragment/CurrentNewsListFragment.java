@@ -82,11 +82,16 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
 
             @Override
             public void onFail(VolleyError error) {
-                setLoadingMoreItems(false);
-                decrementPage();
+                onLoadFail();
             }
         }, getPageToLoad());
         incrementPage();
+    }
+
+    @Override
+    protected void clearItems() {
+        newsList.clear();
+        adapter.clear();
     }
 
     @Override

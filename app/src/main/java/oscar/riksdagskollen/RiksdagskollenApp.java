@@ -8,8 +8,11 @@ import android.util.TypedValue;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
+import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.google.firebase.FirebaseApp;
+
+import java.util.Set;
 
 import io.fabric.sdk.android.Fabric;
 import oscar.riksdagskollen.Manager.AlertManager;
@@ -91,10 +94,7 @@ public class RiksdagskollenApp extends Application {
     }
 
     public boolean isDownloadRepsRunningOrScheduled() {
-        return !(JobManager.instance().
-                getAllJobRequestsForTag(DownloadRepresentativesJob.TAG).isEmpty() &&
-                JobManager.instance()
-                        .getAllJobsForTag(DownloadRepresentativesJob.TAG).isEmpty());
+        return jobIsRunningOrScheduledWithTag(DownloadRepresentativesJob.TAG);
     }
 
     public AlertManager getAlertManager() {
@@ -115,6 +115,15 @@ public class RiksdagskollenApp extends Application {
 
     public ThemeManager getThemeManager() {
         return themeManager;
+    }
+
+    private boolean jobIsRunningOrScheduledWithTag(String tag) {
+        if (!JobManager.instance().getAllJobRequestsForTag(tag).isEmpty()) return true;
+        Set<Job> jobs = JobManager.instance().getAllJobsForTag(tag);
+        for (Job job : jobs) {
+            if (!job.isFinished()) return true;
+        }
+        return false;
     }
 
     public RepresentativeManager getRepresentativeManager() {

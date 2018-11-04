@@ -37,6 +37,7 @@ public class DownloadRepresentativesJob extends Job {
 
             @Override
             public void onFail(VolleyError error) {
+                RiksdagskollenApp.getInstance().getRepresentativeManager().notifyError();
                 latch.countDown();
             }
         });

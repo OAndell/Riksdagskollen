@@ -170,12 +170,19 @@ public class RepresentativeFeedFragment extends RiksdagenAutoLoadingListFragment
             public void onFail(VolleyError error) {
                 if (getAdapter().getObjectCount() == 0 && error.getMessage().equals("no_docs")) {
                     showNoContentWarning(true);
+                } else {
+                    onLoadFail();
                 }
-                setLoadingMoreItems(false);
-                decrementPage();
+
             }
         });
         incrementPage();
+    }
+
+    @Override
+    protected void clearItems() {
+        documentList.clear();
+        adapter.clear();
     }
 
     private ArrayList<PartyDocumentType> getFilter() {
@@ -216,6 +223,7 @@ public class RepresentativeFeedFragment extends RiksdagenAutoLoadingListFragment
     RiksdagenViewHolderAdapter getAdapter() {
         return adapter;
     }
+
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {

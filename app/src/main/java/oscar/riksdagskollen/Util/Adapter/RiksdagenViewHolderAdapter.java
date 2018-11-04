@@ -110,6 +110,10 @@ public abstract class RiksdagenViewHolderAdapter extends RecyclerView.Adapter<Re
 
     public abstract void removeAll(List<?> items);
 
+    public void clear() {
+        sortedList.clear();
+    }
+
     //add a footer to the adapter
     public void addFooter(View footer){
         if(!footers.contains(footer)){

@@ -71,9 +71,9 @@ public class CurrentParties {
             add(C);
             add(KD);
             add(SD);
-            add(V);
             add(MP);
             add(V);
+            add(S);
         }
     };
 

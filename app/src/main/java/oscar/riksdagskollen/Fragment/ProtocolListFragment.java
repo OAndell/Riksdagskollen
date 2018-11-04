@@ -81,12 +81,17 @@ public class ProtocolListFragment extends RiksdagenAutoLoadingListFragment {
 
             @Override
             public void onFail(VolleyError error) {
-                setLoadingMoreItems(false);
-                decrementPage();
+                onLoadFail();
             }
         },getPageToLoad());
 
         incrementPage();
+    }
+
+    @Override
+    protected void clearItems() {
+        protocolList.clear();
+        adapter.clear();
     }
 
     @Override

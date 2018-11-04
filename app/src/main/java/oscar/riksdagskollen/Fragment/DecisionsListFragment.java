@@ -222,6 +222,12 @@ public class DecisionsListFragment extends RiksdagenAutoLoadingListFragment impl
         }
     }
 
+    @Override
+    protected void clearItems() {
+        decisionDocuments.clear();
+        adapter.clear();
+    }
+
     private void changeSearchViewTextColor(View view) {
         if (view != null) {
             if (view instanceof TextView) {
@@ -302,8 +308,7 @@ public class DecisionsListFragment extends RiksdagenAutoLoadingListFragment impl
 
             @Override
             public void onFail(VolleyError error) {
-                setLoadingMoreItems(false);
-                decrementPage();
+                onLoadFail();
             }
         }, getPageToLoad());
     }

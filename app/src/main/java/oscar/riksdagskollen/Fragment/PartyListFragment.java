@@ -196,11 +196,16 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
 
             @Override
             public void onFail(VolleyError error) {
-                setLoadingMoreItems(false);
-                decrementPage();
+                onLoadFail();
             }
         });
         incrementPage();
+    }
+
+    @Override
+    protected void clearItems() {
+        documentList.clear();
+        adapter.clear();
     }
 
     private ArrayList<PartyDocumentType> getFilter(){
