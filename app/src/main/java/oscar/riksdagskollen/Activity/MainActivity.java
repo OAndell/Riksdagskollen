@@ -25,8 +25,6 @@ import android.widget.ImageView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.lang.ref.SoftReference;
-import java.util.Collection;
-import java.util.HashMap;
 
 import oscar.riksdagskollen.BuildConfig;
 import oscar.riksdagskollen.Fragment.AboutFragment;
@@ -40,13 +38,12 @@ import oscar.riksdagskollen.Fragment.VoteListFragment;
 import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
+import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.Helper.AppBarStateChangeListener;
-import oscar.riksdagskollen.Util.JSONModel.Party;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static HashMap<String, Party> parties;
     private SoftReference<CurrentNewsListFragment> currentNewsListFragment;
     private SoftReference<ProtocolListFragment> protFragment;
     private SoftReference<DecisionsListFragment> decisionsFragment;
@@ -70,17 +67,6 @@ public class MainActivity extends AppCompatActivity
     private ImageView collapsingLogo;
     private FirebaseAnalytics fireBase;
 
-    public static Party getParty(String id) {
-        if (parties == null) {
-            parties = new HashMap<>();
-            initParties();
-        }
-        return parties.get(id.toLowerCase());
-    }
-
-    public static Collection<Party> getParties() {
-        return parties.values();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +82,6 @@ public class MainActivity extends AppCompatActivity
 
         setSupportActionBar(toolbar);
 
-        parties = new HashMap<>();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.setNavigationBarColor(RiksdagskollenApp.getColorFromAttribute(R.attr.mainBackgroundColor, this));
@@ -112,7 +96,6 @@ public class MainActivity extends AppCompatActivity
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
-        initParties();
 
         // Fresh start
         if (savedInstanceState == null) {
@@ -315,8 +298,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.s_nav:
                 fireBase.setCurrentScreen(this, "s", null);
                 if (sPartyFragment == null || sPartyFragment.get() == null) {
-                    sPartyFragment = new SoftReference<>(PartyFragment.newInstance(parties.get(("s"))));
-                    PartyListFragment sPartyListFragment = PartyListFragment.newInstance(parties.get("s"));
+                    sPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getS()));
+                    PartyListFragment sPartyListFragment = PartyListFragment.newInstance(CurrentParties.getS());
                     sPartyFragment.get().setListFragment(sPartyListFragment);
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, sPartyFragment.get()).commit();
@@ -324,8 +307,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.m_nav:
                 fireBase.setCurrentScreen(this, "m", null);
                 if (mPartyFragment == null || mPartyFragment.get() == null) {
-                    mPartyFragment = new SoftReference<>(PartyFragment.newInstance(parties.get(("m"))));
-                    PartyListFragment mPartyListFragment = PartyListFragment.newInstance(parties.get("m"));
+                    mPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getM()));
+                    PartyListFragment mPartyListFragment = PartyListFragment.newInstance(CurrentParties.getM());
                     mPartyFragment.get().setListFragment(mPartyListFragment);
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mPartyFragment.get()).commit();
@@ -333,8 +316,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.sd_nav:
                 fireBase.setCurrentScreen(this, "sd", null);
                 if (sdPartyFragment == null || sdPartyFragment.get() == null) {
-                    sdPartyFragment = new SoftReference<>(PartyFragment.newInstance(parties.get(("sd"))));
-                    PartyListFragment sdPartyListFragment = PartyListFragment.newInstance(parties.get("sd"));
+                    sdPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getSD()));
+                    PartyListFragment sdPartyListFragment = PartyListFragment.newInstance(CurrentParties.getSD());
                     sdPartyFragment.get().setListFragment(sdPartyListFragment);
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, sdPartyFragment.get()).commit();
@@ -342,8 +325,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.mp_nav:
                 fireBase.setCurrentScreen(this, "mp", null);
                 if (mpPartyFragment == null || mpPartyFragment.get() == null) {
-                    mpPartyFragment = new SoftReference<>(PartyFragment.newInstance(parties.get(("mp"))));
-                    PartyListFragment mpPartyListFragment = PartyListFragment.newInstance(parties.get("mp"));
+                    mpPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getMP()));
+                    PartyListFragment mpPartyListFragment = PartyListFragment.newInstance(CurrentParties.getMP());
                     mpPartyFragment.get().setListFragment(mpPartyListFragment);
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mpPartyFragment.get()).commit();
@@ -351,8 +334,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.c_nav:
                 fireBase.setCurrentScreen(this, "c", null);
                 if (cPartyFragment == null || cPartyFragment.get() == null) {
-                    cPartyFragment = new SoftReference<>(PartyFragment.newInstance(parties.get(("c"))));
-                    PartyListFragment cPartyListFragment = PartyListFragment.newInstance(parties.get("c"));
+                    cPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getC()));
+                    PartyListFragment cPartyListFragment = PartyListFragment.newInstance(CurrentParties.getC());
                     cPartyFragment.get().setListFragment(cPartyListFragment);
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, cPartyFragment.get()).commit();
@@ -360,8 +343,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.v_nav:
                 fireBase.setCurrentScreen(this, "v", null);
                 if (vPartyFragment == null || vPartyFragment.get() == null) {
-                    vPartyFragment = new SoftReference<>(PartyFragment.newInstance(parties.get(("v"))));
-                    PartyListFragment vPartyListFragment = PartyListFragment.newInstance(parties.get("v"));
+                    vPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getV()));
+                    PartyListFragment vPartyListFragment = PartyListFragment.newInstance(CurrentParties.getV());
                     vPartyFragment.get().setListFragment(vPartyListFragment);
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, vPartyFragment.get()).commit();
@@ -369,8 +352,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.l_nav:
                 fireBase.setCurrentScreen(this, "l", null);
                 if (lPartyFragment == null || lPartyFragment.get() == null) {
-                    lPartyFragment = new SoftReference<>(PartyFragment.newInstance(parties.get(("l"))));
-                    PartyListFragment lPartyListFragment = PartyListFragment.newInstance(parties.get("l"));
+                    lPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getL()));
+                    PartyListFragment lPartyListFragment = PartyListFragment.newInstance(CurrentParties.getL());
                     lPartyFragment.get().setListFragment(lPartyListFragment);
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, lPartyFragment.get()).commit();
@@ -378,8 +361,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.kd_nav:
                 fireBase.setCurrentScreen(this, "kd", null);
                 if (kdPartyFragment == null || kdPartyFragment.get() == null) {
-                    kdPartyFragment = new SoftReference<>(PartyFragment.newInstance(parties.get(("kd"))));
-                    PartyListFragment kdPartyListFragment = PartyListFragment.newInstance(parties.get("kd"));
+                    kdPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getKD()));
+                    PartyListFragment kdPartyListFragment = PartyListFragment.newInstance(CurrentParties.getKD());
                     kdPartyFragment.get().setListFragment(kdPartyListFragment);
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, kdPartyFragment.get()).commit();
@@ -407,65 +390,4 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-
-    // Create all of the Party objects
-    private static void initParties() {
-
-        Party mParty = new Party(
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.party_m),
-                "m",R.drawable.mlogo,
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.m_website),
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.m_ideology));
-
-        Party sParty = new Party(
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.party_s),
-                "s",R.drawable.slogo,
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.s_website),
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.s_ideology));
-
-        Party sdParty = new Party(
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.party_sd),
-                "sd",R.drawable.sdlogo,
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.sd_website),
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.sd_ideology));
-
-        Party kdParty = new Party(
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.party_kd),
-                "kd",R.drawable.kdlogo,
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.kd_website),
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.kd_ideology));
-
-        Party vParty = new Party(
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.party_v),
-                "v",R.drawable.vlogo,
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.v_website),
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.v_ideology));
-
-        Party cParty = new Party(
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.party_c),
-                "c",R.drawable.clogo,
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.c_website),
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.c_ideology));
-
-        Party mpParty = new Party(
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.party_mp),
-                "mp",R.drawable.mplogo,
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.mp_website),
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.mp_ideology));
-
-        Party lParty = new Party(
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.party_l),
-                "l",R.drawable.llogo,
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.l_website),
-                RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.l_ideology));
-
-        parties.put(mParty.getID(), mParty);
-        parties.put(sParty.getID(), sParty);
-        parties.put(sdParty.getID(), sdParty);
-        parties.put(kdParty.getID(), kdParty);
-        parties.put(vParty.getID(), vParty);
-        parties.put(cParty.getID(), cParty);
-        parties.put(mpParty.getID(), mpParty);
-        parties.put(lParty.getID(), lParty);
-    }
 }

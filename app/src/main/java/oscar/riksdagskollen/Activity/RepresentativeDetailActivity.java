@@ -26,6 +26,7 @@ import oscar.riksdagskollen.Fragment.RepresentativeFeedFragment;
 import oscar.riksdagskollen.Fragment.RepresentativeTabFragment;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
+import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeVoteStatistics;
@@ -89,7 +90,7 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
         CircularImageView portrait = findViewById(R.id.representative_portrait);
         ImageView partyLogo = findViewById(R.id.representative_portrait_party_logo);
 
-        partyLogo.setImageResource(MainActivity.getParty(representative.getParti().toLowerCase()).getDrawableLogo());
+        partyLogo.setImageResource(CurrentParties.getParty(representative.getParti().toLowerCase()).getDrawableLogo());
         Glide
                 .with(this)
                 .load(representative.getBild_url_192())

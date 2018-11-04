@@ -16,8 +16,8 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import oscar.riksdagskollen.Activity.MainActivity;
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.View.CircularImageView;
 
@@ -200,7 +200,7 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
             }
 
             try {
-                partyLogo.setImageResource(MainActivity.getParty(item.getParti().toLowerCase()).getDrawableLogo());
+                partyLogo.setImageResource(CurrentParties.getParty(item.getParti().toLowerCase()).getDrawableLogo());
             } catch (Exception e) {//No party found, Does not belong to a party
                 partyLogo.setVisibility(View.GONE);
             }

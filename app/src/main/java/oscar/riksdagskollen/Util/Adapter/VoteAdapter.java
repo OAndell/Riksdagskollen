@@ -24,10 +24,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-import oscar.riksdagskollen.Activity.MainActivity;
 import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
+import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.Enum.DecicionCategory;
 import oscar.riksdagskollen.Util.Helper.VoteResults;
 import oscar.riksdagskollen.Util.JSONModel.Party;
@@ -251,7 +251,7 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
 
             int totalYes = 0;
             int totalNo = 0;
-            for (Party party : MainActivity.getParties()) {
+            for (Party party : CurrentParties.getParties()) {
                 int[] partyResult = voteResults.get(party.getID().toUpperCase());
                 if (partyResult == null) continue;
                 int resultIndex = 0;

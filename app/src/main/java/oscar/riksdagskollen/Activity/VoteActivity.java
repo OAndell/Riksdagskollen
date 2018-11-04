@@ -38,6 +38,7 @@ import java.util.regex.Pattern;
 
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
+import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.Helper.VoteResults;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
@@ -391,7 +392,7 @@ public class VoteActivity extends AppCompatActivity{
 
     private void setupPartyGraph(VoteResults voteResults, String[] parties) {
         for (int i = 0; i < parties.length; i++) {
-            int partyLogo = MainActivity.getParty(parties[i]).getDrawableLogo();
+            int partyLogo = CurrentParties.getParty(parties[i]).getDrawableLogo();
             //TODO fix this horrible mess with old votes. Changes L -> FP
             if(parties[i].equals("L") && voteResults.getPartyVotes("L") == null){
                 parties[i] = "FP";
