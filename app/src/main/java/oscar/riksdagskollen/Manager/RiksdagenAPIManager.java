@@ -282,20 +282,13 @@ public class RiksdagenAPIManager {
     public void getDocumentBody(PartyDocument document, StringRequestCallback callback) {
         if (document == null) {
             // Very long motion, used for testing by sending null as an argument
-            requestManager.downloadHtmlPage("http://data.riksdagen.se/dokument/H5023752.html", callback);
+            requestManager.getDownloadString("http://data.riksdagen.se/dokument/H5023752.html", callback);
         } else if (document.isMotion()) {
-            requestManager.downloadHtmlPage("http:" + document.getDokument_url_html(), callback);
+            requestManager.getDownloadString("http:" + document.getDokument_url_html(), callback);
         } else {
             doApiGetStringRequest("http:" + document.getDokument_url_html(), callback);
         }
     }
-
-
-    public void getNewsHTML(String url, StringRequestCallback callback) {
-        String fullURL = "http://riksdagen.se" + url;
-        requestManager.downloadHtmlPage(fullURL, callback);
-    }
-
 
     public void getProtocols(final ProtocolCallback callback, int page) {
         String subURL = "/dokumentlista/?sok=&doktyp=prot&sort=datum&sortorder=desc&utformat=json" + "&p=" + page;
