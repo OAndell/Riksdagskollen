@@ -31,7 +31,6 @@
     <string name="vote_partyvotes_title">"Röstfördelning:"</string>
     <string name="about_title">Om Riksdagskollen</string>
     <string name="about_body">Riksdagskollen är en android-applikation utvecklad av två studenter för att hålla koll på vad som händer i vår riksdag. All källkod finns tillgänglig på GitHub. Har du några idéer? Bidra gärna!\n\nSamtliga dokument och bilder är hämtade från riksdagens egna API: data.riksdagen.se</string>
-    <string name="about_footer">Oscar Andell, Jesper Holmström &amp; Gustav Aaro</string>
     <string name="github">https://github.com/OAndell/Riksdagskollen</string>
     <string name="view_reply_button">Denna fråga har besvarats: Läs svar</string>
     <string name="no_reply_tip">Denna fråga har ännu inte besvarats. Klicka på klockan i menyn om du vill få en notis när ett svar publiceras.</string>
@@ -56,13 +55,4 @@
     <string name="l_ideology">Socialliberalism, Liberalfeminism</string>
     <string name="kd_ideology">Kristdemokrati, Socialkonservatism</string>
 
-
-    <string name="s_about">TODO</string>
-    <string name="c_about">Centerpartiet är ett grönt, frihetligt parti med fötterna på jorden. Vi tänker göra allt vi kan för att fler ska få ett jobb att gå till. En av våra allra största utmaningar är att stoppa klimatförändringarna. För att vi ska få ett hållbart samhälle måste alla ta ansvar</string>
-    <string name="kd_about">Kristdemokraterna sätter människovärdet främst och vill prioritera det som är nödvändigt för att bygga ett samhälle som håller ihop</string>
-    <string name="l_about">Vi är Liberalerna – Sveriges liberala parti. Vi vill ha en riktigt bra skola för alla barn, och en integrationspolitik som både ställer krav och skapar möjligheter.</string>
-    <string name="m_about">Sverige ska präglas av företagsamhet, jämlikhet och social rörlighet där varje ny generation får en chans att forma sitt eget liv, inte bara följa i sina föräldrars fotspår.</string>
-    <string name="sd_about">Vi är det Sverigevänliga alternativet. Vi värnar tidigare generationers arbete och vårdar det som snart ska överlämnas åt nästa. Vi är hela Sveriges parti och vi tror på förändring framåt.</string>
-    <string name="mp_about">Miljöpartiet har vuxit fram ur rörelserna för miljö, fred och jämställdhet. Idag är vi med och gör politiken grönare.</string>
-    <string name="v_about">Vi är en växande rörelse som verkar för ett samhälle för alla och inte bara några få. Ett samhälle som präglas av medmänsklighet, solidaritet och rättvisa.</string>
 </resources>
