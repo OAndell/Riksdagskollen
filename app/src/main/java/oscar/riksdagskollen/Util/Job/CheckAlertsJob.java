@@ -209,7 +209,7 @@ public class CheckAlertsJob extends Job {
         }
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getContext(), REPLIES_CHANNEL)
-                .setSmallIcon(R.drawable.riksdagen_logo_yellow)
+                .setSmallIcon(R.drawable.riksdagskollen_logo_small)
                 .setContentTitle("Svar på fråga: " + document.getTitel())
                 .setContentText("Klicka här för att läsa svaret")
                 .setStyle(new NotificationCompat.BigTextStyle()
@@ -255,7 +255,7 @@ public class CheckAlertsJob extends Job {
         }
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getContext(), REPLIES_CHANNEL)
-                .setSmallIcon(R.drawable.riksdagen_logo_yellow)
+                .setSmallIcon(R.drawable.riksdagskollen_logo_small)
                 .setContentTitle(message)
                 .setContentText("Klicka här för att läsa")
                 .setStyle(new NotificationCompat.BigTextStyle()

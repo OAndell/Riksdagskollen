@@ -42,7 +42,7 @@
             android:scaleType="fitCenter"
             android:id="@+id/riksdagen_logo_collapsing"
             android:visibility="gone"
-            android:src="@drawable/riksdagen_logo_yellow" />
+            android:src="@drawable/riksdagskollen_splash" />
 
         <include
             android:visibility="gone"

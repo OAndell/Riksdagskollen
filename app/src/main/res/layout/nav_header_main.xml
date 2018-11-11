@@ -9,10 +9,12 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="130dp"
+        android:layout_width="match_parent"
         android:layout_height="130dp"
         android:layout_gravity="center"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:paddingTop="20dp"
-        app:srcCompat="@drawable/riksdagen_logo_yellow_medium" />
+        app:srcCompat="@drawable/riksdagskollen_logo_wide" />
 
 </LinearLayout>

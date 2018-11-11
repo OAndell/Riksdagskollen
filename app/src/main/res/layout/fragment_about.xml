@@ -7,36 +7,16 @@
     android:padding="16dp">
 
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:gravity="center_vertical"
-            android:text='@string/app_name'
-            android:textColor="?attr/mainTitleTextColor"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:visibility="visible" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:src="@drawable/riksdagen_logo_yellow_medium" />
-
-
-    </LinearLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:src="@drawable/riksdagskollen_logo_wide" />
 
     <TextView
         android:id="@+id/body_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="8dp"
         android:text='@string/about_body'
         android:textColor="?attr/mainBodyTextColor"
         android:textSize="17sp"
