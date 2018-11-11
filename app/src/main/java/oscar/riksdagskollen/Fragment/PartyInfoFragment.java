@@ -89,7 +89,7 @@ public class PartyInfoFragment extends Fragment {
                 Document doc = Jsoup.parseBodyFragment(response);
 
                 StringBuilder partyInfo = new StringBuilder();
-                final int paragraphLimit = 3;
+                final int paragraphLimit = 2;
                 int paragraphCount = 0;
                 Element introBody = doc.select("#mw-content-text > div").first();
                 for (Element element : introBody.children()) {
