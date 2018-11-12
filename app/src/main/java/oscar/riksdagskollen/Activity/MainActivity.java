@@ -2,6 +2,8 @@ package oscar.riksdagskollen.Activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +17,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -77,7 +81,7 @@ public class MainActivity extends AppCompatActivity
         toolbar = findViewById(R.id.toolbar);
         appBarLayout = findViewById(R.id.appbar);
         collapsingToolbarLayout = findViewById(R.id.collapsing_layout);
-        collapsingLogo = findViewById(R.id.riksdagen_logo_collapsing);
+        collapsingLogo = findViewById(R.id.riksdagskollen_logo_collapsing);
         fireBase = FirebaseAnalytics.getInstance(this);
 
         setSupportActionBar(toolbar);
@@ -213,6 +217,24 @@ public class MainActivity extends AppCompatActivity
         toggle.setDrawerIndicatorEnabled(false);
         collapsingToolbarLayout.setTitleEnabled(true);
         collapsingLogo.setVisibility(View.VISIBLE);
+        Display display = getWindowManager().getDefaultDisplay();
+
+        int height;
+        int width;
+        int magicNumber = 130;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            DisplayMetrics realDisplayMetrics = new DisplayMetrics();
+            display.getRealMetrics(realDisplayMetrics);
+            height = realDisplayMetrics.heightPixels - magicNumber;
+            width = realDisplayMetrics.widthPixels;
+        } else {
+            Point size = new Point();
+            display.getSize(size);
+            width = size.x;
+            height = size.y;
+        }
+        collapsingLogo.setLayoutParams(new CollapsingToolbarLayout.LayoutParams(width, height));
         collapsingToolbarLayout.setTitle(" ");
 
         Handler handler = new Handler();
@@ -228,7 +250,6 @@ public class MainActivity extends AppCompatActivity
                         //TODO FIGURE out why collapsingLogo.getParent() is null sometimes
                     }
 
-
                     emptyToolbar = false;
                     toggle.setDrawerIndicatorEnabled(true);
                     invalidateOptionsMenu();
@@ -239,7 +260,7 @@ public class MainActivity extends AppCompatActivity
             public void onOffsetChange(AppBarLayout appBarLayout, int verticalOffset) {
                 float percentage = ((float) Math.abs(verticalOffset) / appBarLayout.getTotalScrollRange());
                 float alpha = 255 - (255 * percentage);
-                collapsingLogo.setImageAlpha((int) alpha);
+                collapsingLogo.setAlpha((int) alpha);
             }
         });
         handler.postDelayed(new Runnable() {
@@ -248,12 +269,17 @@ public class MainActivity extends AppCompatActivity
                 appBarLayout.setExpanded(false, true);
                 handleOpenWithNotification();
             }
-        }, 800);
+        }, 200);
     }
 
     private void applyTheme() {
         setTheme(RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         recreate();
+    }
+
+    public boolean hasNavBar(Resources resources) {
+        int id = resources.getIdentifier("config_showNavigationBar", "bool", "android");
+        return id > 0 && resources.getBoolean(id);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

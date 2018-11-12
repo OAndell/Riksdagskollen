@@ -35,12 +35,12 @@
             style="@style/ToolbarStyle"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:scaleType="fitCenter"
-            android:id="@+id/riksdagen_logo_collapsing"
+            android:scaleType="center"
+            android:id="@+id/riksdagskollen_logo_collapsing"
             android:visibility="gone"
             android:src="@drawable/riksdagskollen_splash" />
 

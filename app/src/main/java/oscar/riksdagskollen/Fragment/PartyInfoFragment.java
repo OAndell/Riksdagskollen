@@ -93,7 +93,6 @@ public class PartyInfoFragment extends Fragment {
                 int paragraphCount = 0;
                 Element introBody = doc.select("#mw-content-text > div").first();
                 for (Element element : introBody.children()) {
-                    System.out.println("loop");
                     if (element.is("p")) {
                         String elText = element.text();
                         elText = elText.replaceAll("\\[[0-9A-ö ]+\\]", "");
