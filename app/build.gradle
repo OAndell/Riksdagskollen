@@ -16,11 +16,10 @@ android {
         applicationId "se.oandell.riksdagen"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 16
-        versionName "2.7"
+        versionCode 17
+        versionName "2.8.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
-
     }
     buildTypes {
         debug {
