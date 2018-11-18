@@ -297,7 +297,7 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
 
         //Removes text "Omröstning: Betänkande 2017:18Xyxyx" from title
         private String trimTitle(String title){
-            return title.split("[0-9]{4}\\/[0-9]{2}:[A-ö]{0,4}[0-9]{0,4}")[1];
+            return title.split("[0-9]{4}\\/[0-9]{2}:[A-ö]{0,4}[0-9]{0,4}")[1].trim();
         }
 
     }
