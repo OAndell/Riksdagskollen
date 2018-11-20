@@ -60,7 +60,7 @@ public class AutomatedUITests {
     }
 
     @Test
-    public void test_Reps() {
+    public void test_Representatives() {
         System.out.println("Testing reps");
         navigateTo(R.id.rep_nav);
         scrollView(R.id.recycler_view);
@@ -145,6 +145,7 @@ public class AutomatedUITests {
         System.out.println("Testing about");
         navigateTo(R.id.about_nav);
     }
+
 
     private void navigateTo(int menuId) {
         System.out.println("Opening drawer");
