@@ -171,6 +171,9 @@
                     android:textStyle="normal" />
             </com.google.android.flexbox.FlexboxLayout>
 
+            <oscar.riksdagskollen.Util.View.LikeBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></oscar.riksdagskollen.Util.View.LikeBar>
 
         </LinearLayout>
 
