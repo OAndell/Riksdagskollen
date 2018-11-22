@@ -5,12 +5,14 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import oscar.riksdagskollen.R;
 
 public class LikeBar extends LinearLayout {
 
     private ProgressBar bar;
+    private TextView percentTV;
     private int progress = 0;
 
     public LikeBar(Context context) {
@@ -32,25 +34,28 @@ public class LikeBar extends LinearLayout {
     private void setup(Context context) {
         inflate(context, R.layout.likebar, this);
         bar = findViewById(R.id.likebar_progressBar);
+        percentTV = findViewById(R.id.likebar_percent);
+
         this.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                bar.setProgress(progress += 10);
+                setRatio(progress += 10);
             }
         });
     }
 
     public void setRatio(int progress) {
         this.progress = progress;
+        percentTV.setText(progress + "%");
         bar.setProgress(progress);
     }
 
     public void like() {
-        bar.setProgress(progress++);
+        setRatio(progress++);
     }
 
     public void dislike() {
-        bar.setProgress(progress--);
+        setRatio(progress--);
     }
 
 
