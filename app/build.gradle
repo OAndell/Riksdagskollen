@@ -21,6 +21,9 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
     buildTypes {
         debug {
             // Add API keys to project from local gradle.properties
