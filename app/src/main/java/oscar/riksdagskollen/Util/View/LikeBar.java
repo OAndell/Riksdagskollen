@@ -54,10 +54,12 @@ public class LikeBar extends LinearLayout {
             this.setVisibility(GONE);
         } else {
             this.setVisibility(VISIBLE);
-            percent = (likes / (likes + dislikes)) * 100;
+            percent = Math.round((float) likes / (likes + dislikes) * 100);
             bar.setProgress(percent);
             percentTV.setText(percent + "%");
         }
+
+
     }
 
     public void like() {
