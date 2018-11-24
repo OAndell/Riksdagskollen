@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import oscar.riksdagskollen.Util.View.LikeBar;
 
-import static junit.framework.TestCase.assertTrue;
+import static junit.framework.Assert.assertEquals;
 
 public class LikeBarUnitTest {
 
@@ -22,31 +22,42 @@ public class LikeBarUnitTest {
     public void likeTest() {
         likeBar.setRatio(0, 0);
         likeBar.like();
-        assertTrue(likeBar.getLikes() == 1);
+        assertEquals(1, likeBar.getLikes());
         likeBar.like();
-        assertTrue(likeBar.getLikes() == 2);
+        assertEquals(2, likeBar.getLikes());
     }
 
     @Test
     public void dislikeTest() {
         likeBar.setRatio(0, 0);
         likeBar.dislike();
-        assertTrue(likeBar.getDislikes() == 1);
+        assertEquals(1, likeBar.getDislikes());
         likeBar.dislike();
-        assertTrue(likeBar.getDislikes() == 2);
+        assertEquals(2, likeBar.getDislikes());
     }
 
     @Test
     public void percentTest() {
         likeBar.setRatio(50, 50);
 
-        assertTrue(likeBar.getPercent() == 50);
+        assertEquals(50, likeBar.getPercent());
 
         likeBar.setRatio(1, 99);
-        assertTrue(likeBar.getPercent() == 1);
+        assertEquals(1, likeBar.getPercent());
 
         likeBar.setRatio(200, 100);
-        assertTrue(likeBar.getPercent() == 67);
+        assertEquals(67, likeBar.getPercent());
+    }
+
+    @Test
+    public void affect_percentTest() {
+        likeBar.setRatio(0, 0);
+        likeBar.like();
+        assertEquals(100, likeBar.getPercent());
+        likeBar.dislike();
+        assertEquals(50, likeBar.getPercent());
+        likeBar.dislike();
+        assertEquals(33, likeBar.getPercent());
     }
 
 }
