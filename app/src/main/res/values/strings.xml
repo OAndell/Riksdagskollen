@@ -55,4 +55,10 @@
     <string name="l_ideology">Socialliberalism, Liberalfeminism</string>
     <string name="kd_ideology">Kristdemokrati, Socialkonservatism</string>
 
+
+    <string name="rate_question">Vad tycker du om detta förslag?</string>
+    <string name="good_prop">Bra förslag</string>
+    <string name="bad_prop">Dåligt förslag</string>
+
+
 </resources>

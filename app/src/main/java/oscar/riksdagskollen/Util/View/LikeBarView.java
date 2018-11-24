@@ -8,7 +8,12 @@ import android.widget.TextView;
 
 import oscar.riksdagskollen.R;
 
-public class LikeBar extends LinearLayout {
+
+/**
+ * Component for displaying like/dislike ratio of a decision/document
+ * Currently not in use.
+ */
+public class LikeBarView extends LinearLayout {
 
     private ProgressBar bar;
     private TextView percentTV;
@@ -17,17 +22,17 @@ public class LikeBar extends LinearLayout {
     private int dislikes = 0;
     private int percent = 0;
 
-    public LikeBar(Context context) {
+    public LikeBarView(Context context) {
         super(context);
         setup(context);
     }
 
-    public LikeBar(Context context, AttributeSet attrs) {
+    public LikeBarView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
         setup(context);
     }
 
-    public LikeBar(Context context, AttributeSet attrs, int defStyle) {
+    public LikeBarView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setup(context);
     }
