@@ -9,28 +9,32 @@ import android.widget.TextView;
 
 import oscar.riksdagskollen.R;
 
-public class GiveLikeView extends LinearLayout {
 
-    private LikeListener likeListener;
+/**
+ * A view for liking or disliking a document. Consist of two buttons and a textview.
+ * The abstract class LikeListener is used for handling button presses.
+ */
+public class RateDocumentView extends LinearLayout {
+
+    private ApprovalListener approvalListener;
     private Button likeButton;
     private Button disLikeButton;
     private TextView topTextTV;
 
-
-    public GiveLikeView(Context context, AttributeSet attrs) {
+    public RateDocumentView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
         inflate(context, R.layout.give_like_layout, this);
         setup();
     }
 
-    public GiveLikeView(Context context, AttributeSet attrs, int defStyle) {
+    public RateDocumentView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         inflate(context, R.layout.give_like_layout, this);
         setup();
     }
 
-    public void setLikeListener(LikeListener likeListener) {
-        this.likeListener = likeListener;
+    public void setLikeListener(ApprovalListener approvalListener) {
+        this.approvalListener = approvalListener;
     }
 
     private void setup() {
@@ -40,38 +44,41 @@ public class GiveLikeView extends LinearLayout {
         likeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                likeListener.onLike();
-                likeButton.setEnabled(false);
+                approvalListener.onApprove();
+                /*likeButton.setEnabled(false);
                 disLikeButton.setEnabled(false);
                 likeButton.setAlpha(.2f);
-                disLikeButton.setAlpha(.5f);
+                disLikeButton.setAlpha(.5f);*/
             }
         });
         disLikeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                likeListener.onDislike();
-                likeButton.setEnabled(false);
+                approvalListener.onDisapprove();
+                /*likeButton.setEnabled(false);
                 disLikeButton.setEnabled(false);
                 likeButton.setAlpha(.5f);
-                disLikeButton.setAlpha(.2f);
+                disLikeButton.setAlpha(.2f);*/
             }
         });
 
         //Create default likeListener
-        this.likeListener = new LikeListener() {
+        this.approvalListener = new ApprovalListener() {
             @Override
-            public void onLike() {
-                System.out.println("LIKE");
+            public void onApprove() {
+                System.out.println("No LikeListener defined, button press did nothing");
             }
 
             @Override
-            public void onDislike() {
-                System.out.println("DISLIKE");
+            public void onDisapprove() {
+                System.out.println("No LikeListener defined, button press did nothing");
             }
         };
     }
 
+    /**
+     * Disable buttons and fade them.
+     */
     public void disable() {
         likeButton.setEnabled(false);
         likeButton.setAlpha(.2f);
@@ -84,10 +91,10 @@ public class GiveLikeView extends LinearLayout {
     }
 
 
-    public abstract static class LikeListener {
-        public abstract void onLike();
+    public abstract static class ApprovalListener {
+        public abstract void onApprove();
 
-        public abstract void onDislike();
+        public abstract void onDisapprove();
     }
 
 }

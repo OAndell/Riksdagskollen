@@ -13,7 +13,7 @@ import oscar.riksdagskollen.R;
  * Component for displaying like/dislike ratio of a decision/document
  * Currently not in use.
  */
-public class LikeBarView extends LinearLayout {
+public class ApprovalBarView extends LinearLayout {
 
     private ProgressBar bar;
     private TextView percentTV;
@@ -21,23 +21,27 @@ public class LikeBarView extends LinearLayout {
     private int likes = 0;
     private int dislikes = 0;
     private int percent = 0;
+    private Context context;
 
-    public LikeBarView(Context context) {
+    public ApprovalBarView(Context context) {
         super(context);
-        setup(context);
+        this.context = context;
+        setup();
     }
 
-    public LikeBarView(Context context, AttributeSet attrs) {
+    public ApprovalBarView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
-        setup(context);
+        this.context = context;
+        setup();
     }
 
-    public LikeBarView(Context context, AttributeSet attrs, int defStyle) {
+    public ApprovalBarView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        setup(context);
+        this.context = context;
+        setup();
     }
 
-    private void setup(Context context) {
+    private void setup() {
         inflate(context, R.layout.likebar, this);
         bar = findViewById(R.id.likebar_progressBar);
         percentTV = findViewById(R.id.likebar_percent);
@@ -61,7 +65,7 @@ public class LikeBarView extends LinearLayout {
             this.setVisibility(VISIBLE);
             percent = Math.round((float) likes / (likes + dislikes) * 100);
             bar.setProgress(percent);
-            percentTV.setText(percent + getResources().getString(R.string.likebar_text));
+            percentTV.setText(percent + context.getString(R.string.likebar_text));
         }
 
 

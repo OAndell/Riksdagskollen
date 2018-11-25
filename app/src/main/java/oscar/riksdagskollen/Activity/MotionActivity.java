@@ -46,8 +46,8 @@ import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
-import oscar.riksdagskollen.Util.View.GiveLikeView;
-import oscar.riksdagskollen.Util.View.LikeBarView;
+import oscar.riksdagskollen.Util.View.ApprovalBarView;
+import oscar.riksdagskollen.Util.View.RateDocumentView;
 
 /**
  * Created by gustavaaro on 2018-03-29.
@@ -372,25 +372,25 @@ public class MotionActivity extends AppCompatActivity {
     }*/
 
     private void setupRateFunctionality() {
-        GiveLikeView likeView = findViewById(R.id.activity_motion_givelikeview);
-        final LikeBarView likeBar = findViewById(R.id.activity_motion_likebar);
+        RateDocumentView rateView = findViewById(R.id.activity_motion_givelikeview);
+        final ApprovalBarView approvalBar = findViewById(R.id.activity_motion_likebar);
         if (document.getDoktyp().equals("mot")) {
-            likeView.setLikeListener(new GiveLikeView.LikeListener() {
+            rateView.setLikeListener(new RateDocumentView.ApprovalListener() {
                 @Override
-                public void onLike() {
-                    likeBar.like();
-                    System.out.println(likeBar.getPercent());
+                public void onApprove() {
+                    approvalBar.like();
+                    //FUTURE API POST?
                 }
 
                 @Override
-                public void onDislike() {
-                    likeBar.dislike();
+                public void onDisapprove() {
+                    approvalBar.dislike();
+                    //FUTURE API POST?
                 }
             });
         } else {
-            likeBar.setVisibility(View.GONE);
-            likeView.setVisibility(View.GONE);
-
+            approvalBar.setVisibility(View.GONE);
+            rateView.setVisibility(View.GONE);
         }
     }
 
