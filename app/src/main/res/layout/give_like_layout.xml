@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="top"
     android:orientation="vertical">
 
-
     <TextView
-        android:id="@+id/act_doc_reader_title"
+        android:id="@+id/give_like_view_top_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -66,6 +66,5 @@
             android:textSize="12sp"
             android:textStyle="normal" />
     </LinearLayout>
-
 
 </LinearLayout>

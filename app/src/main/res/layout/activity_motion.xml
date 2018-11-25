@@ -32,13 +32,13 @@
 
 
                 <LinearLayout
+                    android:id="@+id/doc_title_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:id="@+id/doc_title_layout"
                     android:gravity="center"
-                    android:padding="16dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <TextView
                         android:id="@+id/act_doc_reader_title"
@@ -53,7 +53,7 @@
                     <TextView
                         android:id="@+id/act_doc_reader_author"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:text="av Agneta Sjödin (S)"
                         android:textColor="?mainTitleTextColor" />
@@ -143,10 +143,16 @@
                 android:textColor="?buttonColor"
                 android:visibility="gone"/>
 
+
             <oscar.riksdagskollen.Util.View.GiveLikeView
+                android:id="@+id/activity_motion_givelikeview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
+                android:layout_height="wrap_content" />
+
+            <oscar.riksdagskollen.Util.View.LikeBarView
+                android:id="@+id/activity_motion_likebar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 

@@ -26,6 +26,7 @@
             android:orientation="vertical"
             android:paddingBottom="20dp">
 
+
             <TextView
                 android:id="@+id/vote_title"
                 android:layout_width="match_parent"
