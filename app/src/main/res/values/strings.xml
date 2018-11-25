@@ -59,6 +59,7 @@
     <string name="rate_question">Vad tycker du om det här förslaget?</string>
     <string name="good_prop">Bra förslag</string>
     <string name="bad_prop">Dåligt förslag</string>
+    <string name="likebar_text">% av rösterna gillar detta</string>
 
 
 </resources>

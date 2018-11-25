@@ -374,19 +374,24 @@ public class MotionActivity extends AppCompatActivity {
     private void setupRateFunctionality() {
         GiveLikeView likeView = findViewById(R.id.activity_motion_givelikeview);
         final LikeBarView likeBar = findViewById(R.id.activity_motion_likebar);
-        likeView.setLikeListener(new GiveLikeView.LikeListener() {
-            @Override
-            public void onLike() {
-                likeBar.like();
-                System.out.println(likeBar.getPercent());
-            }
+        if (document.getDoktyp().equals("mot")) {
+            likeView.setLikeListener(new GiveLikeView.LikeListener() {
+                @Override
+                public void onLike() {
+                    likeBar.like();
+                    System.out.println(likeBar.getPercent());
+                }
 
-            @Override
-            public void onDislike() {
-                likeBar.dislike();
-            }
-        });
+                @Override
+                public void onDislike() {
+                    likeBar.dislike();
+                }
+            });
+        } else {
+            likeBar.setVisibility(View.GONE);
+            likeView.setVisibility(View.GONE);
 
+        }
     }
 
 }

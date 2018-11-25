@@ -15,5 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="end"
+        android:paddingRight="5dp"
         android:text="100%" />
 </LinearLayout>

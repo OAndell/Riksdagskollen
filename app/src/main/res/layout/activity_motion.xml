@@ -143,17 +143,16 @@
                 android:textColor="?buttonColor"
                 android:visibility="gone"/>
 
-
             <oscar.riksdagskollen.Util.View.GiveLikeView
                 android:id="@+id/activity_motion_givelikeview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="130dp"
+                android:layout_marginTop="10dp" />
 
             <oscar.riksdagskollen.Util.View.LikeBarView
                 android:id="@+id/activity_motion_likebar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
         </LinearLayout>
 
 
