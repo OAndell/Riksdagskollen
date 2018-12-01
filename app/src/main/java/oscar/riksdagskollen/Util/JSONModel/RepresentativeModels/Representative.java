@@ -148,6 +148,9 @@ public class Representative implements Parcelable {
      * @return the "Civilian" work title of the representative
      */
     public String getTitle() {
+        if (personuppgift == null) {
+            return "";
+        }
         ArrayList<RepresentativeInfo> infoList = getPersonuppgift().getUppgift();
         for (int i = 0; i < infoList.size(); i++) {
             if (infoList.get(i).getKod().equals("sv")) {

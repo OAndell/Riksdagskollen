@@ -46,8 +46,6 @@ import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
-import oscar.riksdagskollen.Util.View.ApprovalBarView;
-import oscar.riksdagskollen.Util.View.RateDocumentView;
 
 /**
  * Created by gustavaaro on 2018-03-29.
@@ -371,7 +369,7 @@ public class MotionActivity extends AppCompatActivity {
 
     }*/
 
-    private void setupRateFunctionality() {
+    /*private void setupRateFunctionality() {
         RateDocumentView rateView = findViewById(R.id.activity_motion_givelikeview);
         final ApprovalBarView approvalBar = findViewById(R.id.activity_motion_likebar);
         if (document.getDoktyp().equals("mot")) {
@@ -392,6 +390,6 @@ public class MotionActivity extends AppCompatActivity {
             approvalBar.setVisibility(View.GONE);
             rateView.setVisibility(View.GONE);
         }
-    }
+    }*/
 
 }
