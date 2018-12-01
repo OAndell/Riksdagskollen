@@ -114,7 +114,7 @@ public class MotionActivity extends AppCompatActivity {
 
 
         //ONLINE STUFF
-        setupRateFunctionality();
+        //setupRateFunctionality();
 
     }
 
