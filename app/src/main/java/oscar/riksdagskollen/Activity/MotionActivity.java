@@ -3,6 +3,7 @@ package oscar.riksdagskollen.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ import org.jsoup.nodes.Document;
 
 import java.util.List;
 
+import oscar.riksdagskollen.Manager.SavedDocumentManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.CustomTabs;
@@ -59,6 +61,9 @@ public class MotionActivity extends AppCompatActivity {
     private Context context;
     private LinearLayout portaitContainer;
     private MenuItem notificationItem;
+    private boolean isSaved = false;
+    private boolean firstPrepare = true;
+    private SavedDocumentManager savedDocumentManager;
     RiksdagskollenApp app;
 
 
@@ -67,6 +72,7 @@ public class MotionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTheme(RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         setContentView(R.layout.activity_motion);
+        savedDocumentManager = SavedDocumentManager.getInstance();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -283,6 +289,15 @@ public class MotionActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         searchForReplyOrQuestion();
+        if (!firstPrepare) {
+            if (isSaved) {
+                menu.findItem(R.id.save_motion).setIcon(R.drawable.star_border_to_filled_animated);
+                ((Animatable) menu.findItem(R.id.save_motion).getIcon()).start();
+            } else {
+                menu.findItem(R.id.save_motion).setIcon(R.drawable.star_filled_to_border_animated);
+                ((Animatable) menu.findItem(R.id.save_motion).getIcon()).start();
+            }
+        }
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -293,6 +308,9 @@ public class MotionActivity extends AppCompatActivity {
         if (RiksdagskollenApp.getInstance().getAlertManager().isAlertEnabledForDoc(document)) {
             notificationItem.setIcon(R.drawable.ic_notification_enabled);
         }
+        isSaved = savedDocumentManager.isSaved(document.getId());
+        if (isSaved) menu.findItem(R.id.save_motion).setIcon(R.drawable.ic_star_black);
+        else menu.findItem(R.id.save_motion).setIcon(R.drawable.ic_star_border);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -314,6 +332,16 @@ public class MotionActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Du kommer nu få en notis när ett svar publiceras på denna fråga", Toast.LENGTH_LONG).show();
                 }
                 else item.setIcon(R.drawable.ic_notifications_disabled);
+                break;
+            case R.id.save_motion:
+                if (isSaved) {
+                    savedDocumentManager.unSave(document.getId());
+                } else {
+                    savedDocumentManager.save(document.getId());
+                }
+                isSaved = !isSaved;
+                firstPrepare = false;
+                invalidateOptionsMenu();
                 break;
         }
         return super.onOptionsItemSelected(item);

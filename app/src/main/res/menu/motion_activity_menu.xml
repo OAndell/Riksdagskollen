@@ -14,4 +14,10 @@
         android:icon="@drawable/ic_open_in_browser_24dp"
         app:showAsAction="always"/>
 
+    <item
+        android:id="@+id/save_motion"
+        android:title="Spara dokument"
+        android:icon="@drawable/ic_star_border"
+        app:showAsAction="always" />
+
 </menu>

@@ -19,6 +19,7 @@ import oscar.riksdagskollen.Manager.AlertManager;
 import oscar.riksdagskollen.Manager.RepresentativeManager;
 import oscar.riksdagskollen.Manager.RequestManager;
 import oscar.riksdagskollen.Manager.RiksdagenAPIManager;
+import oscar.riksdagskollen.Manager.SavedDocumentManager;
 import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.Util.Job.AlertJobCreator;
 import oscar.riksdagskollen.Util.Job.CheckAlertsJob;
@@ -37,6 +38,7 @@ public class RiksdagskollenApp extends Application {
     private ThemeManager themeManager;
     private AlertManager alertManager;
     private RepresentativeManager representativeManager;
+    private SavedDocumentManager savedDocumentManager;
 
 
     @Override
@@ -62,7 +64,7 @@ public class RiksdagskollenApp extends Application {
         scheduleCheckAlertsJobIfNotRunning();
 
         representativeManager = new RepresentativeManager(this);
-
+        savedDocumentManager = new SavedDocumentManager(this);
 
     }
 
@@ -115,6 +117,10 @@ public class RiksdagskollenApp extends Application {
 
     public ThemeManager getThemeManager() {
         return themeManager;
+    }
+
+    public SavedDocumentManager getSavedDocumentManager() {
+        return savedDocumentManager;
     }
 
     private boolean jobIsRunningOrScheduledWithTag(String tag) {

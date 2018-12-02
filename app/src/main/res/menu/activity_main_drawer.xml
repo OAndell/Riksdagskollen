@@ -79,11 +79,13 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
+                    android:id="@+id/saved_docs"
+                    android:icon="@drawable/ic_star_black"
+                    android:title="@string/saved_docs" />
+                <item
                     android:id="@+id/feedback_nav"
                     android:icon="@drawable/ic_menu_message"
                     android:title="@string/feedback" />
-            </group>
-            <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/about_nav"
                     android:icon="@drawable/abouticon"

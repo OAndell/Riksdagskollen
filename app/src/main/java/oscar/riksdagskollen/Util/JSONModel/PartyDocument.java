@@ -24,6 +24,7 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
     private String dokumentnamn;
     private String datum;
     private DokIntressent dokintressent;
+    private long saved = 0;
 
     public DokIntressent getDokintressent() {
         return dokintressent;
@@ -89,6 +90,14 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
         return datum;
     }
 
+    public void setSaved(Long saved) {
+        this.saved = saved;
+    }
+
+    public long getSaved() {
+        return saved;
+    }
+
     @Override
     public String toString() {
         return getTitel();
@@ -103,11 +112,6 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
         String stringID = getId();
         stringID = stringID.replaceAll("[A-ö]+","");
         return Long.parseLong(stringID);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     @Override
@@ -136,6 +140,11 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
     }
 
     @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
         dest.writeString(this.undertitel);
@@ -152,6 +161,7 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
         dest.writeString(this.dokumentnamn);
         dest.writeString(this.datum);
         dest.writeParcelable(this.dokintressent, flags);
+        dest.writeLong(this.saved);
     }
 
     protected PartyDocument(Parcel in) {
@@ -170,6 +180,7 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
         this.dokumentnamn = in.readString();
         this.datum = in.readString();
         this.dokintressent = in.readParcelable(DokIntressent.class.getClassLoader());
+        this.saved = in.readLong();
     }
 
     public static final Creator<PartyDocument> CREATOR = new Creator<PartyDocument>() {

@@ -38,6 +38,7 @@ import oscar.riksdagskollen.Fragment.PartyFragment;
 import oscar.riksdagskollen.Fragment.PartyListFragment;
 import oscar.riksdagskollen.Fragment.ProtocolListFragment;
 import oscar.riksdagskollen.Fragment.RepresentativeListFragment;
+import oscar.riksdagskollen.Fragment.SavedDocumentsFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
 import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.R;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity
     private SoftReference<RepresentativeListFragment> repFragment;
     private SoftReference<VoteListFragment> voteListFragment;
     private SoftReference<AboutFragment> aboutFragment;
+    private SoftReference<SavedDocumentsFragment> savedDocumentsFragment;
     private SoftReference<PartyFragment> sPartyFragment;
     private SoftReference<PartyFragment> mPartyFragment;
     private SoftReference<PartyFragment> sdPartyFragment;
@@ -408,6 +410,13 @@ public class MainActivity extends AppCompatActivity
                                 "\nApp-version: " + BuildConfig.VERSION_NAME +
                                 "\nSdk-version: " + Build.VERSION.SDK_INT);
                 startActivity(Intent.createChooser(emailIntent, "Skicka ett mail"));
+                break;
+            case R.id.saved_docs:
+                fireBase.setCurrentScreen(this, "saved", null);
+                if (savedDocumentsFragment == null || savedDocumentsFragment.get() == null) {
+                    savedDocumentsFragment = new SoftReference<>(SavedDocumentsFragment.newInstance());
+                }
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, savedDocumentsFragment.get()).commit();
                 break;
         }
 
