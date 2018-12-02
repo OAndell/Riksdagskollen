@@ -309,7 +309,7 @@ public class MotionActivity extends AppCompatActivity {
             notificationItem.setIcon(R.drawable.ic_notification_enabled);
         }
         isSaved = savedDocumentManager.isSaved(document.getId());
-        if (isSaved) menu.findItem(R.id.save_motion).setIcon(R.drawable.ic_star_black);
+        if (isSaved) menu.findItem(R.id.save_motion).setIcon(R.drawable.ic_star_filled);
         else menu.findItem(R.id.save_motion).setIcon(R.drawable.ic_star_border);
         return super.onCreateOptionsMenu(menu);
     }

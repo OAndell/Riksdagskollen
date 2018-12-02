@@ -80,7 +80,7 @@
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/saved_docs"
-                    android:icon="@drawable/ic_star_black"
+                    android:icon="@drawable/ic_star_yellow"
                     android:title="@string/saved_docs" />
                 <item
                     android:id="@+id/feedback_nav"

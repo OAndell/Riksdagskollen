@@ -20,6 +20,6 @@
         android:layout_height="160dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="100dp"
-        app:srcCompat="@drawable/ic_star_border" />
+        app:srcCompat="@drawable/ic_star_border_button_color" />
 
 </LinearLayout>

@@ -86,10 +86,8 @@ public class SavedDocumentsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        System.out.println("On resume 1: " + savedDocs.size() + " " + documents.size());
         savedDocs = app.getSavedDocumentManager().getSavedDocs();
-        System.out.println("On resume 2: " + savedDocs.size() + " " + documents.size());
-        if (savedDocs.size() != documents.size()) {
+        if (savedDocs.size() != documents.size() || savedDocs.isEmpty()) {
             adapter.clear();
             loadSavedDocs();
         }
