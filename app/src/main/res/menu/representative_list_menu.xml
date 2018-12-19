@@ -9,16 +9,10 @@
         app:showAsAction="always" />
 
     <item
-        android:title="Sortera ökande"
-        android:id="@+id/sort_order_ascending"
+        android:title="Ändra sorteringsordning"
+        android:id="@+id/sort_order"
         app:showAsAction="always"
-        android:icon="@drawable/ic_sort_ascending_animated" />
-    <item
-        android:title="Sortera fallande"
-        android:id="@+id/sort_order_descending"
-        app:showAsAction="always"
-        android:visible="true"
-        android:icon="@drawable/ic_sort_descending_animated" />
+        android:icon="@drawable/ic_sort_ascending" />
 
     <item
         android:title="Sortera"

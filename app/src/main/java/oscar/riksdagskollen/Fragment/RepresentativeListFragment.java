@@ -89,8 +89,7 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Animatable animatable;
+    public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sort_by_name:
                 swapAdapter(ascending ?
@@ -112,11 +111,19 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
                         RepresentativeAdapter.DISTRICT_COMPARATOR :
                         new ReverseOrder<>(RepresentativeAdapter.DISTRICT_COMPARATOR));
                 break;
-            case R.id.sort_order_ascending:
-                setSortOrderAscending(false);
-                break;
-            case R.id.sort_order_descending:
-                setSortOrderAscending(true);
+            case R.id.sort_order:
+                setSortOrderAscending(!ascending);
+                if (ascending) {
+                    item.setIcon(R.drawable.ic_sort_ascending_animated);
+                } else {
+                    item.setIcon(R.drawable.ic_sort_descending_animated);
+                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((Animatable) item.getIcon()).start();
+                    }
+                });
                 break;
             case R.id.filter_rep:
                 showFilterDialog();
@@ -175,25 +182,9 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
 
     private void setSortOrderAscending(boolean ascending) {
         this.ascending = ascending;
-        getActivity().invalidateOptionsMenu();
         swapAdapter(new ReverseOrder<>(currentComparator));
     }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-
-        if (ascending) {
-            ((Animatable) menu.findItem(R.id.sort_order_ascending).getIcon()).start();
-            menu.findItem(R.id.sort_order_ascending).setVisible(true);
-            menu.findItem(R.id.sort_order_descending).setVisible(false);
-        } else {
-            ((Animatable) menu.findItem(R.id.sort_order_descending).getIcon()).start();
-            menu.findItem(R.id.sort_order_ascending).setVisible(false);
-            menu.findItem(R.id.sort_order_descending).setVisible(true);
-        }
-
-        super.onPrepareOptionsMenu(menu);
-    }
 
     public void setCurrentComparator(Comparator<Representative> currentComparator) {
         this.currentComparator = currentComparator;

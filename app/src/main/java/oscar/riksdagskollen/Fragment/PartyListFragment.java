@@ -3,6 +3,7 @@ package oscar.riksdagskollen.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -102,58 +103,69 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
 
-        if (item.getItemId() == R.id.notification_menu_item) {
-            boolean enabled;
-            try {
-                enabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForParty(party.getID(), documentList.get(0).getId());
-            } catch (IndexOutOfBoundsException e) {
-                // if no items has been loaded, fall back on an empty string. Doc id will be updated once some items has been loaded
-                enabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForParty(party.getID(), "");
-            }
-            if (enabled) {
-                item.setIcon(R.drawable.ic_notification_enabled);
-                Toast.makeText(getContext(), String.format("Du kommer nu få en notis när %s publicerar ett nytt dokument", party.getName()), Toast.LENGTH_LONG).show();
-            } else item.setIcon(R.drawable.ic_notifications_disabled);
-        } else if (item.getItemId() == R.id.menu_filter) {
-            oldFilter = getFilter();
-            final CharSequence[] items = PartyDocumentType.getPartyDisplayNames();
-            boolean[] checked = new boolean[items.length];
-            for (int i = 0; i < items.length; i++){
-                checked[i] = preferences.getBoolean(PartyDocumentType.getPartyDokTypes().get(i).getDocType(), true);
-            }
+        switch (item.getItemId()) {
+            case R.id.notification_menu_item:
+                boolean enabled;
+                try {
+                    enabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForParty(party.getID(), documentList.get(0).getId());
+                } catch (IndexOutOfBoundsException e) {
+                    // if no items has been loaded, fall back on an empty string. Doc id will be updated once some items has been loaded
+                    enabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForParty(party.getID(), "");
+                }
+                if (enabled) {
+                    item.setIcon(R.drawable.notifications_border_to_filled_animated);
+                    Toast.makeText(getContext(), String.format("Du kommer nu få en notis när %s publicerar ett nytt dokument", party.getName()), Toast.LENGTH_LONG).show();
+                } else {
+                    item.setIcon(R.drawable.notifications_filled_to_border_animated);
+                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((Animatable) item.getIcon()).start();
+                    }
+                });
+                break;
+            case R.id.menu_filter:
+                oldFilter = getFilter();
+                final CharSequence[] items = PartyDocumentType.getPartyDisplayNames();
+                boolean[] checked = new boolean[items.length];
+                for (int i = 0; i < items.length; i++) {
+                    checked[i] = preferences.getBoolean(PartyDocumentType.getPartyDokTypes().get(i).getDocType(), true);
+                }
 
-            final SharedPreferences.Editor editor = preferences.edit();
+                final SharedPreferences.Editor editor = preferences.edit();
 
 
-            AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom)
-                    .setTitle("Filtrera partiflöde")
-                    .setMultiChoiceItems(items, checked, new DialogInterface.OnMultiChoiceClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
-                            editor.putBoolean(PartyDocumentType.getPartyDokTypes().get(indexSelected).getDocType(), isChecked);
-                        }
-                    }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            editor.apply();
-                        }
-                    }).setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            editor.clear();
-                        }
-                    })
-                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialogInterface) {
-                            editor.clear();
-                        }
-                    })
-                    .create();
+                AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom)
+                        .setTitle("Filtrera partiflöde")
+                        .setMultiChoiceItems(items, checked, new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
+                                editor.putBoolean(PartyDocumentType.getPartyDokTypes().get(indexSelected).getDocType(), isChecked);
+                            }
+                        }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                editor.apply();
+                            }
+                        }).setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                editor.clear();
+                            }
+                        })
+                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                editor.clear();
+                            }
+                        })
+                        .create();
 
-            dialog.show();
+                dialog.show();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

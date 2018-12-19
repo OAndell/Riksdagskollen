@@ -38,6 +38,7 @@ import org.jsoup.nodes.Document;
 
 import java.util.List;
 
+import oscar.riksdagskollen.Manager.AlertManager;
 import oscar.riksdagskollen.Manager.SavedDocumentManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
@@ -62,6 +63,7 @@ public class MotionActivity extends AppCompatActivity {
     private LinearLayout portaitContainer;
     private MenuItem notificationItem;
     private boolean isSaved = false;
+    private boolean isNotificationsEnabled = false;
     private boolean firstPrepare = true;
     private SavedDocumentManager savedDocumentManager;
     RiksdagskollenApp app;
@@ -72,14 +74,14 @@ public class MotionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTheme(RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         setContentView(R.layout.activity_motion);
+        app = RiksdagskollenApp.getInstance();
         savedDocumentManager = SavedDocumentManager.getInstance();
+        document = getIntent().getParcelableExtra("document");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.setNavigationBarColor(RiksdagskollenApp.getColorFromAttribute(R.attr.mainBackgroundColor, this));
         }
-
-        document = getIntent().getParcelableExtra("document");
 
         FirebaseAnalytics analytics = FirebaseAnalytics.getInstance(this);
         analytics.setCurrentScreen(this, "Motion doc: " + document.getId(), null);
@@ -153,7 +155,6 @@ public class MotionActivity extends AppCompatActivity {
         });
 
 
-        app = RiksdagskollenApp.getInstance();
         app.getRiksdagenAPIManager().getDocumentBody( document, new StringRequestCallback() {
             @Override
             public void onResponse(String response) {
@@ -289,33 +290,28 @@ public class MotionActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         searchForReplyOrQuestion();
-        if (!firstPrepare) {
-            if (isSaved) {
-                menu.findItem(R.id.save_motion).setIcon(R.drawable.star_border_to_filled_animated);
-                ((Animatable) menu.findItem(R.id.save_motion).getIcon()).start();
-            } else {
-                menu.findItem(R.id.save_motion).setIcon(R.drawable.star_filled_to_border_animated);
-                ((Animatable) menu.findItem(R.id.save_motion).getIcon()).start();
-            }
-        }
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.motion_activity_menu,menu);
+
         notificationItem = menu.findItem(R.id.notification_menu_item);
-        if (RiksdagskollenApp.getInstance().getAlertManager().isAlertEnabledForDoc(document)) {
+        isNotificationsEnabled = AlertManager.getInstance().isAlertEnabledForDoc(document);
+        if (isNotificationsEnabled) {
             notificationItem.setIcon(R.drawable.ic_notification_enabled);
         }
+
         isSaved = savedDocumentManager.isSaved(document.getId());
         if (isSaved) menu.findItem(R.id.save_motion).setIcon(R.drawable.ic_star_filled);
         else menu.findItem(R.id.save_motion).setIcon(R.drawable.ic_star_border);
+
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         int id = item.getItemId();
 
         switch (id){
@@ -326,22 +322,35 @@ public class MotionActivity extends AppCompatActivity {
                 CustomTabs.openTab(this, Uri.parse("http:" + document.getDokument_url_html()).toString());
                 break;
             case R.id.notification_menu_item:
-                boolean enabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForDoc(document);
-                if (enabled) {
-                    item.setIcon(R.drawable.ic_notification_enabled);
+                isNotificationsEnabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForDoc(document);
+                if (isNotificationsEnabled) {
                     Toast.makeText(getApplicationContext(), "Du kommer nu få en notis när ett svar publiceras på denna fråga", Toast.LENGTH_LONG).show();
+                    item.setIcon(R.drawable.notifications_border_to_filled_animated);
+                } else {
+                    item.setIcon(R.drawable.notifications_filled_to_border_animated);
                 }
-                else item.setIcon(R.drawable.ic_notifications_disabled);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((Animatable) item.getIcon()).start();
+                    }
+                });
                 break;
             case R.id.save_motion:
                 if (isSaved) {
                     savedDocumentManager.unSave(document.getId());
+                    item.setIcon(R.drawable.star_filled_to_border_animated);
                 } else {
+                    item.setIcon(R.drawable.star_border_to_filled_animated);
                     savedDocumentManager.save(document.getId());
                 }
                 isSaved = !isSaved;
-                firstPrepare = false;
-                invalidateOptionsMenu();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((Animatable) item.getIcon()).start();
+                    }
+                });
                 break;
         }
         return super.onOptionsItemSelected(item);
