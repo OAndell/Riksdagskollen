@@ -21,6 +21,7 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import fr.arnaudguyon.xmltojsonlib.XmlToJson;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNews;
 import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNewsLink;
@@ -44,6 +45,7 @@ import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeListCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.VoteCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.VoteStatisticsCallback;
+
 
 /**
  * Created by gustavaaro on 2018-03-25.
@@ -620,9 +622,27 @@ public class RiksdagenAPIManager {
     }
 
     public void getVoteStatisticsForRepresentative(String iid, final VoteStatisticsCallback callback) {
-        String subUrl = "/voteringlista/?iid=" + iid + "&utformat=JSON&gruppering=namn";
-        doApiGetRequest(subUrl, new JSONRequestCallback() {
+        String url = "http://data.riksdagen.se/voteringlista/?iid=" + iid + "&utformat=JSON&gruppering=namn";
+        doApiGetStringRequest(url, new StringRequestCallback() {
             @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new XmlToJson.Builder(response).build().toJson();
+                    jsonObject = jsonObject.getJSONObject("voteringlista").getJSONObject("votering");
+                    RepresentativeVoteStatistics stats = gson.fromJson(jsonObject.toString(), RepresentativeVoteStatistics.class);
+                    callback.onStatisticsFetched(stats);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    callback.onFail(new VolleyError("Failed to parse JSON"));
+                }
+            }
+
+            @Override
+            public void onFail(VolleyError error) {
+
+            }
+
+            /*@Override
             public void onRequestSuccess(JSONObject response) {
                 try {
                     JSONObject jsonObject = response.getJSONObject("voteringlista").getJSONObject("votering");
@@ -637,7 +657,7 @@ public class RiksdagenAPIManager {
             @Override
             public void onRequestFail(VolleyError error) {
                 callback.onFail(error);
-            }
+            }*/
         });
 
     }
