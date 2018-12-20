@@ -88,6 +88,7 @@ dependencies {
     implementation 'com.github.franmontiel:AttributionPresenter:1.0'
     implementation 'com.evernote:android-job:1.2.4'
     implementation 'com.github.bumptech.glide:glide:4.8.0'
+    implementation 'com.github.smart-fun:XmlToJson:1.4.4'    // add this line
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 
 }
