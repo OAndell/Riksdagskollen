@@ -627,6 +627,7 @@ public class RiksdagenAPIManager {
             @Override
             public void onResponse(String response) {
                 try {
+
                     JSONObject jsonObject = new XmlToJson.Builder(response).build().toJson();
                     jsonObject = jsonObject.getJSONObject("voteringlista").getJSONObject("votering");
                     RepresentativeVoteStatistics stats = gson.fromJson(jsonObject.toString(), RepresentativeVoteStatistics.class);
@@ -641,6 +642,8 @@ public class RiksdagenAPIManager {
             public void onFail(VolleyError error) {
                 callback.onFail(error);
             }
+            /*This stopped working when the API stopped serving JSON data for this URL. Might be worth keeping
+              if it returns*/
 
             /*@Override
             public void onRequestSuccess(JSONObject response) {
