@@ -639,7 +639,7 @@ public class RiksdagenAPIManager {
 
             @Override
             public void onFail(VolleyError error) {
-
+                callback.onFail(error);
             }
 
             /*@Override
