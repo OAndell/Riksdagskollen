@@ -622,7 +622,7 @@ public class RiksdagenAPIManager {
     }
 
     public void getVoteStatisticsForRepresentative(String iid, final VoteStatisticsCallback callback) {
-        String url = "http://data.riksdagen.se/voteringlista/?iid=" + iid + "&utformat=JSON&gruppering=namn";
+        String url = "http://data.riksdagen.se/voteringlista/?iid=" + iid + "&utformat=XML&gruppering=namn";
         doApiGetStringRequest(url, new StringRequestCallback() {
             @Override
             public void onResponse(String response) {

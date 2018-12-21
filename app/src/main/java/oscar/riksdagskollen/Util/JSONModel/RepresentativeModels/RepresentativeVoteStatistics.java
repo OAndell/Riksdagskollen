@@ -39,28 +39,28 @@ public class RepresentativeVoteStatistics implements Parcelable {
     }
 
     public String getYes() {
-        if (yes == null) {
+        if (yes == null || yes.equals("")) {
             return "0";
         }
         return yes;
     }
 
     public String getNo() {
-        if (no == null) {
+        if (no == null || no.equals("")) {
             return "0";
         }
         return no;
     }
 
     public String getAbsent() {
-        if (absent == null) {
+        if (absent == null || absent.equals("")) {
             return "0";
         }
         return absent;
     }
 
     public String getAbstained() {
-        if (abstained == null) {
+        if (abstained == null || abstained.equals("")) {
             return "0";
         }
         return abstained;
