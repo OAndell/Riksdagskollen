@@ -166,7 +166,7 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
 
         public void bind(final CurrentNews item ,final OnItemClickListener listener) {
             title.setText(item.getTitel());
-            body.setText(parseString(item.getSummary()));
+            body.setText(Html.fromHtml(parseString(item.getSummary())));
             date.setText(item.getPublicerad());
             imageText.setText(item.getImg_fotograf());
 
@@ -190,13 +190,9 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
             });
         }
 
-        //Maybe do this better......
         private String parseString(String s){
-            s = Html.fromHtml(s).toString();
-            s = s.replaceAll("&nbsp;"," ");
-            s = s.replaceAll("<span(.*?)>", "");
-            s = s.replaceAll("</span>", "");
-            s = s.substring(3,s.length()-4); //remove <p> and </p>
+            s = Html.fromHtml(s).toString().trim();
+            s = s.replaceAll("<p>", "").replaceAll("</p>", "");
             return s;
         }
     }
