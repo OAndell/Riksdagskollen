@@ -1,14 +1,22 @@
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
     }
-
     dependencies {
         classpath 'io.fabric.tools:gradle:1.+'
     }
 }
+
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
+
+if(getCurrentFlavor() == "play"){
+    apply plugin: 'io.fabric'
+}
+
+
 android {
     compileSdkVersion 27
     buildToolsVersion '28.0.3'
@@ -37,8 +45,16 @@ android {
             buildConfigField 'String', "SafetyApiKey", SAFETY_API_KEY
         }
     }
+    flavorDimensions 'version'
+    productFlavors {
+        play {
+            dimension 'version'
+        }
+        fdroid {
+            dimension 'version'
+        }
+    }
 }
-
 
 
 repositories {
@@ -50,11 +66,6 @@ repositories {
     }
 }
 
-
-/**
- *
- * build fabric properties file, if missing
- */
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -74,12 +85,12 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:customtabs:27.1.1'
     implementation "com.android.support:support-compat:27.1.1"
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
+    implementation 'com.google.code.gson:gson:2.8.2'
+    playImplementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
         transitive = true
     }
-    implementation "com.google.android.gms:play-services-safetynet:16.0.0"
-    implementation 'com.google.code.gson:gson:2.8.2'
-    implementation 'com.google.firebase:firebase-core:16.0.4'
+    playImplementation "com.google.android.gms:play-services-safetynet:16.0.0"
+    playImplementation 'com.google.firebase:firebase-core:16.0.4'
 
     implementation 'com.android.volley:volley:1.1.0'
     implementation 'org.jsoup:jsoup:1.11.2'
@@ -91,6 +102,32 @@ dependencies {
     implementation 'com.github.smart-fun:XmlToJson:1.4.4'    // add this line
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 
+    println(getCurrentFlavor());
+
 }
+
+
+def getCurrentFlavor() {
+    Gradle gradle = getGradle()
+    String  tskReqStr = gradle.getStartParameter().getTaskRequests().toString()
+
+    Pattern pattern;
+
+    if( tskReqStr.contains( "assemble" ) )
+        pattern = Pattern.compile("assemble(\\w+)(Release|Debug)")
+    else
+        pattern = Pattern.compile("generate(\\w+)(Release|Debug)")
+
+    Matcher matcher = pattern.matcher( tskReqStr )
+
+    if( matcher.find() )
+        return matcher.group(1).toLowerCase()
+    else
+    {
+        println "NO MATCH FOUND"
+        return "";
+    }
+}
+
 
 apply plugin: 'com.google.gms.google-services'

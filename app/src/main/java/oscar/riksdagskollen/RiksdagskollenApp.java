@@ -6,16 +6,13 @@ import android.content.res.Resources;
 import android.support.annotation.ColorInt;
 import android.util.TypedValue;
 
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.core.CrashlyticsCore;
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
-import com.google.firebase.FirebaseApp;
 
 import java.util.Set;
 
-import io.fabric.sdk.android.Fabric;
 import oscar.riksdagskollen.Manager.AlertManager;
+import oscar.riksdagskollen.Manager.AnalyticsManager;
 import oscar.riksdagskollen.Manager.RepresentativeManager;
 import oscar.riksdagskollen.Manager.RequestManager;
 import oscar.riksdagskollen.Manager.RiksdagenAPIManager;
@@ -39,22 +36,19 @@ public class RiksdagskollenApp extends Application {
     private AlertManager alertManager;
     private RepresentativeManager representativeManager;
     private SavedDocumentManager savedDocumentManager;
+    private AnalyticsManager analyticsManager;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
-        if (!BuildConfig.DEBUG) {
-            FirebaseApp.initializeApp(this);
-            // Set up Crashlytics, disabled for debug builds
-            Crashlytics crashlyticsKit = new Crashlytics.Builder()
-                    .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
-                    .build();
-            // Initialize Fabric with the debug-disabled crashlytics.
-            Fabric.with(this, crashlyticsKit);
-        }
+        analyticsManager = new AnalyticsManager(this);
 
+        // Set up Crashlytics, disabled for debug builds
+        analyticsManager.initCrashlytics();
+        if (!BuildConfig.DEBUG) {
+        }
 
         requestManager = new RequestManager();
         riksdagenAPIManager = new RiksdagenAPIManager(this);
@@ -97,6 +91,10 @@ public class RiksdagskollenApp extends Application {
 
     public boolean isDownloadRepsRunningOrScheduled() {
         return jobIsRunningOrScheduledWithTag(DownloadRepresentativesJob.TAG);
+    }
+
+    public AnalyticsManager getAnalyticsManager() {
+        return analyticsManager;
     }
 
     public AlertManager getAlertManager() {

@@ -24,7 +24,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -36,6 +35,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import oscar.riksdagskollen.Manager.AnalyticsManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
@@ -105,8 +105,8 @@ public class VoteActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final Vote voteDocument = getIntent().getParcelableExtra("document");
-        FirebaseAnalytics analytics = FirebaseAnalytics.getInstance(this);
-        analytics.setCurrentScreen(this, "Vote doc: " + voteDocument.getId(), null);
+
+        AnalyticsManager.getInstance().setCurrentScreen(this, "Vote doc: " + voteDocument.getId());
 
         final TextView title = findViewById(R.id.vote_title);
         title.setText(voteDocument.getTitel());

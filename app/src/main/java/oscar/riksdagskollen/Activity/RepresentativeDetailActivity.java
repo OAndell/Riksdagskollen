@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +23,7 @@ import java.util.List;
 import oscar.riksdagskollen.Fragment.RepresentativeBiographyFragment;
 import oscar.riksdagskollen.Fragment.RepresentativeFeedFragment;
 import oscar.riksdagskollen.Fragment.RepresentativeTabFragment;
+import oscar.riksdagskollen.Manager.AnalyticsManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
@@ -67,8 +67,7 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
         repHeaderLayout.setVisibility(View.VISIBLE);
         representative = getIntent().getParcelableExtra("representative");
 
-        FirebaseAnalytics analytics = FirebaseAnalytics.getInstance(this);
-        analytics.setCurrentScreen(this, "Representative: " + representative.getIntressent_id(), null);
+        AnalyticsManager.getInstance().setCurrentScreen(this, "Representative: " + representative.getIntressent_id());
 
         collapsingToolbarLayout = findViewById(R.id.collapsing_layout);
         collapsingToolbarLayout.setTitleEnabled(true);

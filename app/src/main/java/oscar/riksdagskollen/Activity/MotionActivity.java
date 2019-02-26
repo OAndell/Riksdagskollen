@@ -31,7 +31,6 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -39,6 +38,7 @@ import org.jsoup.nodes.Document;
 import java.util.List;
 
 import oscar.riksdagskollen.Manager.AlertManager;
+import oscar.riksdagskollen.Manager.AnalyticsManager;
 import oscar.riksdagskollen.Manager.SavedDocumentManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
@@ -83,8 +83,7 @@ public class MotionActivity extends AppCompatActivity {
             window.setNavigationBarColor(RiksdagskollenApp.getColorFromAttribute(R.attr.mainBackgroundColor, this));
         }
 
-        FirebaseAnalytics analytics = FirebaseAnalytics.getInstance(this);
-        analytics.setCurrentScreen(this, "Motion doc: " + document.getId(), null);
+        AnalyticsManager.getInstance().setCurrentScreen(this, "Motion doc: " + document.getId());
 
         String intresentId = getIntent().getStringExtra("intressent");
 

@@ -1,5 +1,6 @@
 package oscar.riksdagskollen.Activity;
 
+import android.arch.core.BuildConfig;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -26,11 +27,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
-
 import java.lang.ref.SoftReference;
 
-import oscar.riksdagskollen.BuildConfig;
 import oscar.riksdagskollen.Fragment.AboutFragment;
 import oscar.riksdagskollen.Fragment.CurrentNewsListFragment;
 import oscar.riksdagskollen.Fragment.DecisionsListFragment;
@@ -40,6 +38,7 @@ import oscar.riksdagskollen.Fragment.ProtocolListFragment;
 import oscar.riksdagskollen.Fragment.RepresentativeListFragment;
 import oscar.riksdagskollen.Fragment.SavedDocumentsFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
+import oscar.riksdagskollen.Manager.AnalyticsManager;
 import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
@@ -64,6 +63,7 @@ public class MainActivity extends AppCompatActivity
     private SoftReference<PartyFragment> vPartyFragment;
     private SoftReference<PartyFragment> lPartyFragment;
     private SoftReference<PartyFragment> kdPartyFragment;
+
     private NavigationView navigationView;
     private AppBarLayout appBarLayout;
     private CollapsingToolbarLayout collapsingToolbarLayout;
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity
     private ActionBarDrawerToggle toggle;
     private boolean emptyToolbar = false;
     private ImageView collapsingLogo;
-    private FirebaseAnalytics fireBase;
+    private AnalyticsManager analyticsManager;
 
 
     @Override
@@ -84,7 +84,8 @@ public class MainActivity extends AppCompatActivity
         appBarLayout = findViewById(R.id.appbar);
         collapsingToolbarLayout = findViewById(R.id.collapsing_layout);
         collapsingLogo = findViewById(R.id.riksdagskollen_logo_collapsing);
-        fireBase = FirebaseAnalytics.getInstance(this);
+
+        analyticsManager = AnalyticsManager.getInstance();
 
         setSupportActionBar(toolbar);
 
@@ -294,37 +295,37 @@ public class MainActivity extends AppCompatActivity
 
         switch (id){
             case R.id.news_nav:
-                fireBase.setCurrentScreen(this, "news", null);
+                analyticsManager.setCurrentScreen(this, "news");
                 if (currentNewsListFragment == null || currentNewsListFragment.get() == null)
                     currentNewsListFragment = new SoftReference<>(CurrentNewsListFragment.newInstance());
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, currentNewsListFragment.get()).commit();
                 break;
             case R.id.votes_nav:
-                fireBase.setCurrentScreen(this, "votes", null);
+                analyticsManager.setCurrentScreen(this, "votes");
                 if (voteListFragment == null || voteListFragment.get() == null)
                     voteListFragment = new SoftReference<>(VoteListFragment.newInstance(null));
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, voteListFragment.get()).commit();
                 break;
             case R.id.dec_nav:
-                fireBase.setCurrentScreen(this, "decisions", null);
+                analyticsManager.setCurrentScreen(this, "decisions");
                 if (decisionsFragment == null || decisionsFragment.get() == null)
                     decisionsFragment = new SoftReference<>(DecisionsListFragment.newInstance());
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, decisionsFragment.get()).commit();
                 break;
             case R.id.rep_nav:
-                fireBase.setCurrentScreen(this, "reps", null);
+                analyticsManager.setCurrentScreen(this, "reps");
                 if (repFragment == null || repFragment.get() == null)
                     repFragment = new SoftReference<>(RepresentativeListFragment.newInstance());
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, repFragment.get()).commit();
                 break;
             case R.id.prot_nav:
-                fireBase.setCurrentScreen(this, "protocol", null);
+                analyticsManager.setCurrentScreen(this, "protocol");
                 if (protFragment == null || protFragment.get() == null)
                     protFragment = new SoftReference<>(ProtocolListFragment.newInstance());
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, protFragment.get()).commit();
                 break;
             case R.id.s_nav:
-                fireBase.setCurrentScreen(this, "s", null);
+                analyticsManager.setCurrentScreen(this, "s");
                 if (sPartyFragment == null || sPartyFragment.get() == null) {
                     sPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getS()));
                     PartyListFragment sPartyListFragment = PartyListFragment.newInstance(CurrentParties.getS());
@@ -333,7 +334,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, sPartyFragment.get()).commit();
                 break;
             case R.id.m_nav:
-                fireBase.setCurrentScreen(this, "m", null);
+                analyticsManager.setCurrentScreen(this, "m");
                 if (mPartyFragment == null || mPartyFragment.get() == null) {
                     mPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getM()));
                     PartyListFragment mPartyListFragment = PartyListFragment.newInstance(CurrentParties.getM());
@@ -342,7 +343,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mPartyFragment.get()).commit();
                 break;
             case R.id.sd_nav:
-                fireBase.setCurrentScreen(this, "sd", null);
+                analyticsManager.setCurrentScreen(this, "sd");
                 if (sdPartyFragment == null || sdPartyFragment.get() == null) {
                     sdPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getSD()));
                     PartyListFragment sdPartyListFragment = PartyListFragment.newInstance(CurrentParties.getSD());
@@ -351,7 +352,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, sdPartyFragment.get()).commit();
                 break;
             case R.id.mp_nav:
-                fireBase.setCurrentScreen(this, "mp", null);
+                analyticsManager.setCurrentScreen(this, "mp");
                 if (mpPartyFragment == null || mpPartyFragment.get() == null) {
                     mpPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getMP()));
                     PartyListFragment mpPartyListFragment = PartyListFragment.newInstance(CurrentParties.getMP());
@@ -360,7 +361,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mpPartyFragment.get()).commit();
                 break;
             case R.id.c_nav:
-                fireBase.setCurrentScreen(this, "c", null);
+                analyticsManager.setCurrentScreen(this, "c");
                 if (cPartyFragment == null || cPartyFragment.get() == null) {
                     cPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getC()));
                     PartyListFragment cPartyListFragment = PartyListFragment.newInstance(CurrentParties.getC());
@@ -369,7 +370,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, cPartyFragment.get()).commit();
                 break;
             case R.id.v_nav:
-                fireBase.setCurrentScreen(this, "v", null);
+                analyticsManager.setCurrentScreen(this, "v");
                 if (vPartyFragment == null || vPartyFragment.get() == null) {
                     vPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getV()));
                     PartyListFragment vPartyListFragment = PartyListFragment.newInstance(CurrentParties.getV());
@@ -378,7 +379,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, vPartyFragment.get()).commit();
                 break;
             case R.id.l_nav:
-                fireBase.setCurrentScreen(this, "l", null);
+                analyticsManager.setCurrentScreen(this, "l");
                 if (lPartyFragment == null || lPartyFragment.get() == null) {
                     lPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getL()));
                     PartyListFragment lPartyListFragment = PartyListFragment.newInstance(CurrentParties.getL());
@@ -387,7 +388,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, lPartyFragment.get()).commit();
                 break;
             case R.id.kd_nav:
-                fireBase.setCurrentScreen(this, "kd", null);
+                analyticsManager.setCurrentScreen(this, "kd");
                 if (kdPartyFragment == null || kdPartyFragment.get() == null) {
                     kdPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getKD()));
                     PartyListFragment kdPartyListFragment = PartyListFragment.newInstance(CurrentParties.getKD());
@@ -396,7 +397,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, kdPartyFragment.get()).commit();
                 break;
             case R.id.about_nav:
-                fireBase.setCurrentScreen(this, "about", null);
+                analyticsManager.setCurrentScreen(this, "about");
                 if (aboutFragment == null || aboutFragment.get() == null)
                     aboutFragment = new SoftReference<>(AboutFragment.newInstance());
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, aboutFragment.get()).commit();
@@ -412,7 +413,8 @@ public class MainActivity extends AppCompatActivity
                 startActivity(Intent.createChooser(emailIntent, "Skicka ett mail"));
                 break;
             case R.id.saved_docs:
-                fireBase.setCurrentScreen(this, "saved", null);
+                analyticsManager.setCurrentScreen(this, "saved");
+
                 if (savedDocumentsFragment == null || savedDocumentsFragment.get() == null) {
                     savedDocumentsFragment = new SoftReference<>(SavedDocumentsFragment.newInstance());
                 }

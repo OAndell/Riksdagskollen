@@ -18,11 +18,11 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 
 import com.android.volley.VolleyError;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import oscar.riksdagskollen.Manager.AnalyticsManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
@@ -50,9 +50,7 @@ public class ProtocolReaderActivity extends AppCompatActivity {
 
         url = getIntent().getStringExtra("url");
         title = getIntent().getStringExtra("title");
-
-        FirebaseAnalytics analytics = FirebaseAnalytics.getInstance(this);
-        analytics.setCurrentScreen(this, "Protocol doc: " + title, null);
+        AnalyticsManager.getInstance().setCurrentScreen(this, "Protocol doc: " + title);
 
         final ViewGroup loadingView = findViewById(R.id.loading_view);
 

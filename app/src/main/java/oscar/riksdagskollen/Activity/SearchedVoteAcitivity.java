@@ -11,11 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
-
 import java.util.ArrayList;
 
 import oscar.riksdagskollen.Fragment.VoteListFragment;
+import oscar.riksdagskollen.Manager.AnalyticsManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.JSONModel.DecisionDocument;
@@ -47,8 +46,7 @@ public class SearchedVoteAcitivity extends AppCompatActivity{
         ArrayList<Vote> votes = getIntent().getParcelableArrayListExtra("votes");
         DecisionDocument document = getIntent().getParcelableExtra("document");
 
-        FirebaseAnalytics analytics = FirebaseAnalytics.getInstance(this);
-        analytics.setCurrentScreen(this, "Searched vote activity: " + document.getDok_id(), null);
+        AnalyticsManager.getInstance().setCurrentScreen(this, "Searched vote activity: " + document.getDok_id());
 
         VoteListFragment fragment = VoteListFragment.newInstance(votes);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).commit();
