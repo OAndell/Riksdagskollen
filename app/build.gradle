@@ -33,22 +33,21 @@ android {
         unitTests.returnDefaultValues = true
     }
     buildTypes {
-        debug {
-            // Add API keys to project from local gradle.properties
-            buildConfigField 'String', "SafetyApiKey", SAFETY_API_KEY
+        debug{
+
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            // Add API keys to project from local gradle.properties
-            buildConfigField 'String', "SafetyApiKey", SAFETY_API_KEY
         }
+
     }
     flavorDimensions 'version'
     productFlavors {
         play {
+            // Add API keys to project from local gradle.properties
             dimension 'version'
+            buildConfigField 'String', "SafetyApiKey", SAFETY_API_KEY
         }
         fdroid {
             dimension 'version'
