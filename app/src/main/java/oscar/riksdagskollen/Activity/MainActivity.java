@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
+
         // Fresh start
         if (savedInstanceState == null) {
             startLauncherTransition();
@@ -210,6 +211,10 @@ public class MainActivity extends AppCompatActivity
                                     }
                                 }).create();
                 dialog.show();
+                break;
+            case R.id.menu_preferences:
+                Intent intent = new Intent(this, PreferencesActivity.class);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);

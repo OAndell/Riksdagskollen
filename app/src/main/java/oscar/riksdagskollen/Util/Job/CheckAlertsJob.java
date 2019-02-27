@@ -4,7 +4,9 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -57,9 +59,17 @@ public class CheckAlertsJob extends Job {
     }
 
     public static void scheduleJob() {
-        // Check once every 6 hour, be flexible within 30 minutes
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(RiksdagskollenApp.getInstance());
+
+        int updateFreq = Integer.valueOf(sharedPreferences.getString("update_freq", "540"));
+        JobRequest.NetworkType networkType = sharedPreferences.getBoolean("only_wifi", false) ? JobRequest.NetworkType.UNMETERED : JobRequest.NetworkType.CONNECTED;
+
+        Log.d("JOB", "Scheduled alert with update frequency " + updateFreq + " and network type " + networkType);
+
         new JobRequest.Builder(CheckAlertsJob.TAG)
-                .setPeriodic(TimeUnit.HOURS.toMillis(3), TimeUnit.MINUTES.toMillis(30))
+                .setPeriodic(TimeUnit.MINUTES.toMillis(updateFreq), TimeUnit.MINUTES.toMillis(60))
+                .setRequiredNetworkType(networkType)
+                .setRequirementsEnforced(true)
                 .setUpdateCurrent(true)
                 .build()
                 .schedule();

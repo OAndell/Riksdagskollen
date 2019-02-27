@@ -5,5 +5,9 @@
     <item
         android:title="Utseende"
         android:id="@+id/menu_theme"
-        app:showAsAction="never"></item>
+        app:showAsAction="never" />
+    <item
+        android:title="Inställningar"
+        android:id="@+id/menu_preferences"
+        app:showAsAction="never" />
 </menu>

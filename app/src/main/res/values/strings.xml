@@ -62,5 +62,23 @@
     <string name="bad_prop">Dåligt förslag</string>
     <string name="likebar_text">% av rösterna gillar detta</string>
 
+    <string-array name="update_intervals_entries">
+        <item>30 minuter</item>
+        <item>1 timme</item>
+        <item>3 timmar</item>
+        <item>9 timmar</item>
+        <item>12 timmar</item>
+        <item>24 timmar</item>
+    </string-array>
+
+    <string-array name="update_intervals_values">
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>540</item>
+        <item>720</item>
+        <item>1440</item>
+    </string-array>
+
 
 </resources>

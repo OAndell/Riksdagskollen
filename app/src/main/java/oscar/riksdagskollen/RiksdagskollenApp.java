@@ -46,8 +46,8 @@ public class RiksdagskollenApp extends Application {
         analyticsManager = new AnalyticsManager(this);
 
         // Set up Crashlytics, disabled for debug builds
-        analyticsManager.initCrashlytics();
         if (!BuildConfig.DEBUG) {
+            analyticsManager.initCrashlytics();
         }
 
         requestManager = new RequestManager();
@@ -55,19 +55,15 @@ public class RiksdagskollenApp extends Application {
         themeManager = new ThemeManager(this);
         alertManager = new AlertManager(this);
         JobManager.create(this).addJobCreator(new AlertJobCreator());
-        scheduleCheckAlertsJobIfNotRunning();
+        scheduleCheckAlertsJob();
 
         representativeManager = new RepresentativeManager(this);
         savedDocumentManager = new SavedDocumentManager(this);
 
     }
 
-    public void scheduleCheckAlertsJobIfNotRunning() {
-        if (!isCheckRepliesScheduled()) {
-            System.out.println("Scheduling job");
-            //Create jobs which will search for replies to tracked questions
+    public void scheduleCheckAlertsJob() {
             CheckAlertsJob.scheduleJob();
-        }
     }
 
     public void scheduleDownloadRepresentativesJobIfNotRunning() {
@@ -84,9 +80,9 @@ public class RiksdagskollenApp extends Application {
         return color;
     }
 
-    public boolean isCheckRepliesScheduled() {
-        System.out.println("Checking if job is scheduled");
-        return !JobManager.instance().getAllJobRequestsForTag(CheckAlertsJob.TAG).isEmpty();
+    public boolean isCheckRepliesScheduledorRunning() {
+        System.out.println("Checking if job is scheduled or running");
+        return !jobIsRunningOrScheduledWithTag(CheckAlertsJob.TAG);
     }
 
     public boolean isDownloadRepsRunningOrScheduled() {
