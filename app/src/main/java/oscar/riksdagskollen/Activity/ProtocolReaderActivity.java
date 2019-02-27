@@ -1,6 +1,7 @@
 package oscar.riksdagskollen.Activity;
 
 import android.content.Intent;
+import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import oscar.riksdagskollen.Manager.AnalyticsManager;
+import oscar.riksdagskollen.Manager.SavedDocumentManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
@@ -37,19 +39,32 @@ public class ProtocolReaderActivity extends AppCompatActivity {
 
     private String url;
     private String title;
+    private String docID;
+    private boolean isSaved = false;
+
+
+    private SavedDocumentManager savedDocumentManager;
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         setTheme(RiksdagskollenApp.getInstance().getThemeManager().getCurrentTheme(true));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_reader);
+        savedDocumentManager = SavedDocumentManager.getInstance();
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.setNavigationBarColor(RiksdagskollenApp.getColorFromAttribute(R.attr.mainBackgroundColor, this));
         }
 
+
         url = getIntent().getStringExtra("url");
         title = getIntent().getStringExtra("title");
+        docID = getIntent().getStringExtra("id");
+
+
         AnalyticsManager.getInstance().setCurrentScreen(this, "Protocol doc: " + title);
 
         final ViewGroup loadingView = findViewById(R.id.loading_view);
@@ -105,7 +120,6 @@ public class ProtocolReaderActivity extends AppCompatActivity {
                 String result = doc.toString().replaceAll("style=\"[A-Öa-ö-_:;\\s0-9.%'#:space:/]+\"","");
                 result = result.replaceAll("&nbsp;","");
                 webView.loadDataWithBaseURL("file:///android_asset/", result, "text/html", "UTF-8", null);
-                System.out.println(result);
             }
 
             @Override
@@ -117,12 +131,18 @@ public class ProtocolReaderActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.motion_activity_menu, menu);
+        isSaved = savedDocumentManager.isSaved(docID);
+        if (isSaved) menu.findItem(R.id.save_motion).setIcon(R.drawable.ic_star_filled);
+        else menu.findItem(R.id.save_motion).setIcon(R.drawable.ic_star_border);
         return super.onCreateOptionsMenu(menu);
     }
 
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
             case android.R.id.home:
                 finish();
                 break;
@@ -130,6 +150,22 @@ public class ProtocolReaderActivity extends AppCompatActivity {
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse("http:" + url));
                 startActivity(i);
+                break;
+            case R.id.save_motion:
+                if (isSaved) {
+                    savedDocumentManager.unSave(docID);
+                    item.setIcon(R.drawable.star_filled_to_border_animated);
+                } else {
+                    item.setIcon(R.drawable.star_border_to_filled_animated);
+                    savedDocumentManager.save(docID);
+                }
+                isSaved = !isSaved;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((Animatable) item.getIcon()).start();
+                    }
+                });
                 break;
         }
         return super.onOptionsItemSelected(item);
