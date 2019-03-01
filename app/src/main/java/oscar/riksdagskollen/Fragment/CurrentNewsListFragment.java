@@ -88,7 +88,7 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
 
         switch (item.getItemId()) {
             case R.id.notification_menu_item:
-                boolean enabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForPage(sectionName, "asd"); //newsList.get(0).getId());
+                boolean enabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForPage(sectionName, newsList.get(0).getId());
                 if (enabled) {
                     item.setIcon(R.drawable.notifications_border_to_filled_animated);
                     Toast.makeText(getContext(), "Du kommer nu få en notis när en ny nyhet publiceras", Toast.LENGTH_LONG).show();
