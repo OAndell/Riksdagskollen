@@ -49,7 +49,7 @@ public class PartyRepresentativeFragment extends RiksdagenAutoLoadingListFragmen
         final RiksdagskollenApp app = RiksdagskollenApp.getInstance();
         if (app.getRepresentativeManager().isRepresentativesDownloaded()) {
             setShowLoadingView(false);
-            ArrayList<Representative> representatives = app.getRepresentativeManager().getRepresentativesForParty(party.getID());
+            ArrayList<Representative> representatives = app.getRepresentativeManager().getCurrentRepresentativesForParty(party.getID());
             representativeList.addAll(representatives);
             getAdapter().addAll(representatives);
             setLoadingMoreItems(false);
@@ -110,7 +110,7 @@ public class PartyRepresentativeFragment extends RiksdagenAutoLoadingListFragmen
     @Override
     public void onRepresentativesDownloaded(ArrayList<Representative> representatives) {
         setShowLoadingView(false);
-        ArrayList<Representative> partyReps = RiksdagskollenApp.getInstance().getRepresentativeManager().getRepresentativesForParty(party.getID());
+        ArrayList<Representative> partyReps = RiksdagskollenApp.getInstance().getRepresentativeManager().getCurrentRepresentativesForParty(party.getID());
         representativeList.addAll(partyReps);
         getAdapter().addAll(partyReps);
         setLoadingMoreItems(false);

@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
-import oscar.riksdagskollen.Util.Job.DownloadRepresentativesJob;
+import oscar.riksdagskollen.Util.Job.DownloadAllRepresentativesJob;
 
 /**
  * Created by gustavaaro on 2018-09-27.
@@ -31,7 +32,8 @@ public class RepresentativeManager {
         representatives = new HashMap<>();
         listenerList = new ArrayList<>();
         currentRepresentatives = new ArrayList<>();
-        DownloadRepresentativesJob.scheduleJob();
+        if (!RiksdagskollenApp.getInstance().isDataSaveModeActive())
+            DownloadAllRepresentativesJob.scheduleJob();
 
         for (String partyId : partyIds) {
             representatives.put(partyId, new HashMap<String, Representative>());
@@ -83,6 +85,13 @@ public class RepresentativeManager {
 
     public ArrayList<Representative> getRepresentativesForParty(String party) {
         return new ArrayList<>(representatives.get(party.toLowerCase()).values());
+    }
+
+    public ArrayList<Representative> getCurrentRepresentativesForParty(String party) {
+        ArrayList<Representative> currentRepCopy = (ArrayList<Representative>) currentRepresentatives.clone();
+        currentRepCopy.retainAll(representatives.get(party.toLowerCase()).values());
+        System.out.println("Intersection: " + currentRepCopy.size());
+        return currentRepCopy;
     }
 
     private void notifyDownloaded() {

@@ -431,9 +431,9 @@ public class RiksdagenAPIManager {
         });
     }
 
-    public void getRepresentativesInParty(String party, final RepresentativeListCallback callback) {
+    public void getCurrentRepresentativesInParty(String party, final RepresentativeListCallback callback) {
 
-        ArrayList<Representative> repsForParty = RiksdagskollenApp.getInstance().getRepresentativeManager().getRepresentativesForParty(party);
+        ArrayList<Representative> repsForParty = RiksdagskollenApp.getInstance().getRepresentativeManager().getCurrentRepresentativesForParty(party);
         if (repsForParty != null) {
             callback.onPersonListFetched(repsForParty);
         } else {
