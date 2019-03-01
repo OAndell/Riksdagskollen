@@ -76,7 +76,7 @@ public class AlertManager {
             partyAlertPreferences.edit().putString(partyId, latestId).apply();
             partyAlerts.put(partyId, latestId);
             // Start tracking job if not already started
-            RiksdagskollenApp.getInstance().scheduleCheckAlertsJob();
+            RiksdagskollenApp.getInstance().scheduleCheckAlertsJobIfNotRunningOrScheduled();
         } else {
             partyAlertPreferences.edit().remove(partyId).apply();
             partyAlerts.remove(partyId);
@@ -100,7 +100,7 @@ public class AlertManager {
             sectionAlertPreferences.edit().putString(section, idLatest).apply();
             sectionAlerts.put(section, idLatest);
             // Start tracking job if not already started
-            RiksdagskollenApp.getInstance().scheduleCheckAlertsJob();
+            RiksdagskollenApp.getInstance().scheduleCheckAlertsJobIfNotRunningOrScheduled();
         } else {
             sectionAlertPreferences.edit().remove(section).apply();
             sectionAlerts.remove(section);
@@ -125,7 +125,7 @@ public class AlertManager {
             docAlertsPreferences.edit().putBoolean(document.getId(), true).apply();
             replyAlerts.add(document.getId());
             // Start tracking job if not already started
-            RiksdagskollenApp.getInstance().scheduleCheckAlertsJob();
+            RiksdagskollenApp.getInstance().scheduleCheckAlertsJobIfNotRunningOrScheduled();
         } else {
             docAlertsPreferences.edit().remove(document.getId()).apply();
             replyAlerts.remove(document.getId());

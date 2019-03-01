@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
 
@@ -44,6 +45,7 @@ import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.Helper.AppBarStateChangeListener;
+import oscar.riksdagskollen.Util.Helper.CustomTabs;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -155,6 +157,23 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case VoteListFragment.sectionName:
                     onNavigationItemSelected(navigationView.getMenu().findItem(R.id.votes_nav));
+                    break;
+                case CurrentNewsListFragment.sectionName:
+                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.news_nav));
+                    String url = incoming.getStringExtra("news_item_url");
+                    String linkListaUrl = incoming.getStringExtra("news_item_linklista_url");
+                    try {
+                        if (url.startsWith("http")) {
+                            System.out.println("Opening url: " + url);
+                            CustomTabs.openTab(this, url);
+                        } else {
+                            System.out.println("Opening url: " + url);
+                            CustomTabs.openTab(this, "http://riksdagen.se" + linkListaUrl);
+                        }
+                    } catch (NullPointerException e) { //Some news does not contain the LinkLista object
+                        Toast.makeText(this, "Kunde inte öppna nyhet", Toast.LENGTH_LONG).show();
+                    }
+
                     break;
                 default:
                     break;

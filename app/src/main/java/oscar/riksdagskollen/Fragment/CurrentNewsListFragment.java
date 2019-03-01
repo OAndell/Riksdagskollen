@@ -1,11 +1,16 @@
 package oscar.riksdagskollen.Fragment;
 
+import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 
@@ -28,11 +33,15 @@ import oscar.riksdagskollen.Util.RiksdagenCallback.CurrentNewsCallback;
 public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
     private final List<CurrentNews> newsList = new ArrayList<>();
     private CurrentNewsListAdapter adapter;
+    public static final String sectionName = "news";
+    private MenuItem notificationItem;
+
 
     public static CurrentNewsListFragment newInstance(){
         CurrentNewsListFragment newInstance = new CurrentNewsListFragment();
         return newInstance;
     }
+
 
     @Nullable
     @Override
@@ -51,6 +60,8 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
         adapter = new CurrentNewsListAdapter(newsList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {
@@ -68,6 +79,44 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
                 }
             }
         });
+
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.notification_menu_item:
+                boolean enabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForPage(sectionName, "asd"); //newsList.get(0).getId());
+                if (enabled) {
+                    item.setIcon(R.drawable.notifications_border_to_filled_animated);
+                    Toast.makeText(getContext(), "Du kommer nu få en notis när en ny nyhet publiceras", Toast.LENGTH_LONG).show();
+                } else {
+                    item.setIcon(R.drawable.notifications_filled_to_border_animated);
+                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((Animatable) item.getIcon()).start();
+                    }
+                });
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.news_menu, menu);
+        notificationItem = menu.findItem(R.id.notification_menu_item);
+        if (RiksdagskollenApp.getInstance().getAlertManager().isAlertEnabledForSection(sectionName)) {
+            notificationItem.setIcon(R.drawable.ic_notification_enabled);
+        }
+        if (newsList.size() > 0) {
+            notificationItem.setVisible(true);
+        }
+        super.onCreateOptionsMenu(menu, inflater);
 
     }
 

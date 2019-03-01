@@ -57,15 +57,21 @@ public class RiksdagskollenApp extends Application {
         themeManager = new ThemeManager(this);
         alertManager = new AlertManager(this);
         JobManager.create(this).addJobCreator(new AlertJobCreator());
-        scheduleCheckAlertsJob();
+        scheduleAndCheckAlertsJob();
 
         representativeManager = new RepresentativeManager(this);
         savedDocumentManager = new SavedDocumentManager(this);
 
     }
 
-    public void scheduleCheckAlertsJob() {
+    public void scheduleAndCheckAlertsJob() {
+        CheckAlertsJob.scheduleJob();
+    }
+
+    public void scheduleCheckAlertsJobIfNotRunningOrScheduled() {
+        if (!jobIsRunningOrScheduledWithTag(CheckAlertsJob.TAG)) {
             CheckAlertsJob.scheduleJob();
+        }
     }
 
     public void scheduleDownloadRepresentativesJobIfNotRunning() {

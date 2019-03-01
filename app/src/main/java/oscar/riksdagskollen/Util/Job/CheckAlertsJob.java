@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
@@ -23,12 +24,15 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import oscar.riksdagskollen.Activity.MainActivity;
+import oscar.riksdagskollen.Fragment.CurrentNewsListFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
 import oscar.riksdagskollen.Manager.AlertManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
+import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNews;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
+import oscar.riksdagskollen.Util.RiksdagenCallback.CurrentNewsCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.VoteCallback;
 
@@ -67,7 +71,7 @@ public class CheckAlertsJob extends Job {
         Log.d(TAG, "Scheduled alert with update frequency " + updateFreq + " and network type " + networkType);
 
         new JobRequest.Builder(CheckAlertsJob.TAG)
-                .setPeriodic(TimeUnit.MINUTES.toMillis(updateFreq), TimeUnit.MINUTES.toMillis(30))
+                .setPeriodic(TimeUnit.MINUTES.toMillis(updateFreq))
                 .setRequiredNetworkType(networkType)
                 .setRequirementsEnforced(true)
                 .setUpdateCurrent(true)
@@ -119,7 +123,7 @@ public class CheckAlertsJob extends Job {
             @Override
             public void onDocumentsFetched(List<PartyDocument> documents) {
                 if (!documents.get(0).getId().equals(latestDocId)) {
-                    showMonitorNotification(partyId, true);
+                    showMonitorNotification(partyId, true, null);
                     RiksdagskollenApp.getInstance()
                             .getAlertManager()
                             .setAlertEnabledForPartyDocuments(partyId, documents.get(0).getId(), true);
@@ -143,14 +147,12 @@ public class CheckAlertsJob extends Job {
                     @Override
                     public void onVotesFetched(List<Vote> votes) {
                         if (!votes.get(0).getId().equals(latestDocID)) {
-                            showMonitorNotification(section, false);
+                            showMonitorNotification(section, false, null);
                             RiksdagskollenApp.getInstance()
                                     .getAlertManager()
                                     .setAlertEnabledForSection(section, votes.get(0).getId(), true);
-                            countDownLatch.countDown();
-                        } else {
-                            countDownLatch.countDown();
                         }
+                        countDownLatch.countDown();
                     }
 
                     @Override
@@ -159,6 +161,26 @@ public class CheckAlertsJob extends Job {
                     }
                 }, 1);
                 break;
+            case CurrentNewsListFragment.sectionName:
+                RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getCurrentNews(new CurrentNewsCallback() {
+                    @Override
+                    public void onNewsFetched(List<CurrentNews> currentNews) {
+                        if (!currentNews.get(0).getId().equals(latestDocID)) {
+                            showMonitorNotification(section, false, currentNews.get(0));
+                            RiksdagskollenApp.getInstance()
+                                    .getAlertManager()
+                                    .setAlertEnabledForSection(section, currentNews.get(0).getId(), true);
+                        }
+                        countDownLatch.countDown();
+                    }
+
+                    @Override
+                    public void onFail(VolleyError error) {
+                        countDownLatch.countDown();
+                    }
+                }, 1);
+                break;
+
             default:
                 countDownLatch.countDown();
         }
@@ -233,10 +255,14 @@ public class CheckAlertsJob extends Job {
         notificationManager.notify(Integer.valueOf(document.getBeteckning()), mBuilder.build());
     }
 
-    private void showMonitorNotification(String monitorSection, boolean isParty) {
+    private void showMonitorNotification(String monitorSection, boolean isParty, @Nullable Object document) {
 
         Intent intent = new Intent(getContext(), MainActivity.class);
         intent.putExtra("section", monitorSection);
+        if (monitorSection.equals(CurrentNewsListFragment.sectionName) && document != null) {
+            intent.putExtra("news_item_url", ((CurrentNews) document).getUrl());
+            intent.putExtra("news_item_linklista_url", ((CurrentNews) document).getLinklista().getLink().getUrl());
+        }
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), monitorSection.hashCode(), intent, 0);
 
@@ -259,6 +285,10 @@ public class CheckAlertsJob extends Job {
             switch (monitorSection) {
                 case VoteListFragment.sectionName:
                     message = "Ny votering!";
+                    break;
+                case CurrentNewsListFragment.sectionName:
+                    if (document != null) message = ((CurrentNews) document).getTitel();
+                    else message = "Riksdagen har publicerat en ny nyhet";
                     break;
                 default:
                     message = "Nytt dokument!";
@@ -302,6 +332,6 @@ public class CheckAlertsJob extends Job {
             System.out.println("Failed to write " + e.getMessage());
         }
 
-    } */
+    }*/
 
 }

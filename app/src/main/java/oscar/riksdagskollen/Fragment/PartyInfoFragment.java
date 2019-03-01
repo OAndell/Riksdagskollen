@@ -115,6 +115,8 @@ public class PartyInfoFragment extends Fragment {
             public void onPersonFetched(final ArrayList<Representative> leaders) {
                 for (int i =0; i < leaders.size(); i++) {
                     final Representative tmpRep = leaders.get(i);
+                    if (getActivity() == null) break;
+
                     final View portraitView = LayoutInflater.from(getActivity()).inflate(R.layout.intressent_layout_big, null);
                     final ImageView portrait = portraitView.findViewById(R.id.intressent_portait);
 

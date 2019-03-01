@@ -47,7 +47,7 @@ public class PreferencesActivity extends AppCompatActivity {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
             if (s.equals("update_freq") || s.equals("only_wifi")) {
-                RiksdagskollenApp.getInstance().scheduleCheckAlertsJob();
+                RiksdagskollenApp.getInstance().scheduleAndCheckAlertsJob();
             }
         }
     }
