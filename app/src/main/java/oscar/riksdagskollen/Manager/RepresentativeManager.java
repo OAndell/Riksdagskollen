@@ -90,7 +90,6 @@ public class RepresentativeManager {
     public ArrayList<Representative> getCurrentRepresentativesForParty(String party) {
         ArrayList<Representative> currentRepCopy = (ArrayList<Representative>) currentRepresentatives.clone();
         currentRepCopy.retainAll(representatives.get(party.toLowerCase()).values());
-        System.out.println("Intersection: " + currentRepCopy.size());
         return currentRepCopy;
     }
 

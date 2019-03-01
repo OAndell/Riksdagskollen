@@ -226,6 +226,21 @@ public class Representative implements Parcelable {
         return false;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Representative that = (Representative) o;
+
+        return intressent_id.equals(that.intressent_id);
+    }
+
+    @Override
+    public int hashCode() {
+        return intressent_id.hashCode();
+    }
+
     public String getDescriptiveRole() {
         if (roleIsVIP()) return status;
         if (getCurrentPartyRole() != null) return getCurrentPartyRole();

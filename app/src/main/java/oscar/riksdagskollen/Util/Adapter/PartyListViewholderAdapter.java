@@ -226,19 +226,20 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
                 }
             });
 
-
             ArrayList<Intressent> i = new ArrayList<>();
             DokIntressent dokIntressent = item.getDokintressent();
             if (dokIntressent != null) i = item.getDokintressent().getIntressenter();
-
-
 
             int senderCount = 0;
             for (Intressent intressent : i) {
                 if (intressent.getRoll().equals("undertecknare")) senderCount++;
                 if (senderCount > 1) break;
             }
-            if (senderCount != 1) authorView.setVisibility(View.GONE);
+
+            if (senderCount != 1 || RiksdagskollenApp.getInstance().isDataSaveModeActive()) {
+                authorView.setVisibility(View.GONE);
+            }
+
             else {
                 authorView.setVisibility(View.VISIBLE);
                 imageUrlRequest = RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getRepresentative(i.get(0).getIntressent_id(), new RepresentativeCallback() {
@@ -250,8 +251,6 @@ public class PartyListViewholderAdapter extends RiksdagenViewHolderAdapter {
                                     .load(representative.getBild_url_80())
                                     .into(authorView);
                         }
-
-                        //authorView.setImageUrl(representative.getBild_url_80(), RiksdagskollenApp.getInstance().getRequestManager().getmImageLoader());
                     }
 
                     @Override

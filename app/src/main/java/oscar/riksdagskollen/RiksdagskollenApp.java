@@ -2,7 +2,9 @@ package oscar.riksdagskollen;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
 import android.util.TypedValue;
 
@@ -20,7 +22,7 @@ import oscar.riksdagskollen.Manager.SavedDocumentManager;
 import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.Util.Job.AlertJobCreator;
 import oscar.riksdagskollen.Util.Job.CheckAlertsJob;
-import oscar.riksdagskollen.Util.Job.DownloadRepresentativesJob;
+import oscar.riksdagskollen.Util.Job.DownloadAllRepresentativesJob;
 
 
 /**
@@ -68,7 +70,7 @@ public class RiksdagskollenApp extends Application {
 
     public void scheduleDownloadRepresentativesJobIfNotRunning() {
         if (!isDownloadRepsRunningOrScheduled()) {
-            DownloadRepresentativesJob.scheduleJob();
+            DownloadAllRepresentativesJob.scheduleJob();
         }
     }
 
@@ -86,7 +88,12 @@ public class RiksdagskollenApp extends Application {
     }
 
     public boolean isDownloadRepsRunningOrScheduled() {
-        return jobIsRunningOrScheduledWithTag(DownloadRepresentativesJob.TAG);
+        return jobIsRunningOrScheduledWithTag(DownloadAllRepresentativesJob.TAG);
+    }
+
+    public boolean isDataSaveModeActive() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        return preferences.getBoolean("data_save_mode", false);
     }
 
     public AnalyticsManager getAnalyticsManager() {

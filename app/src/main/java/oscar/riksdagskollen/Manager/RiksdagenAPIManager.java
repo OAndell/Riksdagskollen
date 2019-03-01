@@ -434,7 +434,7 @@ public class RiksdagenAPIManager {
     public void getCurrentRepresentativesInParty(String party, final RepresentativeListCallback callback) {
 
         ArrayList<Representative> repsForParty = RiksdagskollenApp.getInstance().getRepresentativeManager().getCurrentRepresentativesForParty(party);
-        if (repsForParty != null) {
+        if (repsForParty != null && !repsForParty.isEmpty()) {
             callback.onPersonListFetched(repsForParty);
         } else {
             String subUrl = "/personlista/?parti=" + party + "&utformat=json";

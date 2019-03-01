@@ -5,10 +5,10 @@
     <PreferenceCategory android:title="Data-använding">
 
         <SwitchPreference
-            android:title="Datasparläge"
+            android:title="Datasparläge (experimentellt)"
             android:defaultValue="false"
             android:key="data_save_mode"
-            android:summary="Aktivera för att begränsa mängden data som appen använder." />
+            android:summary="Aktivera datasparläget för att begränsa mängden data som appen använder genom att minimera resurser som hämtas. Denna funktion är fortfarande under utveckling och kan därför framkalla oväntat beteende i appen." />
 
         <ListPreference
             android:title="Uppdateringsfrekvens"

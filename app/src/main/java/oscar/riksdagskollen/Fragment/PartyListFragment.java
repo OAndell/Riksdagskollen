@@ -61,6 +61,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
     @Override
     public void onResume() {
         super.onResume();
+        adapter.notifyDataSetChanged();
         preferences.registerOnSharedPreferenceChangeListener(this);
         showNoContentWarning(getFilter().isEmpty());
     }

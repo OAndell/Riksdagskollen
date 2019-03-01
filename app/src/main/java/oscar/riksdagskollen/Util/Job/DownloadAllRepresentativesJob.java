@@ -17,7 +17,7 @@ import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeListCallback;
  * Created by gustavaaro on 2018-09-27.
  */
 
-public class DownloadRepresentativesJob extends Job {
+public class DownloadAllRepresentativesJob extends Job {
 
     public static final String TAG = "job_download_representatives";
 
@@ -52,7 +52,7 @@ public class DownloadRepresentativesJob extends Job {
 
 
     public static int scheduleJob() {
-        return new JobRequest.Builder(DownloadRepresentativesJob.TAG)
+        return new JobRequest.Builder(DownloadAllRepresentativesJob.TAG)
                 .startNow()
                 .setUpdateCurrent(true)
                 .build()

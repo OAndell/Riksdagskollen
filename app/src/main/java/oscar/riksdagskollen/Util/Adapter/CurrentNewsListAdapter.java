@@ -171,14 +171,13 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
             imageText.setText(item.getImg_fotograf());
 
 
-            if(item.getImg_url() != null){
+            if (item.getImg_url() != null && !RiksdagskollenApp.getInstance().isDataSaveModeActive()) {
                 image.setVisibility(View.VISIBLE);
                 //Fix better default image... maybe
                 image.setDefaultImageResId(R.drawable.ic_placeholder_image_web);
                 image.setImageUrl("http://riksdagen.se" + item.getImg_url(),
                         RiksdagskollenApp.getInstance().getRequestManager().getmImageLoader());
-            }
-            else {
+            } else {
                 image.setVisibility(View.GONE);
             }
 

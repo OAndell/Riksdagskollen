@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.VolleyError;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,7 @@ import oscar.riksdagskollen.Util.Adapter.RepresentativeAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
+import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeListCallback;
 
 
 /**
@@ -53,9 +56,29 @@ public class PartyRepresentativeFragment extends RiksdagenAutoLoadingListFragmen
             representativeList.addAll(representatives);
             getAdapter().addAll(representatives);
             setLoadingMoreItems(false);
-        } else {
+        } else if (!app.isDataSaveModeActive()) {
+            // if data save mode is not active, download all current representatives for all parties
             app.scheduleDownloadRepresentativesJobIfNotRunning();
             app.getRepresentativeManager().addDownloadListener(this);
+        } else {
+            // only download the representatives for this party
+            app.getRiksdagenAPIManager().getCurrentRepresentativesInParty(party.getID(), new RepresentativeListCallback() {
+                @Override
+                public void onPersonListFetched(List<Representative> representatives) {
+                    representativeList.addAll(representatives);
+                    getAdapter().addAll(representatives);
+                    setLoadingMoreItems(false);
+                    setShowLoadingView(false);
+                    showNoConnectionWarning(false);
+                }
+
+                @Override
+                public void onFail(VolleyError error) {
+                    setLoadingMoreItems(false);
+                    setShowLoadingView(false);
+                    showNoConnectionWarning(true);
+                }
+            });
         }
 
         super.onViewCreated(view, savedInstanceState);
@@ -93,12 +116,36 @@ public class PartyRepresentativeFragment extends RiksdagenAutoLoadingListFragmen
     @Override
     protected void refresh() {
         showNoConnectionWarning(false);
-        if (adapter.getItemCount() == 0 && !RiksdagskollenApp.getInstance().isDownloadRepsRunningOrScheduled()) {
-            RiksdagskollenApp.getInstance().scheduleDownloadRepresentativesJobIfNotRunning();
-        }
-        if (!RiksdagskollenApp.getInstance().isDownloadRepsRunningOrScheduled()) {
+        setShowLoadingView(false);
+        if (!RiksdagskollenApp.getInstance().isDataSaveModeActive()) {
+            if (adapter.getItemCount() == 0 && !RiksdagskollenApp.getInstance().isDownloadRepsRunningOrScheduled()) {
+                RiksdagskollenApp.getInstance().scheduleDownloadRepresentativesJobIfNotRunning();
+            }
+            if (!RiksdagskollenApp.getInstance().isDownloadRepsRunningOrScheduled()) {
+                setLoadingMoreItems(false);
+            }
+        } else if (adapter.getItemCount() == 0) {
+            RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getCurrentRepresentativesInParty(party.getID(), new RepresentativeListCallback() {
+                @Override
+                public void onPersonListFetched(List<Representative> representatives) {
+                    representativeList.addAll(representatives);
+                    getAdapter().addAll(representatives);
+                    setLoadingMoreItems(false);
+                    setShowLoadingView(false);
+                    showNoConnectionWarning(false);
+                }
+
+                @Override
+                public void onFail(VolleyError error) {
+                    setLoadingMoreItems(false);
+                    setShowLoadingView(false);
+                    showNoConnectionWarning(true);
+                }
+            });
+        } else {
             setLoadingMoreItems(false);
         }
+
     }
 
     @Override
@@ -114,6 +161,7 @@ public class PartyRepresentativeFragment extends RiksdagenAutoLoadingListFragmen
         representativeList.addAll(partyReps);
         getAdapter().addAll(partyReps);
         setLoadingMoreItems(false);
+        showNoConnectionWarning(false);
     }
 
     @Override

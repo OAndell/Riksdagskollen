@@ -64,10 +64,10 @@ public class CheckAlertsJob extends Job {
         int updateFreq = Integer.valueOf(sharedPreferences.getString("update_freq", "540"));
         JobRequest.NetworkType networkType = sharedPreferences.getBoolean("only_wifi", false) ? JobRequest.NetworkType.UNMETERED : JobRequest.NetworkType.CONNECTED;
 
-        Log.d("JOB", "Scheduled alert with update frequency " + updateFreq + " and network type " + networkType);
+        Log.d(TAG, "Scheduled alert with update frequency " + updateFreq + " and network type " + networkType);
 
         new JobRequest.Builder(CheckAlertsJob.TAG)
-                .setPeriodic(TimeUnit.MINUTES.toMillis(updateFreq), TimeUnit.MINUTES.toMillis(60))
+                .setPeriodic(TimeUnit.MINUTES.toMillis(updateFreq), TimeUnit.MINUTES.toMillis(30))
                 .setRequiredNetworkType(networkType)
                 .setRequirementsEnforced(true)
                 .setUpdateCurrent(true)
@@ -80,14 +80,15 @@ public class CheckAlertsJob extends Job {
     protected Result onRunJob(Params params) {
         // Cancel job if no alerts are active
         AlertManager manager = AlertManager.getInstance();
-
         int alerts = manager.getAlertCount();
         Log.d(TAG, "onRunJob: alert count: " + alerts);
+        //writeToFile("Alert check job run at: " + Calendar.getInstance().getTime().toString() + ". \n");
 
         if (alerts == 0) {
             cancel();
             return Result.SUCCESS;
         }
+
         countDownLatch = new CountDownLatch(alerts);
 
         for (String dokId : manager.getReplyAlerts()) {
@@ -276,5 +277,31 @@ public class CheckAlertsJob extends Job {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
         notificationManager.notify(message.hashCode(), mBuilder.build());
     }
+
+    //Debug for check alerts job
+    /*
+    private void writeToFile(String data) {
+
+        try {
+            File debugFile = new File(Environment.getExternalStorageDirectory() + "/notification_debug.txt");
+            if (!debugFile.exists()) {
+                try {
+                    debugFile.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            FileOutputStream fOut = new FileOutputStream(debugFile, true);
+            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+            myOutWriter.append(data);
+            myOutWriter.close();
+            fOut.close();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Failed to write " + e.getMessage());
+        }
+
+    } */
 
 }
