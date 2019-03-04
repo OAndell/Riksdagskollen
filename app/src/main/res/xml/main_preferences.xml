@@ -14,7 +14,7 @@
             android:title="Uppdateringsfrekvens"
             android:summary="Välj hur ofta appen ska leta leta efter nya dokument i bakgrunden för sidor du bevakar. Observera att en hög uppdateringsfrekvens kan leda till att appen förbrukar mer data."
             android:key="update_freq"
-            android:defaultValue="540"
+            android:defaultValue="480"
             android:entries="@array/update_intervals_entries"
             android:entryValues="@array/update_intervals_values" />
 

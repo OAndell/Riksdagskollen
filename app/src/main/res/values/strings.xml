@@ -65,8 +65,10 @@
     <string-array name="update_intervals_entries">
         <item>30 minuter</item>
         <item>1 timme</item>
+        <item>2 timmar</item>
         <item>3 timmar</item>
-        <item>9 timmar</item>
+        <item>6 timmar</item>
+        <item>8 timmar</item>
         <item>12 timmar</item>
         <item>24 timmar</item>
     </string-array>
@@ -74,8 +76,10 @@
     <string-array name="update_intervals_values">
         <item>30</item>
         <item>60</item>
+        <item>120</item>
         <item>180</item>
-        <item>540</item>
+        <item>360</item>
+        <item>480</item>
         <item>720</item>
         <item>1440</item>
     </string-array>
