@@ -215,7 +215,8 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
     private List<Representative> filter(List<Representative> representatives) {
         final List<Representative> filteredRepresentativeList = new ArrayList<>();
         for (Representative representative : representatives) {
-            if (getFilter().get(representative.getParti().toLowerCase())) {
+            if (getFilter().containsKey(representative.getParti().toLowerCase()) &&
+                    getFilter().get(representative.getParti().toLowerCase())) {
                 filteredRepresentativeList.add(representative);
             }
         }

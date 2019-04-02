@@ -269,6 +269,11 @@ public class Representative implements Parcelable {
     }
 
     @Override
+    public String toString() {
+        return tilltalsnamn + " " + efternamn + ". Parti: " + parti + ". Ålder: " + getAge();
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }

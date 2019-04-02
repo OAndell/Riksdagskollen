@@ -64,6 +64,13 @@ public class CurrentParties {
             RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.l_ideology),
             "https://sv.wikipedia.org/wiki/Liberalerna");
 
+    private static final Party noParty = new Party(
+            RiksdagskollenApp.getInstance().getApplicationContext().getString(R.string.no_party),
+            "-", 0,
+            "",
+            "",
+            "");
+
     private static final ArrayList<Party> parties = new ArrayList<Party>() {
         {
             add(M);
@@ -74,6 +81,7 @@ public class CurrentParties {
             add(MP);
             add(V);
             add(S);
+            add(noParty);
         }
     };
 
@@ -113,6 +121,10 @@ public class CurrentParties {
         return L;
     }
 
+    public static Party getNoParty() {
+        return noParty;
+    }
+
     public static Party getParty(String id) {
         switch (id.toLowerCase()) {
             case "m":
@@ -131,6 +143,8 @@ public class CurrentParties {
                 return V;
             case "c":
                 return C;
+            case "-":
+                return noParty;
             default:
                 return null;
         }
