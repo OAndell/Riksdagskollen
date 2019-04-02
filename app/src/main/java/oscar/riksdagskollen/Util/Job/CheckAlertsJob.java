@@ -165,12 +165,19 @@ public class CheckAlertsJob extends Job {
                 RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getCurrentNews(new CurrentNewsCallback() {
                     @Override
                     public void onNewsFetched(List<CurrentNews> currentNews) {
-                        if (!currentNews.get(0).getId().equals(latestDocID)) {
-                            showMonitorNotification(section, false, currentNews.get(0));
-                            RiksdagskollenApp.getInstance()
-                                    .getAlertManager()
-                                    .setAlertEnabledForSection(section, currentNews.get(0).getId(), true);
+
+                        // Show max 5 notifications at the same time
+                        for (int i = 4; i >= 0; i--) {
+                            if (!currentNews.get(i).getId().equals(latestDocID)) {
+                                showMonitorNotification(section, false, currentNews.get(i));
+                                RiksdagskollenApp.getInstance()
+                                        .getAlertManager()
+                                        .setAlertEnabledForSection(section, currentNews.get(i).getId(), true);
+                            } else {
+                                break;
+                            }
                         }
+
                         countDownLatch.countDown();
                     }
 
@@ -226,7 +233,8 @@ public class CheckAlertsJob extends Job {
 
         Intent intent = new Intent(getContext(), MainActivity.class);
         intent.putExtra("document", document);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setAction("dummyAction");
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, 0);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -235,8 +243,6 @@ public class CheckAlertsJob extends Job {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(REPLIES_CHANNEL, name, importance);
             channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
             NotificationManager notificationManager = getContext().getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
@@ -259,12 +265,20 @@ public class CheckAlertsJob extends Job {
 
         Intent intent = new Intent(getContext(), MainActivity.class);
         intent.putExtra("section", monitorSection);
+        intent.setAction("dummyAction");
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         if (monitorSection.equals(CurrentNewsListFragment.sectionName) && document != null) {
             intent.putExtra("news_item_url", ((CurrentNews) document).getUrl());
             intent.putExtra("news_item_linklista_url", ((CurrentNews) document).getLinklista().getLink().getUrl());
         }
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), monitorSection.hashCode(), intent, 0);
+
+        // Need unique resultcode to differentiate multiple pending intents
+        int resultCode = monitorSection.hashCode();
+        if (document != null) {
+            resultCode = ((CurrentNews) document).getTitel().hashCode();
+        }
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), resultCode, intent, 0);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Notifikationer för bevakningar";
@@ -272,8 +286,6 @@ public class CheckAlertsJob extends Job {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(REPLIES_CHANNEL, name, importance);
             channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
             NotificationManager notificationManager = getContext().getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
@@ -298,6 +310,7 @@ public class CheckAlertsJob extends Job {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getContext(), REPLIES_CHANNEL)
                 .setSmallIcon(R.drawable.riksdagskollen_logo_small)
                 .setContentTitle(message)
+                .setShowWhen(false)
                 .setContentText("Klicka här för att läsa")
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText("Klicka här för att läsa"))

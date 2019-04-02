@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
@@ -113,8 +114,8 @@ public class MainActivity extends AppCompatActivity
             // Mark News-fragment as selected at startup
             onNavigationItemSelected(navigationView.getMenu().getItem(0).getSubMenu().getItem(0));
             navigationView.getMenu().getItem(0).getSubMenu().getItem(0).setChecked(true);
-            // Apply theme
         } else {
+            // Apply theme
             emptyToolbar = false;
             toggle.setDrawerIndicatorEnabled(true);
             invalidateOptionsMenu();
@@ -122,13 +123,24 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleOpenWithNotification(intent);
+    }
 
-    private void handleOpenWithNotification() {
-        Intent incoming = getIntent();
+    private void handleOpenWithNotification(@Nullable Intent intent) {
+        Intent incoming;
+        if (intent == null) {
+            incoming = getIntent();
+        } else {
+            incoming = intent;
+        }
+
         if (incoming.hasExtra("document")) {
-            Intent intent = new Intent(this, MotionActivity.class);
-            intent.putExtra("document", incoming.getParcelableExtra("document"));
-            startActivity(intent);
+            Intent docIntent = new Intent(this, MotionActivity.class);
+            docIntent.putExtra("document", incoming.getParcelableExtra("document"));
+            startActivity(docIntent);
         } else if (incoming.hasExtra("section")) {
             switch (incoming.getStringExtra("section")) {
                 case "m":
@@ -159,21 +171,19 @@ public class MainActivity extends AppCompatActivity
                     onNavigationItemSelected(navigationView.getMenu().findItem(R.id.votes_nav));
                     break;
                 case CurrentNewsListFragment.sectionName:
+
                     onNavigationItemSelected(navigationView.getMenu().findItem(R.id.news_nav));
                     String url = incoming.getStringExtra("news_item_url");
                     String linkListaUrl = incoming.getStringExtra("news_item_linklista_url");
                     try {
                         if (url.startsWith("http")) {
-                            System.out.println("Opening url: " + url);
                             CustomTabs.openTab(this, url);
                         } else {
-                            System.out.println("Opening url: " + url);
                             CustomTabs.openTab(this, "http://riksdagen.se" + linkListaUrl);
                         }
                     } catch (NullPointerException e) { //Some news does not contain the LinkLista object
                         Toast.makeText(this, "Kunde inte öppna nyhet", Toast.LENGTH_LONG).show();
                     }
-
                     break;
                 default:
                     break;
@@ -294,7 +304,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void run() {
                 appBarLayout.setExpanded(false, true);
-                handleOpenWithNotification();
+                handleOpenWithNotification(null);
             }
         }, 200);
     }
@@ -317,7 +327,7 @@ public class MainActivity extends AppCompatActivity
         // Ugly hack to prevent News menu item to be checked forever
         navigationView.getMenu().getItem(0).getSubMenu().getItem(0).setChecked(false);
 
-        switch (id){
+        switch (id) {
             case R.id.news_nav:
                 analyticsManager.setCurrentScreen(this, "news");
                 if (currentNewsListFragment == null || currentNewsListFragment.get() == null)
