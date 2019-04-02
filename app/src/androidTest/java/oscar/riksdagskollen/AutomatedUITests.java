@@ -40,7 +40,7 @@ public class AutomatedUITests {
         System.out.println("Testing news");
         navigateTo(R.id.news_nav);
         scrollView(R.id.recycler_view);
-        //pressItemsInRecyclerView(R.id.recycler_view, 25);
+        pressItemsInRecyclerView(R.id.recycler_view, 25);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class AutomatedUITests {
         System.out.println("Testing votes");
         navigateTo(R.id.votes_nav);
         scrollView(R.id.recycler_view);
-        //pressItemsInRecyclerView(R.id.recycler_view, 60);
+        pressItemsInRecyclerView(R.id.recycler_view, 60);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class AutomatedUITests {
         System.out.println("Testing decisions");
         navigateTo(R.id.dec_nav);
         scrollView(R.id.recycler_view);
-        //expandCollapseItemsInRecyclerView(R.id.recycler_view, 40);
+        expandCollapseItemsInRecyclerView(R.id.recycler_view, 40);
     }
 
     @Test
@@ -64,7 +64,7 @@ public class AutomatedUITests {
         System.out.println("Testing reps");
         navigateTo(R.id.rep_nav);
         scrollView(R.id.recycler_view);
-        //pressItemsInRecyclerView(R.id.recycler_view, 60);
+        pressItemsInRecyclerView(R.id.recycler_view, 60);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class AutomatedUITests {
         System.out.println("Testing protocols");
         navigateTo(R.id.prot_nav);
         scrollView(R.id.recycler_view);
-        //pressItemsInRecyclerView(R.id.recycler_view, 20);
+        pressItemsInRecyclerView(R.id.recycler_view, 20);
     }
 
     @Test
@@ -80,7 +80,7 @@ public class AutomatedUITests {
         System.out.println("Testing S");
         navigateTo(R.id.s_nav);
         scrollView(R.id.recycler_view);
-        //pressItemsInRecyclerView(R.id.recycler_view, 20);
+        pressItemsInRecyclerView(R.id.recycler_view, 20);
     }
 
     @Test
@@ -88,7 +88,7 @@ public class AutomatedUITests {
         System.out.println("Testing m");
         navigateTo(R.id.m_nav);
         scrollView(R.id.recycler_view);
-        //pressItemsInRecyclerView(R.id.recycler_view, 20);
+        pressItemsInRecyclerView(R.id.recycler_view, 20);
     }
 
     @Test
@@ -96,7 +96,7 @@ public class AutomatedUITests {
         System.out.println("Testing sd");
         navigateTo(R.id.sd_nav);
         scrollView(R.id.recycler_view);
-        //pressItemsInRecyclerView(R.id.recycler_view, 20);
+        pressItemsInRecyclerView(R.id.recycler_view, 20);
     }
 
     @Test
@@ -104,7 +104,7 @@ public class AutomatedUITests {
         System.out.println("Testing C");
         navigateTo(R.id.c_nav);
         scrollView(R.id.recycler_view);
-        //pressItemsInRecyclerView(R.id.recycler_view, 20);
+        pressItemsInRecyclerView(R.id.recycler_view, 20);
     }
 
     @Test
@@ -112,7 +112,7 @@ public class AutomatedUITests {
         System.out.println("Testing V");
         navigateTo(R.id.v_nav);
         scrollView(R.id.recycler_view);
-        //pressItemsInRecyclerView(R.id.recycler_view, 20);
+        pressItemsInRecyclerView(R.id.recycler_view, 20);
     }
 
     @Test
@@ -120,7 +120,7 @@ public class AutomatedUITests {
         System.out.println("Testing kd");
         navigateTo(R.id.kd_nav);
         scrollView(R.id.recycler_view);
-        //pressItemsInRecyclerView(R.id.recycler_view, 20);
+        pressItemsInRecyclerView(R.id.recycler_view, 20);
     }
 
     @Test
@@ -128,7 +128,7 @@ public class AutomatedUITests {
         System.out.println("Testing L");
         navigateTo(R.id.l_nav);
         scrollView(R.id.recycler_view);
-        //pressItemsInRecyclerView(R.id.recycler_view, 20);
+        pressItemsInRecyclerView(R.id.recycler_view, 20);
     }
 
     @Test
@@ -136,7 +136,7 @@ public class AutomatedUITests {
         System.out.println("Testing mp");
         navigateTo(R.id.mp_nav);
         scrollView(R.id.recycler_view);
-        //pressItemsInRecyclerView(R.id.recycler_view, 20);
+        pressItemsInRecyclerView(R.id.recycler_view, 20);
     }
 
 
