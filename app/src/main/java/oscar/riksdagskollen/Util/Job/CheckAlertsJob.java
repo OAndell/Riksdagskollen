@@ -167,12 +167,12 @@ public class CheckAlertsJob extends Job {
                     public void onNewsFetched(List<CurrentNews> currentNews) {
 
                         // Show max 5 notifications at the same time
-                        for (int i = 4; i >= 0; i--) {
+                        for (int i = 0; i < 5; i++) {
                             if (!currentNews.get(i).getId().equals(latestDocID)) {
                                 showMonitorNotification(section, false, currentNews.get(i));
                                 RiksdagskollenApp.getInstance()
                                         .getAlertManager()
-                                        .setAlertEnabledForSection(section, currentNews.get(i).getId(), true);
+                                        .setAlertEnabledForSection(section, currentNews.get(0).getId(), true);
                             } else {
                                 break;
                             }
