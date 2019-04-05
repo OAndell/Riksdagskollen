@@ -1,34 +1,23 @@
 package oscar.riksdagskollen.Util.Job;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import oscar.riksdagskollen.Activity.MainActivity;
 import oscar.riksdagskollen.Fragment.CurrentNewsListFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
 import oscar.riksdagskollen.Manager.AlertManager;
-import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
+import oscar.riksdagskollen.Util.Helper.NotificationHelper;
 import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNews;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
@@ -43,24 +32,9 @@ import oscar.riksdagskollen.Util.RiksdagenCallback.VoteCallback;
 public class CheckAlertsJob extends Job {
 
     public static final String TAG = "job_alert";
-    public static final String REPLIES_CHANNEL = "replies_channel";
 
     private CountDownLatch countDownLatch;
-    private static final Map<String, String> partyIds;
 
-
-    static {
-        partyIds = new HashMap<>();
-        partyIds.put("m", "Moderaterna");
-        partyIds.put("s", "Socialdemokraterna");
-        partyIds.put("sd", "Sverigedemokraterna");
-        partyIds.put("kd", "Kristdemokraterna");
-        partyIds.put("c", "Centerpartiet");
-        partyIds.put("l", "Liberalerna");
-        partyIds.put("v", "Vänsterpartiet");
-        partyIds.put("mp", "Miljöpartiet");
-
-    }
 
     public static void scheduleJob() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(RiksdagskollenApp.getInstance());
@@ -123,7 +97,8 @@ public class CheckAlertsJob extends Job {
             @Override
             public void onDocumentsFetched(List<PartyDocument> documents) {
                 if (!documents.get(0).getId().equals(latestDocId)) {
-                    showMonitorNotification(partyId, true, null);
+                    //showMonitorNotification(partyId, true, null);
+                    NotificationHelper.showPartyNotification(partyId, getContext());
                     RiksdagskollenApp.getInstance()
                             .getAlertManager()
                             .setAlertEnabledForPartyDocuments(partyId, documents.get(0).getId(), true);
@@ -147,7 +122,7 @@ public class CheckAlertsJob extends Job {
                     @Override
                     public void onVotesFetched(List<Vote> votes) {
                         if (!votes.get(0).getId().equals(latestDocID)) {
-                            showMonitorNotification(section, false, null);
+                            NotificationHelper.showVoteNotification(votes.get(0), getContext());
                             RiksdagskollenApp.getInstance()
                                     .getAlertManager()
                                     .setAlertEnabledForSection(section, votes.get(0).getId(), true);
@@ -169,7 +144,7 @@ public class CheckAlertsJob extends Job {
                         // Show max 5 notifications at the same time
                         for (int i = 0; i < 5; i++) {
                             if (!currentNews.get(i).getId().equals(latestDocID)) {
-                                showMonitorNotification(section, false, currentNews.get(i));
+                                NotificationHelper.showNewsNotification(currentNews.get(i), getContext());
                                 RiksdagskollenApp.getInstance()
                                         .getAlertManager()
                                         .setAlertEnabledForSection(section, currentNews.get(0).getId(), true);
@@ -212,7 +187,7 @@ public class CheckAlertsJob extends Job {
         RiksdagskollenApp.getInstance().getRiksdagenAPIManager().searchForReply(document, new PartyDocumentCallback() {
             @Override
             public void onDocumentsFetched(List<PartyDocument> documents) {
-                showReplyNotification(documents.get(0));
+                NotificationHelper.showReplyNotification(documents.get(0), getContext());
                 RiksdagskollenApp.getInstance().getAlertManager().setAlertEnabledForDoc(document, false);
                 countDownLatch.countDown();
             }
@@ -229,97 +204,7 @@ public class CheckAlertsJob extends Job {
         super.onCancel();
     }
 
-    private void showReplyNotification(PartyDocument document) {
 
-        Intent intent = new Intent(getContext(), MainActivity.class);
-        intent.putExtra("document", document);
-        intent.setAction("dummyAction");
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, 0);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Notifikationer för svar på frågor";
-            String description = "Visar notifikationer när en fråga som användaren bevakar har blivit besvarad.";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(REPLIES_CHANNEL, name, importance);
-            channel.setDescription(description);
-            NotificationManager notificationManager = getContext().getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getContext(), REPLIES_CHANNEL)
-                .setSmallIcon(R.drawable.riksdagskollen_logo_small)
-                .setContentTitle("Svar på fråga: " + document.getTitel())
-                .setContentText("Klicka här för att läsa svaret")
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("Klicka för att läsa svaret"))
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
-        notificationManager.notify(Integer.valueOf(document.getBeteckning()), mBuilder.build());
-    }
-
-    private void showMonitorNotification(String monitorSection, boolean isParty, @Nullable Object document) {
-
-        Intent intent = new Intent(getContext(), MainActivity.class);
-        intent.putExtra("section", monitorSection);
-        intent.setAction("dummyAction");
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        if (monitorSection.equals(CurrentNewsListFragment.sectionName) && document != null) {
-            intent.putExtra("news_item_url", ((CurrentNews) document).getUrl());
-            intent.putExtra("news_item_linklista_url", ((CurrentNews) document).getLinklista().getLink().getUrl());
-        }
-
-        // Need unique resultcode to differentiate multiple pending intents
-        int resultCode = monitorSection.hashCode();
-        if (document != null) {
-            resultCode = ((CurrentNews) document).getTitel().hashCode();
-        }
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), resultCode, intent, 0);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Notifikationer för bevakningar";
-            String description = "Visar notifikationer för valda bevakningar.";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(REPLIES_CHANNEL, name, importance);
-            channel.setDescription(description);
-            NotificationManager notificationManager = getContext().getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-
-        String message;
-        if (isParty) {
-            message = String.format("Nytt dokument från %s!", partyIds.get(monitorSection));
-        } else {
-            switch (monitorSection) {
-                case VoteListFragment.sectionName:
-                    message = "Ny votering!";
-                    break;
-                case CurrentNewsListFragment.sectionName:
-                    if (document != null) message = ((CurrentNews) document).getTitel();
-                    else message = "Riksdagen har publicerat en ny nyhet";
-                    break;
-                default:
-                    message = "Nytt dokument!";
-            }
-        }
-
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getContext(), REPLIES_CHANNEL)
-                .setSmallIcon(R.drawable.riksdagskollen_logo_small)
-                .setContentTitle(message)
-                .setShowWhen(false)
-                .setContentText("Klicka här för att läsa")
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("Klicka här för att läsa"))
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
-        notificationManager.notify(message.hashCode(), mBuilder.build());
-    }
 
     //Debug for check alerts job
     /*

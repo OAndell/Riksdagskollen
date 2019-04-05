@@ -19,7 +19,8 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/InitialTheme"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTop"
+            android:alwaysRetainTaskState="true"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

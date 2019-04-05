@@ -145,6 +145,7 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
 
         switch (item.getItemId()) {
             case R.id.notification_menu_item:
+                if (voteList.isEmpty()) break;
                 boolean enabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForPage(sectionName, voteList.get(0).getId());
                 if (enabled) {
                     item.setIcon(R.drawable.notifications_border_to_filled_animated);

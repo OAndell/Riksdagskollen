@@ -29,6 +29,18 @@ public class CustomTabs {
     private static final int TOOLBAR_SHARE_ITEM_ID = 1;
 
     public static void openTab(Context context, String url) {
+        CustomTabsIntent customTabsIntent = buildIntent(context, url);
+        customTabsIntent.launchUrl(context, Uri.parse(url));
+    }
+
+    public static Intent getCustomTabsIntent(Context context, String url) {
+        CustomTabsIntent customTabsIntent = buildIntent(context, url);
+        Intent intent = customTabsIntent.intent;
+        intent.setData(Uri.parse(url));
+        return intent;
+    }
+
+    private static CustomTabsIntent buildIntent(Context context, String url) {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         enableUrlBarHiding(builder);
         setToolbarColor(context, builder);
@@ -40,9 +52,9 @@ public class CustomTabs {
         addShareMenuItem(builder);
         addCopyMenuItem(context, builder);
 
-        CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(context, Uri.parse(url));
+        return builder.build();
     }
+
 
     /* Enables the url bar to hide as the user scrolls down on the page */
     private static void enableUrlBarHiding(CustomTabsIntent.Builder builder) {
