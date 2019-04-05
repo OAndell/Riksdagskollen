@@ -205,6 +205,7 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         clearItems();
         resetPageToLoad();
         loadNextPage();
+        refreshLayout.setRefreshing(true);
     }
 
     protected void onLoadFail() {
