@@ -99,12 +99,30 @@ public class CurrentNews implements Parcelable {
         return img_tumnagel_url;
     }
 
-    public CurrentNewsLinkList getLinklista(){
+    private CurrentNewsLinkList getLinklista() {
        return linklista;
     }
 
-    public String getUrl(){
+    public String getUrl() {
         return url;
+    }
+
+    //Get the real URL
+    public String getNewsUrl() {
+        try {
+            String url = getLinklista().getLink().getUrl();
+            if (url.startsWith("http")) {
+                return url;
+            } else {
+                return "http://riksdagen.se" + url;
+            }
+        }
+        // Some news does not contain the LinkLista object
+        catch (NullPointerException e) {
+            System.out.println("Could not open news url");
+            return null;
+        }
+
     }
 
     public String getPublicerad() {

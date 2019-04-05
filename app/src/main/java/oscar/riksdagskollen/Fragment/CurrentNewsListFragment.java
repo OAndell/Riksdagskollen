@@ -37,7 +37,7 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
     private MenuItem notificationItem;
 
 
-    public static CurrentNewsListFragment newInstance(){
+    public static CurrentNewsListFragment newInstance() {
         CurrentNewsListFragment newInstance = new CurrentNewsListFragment();
         return newInstance;
     }
@@ -65,18 +65,9 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
         adapter = new CurrentNewsListAdapter(newsList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {
-
                 CurrentNews newsDoc = (CurrentNews) document;
-                try{
-                    String url = newsDoc.getLinklista().getLink().getUrl();
-                    if (url.startsWith("http")) {
-                        CustomTabs.openTab(getContext(), url);
-                    } else {
-                        CustomTabs.openTab(getContext(), "http://riksdagen.se" + newsDoc.getLinklista().getLink().getUrl());
-                    }
-                }catch (NullPointerException e){ //Some news does not contain the LinkLista object
-                    System.out.println("Could not open news url");
-                }
+                if (newsDoc.getUrl() != null)
+                    CustomTabs.openTab(getContext(), newsDoc.getNewsUrl());
             }
         });
 
@@ -124,7 +115,7 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
      * Load the next page and add it to the adapter when downloaded and parsed.
      * Hides the loading view.s
      */
-    protected void loadNextPage(){
+    protected void loadNextPage() {
         setLoadingMoreItems(true);
         RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getCurrentNews(new CurrentNewsCallback() {
             @Override

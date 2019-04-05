@@ -1,6 +1,7 @@
 package oscar.riksdagskollen.Activity;
 
 import android.arch.core.BuildConfig;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -47,6 +48,9 @@ import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.Helper.AppBarStateChangeListener;
 import oscar.riksdagskollen.Util.Helper.CustomTabs;
+import oscar.riksdagskollen.Util.Helper.NotificationHelper;
+
+import static oscar.riksdagskollen.Util.Helper.NotificationHelper.NEWS_ITEM_URL_KEY;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -126,6 +130,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        setIntent(intent);
         handleOpenWithNotification(intent);
     }
 
@@ -137,12 +142,12 @@ public class MainActivity extends AppCompatActivity
             incoming = intent;
         }
 
-        if (incoming.hasExtra("document")) {
+        if (incoming.hasExtra(NotificationHelper.DOCUMENT_KEY)) {
             Intent docIntent = new Intent(this, MotionActivity.class);
             docIntent.putExtra("document", incoming.getParcelableExtra("document"));
             startActivity(docIntent);
-        } else if (incoming.hasExtra("section")) {
-            switch (incoming.getStringExtra("section")) {
+        } else if (incoming.hasExtra(NotificationHelper.SECTION_NAME_KEY)) {
+            switch (incoming.getStringExtra(NotificationHelper.SECTION_NAME_KEY)) {
                 case "m":
                     onNavigationItemSelected(navigationView.getMenu().findItem(R.id.m_nav));
                     break;
@@ -171,17 +176,11 @@ public class MainActivity extends AppCompatActivity
                     onNavigationItemSelected(navigationView.getMenu().findItem(R.id.votes_nav));
                     break;
                 case CurrentNewsListFragment.sectionName:
-
                     onNavigationItemSelected(navigationView.getMenu().findItem(R.id.news_nav));
-                    String url = incoming.getStringExtra("news_item_url");
-                    String linkListaUrl = incoming.getStringExtra("news_item_linklista_url");
+                    String url = incoming.getStringExtra(NEWS_ITEM_URL_KEY);
                     try {
-                        if (url.startsWith("http")) {
-                            CustomTabs.openTab(this, url);
-                        } else {
-                            CustomTabs.openTab(this, "http://riksdagen.se" + linkListaUrl);
-                        }
-                    } catch (NullPointerException e) { //Some news does not contain the LinkLista object
+                        CustomTabs.openTab(this, url);
+                    } catch (ActivityNotFoundException e) { //Some news might not work
                         Toast.makeText(this, "Kunde inte öppna nyhet", Toast.LENGTH_LONG).show();
                     }
                     break;
