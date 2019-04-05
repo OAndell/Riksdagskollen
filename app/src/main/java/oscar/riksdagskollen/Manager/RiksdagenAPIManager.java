@@ -32,6 +32,7 @@ import oscar.riksdagskollen.Util.JSONModel.Protocol;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeInfo;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeVoteStatistics;
+import oscar.riksdagskollen.Util.JSONModel.SearchedDocument;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
 import oscar.riksdagskollen.Util.RiksdagenCallback.CurrentNewsCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.DecisionsCallback;
@@ -42,6 +43,7 @@ import oscar.riksdagskollen.Util.RiksdagenCallback.ProtocolCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeDocumentCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeListCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.SearchDocumentCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.VoteCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.VoteStatisticsCallback;
@@ -355,6 +357,32 @@ public class RiksdagenAPIManager {
             @Override
             public void onRequestFail(VolleyError error) {
                 callback.onFail(error);
+            }
+        });
+    }
+
+    /**
+     * Search query for all document types with search string
+     */
+    public void searchForDocument(final SearchDocumentCallback callback, String search, int pageToLoad) {
+        String subURL = "/dokumentlista/?sok=" + search + "&sort=rel&sortorder=desc&utformat=json" + "&p=" + pageToLoad;
+        doApiGetRequest(subURL, new JSONRequestCallback() {
+            @Override
+            public void onRequestSuccess(JSONObject response) {
+                try {
+                    JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
+
+                    SearchedDocument[] documents = gson.fromJson(jsonDocuments.toString(), SearchedDocument[].class);
+                    callback.onDocumentsFetched(Arrays.asList(documents));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    callback.onFail(new VolleyError("Failed to parse JSON"));
+                }
+            }
+
+            @Override
+            public void onRequestFail(VolleyError error) {
+
             }
         });
     }
