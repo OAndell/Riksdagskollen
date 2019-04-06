@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import oscar.riksdagskollen.RiksdagskollenApp;
+import oscar.riksdagskollen.Util.Enum.PartyHelper;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.Job.DownloadAllRepresentativesJob;
 
@@ -24,7 +25,7 @@ public class RepresentativeManager {
     private ArrayList<Representative> currentRepresentatives;
     private ArrayList<RepresentativeDownloadListener> listenerList;
 
-    private String[] partyIds = {"m", "s", "sd", "l", "c", "mp", "v", "kd", "-"};
+    private String[] partyIds = PartyHelper.getCompletePartyIDs();
 
 
     public RepresentativeManager(Context appContext) {

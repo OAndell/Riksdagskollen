@@ -85,6 +85,18 @@ public class CurrentParties {
         }
     };
 
+    public static final String[] getPartyIDs() {
+        String[] partyIDs = new String[parties.size()];
+        for (int i = 0; i < parties.size(); i++) {
+            partyIDs[i] = parties.get(i).getID();
+        }
+        return partyIDs;
+    }
+
+    ;
+
+
+
     public static ArrayList<Party> getParties() {
         return parties;
     }
@@ -146,7 +158,7 @@ public class CurrentParties {
             case "-":
                 return noParty;
             default:
-                return null;
+                return OtherParties.getParty(id.toLowerCase());
         }
     }
 }
