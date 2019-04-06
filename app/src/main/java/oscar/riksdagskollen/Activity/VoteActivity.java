@@ -393,7 +393,7 @@ public class VoteActivity extends AppCompatActivity{
     private void setupPartyGraph(VoteResults voteResults, String[] parties) {
         for (int i = 0; i < parties.length; i++) {
             int partyLogo = CurrentParties.getParty(parties[i]).getDrawableLogo();
-            //TODO fix this horrible mess with old votes. Changes L -> FP
+            // Changes L -> FP because of old party name.
             if(parties[i].equals("L") && voteResults.getPartyVotes("L") == null){
                 parties[i] = "FP";
             }

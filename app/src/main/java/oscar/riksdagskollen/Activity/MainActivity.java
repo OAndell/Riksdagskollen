@@ -40,6 +40,7 @@ import oscar.riksdagskollen.Fragment.PartyListFragment;
 import oscar.riksdagskollen.Fragment.ProtocolListFragment;
 import oscar.riksdagskollen.Fragment.RepresentativeListFragment;
 import oscar.riksdagskollen.Fragment.SavedDocumentsFragment;
+import oscar.riksdagskollen.Fragment.SearchListFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
 import oscar.riksdagskollen.Manager.AnalyticsManager;
 import oscar.riksdagskollen.Manager.ThemeManager;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity
     private SoftReference<VoteListFragment> voteListFragment;
     private SoftReference<AboutFragment> aboutFragment;
     private SoftReference<SavedDocumentsFragment> savedDocumentsFragment;
+    private SoftReference<SearchListFragment> searchFragment;
     private SoftReference<PartyFragment> sPartyFragment;
     private SoftReference<PartyFragment> mPartyFragment;
     private SoftReference<PartyFragment> sdPartyFragment;
@@ -428,6 +430,12 @@ public class MainActivity extends AppCompatActivity
                     kdPartyFragment.get().setListFragment(kdPartyListFragment);
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, kdPartyFragment.get()).commit();
+                break;
+            case R.id.search_nav:
+                analyticsManager.setCurrentScreen(this, "search");
+                if (searchFragment == null || searchFragment.get() == null)
+                    searchFragment = new SoftReference<>(SearchListFragment.newInstance());
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, searchFragment.get()).commit();
                 break;
             case R.id.about_nav:
                 analyticsManager.setCurrentScreen(this, "about");

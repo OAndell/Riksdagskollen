@@ -22,6 +22,7 @@
     <string name="news">Aktuellt</string>
     <string name="votes">Voteringar</string>
     <string name="about">Om appen</string>
+    <string name="search_nav">Sök</string>
     <string name="feedback">Ge oss feedback</string>
     <string name="saved_docs">Sparade dokument</string>
     <string name="prot">Kammarprotokoll</string>
