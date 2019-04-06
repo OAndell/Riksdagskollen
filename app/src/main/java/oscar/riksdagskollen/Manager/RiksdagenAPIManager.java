@@ -53,6 +53,10 @@ import oscar.riksdagskollen.Util.RiksdagenCallback.VoteStatisticsCallback;
 
 public class RiksdagenAPIManager {
 
+
+    public static String SEARCH_OPTION_REL = "sort=rel";
+    public static String SEARCH_OPTION_DATE = "sort=datum";
+
     private final RequestManager requestManager;
     private final Gson gson;
     private static final String HOST = "http://data.riksdagen.se";
@@ -362,8 +366,9 @@ public class RiksdagenAPIManager {
     /**
      * Search query for all document types with search string
      */
-    public void searchForDocument(String search, int pageToLoad, final PartyDocumentCallback callback) {
-        String subURL = "/dokumentlista/?sok=" + search + "&sort=rel&sortorder=desc&utformat=json" + "&p=" + pageToLoad;
+    public void searchForDocument(String search, String sort_option, int pageToLoad, final PartyDocumentCallback callback) {
+
+        String subURL = "/dokumentlista/?sok=" + search + "&" + sort_option + "&sortorder=desc&utformat=json" + "&p=" + pageToLoad;
         doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
