@@ -134,6 +134,7 @@ public class SearchListFragment extends RiksdagenAutoLoadingListFragment {
             public boolean onQueryTextSubmit(String query) {
                 searchTerm = query;
                 hasSearched = true;
+                searchView.clearFocus();
                 doNewSearch();
                 return true;
             }
@@ -150,7 +151,7 @@ public class SearchListFragment extends RiksdagenAutoLoadingListFragment {
             public boolean onMenuItemClick(MenuItem item) {
                 CharSequence[] options = {"Relevans", "Datum"};
                 int checkedItem = 0;
-                if (searchOption == RiksdagenAPIManager.SEARCH_OPTION_DATE) {
+                if (searchOption.equals(RiksdagenAPIManager.SEARCH_OPTION_DATE)) {
                     checkedItem = 1;
                 }
                 AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom)
