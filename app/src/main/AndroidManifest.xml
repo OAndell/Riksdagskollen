@@ -33,9 +33,6 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Activity.DocumentReaderActivity"
-            android:theme="@style/DefaultTheme.NoActionBar" />
         <activity android:name=".Activity.MotionActivity"
             android:theme="@style/DefaultTheme.NoActionBar" />
         <activity android:name=".Activity.ProtocolReaderActivity" />
