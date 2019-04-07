@@ -6,6 +6,9 @@ import oscar.riksdagskollen.Util.JSONModel.Party;
 
 public class PartyHelper {
 
+    /**
+     * @return ArrayList<Party> of all parties ( including noParty and older parties)
+     */
     public static ArrayList<Party> getCompletePartyList() {
         ArrayList<Party> partiesComplete = new ArrayList<>();
         partiesComplete.addAll(CurrentParties.getParties());

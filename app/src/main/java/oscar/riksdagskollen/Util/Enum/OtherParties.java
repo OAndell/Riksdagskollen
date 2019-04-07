@@ -6,7 +6,10 @@ import oscar.riksdagskollen.Util.JSONModel.Party;
 
 public class OtherParties {
 
-    private static final Party FP = new Party("Folkpartiet", "fp", 0, "", "", "");
+    private static final Party FP = new Party("Folkpartiet",
+            "fp", 0,
+            "", "",
+            "");
 
 
     private static final ArrayList<Party> otherParties = new ArrayList<Party>() {
@@ -15,12 +18,10 @@ public class OtherParties {
         }
     };
 
-    public static final String[] getPartyIDs() {
-        String[] ids = {"fp"};
-        return ids;
-    }
 
-    ;
+    public static Party getFp() {
+        return FP;
+    }
 
     public static ArrayList<Party> getOtherParties() {
         return otherParties;

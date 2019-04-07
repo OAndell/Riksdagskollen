@@ -116,6 +116,9 @@ public class MotionActivity extends AppCompatActivity {
 
         if (document.getDokintressent() == null && intresentId != null) addSenderView(intresentId);
         else if (document.getDokintressent() != null) showSenders();
+        else {
+            findViewById(R.id.act_doc_reader_label_author).setVisibility(View.GONE);
+        }
 
 
         //ONLINE STUFF

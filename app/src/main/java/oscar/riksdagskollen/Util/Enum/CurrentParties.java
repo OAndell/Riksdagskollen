@@ -93,10 +93,6 @@ public class CurrentParties {
         return partyIDs;
     }
 
-    ;
-
-
-
     public static ArrayList<Party> getParties() {
         return parties;
     }

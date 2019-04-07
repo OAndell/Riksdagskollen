@@ -82,6 +82,7 @@
             </WebView>
 
             <TextView
+                android:id="@+id/act_doc_reader_label_author"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Avsändare"
