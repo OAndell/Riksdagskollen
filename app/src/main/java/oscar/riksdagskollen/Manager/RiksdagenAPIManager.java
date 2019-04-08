@@ -32,6 +32,7 @@ import oscar.riksdagskollen.Util.JSONModel.Protocol;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeInfo;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeVoteStatistics;
+import oscar.riksdagskollen.Util.JSONModel.Speech;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
 import oscar.riksdagskollen.Util.RiksdagenCallback.CurrentNewsCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.DecisionsCallback;
@@ -42,6 +43,7 @@ import oscar.riksdagskollen.Util.RiksdagenCallback.ProtocolCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeDocumentCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeListCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.SpeechCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.VoteCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.VoteStatisticsCallback;
@@ -65,6 +67,10 @@ public class RiksdagenAPIManager {
     public RiksdagenAPIManager(RiksdagskollenApp app) {
         requestManager = app.getRequestManager();
         gson = new Gson();
+    }
+
+    public static RiksdagenAPIManager getInstance() {
+        return RiksdagskollenApp.getInstance().getRiksdagenAPIManager();
     }
 
     private Request doApiGetRequest(String subURL, JSONRequestCallback callback) {
@@ -298,7 +304,7 @@ public class RiksdagenAPIManager {
 
     public void getProtocols(final ProtocolCallback callback, int page) {
         String subURL = "/dokumentlista/?sok=&doktyp=prot&sort=datum&sortorder=desc&utformat=json" + "&p=" + page;
-        ;
+
         doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
@@ -314,6 +320,51 @@ public class RiksdagenAPIManager {
             @Override
             public void onRequestFail(VolleyError error) {
                 callback.onFail(error);
+            }
+        });
+    }
+
+    public void getProtocolForDate(String date, String rm, final ProtocolCallback callback) {
+        String subUrl = "/dokumentlista/?doktyp=prot&rm=" + rm + "&from=" + date + "&tom=" + date + "&sort=rel&sortorder=desc&utformat=json";
+        doApiGetRequest(subUrl, new JSONRequestCallback() {
+            @Override
+            public void onRequestSuccess(JSONObject response) {
+
+                try {
+                    JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
+                    Protocol[] protocols = gson.fromJson(jsonDocuments.toString(), Protocol[].class);
+                    callback.onProtocolsFetched(Arrays.asList(protocols));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onRequestFail(VolleyError error) {
+
+            }
+        });
+    }
+
+    public void getSpeech(String protId, String speechNo, final SpeechCallback callback) {
+        String subUrl = "/anforande/" + protId + "-" + speechNo + "/json";
+        doApiGetRequest(subUrl, new JSONRequestCallback() {
+            @Override
+            public void onRequestSuccess(JSONObject response) {
+                try {
+                    JSONObject speechJSON = response.getJSONObject("anforande");
+                    Speech speech = gson.fromJson(speechJSON.toString(), Speech.class);
+                    callback.onSpeechFetched(speech);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onRequestFail(VolleyError error) {
+
             }
         });
     }
@@ -647,6 +698,7 @@ public class RiksdagenAPIManager {
 
 
     }
+
 
     public void getVoteStatisticsForRepresentative(String iid, final VoteStatisticsCallback callback) {
         String url = "http://data.riksdagen.se/voteringlista/?iid=" + iid + "&utformat=XML&gruppering=namn";

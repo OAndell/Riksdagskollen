@@ -25,6 +25,13 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
     private String datum;
     private DokIntressent dokintressent;
     private long saved = 0;
+    private Debate debatt;
+    private String debattnamn;
+    private String debattdag;
+
+    public Debate getDebatt() {
+        return debatt;
+    }
 
     public DokIntressent getDokintressent() {
         return dokintressent;
@@ -98,6 +105,14 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
         return saved;
     }
 
+    public String getDebattnamn() {
+        return debattnamn;
+    }
+
+    public String getDebattdag() {
+        return debattdag;
+    }
+
     @Override
     public String toString() {
         return getTitel();
@@ -162,6 +177,9 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
         dest.writeString(this.datum);
         dest.writeParcelable(this.dokintressent, flags);
         dest.writeLong(this.saved);
+        dest.writeParcelable(this.debatt, flags);
+        dest.writeString(this.debattnamn);
+        dest.writeString(this.debattdag);
     }
 
     protected PartyDocument(Parcel in) {
@@ -181,6 +199,9 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
         this.datum = in.readString();
         this.dokintressent = in.readParcelable(DokIntressent.class.getClassLoader());
         this.saved = in.readLong();
+        this.debatt = in.readParcelable(Debate.class.getClassLoader());
+        this.debattnamn = in.readString();
+        this.debattdag = in.readString();
     }
 
     public static final Creator<PartyDocument> CREATOR = new Creator<PartyDocument>() {

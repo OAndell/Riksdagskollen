@@ -3,6 +3,7 @@ package oscar.riksdagskollen.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.os.Build;
@@ -11,6 +12,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,15 +43,21 @@ import java.util.List;
 
 import oscar.riksdagskollen.Manager.AlertManager;
 import oscar.riksdagskollen.Manager.AnalyticsManager;
+import oscar.riksdagskollen.Manager.RiksdagenAPIManager;
 import oscar.riksdagskollen.Manager.SavedDocumentManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.CustomTabs;
+import oscar.riksdagskollen.Util.JSONModel.DebateSpeech;
 import oscar.riksdagskollen.Util.JSONModel.Intressent;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
+import oscar.riksdagskollen.Util.JSONModel.Protocol;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
+import oscar.riksdagskollen.Util.JSONModel.Speech;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.ProtocolCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.SpeechCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
 
 /**
@@ -89,6 +99,7 @@ public class MotionActivity extends AppCompatActivity {
 
         TextView titleTV = findViewById(R.id.act_doc_reader_title);
         TextView authorTV = findViewById(R.id.act_doc_reader_author);
+        final LinearLayout debateLayout = findViewById(R.id.debate_layout);
         loadingView = findViewById(R.id.loading_view);
         context = this;
 
@@ -120,6 +131,65 @@ public class MotionActivity extends AppCompatActivity {
             findViewById(R.id.act_doc_reader_label_author).setVisibility(View.GONE);
         }
 
+        if (document.getDebatt() != null && document.getDebattdag() != null) {
+            debateLayout.setVisibility(View.VISIBLE);
+            if (document.getDebattnamn() != null) {
+                TextView debateLabel = findViewById(R.id.act_doc_reader_debate_label);
+                debateLabel.setText(document.getDebattnamn() + " " + document.getDebattdag());
+            }
+
+            final Context context = this;
+            RiksdagenAPIManager.getInstance().getProtocolForDate(document.getDebattdag(), document.getRm(), new ProtocolCallback() {
+                @Override
+                public void onProtocolsFetched(List<Protocol> protocols) {
+                    if (protocols.size() == 1) {
+                        final DebateSpeech[] speeches = document.getDebatt().getAnforande();
+                        for (final DebateSpeech speech : speeches) {
+                            final View speechItem = ((LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.speech_item, null);
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            float dip = 14f;
+                            Resources r = getResources();
+                            int px = (int) TypedValue.applyDimension(
+                                    TypedValue.COMPLEX_UNIT_DIP,
+                                    dip,
+                                    r.getDisplayMetrics()
+                            );
+                            params.setMargins(px, px, px, px);
+                            speechItem.setLayoutParams(params);
+                            debateLayout.addView(speechItem);
+                            RiksdagenAPIManager.getInstance().getSpeech(protocols.get(0).getId(), speech.getAnf_nummer(), new SpeechCallback() {
+                                @Override
+                                public void onSpeechFetched(Speech speechDetail) {
+                                    //speakerView.findViewById(R.id.debate_item_info).setVisibility(View.VISIBLE);
+                                    //speakerView.findViewById(R.id.debate_item_text).setVisibility(View.VISIBLE);
+                                    //speakerView.findViewById(R.id.debate_item_loading_view).setVisibility(View.GONE);
+
+                                    TextView name = speechItem.findViewById(R.id.debate_item_speaker);
+                                    TextView time = speechItem.findViewById(R.id.debate_item_time);
+                                    TextView speechContent = speechItem.findViewById(R.id.debate_item_text);
+                                    name.setText(speechDetail.getTalare());
+                                    time.setText(speech.getAnf_klockslag());
+                                    speechContent.setText(Html.fromHtml(speechDetail.getAnforandetext()));
+                                }
+
+                                @Override
+                                public void onFail(VolleyError error) {
+                                    Log.e("MotionActivity", "onFail: Could not get speech");
+                                    debateLayout.setVisibility(View.GONE);
+                                }
+                            });
+                        }
+                    }
+                }
+
+                @Override
+                public void onFail(VolleyError error) {
+                    Log.e("MotionActivity", "onFail: Could not get protocol");
+                    debateLayout.setVisibility(View.GONE);
+                }
+            });
+
+        }
 
         //ONLINE STUFF
         //setupRateFunctionality();
