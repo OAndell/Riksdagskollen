@@ -90,7 +90,6 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
         super(listener);
         setSortedList(voteList);
         addAll(items);
-
         this.clickListener = listener;
 
     }
