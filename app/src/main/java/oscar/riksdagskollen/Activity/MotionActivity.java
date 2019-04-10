@@ -191,6 +191,7 @@ public class MotionActivity extends AppCompatActivity {
         webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setJavaScriptEnabled(true);
 
+
         webView.setInitialScale(1);
 
         //Disable text-select to make consistent with rest of app
