@@ -65,7 +65,6 @@ public class DebateListFragment extends RiksdagenAutoLoadingListFragment {
         RiksdagenAPIManager.getInstance().getDebates(getPageToLoad(), new PartyDocumentCallback() {
             @Override
             public void onDocumentsFetched(List<PartyDocument> documents) {
-                setShowLoadingView(false);
                 //Sort out interpolations with no debate.
                 for (PartyDocument document : documents) {
                     if (document.getDebattdag() != null) {
@@ -77,8 +76,9 @@ public class DebateListFragment extends RiksdagenAutoLoadingListFragment {
 
                 //Load next page if first page
                 if (adapter.getItemCount() < MIN_DOC) {
-                    setLoadingUntilFull(true);
-                    loadAdditionalDebates();
+                    loadNextPage();
+                } else {
+                    setLoadingMoreItems(false);
                 }
             }
 
@@ -87,30 +87,10 @@ public class DebateListFragment extends RiksdagenAutoLoadingListFragment {
 
             }
         });
-        if (!isLoadingUntilFull()) {
-            incrementPage();
-        }
+        incrementPage(); //Hopefully this is not a race condition?
+
     }
 
-    private void loadAdditionalDebates() {
-        incrementPage();
-        RiksdagenAPIManager.getInstance().getDebates(getPageToLoad(), new PartyDocumentCallback() {
-            @Override
-            public void onDocumentsFetched(List<PartyDocument> documents) {
-                for (PartyDocument document : documents) {
-                    if (document.getDebattdag() != null) {
-                        documentList.add(document);
-                    }
-                }
-                getAdapter().addAll(documentList);
-            }
-
-            @Override
-            public void onFail(VolleyError error) {
-            }
-        });
-        incrementPage();
-    }
 
 
     @Override
