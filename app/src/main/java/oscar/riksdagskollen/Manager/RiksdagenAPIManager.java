@@ -110,6 +110,29 @@ public class RiksdagenAPIManager {
         });
     }
 
+    public void getDebates(int page, final PartyDocumentCallback callback) {
+        String subURL = "/dokumentlista/?sok=&doktyp=ip&sort=datum&sortorder=desc&utformat=json" + "&p=" + page;
+
+        doApiGetRequest(subURL, new JSONRequestCallback() {
+            @Override
+            public void onRequestSuccess(final JSONObject response) {
+                try {
+                    JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
+                    PartyDocument[] documents = gson.fromJson(jsonDocuments.toString(), PartyDocument[].class);
+                    callback.onDocumentsFetched(Arrays.asList(documents));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    callback.onFail(new VolleyError("Failed to parse JSON"));
+                }
+            }
+
+            @Override
+            public void onRequestFail(VolleyError error) {
+                callback.onFail(error);
+            }
+        });
+    }
+
     /**
      * Get the current news (Aktuellt)
      *

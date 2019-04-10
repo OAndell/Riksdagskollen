@@ -127,6 +127,7 @@ public class SearchListFragment extends RiksdagenAutoLoadingListFragment {
         final MenuItem searchItem = menu.findItem(R.id.menu_search);
         searchView = (SearchView) searchItem.getActionView();
         changeSearchViewTextColor(searchView);
+
         searchItem.expandActionView();
         searchView.setQueryHint("Sök efter dokument...");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

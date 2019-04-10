@@ -34,6 +34,7 @@ import java.lang.ref.SoftReference;
 
 import oscar.riksdagskollen.Fragment.AboutFragment;
 import oscar.riksdagskollen.Fragment.CurrentNewsListFragment;
+import oscar.riksdagskollen.Fragment.DebateListFragment;
 import oscar.riksdagskollen.Fragment.DecisionsListFragment;
 import oscar.riksdagskollen.Fragment.PartyFragment;
 import oscar.riksdagskollen.Fragment.PartyListFragment;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity
     private SoftReference<DecisionsListFragment> decisionsFragment;
     private SoftReference<RepresentativeListFragment> repFragment;
     private SoftReference<VoteListFragment> voteListFragment;
+    private SoftReference<DebateListFragment> debateFragment;
     private SoftReference<AboutFragment> aboutFragment;
     private SoftReference<SavedDocumentsFragment> savedDocumentsFragment;
     private SoftReference<SearchListFragment> searchFragment;
@@ -358,6 +360,12 @@ public class MainActivity extends AppCompatActivity
                 if (protFragment == null || protFragment.get() == null)
                     protFragment = new SoftReference<>(ProtocolListFragment.newInstance());
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, protFragment.get()).commit();
+                break;
+            case R.id.debate_nav:
+                analyticsManager.setCurrentScreen(this, "debateList");
+                if (debateFragment == null || debateFragment.get() == null)
+                    debateFragment = new SoftReference<>(DebateListFragment.newInstance());
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, debateFragment.get()).commit();
                 break;
             case R.id.s_nav:
                 analyticsManager.setCurrentScreen(this, "s");

@@ -26,8 +26,8 @@
                     android:title="@string/representatives"/>
                 <item
                     android:id="@+id/prot_nav"
-                    android:icon="@drawable/protlogo"
-                    android:title="@string/prot"/>
+                    android:icon="@android:drawable/ic_menu_agenda"
+                    android:title="@string/prot" />
                 </group>
         </menu>
 

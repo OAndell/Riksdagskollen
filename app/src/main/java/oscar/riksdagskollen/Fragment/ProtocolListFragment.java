@@ -61,7 +61,6 @@ public class ProtocolListFragment extends RiksdagenAutoLoadingListFragment {
                 startActivity(intent);
             }
         });
-
     }
 
     /**
