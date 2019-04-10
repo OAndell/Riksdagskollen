@@ -12,8 +12,6 @@
     <color name="secondaryDarkColor">#cccccc</color>
     <color name="darkText">#212121</color>
 
-    <color name="iconColor">@color/riksdagBlue</color>
-
     <color name="yesVoteColor">#3cb44b</color>
     <color name="yesVoteColorLight">#d9f2dc</color>
     <color name="noVoteColor">#e6194b</color>

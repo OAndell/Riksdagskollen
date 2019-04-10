@@ -5,7 +5,6 @@
     <attr name="cardViewBorderColor" format="color" />
 
     <attr name="toolbarTitleTextColor" format="color" />
-    <attr name="iconColor" format="color" />
 
     <attr name="mainTitleTextColor" format="color" />
     <attr name="mainBodyTextColor" format="color" />

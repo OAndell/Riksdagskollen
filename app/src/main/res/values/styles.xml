@@ -10,11 +10,13 @@
     <style name="DefaultTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/riksdagBlue</item>
         <item name="colorPrimaryDark">@color/riksdagBlueDark</item>
-        <item name="colorAccent">@color/white</item>
+        <item name="colorAccent">@color/riksdagBlue</item>
 
 
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+
+        <item name="colorControlActivated">@color/white</item>
 
 
         <item name="toolbarTitleTextColor">@color/white</item>
@@ -22,7 +24,6 @@
         <item name="secondaryLightColor">@color/secondaryLightColor</item>
         <item name="secondaryDarkColor">@color/secondaryDarkColor</item>
 
-        <item name="iconColor">@color/riksdagBlue</item>
         <item name="mainBackgroundColor">@color/white</item>
         <item name="cardViewBackgroundColor">@color/white</item>
         <item name="cardViewBorderColor">@color/white</item>
@@ -62,7 +63,6 @@
         <item name="secondaryLightColor">@color/secondaryLightColor</item>
         <item name="secondaryDarkColor">@color/secondaryDarkColor</item>
 
-        <item name="iconColor">@color/white</item>
         <item name="mainBackgroundColor">@color/black</item>
         <item name="cardViewBorderColor">@color/black</item>
         <item name="cardViewBackgroundColor">@color/black</item>
@@ -104,7 +104,6 @@
         <item name="secondaryLightColor">@color/riksdagBlueLight</item>
         <item name="secondaryDarkColor">@color/secondaryDarkColor</item>
 
-        <item name="iconColor">@color/riksdagBlueLight</item>
         <item name="mainBackgroundColor">@color/white</item>
         <item name="cardViewBorderColor">@color/white</item>
         <item name="cardViewBackgroundColor">@color/white</item>
