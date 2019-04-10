@@ -15,6 +15,7 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
 
+
         <item name="toolbarTitleTextColor">@color/white</item>
 
         <item name="secondaryLightColor">@color/secondaryLightColor</item>
@@ -32,10 +33,15 @@
 
         <item name="navigationDrawerHighlight">@color/secondaryDarkColor</item>
 
+        <item name="speakBubbleIncomingDrawable">@drawable/text_bubble_incoming_default_theme</item>
+        <item name="speakBubbleOutgoingDrawable">@drawable/text_bubble_outgoing_default_theme</item>
+
         <item name="loadingViewDrawable">@drawable/loading_view_default</item>
         <item name="buttonBackgroundDrawable">@drawable/button_background_default</item>
 
         <item name="android:windowBackground">?colorPrimary</item>
+
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
     </style>
 
     <style name="BlackTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -63,10 +69,18 @@
 
         <item name="navigationDrawerHighlight">@color/darkResultIndicator</item>
 
+        <item name="speakBubbleIncomingDrawable">@drawable/text_bubble_incoming_dark_theme</item>
+        <item name="speakBubbleOutgoingDrawable">@drawable/text_bubble_outgoing_dark_theme</item>
+
         <item name="loadingViewDrawable">@drawable/loading_view_black</item>
         <item name="buttonBackgroundDrawable">@drawable/button_background_black</item>
 
         <item name="android:windowBackground">@color/black</item>
+
+        <item name="android:textColorSecondary">?mainTitleTextColor</item>
+        <item name="android:textColor">?mainBodyTextColor</item>
+
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
     </style>
 
     <style name="WhiteTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -94,10 +108,15 @@
 
         <item name="navigationDrawerHighlight">@color/riksdagBlueAlpha</item>
 
+        <item name="speakBubbleIncomingDrawable">@drawable/text_bubble_incoming_light_theme</item>
+        <item name="speakBubbleOutgoingDrawable">@drawable/text_bubble_outgoing_light_theme</item>
+
         <item name="loadingViewDrawable">@drawable/loading_view_white</item>
         <item name="buttonBackgroundDrawable">@drawable/button_background_white</item>
 
         <item name="android:windowBackground">@color/white</item>
+
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
     </style>
 
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -105,6 +124,10 @@
         <item name="android:textColorSecondary">?attr/secondaryLightColor</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="OverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:popupBackground">?mainBackgroundColor</item>
     </style>
 
     <style name="ToolbarStyle" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -161,6 +184,12 @@
         <item name="android:textSize">25sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">?attr/secondaryLightColor</item>
+    </style>
+
+    <style name="PreferenceFragmentStyle">
+
+        <item name="android:textColorSecondary">?mainTitleTextColor</item>
+        <item name="android:textColor">?mainBodyTextColor</item>
     </style>
 
 
