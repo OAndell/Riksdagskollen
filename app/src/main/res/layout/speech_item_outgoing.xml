@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="4dp"
+    android:orientation="horizontal"
+    android:weightSum="30">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?speakBubbleOutgoingDrawable"
+        android:orientation="vertical"
+        android:layout_weight="26"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:visibility="visible">
+
+        <ProgressBar
+            android:id="@+id/debate_item_loading_view"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:indeterminate="true"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/debate_item_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:weightSum="30">
+
+            <TextView
+                android:id="@+id/debate_item_speaker"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="6dp"
+                android:layout_weight="25"
+                android:baselineAligned="false"
+                android:gravity="center_vertical"
+                android:text="Isabella Lövin (blablablabla)"
+                android:textColor="?debateTextColorTitle"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/debate_item_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="5"
+                android:gravity="center_vertical"
+                android:text="14:39"
+                android:textColor="?debateTextColorTitle"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/debate_item_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?debateTextColor"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <oscar.riksdagskollen.Util.View.CircularImageView
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_weight="4"
+        android:id="@+id/debate_item_portrait" />
+
+
+</LinearLayout>

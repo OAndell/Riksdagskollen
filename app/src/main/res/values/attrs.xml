@@ -8,6 +8,8 @@
 
     <attr name="mainTitleTextColor" format="color" />
     <attr name="mainBodyTextColor" format="color" />
+    <attr name="debateTextColor" format="color" />
+    <attr name="debateTextColorTitle" format="color" />
     <attr name="buttonColor" format="color" />
     <attr name="secondaryLightColor" format="color" />
     <attr name="secondaryDarkColor" format="color" />
@@ -17,5 +19,8 @@
     <attr name="navigationDrawerHighlight" format="color" />
     <attr name="loadingViewDrawable" format="reference" />
     <attr name="buttonBackgroundDrawable" format="reference" />
+    <attr name="speakBubbleIncomingDrawable" format="reference" />
+    <attr name="speakBubbleOutgoingDrawable" format="reference" />
+
 
 </resources>

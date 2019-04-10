@@ -26,6 +26,8 @@
         <item name="cardViewBorderColor">@color/white</item>
         <item name="mainTitleTextColor">@color/riksdagBlue</item>
         <item name="mainBodyTextColor">@color/darkText</item>
+        <item name="debateTextColor">@color/white</item>
+        <item name="debateTextColorTitle">@color/white</item>
         <item name="buttonColor">@color/riksdagBlue</item>
 
         <item name="yesindicatorcolor">@color/yesVoteColorLight</item>
@@ -62,6 +64,8 @@
         <item name="cardViewBackgroundColor">@color/black</item>
         <item name="mainTitleTextColor">@color/white</item>
         <item name="mainBodyTextColor">@color/white</item>
+        <item name="debateTextColor">@color/white</item>
+        <item name="debateTextColorTitle">@color/white</item>
         <item name="buttonColor">@color/white</item>
 
         <item name="yesindicatorcolor">@color/darkResultIndicator</item>
@@ -101,6 +105,8 @@
         <item name="cardViewBackgroundColor">@color/white</item>
         <item name="mainTitleTextColor">@color/riksdagBlueLight</item>
         <item name="mainBodyTextColor">@color/darkText</item>
+        <item name="debateTextColor">@color/riksdagBlueLight</item>
+        <item name="debateTextColorTitle">@color/riksdagBlueLight</item>
         <item name="buttonColor">@color/riksdagBlueLight</item>
 
         <item name="yesindicatorcolor">@color/riksdagBlueAlpha</item>
