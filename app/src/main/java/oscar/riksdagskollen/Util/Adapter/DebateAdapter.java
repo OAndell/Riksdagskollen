@@ -1,12 +1,14 @@
 package oscar.riksdagskollen.Util.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -17,8 +19,10 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
+import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.JSONModel.DebateSpeech;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.JSONModel.Speech;
@@ -66,7 +70,16 @@ public class DebateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         final DebateViewHolderItem debateView = (DebateViewHolderItem) holder;
         debateView.speakerName.setText(debateSpeeches.get(position).getTalare());
         debateView.time.setText(debateSpeeches.get(position).getAnf_klockslag());
+        int drawableResource = CurrentParties.getParty(debateSpeeches.get(position).getParti()).getDrawableLogo();
+        debateView.partyLogo.setImageResource(drawableResource);
         debateView.setLoading(true);
+
+        debateView.speakerName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         Speech speechDetail = speechDetails.get(debateSpeeches.get(position).getAnf_nummer());
         if (speechDetail != null) {
@@ -89,14 +102,32 @@ public class DebateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     });
         }
 
+
         RiksdagskollenApp.getInstance().getRiksdagenAPIManager()
                 .getRepresentative(debateSpeeches.get(position).getIntressent_id(), new RepresentativeCallback() {
                     @Override
-                    public void onPersonFetched(Representative representative) {
+                    public void onPersonFetched(final Representative representative) {
                         Glide
                                 .with(context)
                                 .load(representative.getBild_url_80())
                                 .into(debateView.portrait);
+                        debateView.portrait.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent repDetailsIntent = new Intent(context, RepresentativeDetailActivity.class);
+                                repDetailsIntent.putExtra("representative", representative);
+                                context.startActivity(repDetailsIntent);
+                            }
+                        });
+
+                        debateView.speakerName.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent repDetailsIntent = new Intent(context, RepresentativeDetailActivity.class);
+                                repDetailsIntent.putExtra("representative", representative);
+                                context.startActivity(repDetailsIntent);
+                            }
+                        });
                     }
 
                     @Override
@@ -120,7 +151,6 @@ public class DebateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     private String cleanupSpeech(String speech) {
-        System.out.println(speech);
         speech = speech.replaceAll("STYLEREF Kantrubrik \\\\\\* MERGEFORMAT Svar på interpellationer", "");
         return speech;
     }
@@ -137,6 +167,7 @@ public class DebateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         TextView time;
         TextView speech;
         CircularImageView portrait;
+        ImageView partyLogo;
         Context context;
         ProgressBar loadingView;
         LinearLayout speechInfoView;
@@ -150,7 +181,7 @@ public class DebateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             loadingView = itemView.findViewById(R.id.debate_item_loading_view);
             speechInfoView = itemView.findViewById(R.id.debate_item_info);
             portrait = itemView.findViewById(R.id.debate_item_portrait);
-
+            partyLogo = itemView.findViewById(R.id.debate_item_portrait_party_logo);
         }
 
         void setLoading(boolean loading) {

@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
         android:background="?speakBubbleOutgoingDrawable"
         android:orientation="vertical"
-        android:layout_weight="26"
-        android:paddingLeft="32dp"
+        android:layout_weight="25"
+        android:paddingLeft="16dp"
         android:paddingRight="32dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
@@ -21,7 +21,7 @@
         <ProgressBar
             android:id="@+id/debate_item_loading_view"
             android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_height="200dp"
             android:layout_gravity="center"
             android:layout_margin="8dp"
             android:indeterminate="true"
@@ -73,11 +73,28 @@
 
     </LinearLayout>
 
-    <oscar.riksdagskollen.Util.View.CircularImageView
+
+    <FrameLayout
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_weight="4"
-        android:id="@+id/debate_item_portrait" />
+        android:layout_height="60dp"
+        android:layout_weight="5">
+
+        <oscar.riksdagskollen.Util.View.CircularImageView
+            android:id="@+id/debate_item_portrait"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter" />
+
+        <ImageView
+            android:id="@+id/debate_item_portrait_party_logo"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="6dp"
+            android:layout_marginRight="6dp"
+            android:scaleType="fitEnd" />
+
+    </FrameLayout>
 
 
 </LinearLayout>
