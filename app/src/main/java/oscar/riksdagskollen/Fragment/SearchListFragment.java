@@ -123,7 +123,7 @@ public class SearchListFragment extends RiksdagenAutoLoadingListFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.dec_menu, menu);
+        inflater.inflate(R.menu.doc_search_menu, menu);
         final MenuItem searchItem = menu.findItem(R.id.menu_search);
         searchView = (SearchView) searchItem.getActionView();
         changeSearchViewTextColor(searchView);
@@ -146,7 +146,7 @@ public class SearchListFragment extends RiksdagenAutoLoadingListFragment {
             }
         });
 
-        MenuItem optionsItem = menu.findItem(R.id.menu_filter);
+        MenuItem optionsItem = menu.findItem(R.id.menu_sort);
         optionsItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -183,9 +183,7 @@ public class SearchListFragment extends RiksdagenAutoLoadingListFragment {
     }
 
     private void doNewSearch() {
-        clearItems();
-        resetPageToLoad();
-        loadNextPage();
+        refresh();
     }
 
     private void changeSearchViewTextColor(View view) {
