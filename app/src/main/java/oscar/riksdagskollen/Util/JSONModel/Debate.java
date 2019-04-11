@@ -3,6 +3,10 @@ package oscar.riksdagskollen.Util.JSONModel;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
+import oscar.riksdagskollen.Util.Enum.CurrentParties;
+
 public class Debate implements Parcelable {
 
 
@@ -10,6 +14,17 @@ public class Debate implements Parcelable {
 
     public DebateSpeech[] getAnforande() {
         return anforande;
+    }
+
+    public ArrayList<Party> getPartiesInDebate() {
+        ArrayList<Party> parties = new ArrayList<>();
+        for (int i = 0; i < anforande.length; i++) {
+            Party party = CurrentParties.getParty(anforande[i].getParti());
+            if (!parties.contains(party)) {
+                parties.add(party);
+            }
+        }
+        return parties;
     }
 
     @Override

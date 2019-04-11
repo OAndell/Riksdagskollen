@@ -16,7 +16,7 @@ import java.util.List;
 import oscar.riksdagskollen.Activity.MotionActivity;
 import oscar.riksdagskollen.Manager.RiksdagenAPIManager;
 import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.Util.Adapter.PartyListViewholderAdapter;
+import oscar.riksdagskollen.Util.Adapter.DebateListAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
@@ -28,7 +28,7 @@ import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
 
 public class DebateListFragment extends RiksdagenAutoLoadingListFragment {
     private final List<PartyDocument> documentList = new ArrayList<>();
-    private PartyListViewholderAdapter adapter;
+    private DebateListAdapter adapter;
 
     public static DebateListFragment newInstance() {
         DebateListFragment newInstance = new DebateListFragment();
@@ -46,7 +46,7 @@ public class DebateListFragment extends RiksdagenAutoLoadingListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new PartyListViewholderAdapter(documentList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
+        adapter = new DebateListAdapter(documentList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {
                 Intent intent = new Intent(getContext(), MotionActivity.class);
@@ -88,10 +88,7 @@ public class DebateListFragment extends RiksdagenAutoLoadingListFragment {
             }
         });
         incrementPage(); //Hopefully this is not a race condition?
-
     }
-
-
 
     @Override
     protected void clearItems() {
