@@ -119,8 +119,12 @@ public class CurrentNews implements Parcelable {
         }
         // Some news does not contain the LinkLista object
         catch (NullPointerException e) {
-            System.out.println("Could not open news url");
-            return null;
+            String url = getUrl();
+            if (url.startsWith("http")) {
+                return url;
+            } else {
+                return "http://riksdagen.se" + url;
+            }
         }
 
     }
