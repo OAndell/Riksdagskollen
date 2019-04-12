@@ -112,7 +112,7 @@ public class RiksdagenAPIManager {
     }
 
     public void getDebates(int page, final PartyDocumentCallback callback) {
-        String subURL = "/dokumentlista/?sok=&doktyp=ip,bet&sort=datum&sortorder=desc&utformat=json" + "&p=" + page;
+        String subURL = "/dokumentlista/?sok=&doktyp=ip,bet,kam-ad&sort=datum&sortorder=desc&utformat=json" + "&p=" + page;
 
         doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override

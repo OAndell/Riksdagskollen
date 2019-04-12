@@ -15,7 +15,8 @@ public enum DocumentType {
     Interpellation("ip", "Interpellationer"),
     Motion("mot", "Motioner"),
     FragaSvar("frs", "Svar på fråga"),
-    Betankande("bet", "Betänkande");
+    Betankande("bet", "Betänkande"),
+    KamAd("kam-ad", "Aktuell Debatt");
 
     private String docType;
     private String displayName;
