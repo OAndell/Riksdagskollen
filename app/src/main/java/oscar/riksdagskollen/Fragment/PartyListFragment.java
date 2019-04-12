@@ -25,7 +25,7 @@ import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.PartyListViewholderAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
-import oscar.riksdagskollen.Util.Enum.PartyDocumentType;
+import oscar.riksdagskollen.Util.Enum.DocumentType;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
@@ -40,7 +40,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
     private ArrayList<PartyDocument> documentList = new ArrayList<>();
     private PartyListViewholderAdapter adapter;
     private SharedPreferences preferences;
-    private ArrayList<PartyDocumentType> oldFilter;
+    private ArrayList<DocumentType> oldFilter;
     private MenuItem notificationItem;
 
     /**
@@ -130,10 +130,10 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
                 break;
             case R.id.menu_filter:
                 oldFilter = getFilter();
-                final CharSequence[] items = PartyDocumentType.getPartyDisplayNames();
+                final CharSequence[] items = DocumentType.getPartyDisplayNames();
                 boolean[] checked = new boolean[items.length];
                 for (int i = 0; i < items.length; i++) {
-                    checked[i] = preferences.getBoolean(PartyDocumentType.getPartyDokTypes().get(i).getDocType(), true);
+                    checked[i] = preferences.getBoolean(DocumentType.getPartyDokTypes().get(i).getDocType(), true);
                 }
 
                 final SharedPreferences.Editor editor = preferences.edit();
@@ -144,7 +144,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
                         .setMultiChoiceItems(items, checked, new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
-                                editor.putBoolean(PartyDocumentType.getPartyDokTypes().get(indexSelected).getDocType(), isChecked);
+                                editor.putBoolean(DocumentType.getPartyDokTypes().get(indexSelected).getDocType(), isChecked);
                             }
                         }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
@@ -221,9 +221,9 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
         adapter.clear();
     }
 
-    private ArrayList<PartyDocumentType> getFilter(){
-        ArrayList<PartyDocumentType> filter = new ArrayList<>();
-        for (PartyDocumentType documentType : PartyDocumentType.getPartyDokTypes()) {
+    private ArrayList<DocumentType> getFilter() {
+        ArrayList<DocumentType> filter = new ArrayList<>();
+        for (DocumentType documentType : DocumentType.getPartyDokTypes()) {
             if (preferences.getBoolean(documentType.getDocType(), true)) filter.add(documentType);
         }
         return filter;
@@ -232,7 +232,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
     private List<PartyDocument> filter(List<PartyDocument> documents) {
         final List<PartyDocument> filteredDocumentList = new ArrayList<>();
         for (PartyDocument document : documents) {
-            if (getFilter().contains(PartyDocumentType.getDocTypeForDocument(document))) {
+            if (getFilter().contains(DocumentType.getDocTypeForDocument(document))) {
                 filteredDocumentList.add(document);
             }
         }
@@ -244,7 +244,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
     }
 
     private void onFilterChanged() {
-        List<PartyDocumentType> filter = getFilter();
+        List<DocumentType> filter = getFilter();
 
         if (!filter.equals(oldFilter)) {
             applyFilter();

@@ -19,7 +19,7 @@ import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.PartyListViewholderAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
-import oscar.riksdagskollen.Util.Enum.PartyDocumentType;
+import oscar.riksdagskollen.Util.Enum.DocumentType;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeDocumentCallback;
 
@@ -33,7 +33,7 @@ public class RepresentativeFeedFragment extends RiksdagenAutoLoadingListFragment
     private PartyListViewholderAdapter adapter;
     private ArrayList<PartyDocument> documentList = new ArrayList<>();
     private SharedPreferences preferences;
-    private ArrayList<PartyDocumentType> oldFilter;
+    private ArrayList<DocumentType> oldFilter;
 
 
     public static RepresentativeFeedFragment newInstance(String iid, ArrayList<PartyDocument> firstPage) {
@@ -95,10 +95,10 @@ public class RepresentativeFeedFragment extends RiksdagenAutoLoadingListFragment
 
         if (item.getItemId() == R.id.menu_filter) {
             oldFilter = getFilter();
-            final CharSequence[] items = PartyDocumentType.getDisplayNames();
+            final CharSequence[] items = DocumentType.getDisplayNames();
             boolean[] checked = new boolean[items.length];
             for (int i = 0; i < items.length; i++) {
-                checked[i] = preferences.getBoolean(PartyDocumentType.getAllDokTypes().get(i).getDocType(), true);
+                checked[i] = preferences.getBoolean(DocumentType.getAllDokTypes().get(i).getDocType(), true);
             }
 
             final SharedPreferences.Editor editor = preferences.edit();
@@ -109,7 +109,7 @@ public class RepresentativeFeedFragment extends RiksdagenAutoLoadingListFragment
                     .setMultiChoiceItems(items, checked, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
-                            editor.putBoolean(PartyDocumentType.getAllDokTypes().get(indexSelected).getDocType(), isChecked);
+                            editor.putBoolean(DocumentType.getAllDokTypes().get(indexSelected).getDocType(), isChecked);
                         }
                     }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
@@ -185,9 +185,9 @@ public class RepresentativeFeedFragment extends RiksdagenAutoLoadingListFragment
         adapter.clear();
     }
 
-    private ArrayList<PartyDocumentType> getFilter() {
-        ArrayList<PartyDocumentType> filter = new ArrayList<>();
-        for (PartyDocumentType documentType : PartyDocumentType.values()) {
+    private ArrayList<DocumentType> getFilter() {
+        ArrayList<DocumentType> filter = new ArrayList<>();
+        for (DocumentType documentType : DocumentType.values()) {
             if (preferences.getBoolean(documentType.getDocType(), true)) filter.add(documentType);
         }
         return filter;
@@ -196,7 +196,7 @@ public class RepresentativeFeedFragment extends RiksdagenAutoLoadingListFragment
     private List<PartyDocument> filter(List<PartyDocument> documents) {
         final List<PartyDocument> filteredDocumentList = new ArrayList<>();
         for (PartyDocument document : documents) {
-            if (getFilter().contains(PartyDocumentType.getDocTypeForDocument(document))) {
+            if (getFilter().contains(DocumentType.getDocTypeForDocument(document))) {
                 filteredDocumentList.add(document);
             }
         }
@@ -208,7 +208,7 @@ public class RepresentativeFeedFragment extends RiksdagenAutoLoadingListFragment
     }
 
     private void onFilterChanged() {
-        List<PartyDocumentType> filter = getFilter();
+        List<DocumentType> filter = getFilter();
 
         if (!filter.equals(oldFilter)) {
             applyFilter();

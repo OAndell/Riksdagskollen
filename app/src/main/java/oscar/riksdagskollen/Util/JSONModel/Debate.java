@@ -3,6 +3,15 @@ package oscar.riksdagskollen.Util.JSONModel;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
@@ -37,10 +46,10 @@ public class Debate implements Parcelable {
         dest.writeTypedArray(this.anforande, flags);
     }
 
-    public Debate() {
-    }
+
 
     protected Debate(Parcel in) {
+        System.out.println(in.toString());
         this.anforande = in.createTypedArray(DebateSpeech.CREATOR);
     }
 
@@ -55,4 +64,26 @@ public class Debate implements Parcelable {
             return new Debate[size];
         }
     };
+
+
+    //Because of shitty API
+    public static class DebateDezerializer implements JsonDeserializer<Debate> {
+        @Override
+        public Debate deserialize(JsonElement json, Type typeOfT,
+                                  JsonDeserializationContext context) throws JsonParseException {
+
+            JsonObject jsonObj = json.getAsJsonObject();
+            JsonElement speeches = jsonObj.get("anforande");
+            if (speeches.isJsonArray()) {
+                return new Gson().fromJson(json, Debate.class);
+            } else {
+                JsonArray jsonArray = new JsonArray();
+                jsonArray.add(speeches);
+                jsonObj.remove("anforande");
+                jsonObj.add("anforande", jsonArray);
+                return new Gson().fromJson(jsonObj, Debate.class);
+            }
+        }
+
+    }
 }

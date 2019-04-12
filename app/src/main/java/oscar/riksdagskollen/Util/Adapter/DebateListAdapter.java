@@ -25,6 +25,7 @@ import java.util.List;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
+import oscar.riksdagskollen.Util.Enum.DocumentType;
 import oscar.riksdagskollen.Util.JSONModel.Intressent;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
@@ -33,6 +34,9 @@ import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.View.CircularImageView;
 
 public class DebateListAdapter extends RiksdagenViewHolderAdapter {
+
+    private static final int TYPE_PORTRAIT = 111;
+    private static final int TYPE_NO_PORTRAIT = 222;
 
     private static final Comparator<PartyDocument> DEFAULT_COMPARATOR = new Comparator<PartyDocument>() {
         @Override
@@ -104,13 +108,33 @@ public class DebateListAdapter extends RiksdagenViewHolderAdapter {
         return documentList.get(position - headers.size()).uniqueDocId();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        //check what type our position is, based on the assumption that the order is headers > sortedList > footers
+        if (position < headers.size()) {
+            return TYPE_HEADER;
+        } else if (position >= headers.size() + documentList.size()) {
+            return TYPE_FOOTER;
+        }
+        if (documentList.get(position).getDoktyp().equals(DocumentType.Interpellation.getDocType())) {
+            return TYPE_PORTRAIT;
+        }
+        return TYPE_ITEM;
+    }
+
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == TYPE_PORTRAIT) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.debate_ip_list_item, parent, false);
+            return new IPDebateListViewHolder(itemView, fragment);
+        }
         if (viewType == TYPE_ITEM) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.debate_list_item, parent, false);
-            return new DebateListViewHolder(itemView, fragment);
+                    .inflate(R.layout.debate_other_list_item, parent, false);
+            return new BetDebateListViewHolder(itemView, fragment);
         } else {
             FrameLayout frameLayout = new FrameLayout(parent.getContext());
             //make sure it fills the space
@@ -131,7 +155,12 @@ public class DebateListAdapter extends RiksdagenViewHolderAdapter {
             prepareHeaderFooter((HeaderFooterViewHolder) holder, v);
         } else {
             PartyDocument document = documentList.get(position - headers.size());
-            ((DebateListViewHolder) holder).bind(document, clickListener);
+            if (documentList.get(position).getDoktyp().equals(DocumentType.Interpellation.getDocType())) {
+                ((IPDebateListViewHolder) holder).bind(document, clickListener);
+            } else {
+                ((BetDebateListViewHolder) holder).bind(document, clickListener);
+            }
+
         }
     }
 
@@ -176,7 +205,7 @@ public class DebateListAdapter extends RiksdagenViewHolderAdapter {
         }
     }
 
-    static class DebateListViewHolder extends RecyclerView.ViewHolder {
+    static class IPDebateListViewHolder extends RecyclerView.ViewHolder {
         final TextView documentTitle;
         final TextView debateDate;
         final TextView author;
@@ -187,7 +216,7 @@ public class DebateListAdapter extends RiksdagenViewHolderAdapter {
         Request imageUrlRequest;
 
 
-        public DebateListViewHolder(View cardView, Fragment fragment) {
+        public IPDebateListViewHolder(View cardView, Fragment fragment) {
             super(cardView);
             this.fragment = fragment;
             documentTitle = cardView.findViewById(R.id.debate_card_title);
@@ -196,7 +225,6 @@ public class DebateListAdapter extends RiksdagenViewHolderAdapter {
             authorView = cardView.findViewById(R.id.debate_card_portrait);
             partySymbol = cardView.findViewById(R.id.debate_card_party_logo);
             partyContainer = cardView.findViewById(R.id.debate_card_parties_holder);
-
 
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -250,6 +278,65 @@ public class DebateListAdapter extends RiksdagenViewHolderAdapter {
 
                 }
             });
+
+
+        }
+    }
+
+
+    static class BetDebateListViewHolder extends RecyclerView.ViewHolder {
+        final TextView documentType;
+        final TextView documentTitle;
+        final TextView debateDate;
+        final TextView author;
+        final CircularImageView authorView;
+        final ImageView partySymbol;
+        final FlexboxLayout partyContainer;
+        final Fragment fragment;
+        Request imageUrlRequest;
+
+
+        public BetDebateListViewHolder(View cardView, Fragment fragment) {
+            super(cardView);
+            this.fragment = fragment;
+            documentTitle = cardView.findViewById(R.id.debate_card_title);
+            debateDate = cardView.findViewById(R.id.debate_card_date);
+            author = cardView.findViewById(R.id.debate_card_author);
+            authorView = cardView.findViewById(R.id.debate_card_portrait);
+            partySymbol = cardView.findViewById(R.id.debate_card_party_logo);
+            partyContainer = cardView.findViewById(R.id.debate_card_parties_holder);
+            documentType = cardView.findViewById(R.id.debate_card_doctype);
+
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                }
+            });
+        }
+
+        void bind(final PartyDocument item, final OnItemClickListener listener) {
+            partyContainer.removeAllViews();
+
+            documentType.setText(DocumentType.getDocTypeForDocument(item).getDisplayName());
+
+            documentTitle.setText(item.getTitel());
+            debateDate.setText("Debattdag " + item.getDebattdag());
+            author.setText(item.getUndertitel());
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(item);
+                }
+            });
+
+            ArrayList<Party> partiesInDebate = item.getDebatt().getPartiesInDebate();
+            for (Party party : partiesInDebate) {
+                ImageView partyIcon = new ImageView(RiksdagskollenApp.getInstance().getApplicationContext());
+                partyIcon.setImageResource(party.getDrawableLogo());
+                partyIcon.setLayoutParams(new LinearLayout.LayoutParams(80, 80));
+                partyContainer.addView(partyIcon);
+            }
 
 
         }

@@ -19,8 +19,8 @@ public abstract class RiksdagenViewHolderAdapter extends RecyclerView.Adapter<Re
     final List<View> headers = new ArrayList<>();
     final List<View> footers = new ArrayList<>();
 
-    private static final int TYPE_HEADER = 111;
-    private static final int TYPE_FOOTER = 222;
+    protected static final int TYPE_HEADER = 111;
+    protected static final int TYPE_FOOTER = 222;
     static final int TYPE_ITEM = 333;
     OnItemClickListener clickListener;
 

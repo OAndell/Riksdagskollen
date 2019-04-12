@@ -9,17 +9,18 @@ import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
  * Created by gustavaaro on 2018-08-28.
  */
 
-public enum PartyDocumentType {
+public enum DocumentType {
 
     Fraga("fr", "Skriftliga frågor"),
     Interpellation("ip", "Interpellationer"),
     Motion("mot", "Motioner"),
-    FragaSvar("frs", "Svar på fråga");
+    FragaSvar("frs", "Svar på fråga"),
+    Betankande("bet", "Betänkande");
 
     private String docType;
     private String displayName;
 
-    PartyDocumentType(String docType, String displayName){
+    DocumentType(String docType, String displayName) {
         this.docType = docType;
         this.displayName = displayName;
     }
@@ -32,8 +33,8 @@ public enum PartyDocumentType {
         return docType;
     }
 
-    public static PartyDocumentType getDocumentTypeFromName(CharSequence displayName){
-        for (PartyDocumentType type: PartyDocumentType.values()) {
+    public static DocumentType getDocumentTypeFromName(CharSequence displayName) {
+        for (DocumentType type : DocumentType.values()) {
             if (type.displayName.equals(displayName)) return type;
         }
         return null;
@@ -57,7 +58,7 @@ public enum PartyDocumentType {
         return names;
     }
 
-    public static PartyDocumentType getDocTypeForDocument(PartyDocument document) {
+    public static DocumentType getDocTypeForDocument(PartyDocument document) {
 
         for (int i = 0; i < values().length; i++) {
             if (document.getDoktyp().equals(values()[i].docType)) {
@@ -67,16 +68,16 @@ public enum PartyDocumentType {
         return null;
     }
 
-    public static ArrayList<PartyDocumentType> getPartyDokTypes() {
-        ArrayList<PartyDocumentType> filter = new ArrayList<>();
+    public static ArrayList<DocumentType> getPartyDokTypes() {
+        ArrayList<DocumentType> filter = new ArrayList<>();
         filter.addAll(Arrays.asList(values()));
         // Party documents do not have Answers for questions
         filter.remove(FragaSvar);
         return filter;
     }
 
-    public static ArrayList<PartyDocumentType> getAllDokTypes(){
-        ArrayList<PartyDocumentType> filter = new ArrayList<>();
+    public static ArrayList<DocumentType> getAllDokTypes() {
+        ArrayList<DocumentType> filter = new ArrayList<>();
         filter.addAll(Arrays.asList(values()));
         return filter;
     }

@@ -25,6 +25,7 @@ import fr.arnaudguyon.xmltojsonlib.XmlToJson;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNews;
 import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNewsLink;
+import oscar.riksdagskollen.Util.JSONModel.Debate;
 import oscar.riksdagskollen.Util.JSONModel.DecisionDocument;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
@@ -111,12 +112,17 @@ public class RiksdagenAPIManager {
     }
 
     public void getDebates(int page, final PartyDocumentCallback callback) {
-        String subURL = "/dokumentlista/?sok=&doktyp=ip&sort=datum&sortorder=desc&utformat=json" + "&p=" + page;
+        String subURL = "/dokumentlista/?sok=&doktyp=ip,bet&sort=datum&sortorder=desc&utformat=json" + "&p=" + page;
 
         doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(final JSONObject response) {
+
                 try {
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(Debate.class, new Debate.DebateDezerializer())
+                            .create();
+
                     JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
                     PartyDocument[] documents = gson.fromJson(jsonDocuments.toString(), PartyDocument[].class);
                     callback.onDocumentsFetched(Arrays.asList(documents));
@@ -718,8 +724,6 @@ public class RiksdagenAPIManager {
 
             }
         });
-
-
     }
 
 
