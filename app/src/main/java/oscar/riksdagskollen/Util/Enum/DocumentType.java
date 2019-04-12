@@ -71,9 +71,9 @@ public enum DocumentType {
 
     public static ArrayList<DocumentType> getPartyDokTypes() {
         ArrayList<DocumentType> filter = new ArrayList<>();
-        filter.addAll(Arrays.asList(values()));
-        // Party documents do not have Answers for questions
-        filter.remove(FragaSvar);
+        filter.add(Fraga);
+        filter.add(Interpellation);
+        filter.add(Motion);
         return filter;
     }
 
