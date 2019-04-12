@@ -107,8 +107,9 @@ public class DebateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 .getRepresentative(debateSpeeches.get(position).getIntressent_id(), new RepresentativeCallback() {
                     @Override
                     public void onPersonFetched(final Representative representative) {
+
                         Glide
-                                .with(context)
+                                .with(context.getApplicationContext())
                                 .load(representative.getBild_url_80())
                                 .into(debateView.portrait);
                         debateView.portrait.setOnClickListener(new View.OnClickListener() {

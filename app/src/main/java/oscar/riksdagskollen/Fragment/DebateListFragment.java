@@ -13,13 +13,15 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 
-import oscar.riksdagskollen.Activity.MotionActivity;
+import oscar.riksdagskollen.Activity.DebateActivity;
 import oscar.riksdagskollen.Manager.RiksdagenAPIManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.Util.Adapter.DebateListAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
+
+import static oscar.riksdagskollen.Activity.DebateActivity.DEBATE_INITIATOR_ID;
 
 
 /**
@@ -48,9 +50,13 @@ public class DebateListFragment extends RiksdagenAutoLoadingListFragment {
         super.onCreate(savedInstanceState);
         adapter = new DebateListAdapter(documentList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Object document) {
-                Intent intent = new Intent(getContext(), MotionActivity.class);
-                intent.putExtra("document", ((PartyDocument) document));
+            public void onItemClick(Object clickedDocument) {
+                PartyDocument document = (PartyDocument) clickedDocument;
+                Intent intent = new Intent(getContext(), DebateActivity.class);
+                intent.putExtra(DebateActivity.SHOW_INITIATING_DOCUMENT, true);
+                intent.putExtra(DebateActivity.INITIATING_DOCUMENT, (PartyDocument) document);
+                if (document.getSenders().size() > 0)
+                    intent.putExtra(DEBATE_INITIATOR_ID, document.getSenders().get(0));
                 startActivity(intent);
             }
         }, this);

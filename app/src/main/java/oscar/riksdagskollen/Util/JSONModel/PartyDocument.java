@@ -3,6 +3,8 @@ package oscar.riksdagskollen.Util.JSONModel;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * Created by gustavaaro on 2018-03-25.
  */
@@ -202,6 +204,16 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
         this.debatt = in.readParcelable(Debate.class.getClassLoader());
         this.debattnamn = in.readString();
         this.debattdag = in.readString();
+    }
+
+    public ArrayList<String> getSenders() {
+        ArrayList<String> senders = new ArrayList<>();
+        for (Intressent i : getDokintressent().getIntressenter()) {
+            if (i.getRoll().equals("undertecknare") || (getDoktyp().equals("frs") && i.getRoll().equals("besvaradav"))) {
+                senders.add(i.getIntressent_id());
+            }
+        }
+        return senders;
     }
 
     public static final Creator<PartyDocument> CREATOR = new Creator<PartyDocument>() {

@@ -365,13 +365,14 @@ public class RiksdagenAPIManager {
                     callback.onProtocolsFetched(Arrays.asList(protocols));
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    callback.onFail(new VolleyError(e.getMessage()));
                 }
 
             }
 
             @Override
             public void onRequestFail(VolleyError error) {
-
+                callback.onFail(error);
             }
         });
     }

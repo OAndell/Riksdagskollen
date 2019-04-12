@@ -75,11 +75,10 @@
             </View>
 
 
-            <WebView
+            <oscar.riksdagskollen.Util.View.DocumentHtmlView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/webview">
-            </WebView>
+                android:id="@+id/webview"></oscar.riksdagskollen.Util.View.DocumentHtmlView>
 
             <TextView
                 android:id="@+id/act_doc_reader_label_author"

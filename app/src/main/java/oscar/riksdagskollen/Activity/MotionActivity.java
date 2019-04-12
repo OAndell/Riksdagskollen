@@ -11,17 +11,14 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -33,33 +30,22 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import oscar.riksdagskollen.Manager.AlertManager;
 import oscar.riksdagskollen.Manager.AnalyticsManager;
-import oscar.riksdagskollen.Manager.RiksdagenAPIManager;
 import oscar.riksdagskollen.Manager.SavedDocumentManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.CustomTabs;
-import oscar.riksdagskollen.Util.JSONModel.DebateSpeech;
-import oscar.riksdagskollen.Util.JSONModel.Intressent;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
-import oscar.riksdagskollen.Util.JSONModel.Protocol;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
+import oscar.riksdagskollen.Util.RiksdagenCallback.OnDocumentHtmlViewLoadedCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
-import oscar.riksdagskollen.Util.RiksdagenCallback.ProtocolCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
-import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
+import oscar.riksdagskollen.Util.View.DocumentHtmlView;
 
 import static oscar.riksdagskollen.Activity.DebateActivity.DEBATE_INITIATOR_ID;
-import static oscar.riksdagskollen.Activity.DebateActivity.DEBATE_NAME;
-import static oscar.riksdagskollen.Activity.DebateActivity.PROTOCOL_ID;
 
 /**
  * Created by gustavaaro on 2018-03-29.
@@ -67,7 +53,6 @@ import static oscar.riksdagskollen.Activity.DebateActivity.PROTOCOL_ID;
 
 public class MotionActivity extends AppCompatActivity {
 
-    ProgressBar progress;
     private PartyDocument document;
     private ViewGroup loadingView;
     private Context context;
@@ -75,7 +60,6 @@ public class MotionActivity extends AppCompatActivity {
     private MenuItem notificationItem;
     private boolean isSaved = false;
     private boolean isNotificationsEnabled = false;
-    private boolean firstPrepare = true;
     private SavedDocumentManager savedDocumentManager;
     RiksdagskollenApp app;
 
@@ -120,8 +104,15 @@ public class MotionActivity extends AppCompatActivity {
             titleTV.setText(document.getTitel());
             authorTV.setText(document.getUndertitel());
         }
-
-        setUpWebView();
+        DocumentHtmlView documentHtmlView = findViewById(R.id.webview);
+        documentHtmlView.setDocument(document);
+        documentHtmlView.setLoadedCallack(new OnDocumentHtmlViewLoadedCallback() {
+            @Override
+            public void onDocumentLoaded() {
+                loadingView.setVisibility(View.GONE);
+            }
+        });
+        //setUpWebView();
         portaitContainer = findViewById(R.id.act_doc_reader_portrait_container);
 
 
@@ -133,35 +124,18 @@ public class MotionActivity extends AppCompatActivity {
 
         if (document.getDoktyp().equals("ip") && document.getDebatt() != null && document.getDebattdag() != null) {
 
-            final Context context = this;
-            RiksdagenAPIManager.getInstance().getProtocolForDate(document.getDebattdag(), document.getRm(), new ProtocolCallback() {
+            Button replyButton = findViewById(R.id.reply_button);
+            replyButton.setVisibility(View.VISIBLE);
+            replyButton.setText("Denna interpellation har behandlats i en debatt i riksdagen: Läs debatt");
+            replyButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onProtocolsFetched(final List<Protocol> protocols) {
-                    if (protocols.size() == 1) {
-                        Button replyButton = findViewById(R.id.reply_button);
-                        replyButton.setVisibility(View.VISIBLE);
-                        replyButton.setText("Denna interpellation har behandlats i en debatt i riksdagen: Läs debatt");
-                        replyButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                final DebateSpeech[] speeches = document.getDebatt().getAnforande();
-                                List<DebateSpeech> debateSpeeches = Arrays.asList(speeches);
-                                Intent intent = new Intent(context, DebateActivity.class);
-                                intent.putParcelableArrayListExtra(DebateActivity.SPEECHES, new ArrayList<>(debateSpeeches));
-                                intent.putExtra(PROTOCOL_ID, protocols.get(0).getId());
-                                if (document.getDebattnamn() != null)
-                                    intent.putExtra(DEBATE_NAME, document.getDebattnamn() + " " + document.getDebattdag());
-                                if (getSenders().size() > 0)
-                                    intent.putExtra(DEBATE_INITIATOR_ID, getSenders().get(0));
-                                startActivity(intent);
-                            }
-                        });
-                    }
-                }
-
-                @Override
-                public void onFail(VolleyError error) {
-                    Log.e("MotionActivity", "onFail: Could not get protocol");
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, DebateActivity.class);
+                    intent.putExtra(DebateActivity.SHOW_INITIATING_DOCUMENT, false);
+                    intent.putExtra(DebateActivity.INITIATING_DOCUMENT, document);
+                    if (document.getSenders().size() > 0)
+                        intent.putExtra(DEBATE_INITIATOR_ID, document.getSenders().get(0));
+                    startActivity(intent);
                 }
             });
 
@@ -170,80 +144,6 @@ public class MotionActivity extends AppCompatActivity {
         //ONLINE STUFF
         //setupRateFunctionality();
 
-    }
-
-    private void setUpWebView() {
-        WebViewClient webViewClient = new CustomWebViewClient();
-
-        final WebView webView = findViewById(R.id.webview);
-        webView.setWebChromeClient(new WebChromeClient(){
-            @Override
-            public void onProgressChanged(WebView view, final int newProgress) {
-                if(newProgress == 100){
-                    loadingView.setVisibility(View.GONE);
-                }
-            }
-        });
-        webView.setWebViewClient(webViewClient);
-        webView.getSettings().setDomStorageEnabled(true);
-        webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        webView.getSettings().setLoadWithOverviewMode(true);
-        webView.getSettings().setUseWideViewPort(true);
-        webView.getSettings().setJavaScriptEnabled(true);
-
-
-        webView.setInitialScale(1);
-
-        //Disable text-select to make consistent with rest of app
-        webView.setLongClickable(false);
-        webView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return true;
-            }
-        });
-
-
-        app.getRiksdagenAPIManager().getDocumentBody( document, new StringRequestCallback() {
-            @Override
-            public void onResponse(String response) {
-                Document doc = Jsoup.parse(response);
-                //Remove title
-                doc.head().append("<meta name=\"viewport\" content='width=device-width, initial-scale=2.0,text/html, charset='utf-8'>\n");
-                doc.head().appendElement("link").attr("rel", "stylesheet").attr("type", "text/css").attr("href", app.getThemeManager().getCurrentTheme().getCss());
-                doc.select("div>span.sidhuvud_publikation").remove();
-                doc.select("div>span.sidhuvud_beteckning").remove();
-                doc.select("div>span.MotionarLista").remove();
-                doc.select("div.pconf>h1").remove();
-                doc.select("div>hr.sidhuvud_linje").remove();
-                doc.select("head>style").remove();
-                doc.select("body>div>br").remove();
-
-                if(document.getDoktyp().equals("frs")){
-                    try {
-                        // Add title styling
-                        doc.select("body>div>div>p").get(0).addClass("DokumentRubrik");
-                        doc.select("body>div>div>table.webbtabell").remove();
-
-                        // Only show body of response
-                        doc.body().replaceWith(doc.select("body>div>div").get(0));
-                    } catch (IndexOutOfBoundsException e){
-                        // Failed to get response body
-                        e.printStackTrace();
-                    }
-                }
-
-                //String result = doc.toString().replaceAll("class=\\\"[A-Öa-ö0-9]+\\\"","");
-                //Clear default styling
-                String result = doc.toString().replaceAll("style=\"[A-Öa-ö-_:;\\s0-9.%']+\"","");
-                webView.loadDataWithBaseURL("file:///android_asset/", result, "text/html", "UTF-8", null);
-            }
-
-            @Override
-            public void onFail(VolleyError error) {
-
-            }
-        });
     }
 
     private void searchForReplyOrQuestion() {
@@ -298,20 +198,11 @@ public class MotionActivity extends AppCompatActivity {
     }
 
     private void showSenders() {
-        for (String sender : getSenders()) {
+        for (String sender : document.getSenders()) {
             addSenderView(sender);
         }
     }
 
-    private ArrayList<String> getSenders() {
-        ArrayList<String> senders = new ArrayList<>();
-        for (Intressent i : document.getDokintressent().getIntressenter()){
-            if(i.getRoll().equals("undertecknare") || (document.getDoktyp().equals("frs") && i.getRoll().equals("besvaradav"))){
-                senders.add(i.getIntressent_id());
-            }
-        }
-        return senders;
-    }
 
     private void addSenderView(String iid) {
         final View portraitView = LayoutInflater.from(this).inflate(R.layout.intressent_layout, null);
