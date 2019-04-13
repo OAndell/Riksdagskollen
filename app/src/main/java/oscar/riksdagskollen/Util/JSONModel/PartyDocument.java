@@ -207,6 +207,9 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
     }
 
     public ArrayList<String> getSenders() {
+        if (getDokintressent() == null) {
+            return new ArrayList<String>();
+        }
         ArrayList<String> senders = new ArrayList<>();
         for (Intressent i : getDokintressent().getIntressenter()) {
             if (i.getRoll().equals("undertecknare") || (getDoktyp().equals("frs") && i.getRoll().equals("besvaradav"))) {

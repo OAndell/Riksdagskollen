@@ -18,6 +18,7 @@ import oscar.riksdagskollen.Manager.RiksdagenAPIManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.Util.Adapter.DebateListAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
+import oscar.riksdagskollen.Util.Enum.DocumentType;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
 
@@ -53,7 +54,10 @@ public class DebateListFragment extends RiksdagenAutoLoadingListFragment {
             public void onItemClick(Object clickedDocument) {
                 PartyDocument document = (PartyDocument) clickedDocument;
                 Intent intent = new Intent(getContext(), DebateActivity.class);
-                intent.putExtra(DebateActivity.SHOW_INITIATING_DOCUMENT, true);
+                if (((PartyDocument) clickedDocument).getDoktyp().equals(DocumentType.Interpellation.getDocType()))
+                    intent.putExtra(DebateActivity.SHOW_INITIATING_DOCUMENT, true);
+                else
+                    intent.putExtra(DebateActivity.SHOW_INITIATING_DOCUMENT, false);
                 intent.putExtra(DebateActivity.INITIATING_DOCUMENT, (PartyDocument) document);
                 if (document.getSenders().size() > 0)
                     intent.putExtra(DEBATE_INITIATOR_ID, document.getSenders().get(0));
