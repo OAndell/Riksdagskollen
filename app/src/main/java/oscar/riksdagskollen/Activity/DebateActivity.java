@@ -95,7 +95,7 @@ public class DebateActivity extends AppCompatActivity {
 
         String debateName = "Debatt";
         if (initiatingDocument.getDebattnamn() != null)
-            debateName = initiatingDocument.getDebattnamn() + " " + initiatingDocument.getDebattdag();
+            debateName = initiatingDocument.getTitel();
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(debateName);
         setSupportActionBar(toolbar);

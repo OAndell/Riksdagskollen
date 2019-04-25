@@ -57,7 +57,7 @@ public class DebateListFragment extends RiksdagenAutoLoadingListFragment {
                 if (((PartyDocument) clickedDocument).getDoktyp().equals(DocumentType.Interpellation.getDocType()))
                     intent.putExtra(DebateActivity.SHOW_INITIATING_DOCUMENT, true);
                 else
-                    intent.putExtra(DebateActivity.SHOW_INITIATING_DOCUMENT, true);
+                    intent.putExtra(DebateActivity.SHOW_INITIATING_DOCUMENT, false);
                 intent.putExtra(DebateActivity.INITIATING_DOCUMENT, (PartyDocument) document);
                 if (document.getSenders().size() > 0)
                     intent.putExtra(DEBATE_INITIATOR_ID, document.getSenders().get(0));
