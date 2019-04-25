@@ -2,7 +2,8 @@
 <resources>
     <color name="riksdagBlue">#1b506f</color>
     <color name="riksdagBlueLight">#4e7c9d</color>
-    <color name="riksdagBlueAlpha">#e7edf2</color>
+    <color name="riksdagBlueLightest">#e7edf2</color>
+    <color name="riksdagsBlueAlpha">#234e7c9d</color>
 
     <color name="riksdagBlueDark">#002844</color>
     <color name="white">#ffffff</color>

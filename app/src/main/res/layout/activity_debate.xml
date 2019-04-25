@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/mainBackgroundColor">
+    android:background="?attr/mainBackgroundColor"
+    android:orientation="vertical">
 
     <include layout="@layout/riksdagen_toolbar"></include>
 
@@ -11,46 +11,74 @@
         layout="@layout/loading_view"
         android:visibility="visible"></include>
 
-    <android.support.v4.widget.NestedScrollView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/debate_scrollview"
+            android:overScrollMode="never">
+
+            <LinearLayout
+                android:id="@+id/document_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <oscar.riksdagskollen.Util.View.DocumentHtmlView
+                    android:id="@+id/document_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </oscar.riksdagskollen.Util.View.DocumentHtmlView>
+
+
+                <TextView
+                    android:id="@+id/debate_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="8dp"
+                    android:text="Debatt"
+                    android:textColor="?mainTitleTextColor"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/activity_debate_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </android.support.v7.widget.RecyclerView>
+
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/scroll_hint"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/document_container"
-            android:orientation="vertical">
+            android:minHeight="50dp"
+            android:minWidth="0dp"
+            android:background="?fabBackgroundDrawable"
+            android:text="Scrolla ner till debatt"
+            android:textColor="?secondaryLightColor"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:gravity="center"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:elevation="12dp" />
 
-            <oscar.riksdagskollen.Util.View.DocumentHtmlView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/document_view">
 
-            </oscar.riksdagskollen.Util.View.DocumentHtmlView>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Debatt"
-                android:layout_marginTop="16dp"
-                android:textStyle="bold"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingBottom="8dp"
-                android:textColor="?mainTitleTextColor"
-                android:textSize="18sp" />
-
-            <android.support.v7.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/activity_debate_recyclerview">
-
-            </android.support.v7.widget.RecyclerView>
-
-        </LinearLayout>
-
-    </android.support.v4.widget.NestedScrollView>
+    </FrameLayout>
 
 
 </LinearLayout>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +13,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -47,7 +50,10 @@ public class DebateActivity extends AppCompatActivity {
     private boolean showInitiatingDocument = false;
     private PartyDocument initiatingDocument;
     private ViewGroup loadingView;
-
+    private TextView debateLabel;
+    private NestedScrollView scrollView;
+    private Button scrollHint;
+    private DocumentHtmlView documentHtmlView;
 
 
 
@@ -64,6 +70,23 @@ public class DebateActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.activity_debate_recyclerview);
         loadingView = findViewById(R.id.loading_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        debateLabel = findViewById(R.id.debate_label);
+        scrollView = findViewById(R.id.debate_scrollview);
+        scrollHint = findViewById(R.id.scroll_hint);
+        documentHtmlView = findViewById(R.id.document_view);
+
+
+        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (showInitiatingDocument) {
+                    float alpha = (300 - scrollY) / 100f;
+                    scrollHint.setAlpha(alpha);
+                    if (alpha < 0) scrollHint.setVisibility(View.INVISIBLE);
+                    else scrollHint.setVisibility(View.VISIBLE);
+                }
+            }
+        });
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
         ((ProgressBar) loadingView.findViewById(R.id.progress_bar)).getIndeterminateDrawable().setColorFilter(
@@ -94,20 +117,29 @@ public class DebateActivity extends AppCompatActivity {
 
             @Override
             public void onFail(VolleyError error) {
+                Toast.makeText(context, "Kunde inte hämta debatt", Toast.LENGTH_LONG).show();
+                finish();
                 Log.e("DebateActivity", "onFail: Could not get protocol");
             }
         });
 
         if (showInitiatingDocument) {
-            DocumentHtmlView documentHtmlView = findViewById(R.id.document_view);
             documentHtmlView.setDocument(initiatingDocument);
             documentHtmlView.setLoadedCallack(new OnDocumentHtmlViewLoadedCallback() {
                 @Override
                 public void onDocumentLoaded() {
                     loadingView.setVisibility(View.GONE);
+                    scrollHint.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            scrollView.smoothScrollTo(0, documentHtmlView.getMeasuredHeight());
+                        }
+                    });
                 }
             });
         } else {
+            scrollHint.setVisibility(View.GONE);
+            debateLabel.setVisibility(View.GONE);
             loadingView.setVisibility(View.GONE);
         }
     }

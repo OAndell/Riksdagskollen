@@ -4,5 +4,5 @@
     <corners
         android:bottomLeftRadius="3dp"
         android:bottomRightRadius="3dp" />
-    <solid android:color="@color/riksdagBlueAlpha" />
+    <solid android:color="@color/riksdagsBlueAlpha" />
 </shape>

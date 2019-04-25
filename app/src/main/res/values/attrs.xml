@@ -21,6 +21,7 @@
     <attr name="buttonBackgroundDrawable" format="reference" />
     <attr name="speakBubbleIncomingDrawable" format="reference" />
     <attr name="speakBubbleOutgoingDrawable" format="reference" />
+    <attr name="fabBackgroundDrawable" format="reference" />
 
 
 </resources>

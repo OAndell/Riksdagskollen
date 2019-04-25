@@ -45,6 +45,8 @@
         <item name="android:windowBackground">?colorPrimary</item>
 
         <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+
+        <item name="fabBackgroundDrawable">@drawable/fab_background_default</item>
     </style>
 
     <style name="BlackTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -88,6 +90,8 @@
         <item name="android:textColor">?mainBodyTextColor</item>
 
         <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+
+        <item name="fabBackgroundDrawable">@drawable/fab_background_dark</item>
     </style>
 
     <style name="WhiteTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -114,10 +118,10 @@
         <item name="debateTextColorTitle">@color/riksdagBlueLight</item>
         <item name="buttonColor">@color/riksdagBlueLight</item>
 
-        <item name="yesindicatorcolor">@color/riksdagBlueAlpha</item>
-        <item name="noindicatorcolor">@color/riksdagBlueAlpha</item>
+        <item name="yesindicatorcolor">@color/riksdagBlueLightest</item>
+        <item name="noindicatorcolor">@color/riksdagBlueLightest</item>
 
-        <item name="navigationDrawerHighlight">@color/riksdagBlueAlpha</item>
+        <item name="navigationDrawerHighlight">@color/riksdagBlueLightest</item>
 
         <item name="speakBubbleIncomingDrawable">@drawable/text_bubble_incoming_light_theme</item>
         <item name="speakBubbleOutgoingDrawable">@drawable/text_bubble_outgoing_light_theme</item>
@@ -128,6 +132,8 @@
         <item name="android:windowBackground">@color/white</item>
 
         <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+
+        <item name="fabBackgroundDrawable">@drawable/fab_background_light</item>
     </style>
 
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">

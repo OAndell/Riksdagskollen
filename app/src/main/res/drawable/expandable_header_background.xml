@@ -6,5 +6,5 @@
         android:topRightRadius="3dp"
         android:bottomLeftRadius="1dp"
         android:bottomRightRadius="1dp" />
-    <solid android:color="@color/riksdagBlueAlpha" />
+    <solid android:color="@color/riksdagsBlueAlpha" />
 </shape>
