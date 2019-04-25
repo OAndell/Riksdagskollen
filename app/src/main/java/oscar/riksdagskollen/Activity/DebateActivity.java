@@ -1,6 +1,7 @@
 package oscar.riksdagskollen.Activity;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -74,6 +76,11 @@ public class DebateActivity extends AppCompatActivity {
         scrollView = findViewById(R.id.debate_scrollview);
         scrollHint = findViewById(R.id.scroll_hint);
         documentHtmlView = findViewById(R.id.document_view);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.setNavigationBarColor(RiksdagskollenApp.getColorFromAttribute(R.attr.mainBackgroundColor, this));
+        }
 
 
         scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
