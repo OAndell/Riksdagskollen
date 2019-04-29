@@ -19,7 +19,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-import oscar.riksdagskollen.Activity.MotionActivity;
+import oscar.riksdagskollen.Activity.DocumentReaderActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.PartyListViewholderAdapter;
@@ -69,7 +69,7 @@ public class SavedDocumentsFragment extends Fragment {
         PartyListViewholderAdapter adapter = new PartyListViewholderAdapter(documents, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {
-                Intent intent = new Intent(getContext(), MotionActivity.class);
+                Intent intent = new Intent(getContext(), DocumentReaderActivity.class);
                 intent.putExtra("document", ((PartyDocument) document));
                 startActivity(intent);
             }

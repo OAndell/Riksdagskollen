@@ -51,7 +51,7 @@ import static oscar.riksdagskollen.Activity.DebateActivity.DEBATE_INITIATOR_ID;
  * Created by gustavaaro on 2018-03-29.
  */
 
-public class MotionActivity extends AppCompatActivity {
+public class DocumentReaderActivity extends AppCompatActivity {
 
     private PartyDocument document;
     private ViewGroup loadingView;
@@ -158,7 +158,7 @@ public class MotionActivity extends AppCompatActivity {
                     replyButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(context, MotionActivity.class);
+                            Intent intent = new Intent(context, DocumentReaderActivity.class);
                             intent.putExtra("document", (reply));
                             startActivity(intent);
                         }
@@ -183,7 +183,7 @@ public class MotionActivity extends AppCompatActivity {
                     replyButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(context, MotionActivity.class);
+                            Intent intent = new Intent(context, DocumentReaderActivity.class);
                             intent.putExtra("document", (reply));
                             startActivity(intent);
                         }
@@ -323,7 +323,7 @@ public class MotionActivity extends AppCompatActivity {
             builder.setNegativeButton("Nej", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    ((MotionActivity) context).finish();
+                    ((DocumentReaderActivity) context).finish();
                 }
             });
             builder.show();

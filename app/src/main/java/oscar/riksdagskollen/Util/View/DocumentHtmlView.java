@@ -19,7 +19,7 @@ import com.android.volley.VolleyError;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import oscar.riksdagskollen.Activity.MotionActivity;
+import oscar.riksdagskollen.Activity.DocumentReaderActivity;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.RiksdagenCallback.OnDocumentHtmlViewLoadedCallback;
@@ -145,7 +145,7 @@ public class DocumentHtmlView extends WebView {
             builder.setNegativeButton("Nej", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    ((MotionActivity) context).finish();
+                    ((DocumentReaderActivity) context).finish();
                 }
             });
             builder.show();

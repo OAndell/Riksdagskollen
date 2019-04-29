@@ -14,7 +14,7 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 
-import oscar.riksdagskollen.Activity.MotionActivity;
+import oscar.riksdagskollen.Activity.DocumentReaderActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.PartyListViewholderAdapter;
@@ -81,7 +81,7 @@ public class RepresentativeFeedFragment extends RiksdagenAutoLoadingListFragment
         adapter = new PartyListViewholderAdapter(documentList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {
-                Intent intent = new Intent(getContext(), MotionActivity.class);
+                Intent intent = new Intent(getContext(), DocumentReaderActivity.class);
                 intent.putExtra("document", ((PartyDocument) document));
                 intent.putExtra("intressent", iid);
                 startActivity(intent);

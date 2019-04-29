@@ -233,7 +233,7 @@ public class VoteActivity extends AppCompatActivity{
                     motionTitle.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(context, MotionActivity.class);
+                            Intent intent = new Intent(context, DocumentReaderActivity.class);
                             intent.putExtra("document", ((PartyDocument) motionDocument));
                             startActivity(intent);
                         }
