@@ -17,6 +17,7 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 
+import oscar.riksdagskollen.Manager.AlertManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.CurrentNewsListAdapter;
@@ -33,7 +34,7 @@ import oscar.riksdagskollen.Util.RiksdagenCallback.CurrentNewsCallback;
 public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
     private final List<CurrentNews> newsList = new ArrayList<>();
     private CurrentNewsListAdapter adapter;
-    public static final String sectionName = "news";
+    public static final String SECTION_NAME_NEWS = "news";
     private MenuItem notificationItem;
 
 
@@ -79,7 +80,14 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
 
         switch (item.getItemId()) {
             case R.id.notification_menu_item:
-                boolean enabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForPage(sectionName, newsList.get(0).getId());
+                boolean enabled;
+                try {
+                    enabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForPage(SECTION_NAME_NEWS, newsList.get(0).getId());
+
+                } catch (IndexOutOfBoundsException e) {
+                    // if no items has been loaded, fall back on an empty string. Doc id will be updated once some items has been loaded
+                    enabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForPage(SECTION_NAME_NEWS, "");
+                }
                 if (enabled) {
                     item.setIcon(R.drawable.notifications_border_to_filled_animated);
                     Toast.makeText(getContext(), "Du kommer nu få en notis när en ny nyhet publiceras", Toast.LENGTH_LONG).show();
@@ -101,7 +109,7 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.news_menu, menu);
         notificationItem = menu.findItem(R.id.notification_menu_item);
-        if (RiksdagskollenApp.getInstance().getAlertManager().isAlertEnabledForSection(sectionName)) {
+        if (RiksdagskollenApp.getInstance().getAlertManager().isAlertEnabledForSection(SECTION_NAME_NEWS)) {
             notificationItem.setIcon(R.drawable.ic_notification_enabled);
         }
         if (newsList.size() > 0) {
@@ -124,6 +132,10 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
                 newsList.addAll(currentNews);
                 getAdapter().addAll(currentNews);
                 setLoadingMoreItems(false);
+
+                if (getPageToLoad() <= 2) {
+                    updateAlertsLatestDocument();
+                }
             }
 
             @Override
@@ -138,6 +150,12 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
     protected void clearItems() {
         newsList.clear();
         adapter.clear();
+    }
+
+    private void updateAlertsLatestDocument() {
+        if (AlertManager.getInstance().isAlertEnabledForSection(SECTION_NAME_NEWS)) {
+            AlertManager.getInstance().setAlertEnabledForSection(SECTION_NAME_NEWS, newsList.get(0).getId(), true);
+        }
     }
 
     @Override
