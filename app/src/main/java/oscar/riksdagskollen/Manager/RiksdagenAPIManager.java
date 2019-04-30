@@ -91,6 +91,10 @@ public class RiksdagenAPIManager {
                 + "&parti=" + partyid
                 + "&p=" + page;
 
+        final Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Debate.class, new Debate.DebateDezerializer())
+                .create();
+
         doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(final JSONObject response) {
@@ -282,6 +286,13 @@ public class RiksdagenAPIManager {
         String subURL = "/personlista/?iid=&fnamn=" + fname.trim() + "&ename=" + ename.trim() + "&parti=" + partyID + "&rdlstatus=samtliga&utformat=json";
         subURL = subURL.replaceAll(" ", "%20");
 
+        Representative representative = RiksdagskollenApp.getInstance().getRepresentativeManager().findRepresentative(partyID, sourceId);
+
+        if (representative != null) {
+            callback.onPersonFetched(representative);
+            return;
+        }
+
         doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(final JSONObject response) {
@@ -296,6 +307,7 @@ public class RiksdagenAPIManager {
                         for (int i = 0; i < returnedHits.length(); i++) {
                             Representative representative = gson.fromJson(returnedHits.get(i).toString(), Representative.class);
                             if (representative.getSourceid().equals(sourceId)) {
+                                RiksdagskollenApp.getInstance().getRepresentativeManager().addRepresentative(representative);
                                 callback.onPersonFetched(representative);
                                 return;
                             }
@@ -305,6 +317,7 @@ public class RiksdagenAPIManager {
                     } else {
                         JSONObject jsonDocuments = response.getJSONObject("personlista").getJSONObject("person");
                         Representative representative = gson.fromJson(jsonDocuments.toString(), Representative.class);
+                        RiksdagskollenApp.getInstance().getRepresentativeManager().addRepresentative(representative);
                         callback.onPersonFetched(representative);
                     }
                 } catch (JSONException e) {

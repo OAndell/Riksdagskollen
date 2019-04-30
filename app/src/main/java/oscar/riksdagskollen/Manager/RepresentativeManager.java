@@ -84,6 +84,17 @@ public class RepresentativeManager {
         return null;
     }
 
+    public Representative findRepresentative(String party, String sourceId) {
+        for (Representative representative : representatives.get(party).values()) {
+            if (representative.getSourceid().equals(sourceId)) {
+                return representative;
+            }
+        }
+
+        //Not found
+        return null;
+    }
+
     public ArrayList<Representative> getRepresentativesForParty(String party) {
         return new ArrayList<>(representatives.get(party.toLowerCase()).values());
     }
