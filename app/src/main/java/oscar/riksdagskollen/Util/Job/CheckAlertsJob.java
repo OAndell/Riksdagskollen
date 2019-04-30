@@ -117,7 +117,7 @@ public class CheckAlertsJob extends Job {
 
     private void checkSectionForNewDocument(final String section, final String latestDocID, final CountDownLatch countDownLatch) {
         switch (section) {
-            case VoteListFragment.sectionName:
+            case VoteListFragment.SECTION_NAME_VOTE:
                 RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getVotes(new VoteCallback() {
                     @Override
                     public void onVotesFetched(List<Vote> votes) {
@@ -136,7 +136,7 @@ public class CheckAlertsJob extends Job {
                     }
                 }, 1);
                 break;
-            case CurrentNewsListFragment.sectionName:
+            case CurrentNewsListFragment.SECTION_NAME_NEWS:
                 RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getCurrentNews(new CurrentNewsCallback() {
                     @Override
                     public void onNewsFetched(List<CurrentNews> currentNews) {

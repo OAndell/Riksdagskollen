@@ -38,7 +38,7 @@ public class NotificationHelper {
 
         Intent intent = getIntent(context);
         intent.putExtra(NEWS_ITEM_URL_KEY, currentNews.getNewsUrl());
-        intent.putExtra(SECTION_NAME_KEY, CurrentNewsListFragment.sectionName);
+        intent.putExtra(SECTION_NAME_KEY, CurrentNewsListFragment.SECTION_NAME_NEWS);
 
         Date date = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -77,9 +77,9 @@ public class NotificationHelper {
         createMonitorChannel(context);
 
         Intent intent = getIntent(context);
-        intent.putExtra(SECTION_NAME_KEY, VoteListFragment.sectionName);
+        intent.putExtra(SECTION_NAME_KEY, VoteListFragment.SECTION_NAME_VOTE);
 
-        int resultCode = VoteListFragment.sectionName.hashCode();
+        int resultCode = VoteListFragment.SECTION_NAME_VOTE.hashCode();
         PendingIntent pendingIntent = PendingIntent.getActivity(context, resultCode, intent, 0);
 
         String title = "Det finns nya voteringar från riksdagen";

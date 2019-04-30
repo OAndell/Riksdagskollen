@@ -1,6 +1,7 @@
 package oscar.riksdagskollen.Fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,16 +20,13 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.google.android.flexbox.FlexboxLayout;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-
 import java.util.ArrayList;
 
 import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.CustomTabs;
+import oscar.riksdagskollen.Util.Helper.WikiPartyInfoExtractor;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyLeadersCallback;
@@ -41,6 +39,10 @@ import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
 
 public class PartyInfoFragment extends Fragment {
     private Party party;
+    private static final String PARTY_INFO_PREFERENCES = "party_info";
+    private static final String SUMMARY_SUFFIX = "_summary";
+    private static final String IDEOLOGY_SUFFIX = "_ideology";
+
 
     public static PartyInfoFragment newInstance(Party party){
         Bundle args = new Bundle();
@@ -79,29 +81,21 @@ public class PartyInfoFragment extends Fragment {
         final RiksdagskollenApp app = RiksdagskollenApp.getInstance();
         final Fragment fragment = this;
         final TextView partyWikiInfo = view.findViewById(R.id.about_party_wiki);
+        final TextView source = view.findViewById(R.id.source_tv);
+        final TextView ideologyView = view.findViewById(R.id.ideology);
+
+        partyWikiInfo.setText(getCachedWikiInfo(getSummaryKey()));
+        ideologyView.setText(getCachedWikiInfo(getIdeologyKey()));
+
 
         app.getRequestManager().getDownloadString(party.getWikiUrl(), new StringRequestCallback() {
             @Override
             public void onResponse(String response) {
-                int startIndex = response.indexOf("id=\"firstHeading\"");
-                int endIndex = response.indexOf("id=\"toc\"");
-                response = response.substring(startIndex, endIndex);
-                Document doc = Jsoup.parseBodyFragment(response);
-
-                StringBuilder partyInfo = new StringBuilder();
-                final int paragraphLimit = 2;
-                int paragraphCount = 0;
-                Element introBody = doc.select("#mw-content-text > div").first();
-                for (Element element : introBody.children()) {
-                    if (element.is("p")) {
-                        String elText = element.text();
-                        elText = elText.replaceAll("\\[[0-9A-ö ]+\\]", "");
-                        partyInfo.append(elText).append("\n\n");
-                        paragraphCount++;
-                    }
-                    if (paragraphCount == paragraphLimit) break;
-                }
-                partyWikiInfo.setText(partyInfo.toString());
+                WikiPartyInfoExtractor partyInfoExtractor = new WikiPartyInfoExtractor(response);
+                partyWikiInfo.setText(partyInfoExtractor.getPartySummary());
+                source.setText("Källa: Wikipedia\n" + partyInfoExtractor.getLastUpdated());
+                ideologyView.setText(partyInfoExtractor.getPartyIdeology());
+                saveWikiResults(partyInfoExtractor);
             }
 
             @Override
@@ -110,9 +104,17 @@ public class PartyInfoFragment extends Fragment {
             }
         });
 
+        // Hack to fill the view, since flexboxlayput does not support min-height
+        for (int i = 0; i < 4; i++) {
+            View portraitView = LayoutInflater.from(getActivity()).inflate(R.layout.intressent_layout_big, null);
+            leadersLayout.addView(portraitView);
+        }
+
+
         app.getRiksdagenAPIManager().getPartyLeaders(party.getName(), new PartyLeadersCallback() {
             @Override
             public void onPersonFetched(final ArrayList<Representative> leaders) {
+                leadersLayout.removeAllViews();
                 for (int i =0; i < leaders.size(); i++) {
                     final Representative tmpRep = leaders.get(i);
                     if (getActivity() == null) break;
@@ -121,6 +123,7 @@ public class PartyInfoFragment extends Fragment {
                     final ImageView portrait = portraitView.findViewById(R.id.intressent_portait);
 
                     leadersLayout.addView(portraitView);
+
                     app.getRiksdagenAPIManager().getRepresentative(tmpRep.getTilltalsnamn(), tmpRep.getEfternamn(), party.getID(), tmpRep.getSourceid(), new RepresentativeCallback() {
                         @Override
                         public void onPersonFetched(final Representative representative) {
@@ -164,8 +167,6 @@ public class PartyInfoFragment extends Fragment {
         });
 
         //ideology
-        TextView ideologyView = view.findViewById(R.id.ideology);
-        ideologyView.setText(party.getIdeology());
 
         //Set party website
         TextView website = view.findViewById(R.id.website);
@@ -180,6 +181,40 @@ public class PartyInfoFragment extends Fragment {
         });
 
 
+    }
+
+    private String getCachedWikiInfo(String key) {
+        SharedPreferences preferences = getActivity().getSharedPreferences(PARTY_INFO_PREFERENCES, 0);
+        String info = preferences.getString(key, "");
+
+        // Default to predefined ideology
+        if (key.equals(getIdeologyKey()) && info.isEmpty()) {
+            info = party.getIdeology();
+        }
+        return info;
+    }
+
+    private void saveWikiResults(WikiPartyInfoExtractor infoExtractor) {
+        SharedPreferences preferences = getActivity().getSharedPreferences(PARTY_INFO_PREFERENCES, 0);
+
+        // Update stored information if needed
+        if (!preferences.getString(getSummaryKey(), "").equals(infoExtractor.getPartySummary())) {
+            preferences.edit().putString(getSummaryKey(), infoExtractor.getPartySummary()).apply();
+        }
+
+        if (!preferences.getString(getIdeologyKey(), "").equals(infoExtractor.getPartyIdeology())) {
+            preferences.edit().putString(getIdeologyKey(), infoExtractor.getPartyIdeology()).apply();
+        }
+
+
+    }
+
+    private String getSummaryKey() {
+        return party.getID() + SUMMARY_SUFFIX;
+    }
+
+    private String getIdeologyKey() {
+        return party.getID() + IDEOLOGY_SUFFIX;
     }
 
 

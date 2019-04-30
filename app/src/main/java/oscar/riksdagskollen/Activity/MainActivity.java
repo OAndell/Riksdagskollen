@@ -25,7 +25,6 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -176,10 +175,10 @@ public class MainActivity extends AppCompatActivity
                 case "v":
                     onNavigationItemSelected(navigationView.getMenu().findItem(R.id.v_nav));
                     break;
-                case VoteListFragment.sectionName:
+                case VoteListFragment.SECTION_NAME_VOTE:
                     onNavigationItemSelected(navigationView.getMenu().findItem(R.id.votes_nav));
                     break;
-                case CurrentNewsListFragment.sectionName:
+                case CurrentNewsListFragment.SECTION_NAME_NEWS:
                     onNavigationItemSelected(navigationView.getMenu().findItem(R.id.news_nav));
                     String url = incoming.getStringExtra(NEWS_ITEM_URL_KEY);
                     try {
@@ -278,22 +277,29 @@ public class MainActivity extends AppCompatActivity
         collapsingToolbarLayout.setTitle(" ");
 
         Handler handler = new Handler();
-        appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+
+        final AppBarStateChangeListener appBarStateChangeListener = new AppBarStateChangeListener() {
             @Override
-            public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                if (state.equals(State.COLLAPSED)) {
-                    collapsingToolbarLayout.setTitleEnabled(false);
+            public void onStateChanged(AppBarLayout appBarLayout, final State state) {
+                appBarLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (state.equals(State.COLLAPSED)) {
+                            collapsingToolbarLayout.setTitleEnabled(false);
 
-                    try {
-                        ((ViewGroup) collapsingLogo.getParent()).removeView(collapsingLogo);
-                    } catch (NullPointerException e) {
-                        //TODO FIGURE out why collapsingLogo.getParent() is null sometimes
+                            try {
+                                collapsingToolbarLayout.removeView(collapsingLogo);
+                            } catch (Exception e) {
+                                //TODO FIGURE out why collapsingLogo.getParent() is null sometimes
+                            }
+
+                            emptyToolbar = false;
+                            toggle.setDrawerIndicatorEnabled(true);
+                            invalidateOptionsMenu();
+                        }
                     }
+                });
 
-                    emptyToolbar = false;
-                    toggle.setDrawerIndicatorEnabled(true);
-                    invalidateOptionsMenu();
-                }
             }
 
             @Override
@@ -302,12 +308,14 @@ public class MainActivity extends AppCompatActivity
                 float alpha = 255 - (255 * percentage);
                 collapsingLogo.setAlpha((int) alpha);
             }
-        });
+        };
+        appBarLayout.addOnOffsetChangedListener(appBarStateChangeListener);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 appBarLayout.setExpanded(false, true);
                 handleOpenWithNotification(null);
+
             }
         }, 200);
     }

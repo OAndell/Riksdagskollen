@@ -45,7 +45,7 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
     private boolean isShowingSearchedVotes = false;
     private SharedPreferences preferences;
     private MenuItem notificationItem;
-    public static final String sectionName = "vote";
+    public static final String SECTION_NAME_VOTE = "vote";
 
 
     public static VoteListFragment newInstance(@Nullable ArrayList<Vote> votes) {
@@ -146,7 +146,7 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
         switch (item.getItemId()) {
             case R.id.notification_menu_item:
                 if (voteList.isEmpty()) break;
-                boolean enabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForPage(sectionName, voteList.get(0).getId());
+                boolean enabled = RiksdagskollenApp.getInstance().getAlertManager().toggleEnabledForPage(SECTION_NAME_VOTE, voteList.get(0).getId());
                 if (enabled) {
                     item.setIcon(R.drawable.notifications_border_to_filled_animated);
                     Toast.makeText(getContext(), "Du kommer nu få en notis när en ny votering publiceras", Toast.LENGTH_LONG).show();
@@ -209,7 +209,7 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.party_feed_menu, menu);
         notificationItem = menu.findItem(R.id.notification_menu_item);
-        if (RiksdagskollenApp.getInstance().getAlertManager().isAlertEnabledForSection(sectionName)) {
+        if (RiksdagskollenApp.getInstance().getAlertManager().isAlertEnabledForSection(SECTION_NAME_VOTE)) {
             notificationItem.setIcon(R.drawable.ic_notification_enabled);
         }
         if (voteList.size() > 0) {
@@ -278,8 +278,8 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
     }
 
     private void updateAlerts() {
-        if (AlertManager.getInstance().isAlertEnabledForSection(sectionName)) {
-            AlertManager.getInstance().setAlertEnabledForSection(sectionName, voteList.get(0).getId(), true);
+        if (AlertManager.getInstance().isAlertEnabledForSection(SECTION_NAME_VOTE)) {
+            AlertManager.getInstance().setAlertEnabledForSection(SECTION_NAME_VOTE, voteList.get(0).getId(), true);
         }
     }
 }
