@@ -90,7 +90,7 @@ dependencies {
         transitive = true
     }
     playImplementation "com.google.android.gms:play-services-safetynet:16.0.0"
-    playImplementation 'com.google.firebase:firebase-core:16.0.4'
+    playImplementation 'com.google.firebase:firebase-core:16.0.9'
 
     implementation 'com.android.volley:volley:1.1.0'
     implementation 'org.jsoup:jsoup:1.11.2'
