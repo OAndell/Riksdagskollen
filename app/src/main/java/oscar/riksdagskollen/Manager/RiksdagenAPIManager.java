@@ -712,7 +712,7 @@ public class RiksdagenAPIManager {
         //need to remove swedish chars
         partyName = partyName.replace("ö", "o");
         partyName = partyName.replace("ä", "a");
-        String partyInfoUrl = "http://riksdagen.se/sv/ledamoter-partier/" + partyName;
+        String partyInfoUrl = "https://riksdagen.se/sv/ledamoter-partier/" + partyName;
         return requestManager.getDownloadString(partyInfoUrl, new StringRequestCallback() {
             @Override
             public void onResponse(String response) {
