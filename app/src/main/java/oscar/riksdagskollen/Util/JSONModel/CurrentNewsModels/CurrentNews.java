@@ -114,7 +114,7 @@ public class CurrentNews implements Parcelable {
             if (url.startsWith("http")) {
                 return url;
             } else {
-                return "http://riksdagen.se" + url;
+                return "https://riksdagen.se" + url;
             }
         }
         // Some news does not contain the LinkLista object
@@ -123,7 +123,7 @@ public class CurrentNews implements Parcelable {
             if (url.startsWith("http")) {
                 return url;
             } else {
-                return "http://riksdagen.se" + url;
+                return "https://riksdagen.se" + url;
             }
         }
 
