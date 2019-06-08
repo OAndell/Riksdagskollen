@@ -612,6 +612,10 @@ public class RiksdagenAPIManager {
                 + "&iid=" + intressentId
                 + "&p=" + page;
 
+        final Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Debate.class, new Debate.DebateDezerializer())
+                .create();
+
         doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
