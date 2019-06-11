@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="s_twitter">socialdemokrat</string>
+    <string name="m_twitter">nya_moderaterna</string>
+    <string name="sd_twitter">sdriks</string>
+    <string name="mp_twitter">miljopartiet</string>
+    <string name="c_twitter">centerpartiet</string>
+    <string name="v_twitter">vansterpartiet</string>
+    <string name="l_twitter">liberalerna</string>
+    <string name="kd_twitter">kdriks</string>
+</resources>

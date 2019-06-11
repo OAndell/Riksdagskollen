@@ -20,6 +20,7 @@ import oscar.riksdagskollen.Manager.RequestManager;
 import oscar.riksdagskollen.Manager.RiksdagenAPIManager;
 import oscar.riksdagskollen.Manager.SavedDocumentManager;
 import oscar.riksdagskollen.Manager.ThemeManager;
+import oscar.riksdagskollen.Manager.TwitterAPIManager;
 import oscar.riksdagskollen.Util.Job.AlertJobCreator;
 import oscar.riksdagskollen.Util.Job.CheckAlertsJob;
 import oscar.riksdagskollen.Util.Job.DownloadAllRepresentativesJob;
@@ -39,6 +40,7 @@ public class RiksdagskollenApp extends Application {
     private RepresentativeManager representativeManager;
     private SavedDocumentManager savedDocumentManager;
     private AnalyticsManager analyticsManager;
+    private TwitterAPIManager twitterAPIManager;
 
 
     @Override
@@ -61,6 +63,9 @@ public class RiksdagskollenApp extends Application {
 
         representativeManager = new RepresentativeManager(this);
         savedDocumentManager = new SavedDocumentManager(this);
+
+        twitterAPIManager = new TwitterAPIManager(this);
+
 
     }
 
@@ -141,5 +146,9 @@ public class RiksdagskollenApp extends Application {
 
     public RepresentativeManager getRepresentativeManager() {
         return representativeManager;
+    }
+
+    public TwitterAPIManager getTwitterAPIManager() {
+        return twitterAPIManager;
     }
 }

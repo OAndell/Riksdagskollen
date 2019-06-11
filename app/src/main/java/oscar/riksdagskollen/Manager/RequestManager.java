@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.DesktopStringRequest;
+import oscar.riksdagskollen.Util.Helper.TwitterAuthRequest;
 import oscar.riksdagskollen.Util.RiksdagenCallback.JSONRequestCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
 
@@ -72,6 +73,22 @@ public class RequestManager {
 
     public void doPostRequest(JSONObject jsonRequest, String subURL, String host, JSONRequestCallback callback) {
         doJsonRequest(POST, jsonRequest, subURL, host, callback);
+    }
+
+    public void doTwitterAuthRequest(JSONObject jsonRequest, String subURL, String host, String apiKey, final JSONRequestCallback callback) {
+        System.out.println("Making request to: " + host + subURL);
+        TwitterAuthRequest request = new TwitterAuthRequest(POST, host + subURL, apiKey, jsonRequest, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                callback.onRequestSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onRequestFail(error);
+            }
+        });
+        requestQueue.add(request);
     }
 
     public void doPutRequest(JSONObject jsonRequest, String subURL, String host, JSONRequestCallback callback) {
@@ -130,6 +147,7 @@ public class RequestManager {
 
         return requestQueue.add(request);
     }
+
 
     public Request getDownloadString(String url, StringRequestCallback callback) {
         //remove swedish chars

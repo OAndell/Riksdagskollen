@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity
             toggle.setDrawerIndicatorEnabled(true);
             invalidateOptionsMenu();
         }
-
     }
 
     @Override
