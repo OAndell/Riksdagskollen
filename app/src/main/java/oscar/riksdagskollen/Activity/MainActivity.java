@@ -29,7 +29,10 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+
 import java.lang.ref.SoftReference;
+import java.util.List;
 
 import oscar.riksdagskollen.Fragment.AboutFragment;
 import oscar.riksdagskollen.Fragment.CurrentNewsListFragment;
@@ -44,12 +47,17 @@ import oscar.riksdagskollen.Fragment.SearchListFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
 import oscar.riksdagskollen.Manager.AnalyticsManager;
 import oscar.riksdagskollen.Manager.ThemeManager;
+import oscar.riksdagskollen.Manager.TwitterAPIManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.Helper.AppBarStateChangeListener;
 import oscar.riksdagskollen.Util.Helper.CustomTabs;
 import oscar.riksdagskollen.Util.Helper.NotificationHelper;
+import oscar.riksdagskollen.Util.Helper.TwitterUserFactory;
+import oscar.riksdagskollen.Util.JSONModel.Twitter.Tweet;
+import oscar.riksdagskollen.Util.JSONModel.Twitter.TwitterUser;
+import oscar.riksdagskollen.Util.RiksdagenCallback.TwitterCallback;
 
 import static oscar.riksdagskollen.Util.Helper.NotificationHelper.NEWS_ITEM_URL_KEY;
 
@@ -127,6 +135,24 @@ public class MainActivity extends AppCompatActivity
             toggle.setDrawerIndicatorEnabled(true);
             invalidateOptionsMenu();
         }
+
+        //TODO TWITTER DEMO
+        System.out.println("TWITTER DEMO");
+        TwitterAPIManager twitterAPIManager = RiksdagskollenApp.getInstance().getTwitterAPIManager();
+        TwitterUser vTwitter = TwitterUserFactory.getUser(CurrentParties.getParty("v"));
+        twitterAPIManager.getTweets(vTwitter.getTwitterScreenName(), new TwitterCallback() {
+            @Override
+            public void onTweetsFetched(List<Tweet> tweets) {
+                for (int i = 0; i < tweets.size(); i++) {
+                    System.out.println(tweets.get(i).getText());
+                }
+            }
+
+            @Override
+            public void onFail(VolleyError error) {
+
+            }
+        });
     }
 
     @Override

@@ -17,11 +17,14 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.DesktopStringRequest;
 import oscar.riksdagskollen.Util.Helper.TwitterAuthRequest;
+import oscar.riksdagskollen.Util.Helper.TwitterGetRequest;
+import oscar.riksdagskollen.Util.RiksdagenCallback.JSONArrayCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.JSONRequestCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
 
@@ -90,6 +93,23 @@ public class RequestManager {
         });
         requestQueue.add(request);
     }
+
+    public void doTwitterGetRequest(String subURL, String host, String token, final JSONArrayCallback callback) {
+        System.out.println("Making request to: " + host + subURL);
+        TwitterGetRequest request = new TwitterGetRequest(GET, host + subURL, token, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                callback.onRequestSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onRequestFail(error);
+            }
+        });
+        requestQueue.add(request);
+    }
+
 
     public void doPutRequest(JSONObject jsonRequest, String subURL, String host, JSONRequestCallback callback) {
         doJsonRequest(PUT, jsonRequest, subURL, host, callback);

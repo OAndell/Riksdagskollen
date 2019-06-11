@@ -7,8 +7,8 @@ public class Tweet implements Parcelable {
 
     public static final Creator<Tweet> CREATOR = new Creator<Tweet>() {
         @Override
-        public Tweet createFromParcel(Parcel in) {
-            return new Tweet(in);
+        public Tweet createFromParcel(Parcel source) {
+            return new Tweet(source);
         }
 
         @Override
@@ -16,21 +16,39 @@ public class Tweet implements Parcelable {
             return new Tweet[size];
         }
     };
-    private int id;
-    private String text;
+    private long id;
+    private String full_text;
 
-    protected Tweet(Parcel in) {
-        this.id = id;
-        this.text = text;
-
-    }
 
     @Override
     public int describeContents() {
         return 0;
     }
 
+    private boolean truncated;
+
+    protected Tweet(Parcel in) {
+        this.id = in.readLong();
+        this.full_text = in.readString();
+        this.truncated = in.readByte() != 0;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeString(this.full_text);
+        dest.writeByte(this.truncated ? (byte) 1 : (byte) 0);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getText() {
+        return full_text;
+    }
+
+    public boolean isTruncated() {
+        return truncated;
     }
 }
