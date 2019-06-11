@@ -1,5 +1,6 @@
 package oscar.riksdagskollen.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -195,15 +196,19 @@ public class PartyInfoFragment extends Fragment {
     }
 
     private void saveWikiResults(WikiPartyInfoExtractor infoExtractor) {
-        SharedPreferences preferences = getActivity().getSharedPreferences(PARTY_INFO_PREFERENCES, 0);
 
-        // Update stored information if needed
-        if (!preferences.getString(getSummaryKey(), "").equals(infoExtractor.getPartySummary())) {
-            preferences.edit().putString(getSummaryKey(), infoExtractor.getPartySummary()).apply();
-        }
+        Context context = this.getActivity();
 
-        if (!preferences.getString(getIdeologyKey(), "").equals(infoExtractor.getPartyIdeology())) {
-            preferences.edit().putString(getIdeologyKey(), infoExtractor.getPartyIdeology()).apply();
+        if (context != null) {
+            SharedPreferences preferences = context.getSharedPreferences(PARTY_INFO_PREFERENCES, 0);
+            // Update stored information if needed
+            if (!preferences.getString(getSummaryKey(), "").equals(infoExtractor.getPartySummary())) {
+                preferences.edit().putString(getSummaryKey(), infoExtractor.getPartySummary()).apply();
+            }
+
+            if (!preferences.getString(getIdeologyKey(), "").equals(infoExtractor.getPartyIdeology())) {
+                preferences.edit().putString(getIdeologyKey(), infoExtractor.getPartyIdeology()).apply();
+            }
         }
 
 
