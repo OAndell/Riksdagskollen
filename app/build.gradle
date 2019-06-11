@@ -5,9 +5,6 @@ buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
     }
-    dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
-    }
 }
 
 apply plugin: 'com.android.application'
@@ -64,6 +61,7 @@ repositories {
     maven {
         url 'https://maven.fabric.io/public'
     }
+    mavenCentral()
 }
 
 
@@ -86,11 +84,12 @@ dependencies {
     implementation 'com.android.support:customtabs:27.1.1'
     implementation "com.android.support:support-compat:27.1.1"
     implementation 'com.google.code.gson:gson:2.8.2'
-    playImplementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
-        transitive = true
-    }
     playImplementation "com.google.android.gms:play-services-safetynet:16.0.0"
     playImplementation 'com.google.firebase:firebase-core:16.0.9'
+
+    playImplementation('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
+        transitive = true;
+    }
 
     implementation 'com.android.volley:volley:1.1.0'
     implementation 'org.jsoup:jsoup:1.11.2'
@@ -102,7 +101,9 @@ dependencies {
     implementation 'com.github.smart-fun:XmlToJson:1.4.4'    // add this line
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 
-    println(getCurrentFlavor());
+    println(getCurrentFlavor())
+
+
 
 }
 
