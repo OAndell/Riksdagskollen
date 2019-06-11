@@ -52,6 +52,7 @@ public class RiksdagskollenApp extends Application {
             analyticsManager.initCrashlytics();
         }
 
+
         requestManager = new RequestManager();
         riksdagenAPIManager = new RiksdagenAPIManager(this);
         themeManager = new ThemeManager(this);

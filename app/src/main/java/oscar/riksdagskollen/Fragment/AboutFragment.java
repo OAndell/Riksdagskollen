@@ -56,7 +56,7 @@ public class AboutFragment extends Fragment {
                 CustomTabs.openTab(getContext(), getResources().getString(R.string.github));
             }
         });
-
+        
         final AttributionPresenter attributionPresenter = new AttributionPresenter.Builder(getContext())
                 .addAttributions(
                         Library.GSON)
