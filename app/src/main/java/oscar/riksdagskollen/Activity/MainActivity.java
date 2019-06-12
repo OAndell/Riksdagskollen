@@ -47,7 +47,6 @@ import oscar.riksdagskollen.Fragment.SearchListFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
 import oscar.riksdagskollen.Manager.AnalyticsManager;
 import oscar.riksdagskollen.Manager.ThemeManager;
-import oscar.riksdagskollen.Manager.TwitterAPIManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
@@ -138,14 +137,11 @@ public class MainActivity extends AppCompatActivity
 
         //TODO TWITTER DEMO
         System.out.println("TWITTER DEMO");
-        TwitterAPIManager twitterAPIManager = RiksdagskollenApp.getInstance().getTwitterAPIManager();
         TwitterUser vTwitter = TwitterUserFactory.getUser(CurrentParties.getParty("v"));
-        twitterAPIManager.getTweets(vTwitter.getTwitterScreenName(), new TwitterCallback() {
+        vTwitter.getTimeline(new TwitterCallback() {
             @Override
-            public void onTweetsFetched(List<Tweet> tweets) {
-                for (int i = 0; i < tweets.size(); i++) {
-                    System.out.println(tweets.get(i).getText());
-                }
+            public void onTweetsFetched(List<Tweet> tweet) {
+                System.out.println(tweet.get(0).getText());
             }
 
             @Override

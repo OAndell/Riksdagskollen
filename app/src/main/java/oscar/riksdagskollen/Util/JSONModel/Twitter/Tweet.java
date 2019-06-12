@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 public class Tweet implements Parcelable {
 
+    private long id;
+    private String full_text;
     public static final Creator<Tweet> CREATOR = new Creator<Tweet>() {
         @Override
         public Tweet createFromParcel(Parcel source) {
@@ -16,29 +18,9 @@ public class Tweet implements Parcelable {
             return new Tweet[size];
         }
     };
-    private long id;
-    private String full_text;
-
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    private boolean truncated;
-
-    protected Tweet(Parcel in) {
-        this.id = in.readLong();
-        this.full_text = in.readString();
-        this.truncated = in.readByte() != 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(this.id);
-        dest.writeString(this.full_text);
-        dest.writeByte(this.truncated ? (byte) 1 : (byte) 0);
-    }
+    private String created_at;
+    private Tweet retweeted_status;
+    private TweetEntities entities;
 
     public long getId() {
         return id;
@@ -48,7 +30,44 @@ public class Tweet implements Parcelable {
         return full_text;
     }
 
-    public boolean isTruncated() {
-        return truncated;
+    public Tweet() {
+    }
+
+    protected Tweet(Parcel in) {
+        this.id = in.readLong();
+        this.full_text = in.readString();
+        this.created_at = in.readString();
+        this.retweeted_status = in.readParcelable(Tweet.class.getClassLoader());
+        this.entities = in.readParcelable(TweetEntities.class.getClassLoader());
+    }
+
+    public TweetEntities getEntities() {
+        return entities;
+    }
+
+    public Tweet getRetweeted_status() {
+        return retweeted_status;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public boolean isRetweet() {
+        return retweeted_status != null;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeString(this.full_text);
+        dest.writeString(this.created_at);
+        dest.writeParcelable(this.retweeted_status, flags);
+        dest.writeParcelable(this.entities, flags);
     }
 }

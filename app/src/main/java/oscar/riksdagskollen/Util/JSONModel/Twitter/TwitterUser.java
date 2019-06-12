@@ -2,6 +2,9 @@ package oscar.riksdagskollen.Util.JSONModel.Twitter;
 
 import android.os.Parcelable;
 
+import oscar.riksdagskollen.RiksdagskollenApp;
+import oscar.riksdagskollen.Util.RiksdagenCallback.TwitterCallback;
+
 public class TwitterUser {
     public static int TYPE_PARTY_TWITTER = 10001;
     public static int TYPE_REP_TWITTER = 10002;
@@ -9,8 +12,7 @@ public class TwitterUser {
     private Parcelable owner;
     private String twitterScreenName;
     private int type;
-    private Tweet[] tweets;
-
+    //private ArrayList<Tweet> tweets;
 
     public TwitterUser(Parcelable owner, String twitterScreenName, int type) {
         this.owner = owner;
@@ -28,5 +30,9 @@ public class TwitterUser {
 
     public int getType() {
         return type;
+    }
+
+    public void getTimeline(TwitterCallback callback) {
+        RiksdagskollenApp.getInstance().getTwitterAPIManager().getTweets(twitterScreenName, callback);
     }
 }
