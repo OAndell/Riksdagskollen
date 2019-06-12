@@ -31,6 +31,7 @@ public class Tweet implements Parcelable {
     }
 
     public Tweet() {
+
     }
 
     protected Tweet(Parcel in) {
@@ -55,6 +56,13 @@ public class Tweet implements Parcelable {
 
     public boolean isRetweet() {
         return retweeted_status != null;
+    }
+
+    public boolean hasMedia() {
+        if (entities != null) {
+            return entities.getMedia() != null;
+        }
+        return false;
     }
 
     @Override
