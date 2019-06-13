@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity
 
         //TODO TWITTER DEMO
         System.out.println("TWITTER DEMO");
-        TwitterUser vTwitter = TwitterUserFactory.getUser(CurrentParties.getParty("v"));
+        TwitterUser vTwitter = TwitterUserFactory.getUser(CurrentParties.getV());
         vTwitter.getTimeline(new TwitterCallback() {
             @Override
             public void onTweetsFetched(List<Tweet> tweet) {
