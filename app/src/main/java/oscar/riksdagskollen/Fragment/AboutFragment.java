@@ -30,6 +30,9 @@ import oscar.riksdagskollen.Util.Helper.CustomTabs;
 
 public class AboutFragment extends Fragment {
 
+    public static final String SECTION_NAME_ABOUT = "about";
+
+
     private Button licenceButton;
     public static AboutFragment newInstance(){
         AboutFragment newInstance = new AboutFragment();

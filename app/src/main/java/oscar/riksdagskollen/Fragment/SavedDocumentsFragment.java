@@ -35,6 +35,9 @@ public class SavedDocumentsFragment extends Fragment {
     private PartyListViewholderAdapter adapter;
     private View noSavedView;
 
+    public static final String SECTION_NAME_SAVED = "saved";
+
+
     private Comparator<PartyDocument> savedComparator = new Comparator<PartyDocument>() {
         @Override
         public int compare(PartyDocument a, PartyDocument b) {

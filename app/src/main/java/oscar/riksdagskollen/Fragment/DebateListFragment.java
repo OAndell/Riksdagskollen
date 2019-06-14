@@ -33,6 +33,9 @@ public class DebateListFragment extends RiksdagenAutoLoadingListFragment {
     private final List<PartyDocument> documentList = new ArrayList<>();
     private DebateListAdapter adapter;
 
+    public static final String SECTION_NAME_DEBATE = "debate";
+
+
     public static DebateListFragment newInstance() {
         DebateListFragment newInstance = new DebateListFragment();
         return newInstance;
