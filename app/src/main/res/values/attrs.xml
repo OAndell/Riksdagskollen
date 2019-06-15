@@ -3,7 +3,7 @@
     <attr name="mainBackgroundColor" format="color" />
     <attr name="cardViewBackgroundColor" format="color" />
     <attr name="cardViewBorderColor" format="color" />
-
+    <attr name="loadingViewAccentColor" format="color" />
     <attr name="toolbarTitleTextColor" format="color" />
 
     <attr name="mainTitleTextColor" format="color" />

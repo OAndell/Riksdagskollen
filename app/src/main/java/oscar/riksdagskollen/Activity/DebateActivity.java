@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -96,9 +95,6 @@ public class DebateActivity extends AppCompatActivity {
         });
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
-        ((ProgressBar) loadingView.findViewById(R.id.progress_bar)).getIndeterminateDrawable().setColorFilter(
-                RiksdagskollenApp.getColorFromAttribute(R.attr.secondaryLightColor, this),
-                android.graphics.PorterDuff.Mode.MULTIPLY);
 
         String debateName = "Debatt";
         if (initiatingDocument.getDebattnamn() != null)

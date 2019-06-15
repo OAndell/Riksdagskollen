@@ -39,6 +39,9 @@ public class SearchListFragment extends RiksdagenAutoLoadingListFragment {
     private Boolean hasSearched = false; //To make sure it does start searching before the user has entered a query.
     private String searchOption = RiksdagenAPIManager.SEARCH_OPTION_REL;
 
+    public static final String SECTION_NAME_SEARCH = "search";
+
+
 
     public static SearchListFragment newInstance() {
         SearchListFragment newInstance = new SearchListFragment();

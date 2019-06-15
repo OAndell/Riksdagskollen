@@ -42,6 +42,9 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
     private HashMap<String, Boolean> currentFilter = new HashMap<>();
     private HashMap<String, Boolean> oldFilter = new HashMap<>();
 
+    public static final String SECTION_NAME_REPS = "reps";
+
+
     public static RepresentativeListFragment newInstance() {
         return new RepresentativeListFragment();
     }

@@ -31,6 +31,9 @@ public class ProtocolListFragment extends RiksdagenAutoLoadingListFragment {
     private final List<Protocol> protocolList = new ArrayList<>();
     private ProtocolAdapter adapter;
 
+    public static final String SECTION_NAME_protocol = "protocol";
+
+
     public static ProtocolListFragment newInstance(){
         ProtocolListFragment newInstance = new ProtocolListFragment();
         return newInstance;

@@ -40,6 +40,9 @@ public class DecisionsListFragment extends RiksdagenAutoLoadingListFragment impl
     private final List<DecisionDocument> decisionDocuments = new ArrayList<>();
     private final List<DecisionDocument> searchedDecisions = new ArrayList<>();
 
+    public static final String SECTION_NAME_DECISIONS = "decisions";
+
+
     private HashMap<String, Boolean> searchFilter = new HashMap<>();
 
     private List<DecicionCategory> oldFilter;
