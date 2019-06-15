@@ -29,17 +29,10 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
-
-import java.lang.ref.SoftReference;
-import java.util.List;
-
 import oscar.riksdagskollen.Fragment.AboutFragment;
 import oscar.riksdagskollen.Fragment.CurrentNewsListFragment;
 import oscar.riksdagskollen.Fragment.DebateListFragment;
 import oscar.riksdagskollen.Fragment.DecisionsListFragment;
-import oscar.riksdagskollen.Fragment.PartyFragment;
-import oscar.riksdagskollen.Fragment.PartyListFragment;
 import oscar.riksdagskollen.Fragment.ProtocolListFragment;
 import oscar.riksdagskollen.Fragment.RepresentativeListFragment;
 import oscar.riksdagskollen.Fragment.SavedDocumentsFragment;
@@ -53,33 +46,12 @@ import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.Helper.AppBarStateChangeListener;
 import oscar.riksdagskollen.Util.Helper.CustomTabs;
 import oscar.riksdagskollen.Util.Helper.NotificationHelper;
-import oscar.riksdagskollen.Util.Helper.TwitterUserFactory;
-import oscar.riksdagskollen.Util.JSONModel.Twitter.Tweet;
-import oscar.riksdagskollen.Util.JSONModel.Twitter.TwitterUser;
-import oscar.riksdagskollen.Util.RiksdagenCallback.TwitterCallback;
+import oscar.riksdagskollen.Util.Helper.RiksdagskollenFragmentFactory;
 
 import static oscar.riksdagskollen.Util.Helper.NotificationHelper.NEWS_ITEM_URL_KEY;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    private SoftReference<CurrentNewsListFragment> currentNewsListFragment;
-    private SoftReference<ProtocolListFragment> protFragment;
-    private SoftReference<DecisionsListFragment> decisionsFragment;
-    private SoftReference<RepresentativeListFragment> repFragment;
-    private SoftReference<VoteListFragment> voteListFragment;
-    private SoftReference<DebateListFragment> debateFragment;
-    private SoftReference<AboutFragment> aboutFragment;
-    private SoftReference<SavedDocumentsFragment> savedDocumentsFragment;
-    private SoftReference<SearchListFragment> searchFragment;
-    private SoftReference<PartyFragment> sPartyFragment;
-    private SoftReference<PartyFragment> mPartyFragment;
-    private SoftReference<PartyFragment> sdPartyFragment;
-    private SoftReference<PartyFragment> mpPartyFragment;
-    private SoftReference<PartyFragment> cPartyFragment;
-    private SoftReference<PartyFragment> vPartyFragment;
-    private SoftReference<PartyFragment> lPartyFragment;
-    private SoftReference<PartyFragment> kdPartyFragment;
 
     private NavigationView navigationView;
     private AppBarLayout appBarLayout;
@@ -89,6 +61,7 @@ public class MainActivity extends AppCompatActivity
     private boolean emptyToolbar = false;
     private ImageView collapsingLogo;
     private AnalyticsManager analyticsManager;
+    private RiksdagskollenFragmentFactory fragmentFactory = new RiksdagskollenFragmentFactory();
 
 
     @Override
@@ -135,20 +108,6 @@ public class MainActivity extends AppCompatActivity
             invalidateOptionsMenu();
         }
 
-        //TODO TWITTER DEMO
-        System.out.println("TWITTER DEMO");
-        TwitterUser vTwitter = TwitterUserFactory.getUser(CurrentParties.getV());
-        vTwitter.getTimeline(new TwitterCallback() {
-            @Override
-            public void onTweetsFetched(List<Tweet> tweet) {
-                System.out.println(tweet.get(0).getText());
-            }
-
-            @Override
-            public void onFail(VolleyError error) {
-
-            }
-        });
     }
 
     @Override
@@ -361,142 +320,92 @@ public class MainActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.news_nav:
-                analyticsManager.setCurrentScreen(this, "news");
-                if (currentNewsListFragment == null || currentNewsListFragment.get() == null)
-                    currentNewsListFragment = new SoftReference<>(CurrentNewsListFragment.newInstance());
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, currentNewsListFragment.get()).commit();
+                analyticsManager.setCurrentScreen(this, CurrentNewsListFragment.SECTION_NAME_NEWS);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragmentFactory.getFragment(CurrentNewsListFragment.SECTION_NAME_NEWS)).commit();
                 break;
             case R.id.votes_nav:
-                analyticsManager.setCurrentScreen(this, "votes");
-                if (voteListFragment == null || voteListFragment.get() == null)
-                    voteListFragment = new SoftReference<>(VoteListFragment.newInstance(null));
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, voteListFragment.get()).commit();
+                analyticsManager.setCurrentScreen(this, VoteListFragment.SECTION_NAME_VOTE);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragmentFactory.getFragment(VoteListFragment.SECTION_NAME_VOTE)).commit();
                 break;
             case R.id.dec_nav:
-                analyticsManager.setCurrentScreen(this, "decisions");
-                if (decisionsFragment == null || decisionsFragment.get() == null)
-                    decisionsFragment = new SoftReference<>(DecisionsListFragment.newInstance());
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, decisionsFragment.get()).commit();
+                analyticsManager.setCurrentScreen(this, DecisionsListFragment.SECTION_NAME_DECISIONS);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragmentFactory.getFragment(DecisionsListFragment.SECTION_NAME_DECISIONS)).commit();
                 break;
             case R.id.rep_nav:
-                analyticsManager.setCurrentScreen(this, "reps");
-                if (repFragment == null || repFragment.get() == null)
-                    repFragment = new SoftReference<>(RepresentativeListFragment.newInstance());
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, repFragment.get()).commit();
+                analyticsManager.setCurrentScreen(this, RepresentativeListFragment.SECTION_NAME_REPS);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragmentFactory.getFragment(RepresentativeListFragment.SECTION_NAME_REPS)).commit();
                 break;
             case R.id.prot_nav:
-                analyticsManager.setCurrentScreen(this, "protocol");
-                if (protFragment == null || protFragment.get() == null)
-                    protFragment = new SoftReference<>(ProtocolListFragment.newInstance());
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, protFragment.get()).commit();
+                analyticsManager.setCurrentScreen(this, ProtocolListFragment.SECTION_NAME_protocol);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragmentFactory.getFragment(ProtocolListFragment.SECTION_NAME_protocol)).commit();
                 break;
             case R.id.debate_nav:
-                analyticsManager.setCurrentScreen(this, "debateList");
-                if (debateFragment == null || debateFragment.get() == null)
-                    debateFragment = new SoftReference<>(DebateListFragment.newInstance());
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, debateFragment.get()).commit();
+                analyticsManager.setCurrentScreen(this, DebateListFragment.SECTION_NAME_DEBATE);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragmentFactory.getFragment(DebateListFragment.SECTION_NAME_DEBATE)).commit();
                 break;
             case R.id.s_nav:
-                analyticsManager.setCurrentScreen(this, "s");
-                if (sPartyFragment == null || sPartyFragment.get() == null) {
-                    sPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getS()));
-                    PartyListFragment sPartyListFragment = PartyListFragment.newInstance(CurrentParties.getS());
-                    sPartyFragment.get().setListFragment(sPartyListFragment);
-                }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, sPartyFragment.get()).commit();
+                analyticsManager.setCurrentScreen(this, CurrentParties.getS().getID());
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragmentFactory.getFragment(CurrentParties.getS().getID())).commit();
                 break;
             case R.id.m_nav:
-                analyticsManager.setCurrentScreen(this, "m");
-                if (mPartyFragment == null || mPartyFragment.get() == null) {
-                    mPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getM()));
-                    PartyListFragment mPartyListFragment = PartyListFragment.newInstance(CurrentParties.getM());
-                    mPartyFragment.get().setListFragment(mPartyListFragment);
-                }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mPartyFragment.get()).commit();
+                analyticsManager.setCurrentScreen(this, CurrentParties.getM().getID());
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragmentFactory.getFragment(CurrentParties.getM().getID())).commit();
                 break;
             case R.id.sd_nav:
-                analyticsManager.setCurrentScreen(this, "sd");
-                if (sdPartyFragment == null || sdPartyFragment.get() == null) {
-                    sdPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getSD()));
-                    PartyListFragment sdPartyListFragment = PartyListFragment.newInstance(CurrentParties.getSD());
-                    sdPartyFragment.get().setListFragment(sdPartyListFragment);
-                }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, sdPartyFragment.get()).commit();
+                analyticsManager.setCurrentScreen(this, CurrentParties.getSD().getID());
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragmentFactory.getFragment(CurrentParties.getSD().getID())).commit();
                 break;
             case R.id.mp_nav:
-                analyticsManager.setCurrentScreen(this, "mp");
-                if (mpPartyFragment == null || mpPartyFragment.get() == null) {
-                    mpPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getMP()));
-                    PartyListFragment mpPartyListFragment = PartyListFragment.newInstance(CurrentParties.getMP());
-                    mpPartyFragment.get().setListFragment(mpPartyListFragment);
-                }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mpPartyFragment.get()).commit();
+                analyticsManager.setCurrentScreen(this, CurrentParties.getMP().getID());
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragmentFactory.getFragment(CurrentParties.getMP().getID())).commit();
                 break;
             case R.id.c_nav:
-                analyticsManager.setCurrentScreen(this, "c");
-                if (cPartyFragment == null || cPartyFragment.get() == null) {
-                    cPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getC()));
-                    PartyListFragment cPartyListFragment = PartyListFragment.newInstance(CurrentParties.getC());
-                    cPartyFragment.get().setListFragment(cPartyListFragment);
-                }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, cPartyFragment.get()).commit();
+                analyticsManager.setCurrentScreen(this, CurrentParties.getC().getID());
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragmentFactory.getFragment(CurrentParties.getC().getID())).commit();
                 break;
             case R.id.v_nav:
-                analyticsManager.setCurrentScreen(this, "v");
-                if (vPartyFragment == null || vPartyFragment.get() == null) {
-                    vPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getV()));
-                    PartyListFragment vPartyListFragment = PartyListFragment.newInstance(CurrentParties.getV());
-                    vPartyFragment.get().setListFragment(vPartyListFragment);
-                }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, vPartyFragment.get()).commit();
+                analyticsManager.setCurrentScreen(this, CurrentParties.getV().getID());
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragmentFactory.getFragment(CurrentParties.getV().getID())).commit();
                 break;
             case R.id.l_nav:
-                analyticsManager.setCurrentScreen(this, "l");
-                if (lPartyFragment == null || lPartyFragment.get() == null) {
-                    lPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getL()));
-                    PartyListFragment lPartyListFragment = PartyListFragment.newInstance(CurrentParties.getL());
-                    lPartyFragment.get().setListFragment(lPartyListFragment);
-                }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, lPartyFragment.get()).commit();
+                analyticsManager.setCurrentScreen(this, CurrentParties.getL().getID());
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragmentFactory.getFragment(CurrentParties.getL().getID())).commit();
                 break;
             case R.id.kd_nav:
-                analyticsManager.setCurrentScreen(this, "kd");
-                if (kdPartyFragment == null || kdPartyFragment.get() == null) {
-                    kdPartyFragment = new SoftReference<>(PartyFragment.newInstance(CurrentParties.getKD()));
-                    PartyListFragment kdPartyListFragment = PartyListFragment.newInstance(CurrentParties.getKD());
-                    kdPartyFragment.get().setListFragment(kdPartyListFragment);
-                }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, kdPartyFragment.get()).commit();
+                analyticsManager.setCurrentScreen(this, CurrentParties.getKD().getID());
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragmentFactory.getFragment(CurrentParties.getKD().getID())).commit();
                 break;
             case R.id.search_nav:
-                analyticsManager.setCurrentScreen(this, "search");
-                if (searchFragment == null || searchFragment.get() == null)
-                    searchFragment = new SoftReference<>(SearchListFragment.newInstance());
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, searchFragment.get()).commit();
+                analyticsManager.setCurrentScreen(this, SearchListFragment.SECTION_NAME_SEARCH);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragmentFactory.getFragment(SearchListFragment.SECTION_NAME_SEARCH)).commit();
                 break;
             case R.id.about_nav:
-                analyticsManager.setCurrentScreen(this, "about");
-                if (aboutFragment == null || aboutFragment.get() == null)
-                    aboutFragment = new SoftReference<>(AboutFragment.newInstance());
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, aboutFragment.get()).commit();
+                analyticsManager.setCurrentScreen(this, AboutFragment.SECTION_NAME_ABOUT);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragmentFactory.getFragment(AboutFragment.SECTION_NAME_ABOUT)).commit();
                 break;
             case R.id.feedback_nav:
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                        "mailto", "oscar@andell.eu", null));
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Tankar kring Riksdagskollen");
-                emailIntent.putExtra(Intent.EXTRA_TEXT,
-                        "\n\nSysteminformation:" +
-                                "\nApp-version: " + BuildConfig.VERSION_NAME +
-                                "\nSdk-version: " + Build.VERSION.SDK_INT);
-                startActivity(Intent.createChooser(emailIntent, "Skicka ett mail"));
+                sendFeedback();
                 break;
             case R.id.saved_docs:
-                analyticsManager.setCurrentScreen(this, "saved");
-
-                if (savedDocumentsFragment == null || savedDocumentsFragment.get() == null) {
-                    savedDocumentsFragment = new SoftReference<>(SavedDocumentsFragment.newInstance());
-                }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, savedDocumentsFragment.get()).commit();
+                analyticsManager.setCurrentScreen(this, SavedDocumentsFragment.SECTION_NAME_SAVED);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragmentFactory.getFragment(SavedDocumentsFragment.SECTION_NAME_SAVED)).commit();
                 break;
         }
 
@@ -504,5 +413,19 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void sendFeedback() {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto", "oscar@andell.eu", null));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Tankar kring Riksdagskollen");
+        emailIntent.putExtra(Intent.EXTRA_TEXT,
+                "\n\nSysteminformation:" +
+                        "\nApp-version: " + BuildConfig.VERSION_NAME +
+                        "\nSdk-version: " + Build.VERSION.SDK_INT);
+        startActivity(Intent.createChooser(emailIntent, "Skicka ett mail"));
+    }
+
+
+
 
 }
