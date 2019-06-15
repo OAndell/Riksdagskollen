@@ -111,6 +111,7 @@ public class PartyFragment extends Fragment {
         adapter.addFragment(listFragment, "Flöde");
         adapter.addFragment(infoFragment, "Parti");
         adapter.addFragment(representativeFragment,"Ledamöter");
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

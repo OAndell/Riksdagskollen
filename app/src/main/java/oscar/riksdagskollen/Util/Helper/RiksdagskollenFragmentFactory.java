@@ -14,6 +14,7 @@ import oscar.riksdagskollen.Fragment.ProtocolListFragment;
 import oscar.riksdagskollen.Fragment.RepresentativeListFragment;
 import oscar.riksdagskollen.Fragment.SavedDocumentsFragment;
 import oscar.riksdagskollen.Fragment.SearchListFragment;
+import oscar.riksdagskollen.Fragment.TwitterListFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.JSONModel.Party;
@@ -29,6 +30,7 @@ public class RiksdagskollenFragmentFactory {
     private SoftReference<AboutFragment> aboutFragment;
     private SoftReference<SavedDocumentsFragment> savedDocumentsFragment;
     private SoftReference<SearchListFragment> searchFragment;
+    private SoftReference<TwitterListFragment> twitterListFragment;
     private SoftReference<PartyFragment> sPartyFragment;
     private SoftReference<PartyFragment> mPartyFragment;
     private SoftReference<PartyFragment> sdPartyFragment;
@@ -73,6 +75,10 @@ public class RiksdagskollenFragmentFactory {
                 if (protFragment == null || protFragment.get() == null)
                     protFragment = new SoftReference<>(ProtocolListFragment.newInstance());
                 return protFragment.get();
+            case TwitterListFragment.SECTION_NAME_TWITTER:
+                if (twitterListFragment == null || twitterListFragment.get() == null)
+                    twitterListFragment = new SoftReference<>(TwitterListFragment.newInstance());
+                return twitterListFragment.get();
 
             case "s":
                 sPartyFragment = setUpPartySoftFragmentReference(sPartyFragment, CurrentParties.getS());

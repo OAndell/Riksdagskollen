@@ -37,6 +37,7 @@ import oscar.riksdagskollen.Fragment.ProtocolListFragment;
 import oscar.riksdagskollen.Fragment.RepresentativeListFragment;
 import oscar.riksdagskollen.Fragment.SavedDocumentsFragment;
 import oscar.riksdagskollen.Fragment.SearchListFragment;
+import oscar.riksdagskollen.Fragment.TwitterListFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
 import oscar.riksdagskollen.Manager.AnalyticsManager;
 import oscar.riksdagskollen.Manager.ThemeManager;
@@ -406,6 +407,11 @@ public class MainActivity extends AppCompatActivity
                 analyticsManager.setCurrentScreen(this, SavedDocumentsFragment.SECTION_NAME_SAVED);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(SavedDocumentsFragment.SECTION_NAME_SAVED)).commit();
+                break;
+            case R.id.twitter_nav:
+                analyticsManager.setCurrentScreen(this, TwitterListFragment.SECTION_NAME_TWITTER);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragmentFactory.getFragment(TwitterListFragment.SECTION_NAME_TWITTER)).commit();
                 break;
         }
 

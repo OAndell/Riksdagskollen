@@ -25,6 +25,7 @@ import oscar.riksdagskollen.Util.RiksdagenCallback.TwitterCallback;
 public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
     private final List<Tweet> documentList = new ArrayList<>();
     private TweetAdapter adapter;
+    public static final String SECTION_NAME_TWITTER = "twitter";
 
     private TwitterUser twitterUser = TwitterUserFactory.getUser(CurrentParties.getV());
 

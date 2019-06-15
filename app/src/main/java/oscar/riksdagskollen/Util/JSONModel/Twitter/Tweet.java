@@ -34,6 +34,13 @@ public class Tweet implements Parcelable {
 
     }
 
+    public String getImageUrl() {
+        if (hasMedia()) {
+            return getEntities().getMedia()[0].getMedia_url_https();
+        } else return "";
+    }
+
+
     protected Tweet(Parcel in) {
         this.id = in.readLong();
         this.full_text = in.readString();

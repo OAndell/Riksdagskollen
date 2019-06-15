@@ -146,21 +146,26 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
 
         }
 
-        public void bind(final Tweet tweet, final OnItemClickListener listener) {
-            //TODO : if retweet do stuff
-            tweetText.setText(tweet.getText());
+        public void bind(Tweet tweet, final OnItemClickListener listener) {
+            if (tweet.isRetweet()) {
+                Tweet reTweet = tweet.getRetweeted_status();
+                String RTString = tweet.getText().split(":")[0];
+                tweetText.setText(RTString + ": " + reTweet.getText());
+                tweet = reTweet;
+            } else {
+                tweetText.setText(tweet.getText());
+            }
             date.setText(tweet.getCreated_at());
             if (tweet.hasMedia()) {
                 image.setVisibility(View.VISIBLE);
                 image.setDefaultImageResId(R.drawable.ic_placeholder_image_web);
-                //TODO : create a get image function in Tweet Class.
-                image.setImageUrl(tweet.getEntities().getMedia()[0].getMedia_url_https(),
+                image.setImageUrl(tweet.getImageUrl(),
                         RiksdagskollenApp.getInstance().getRequestManager().getmImageLoader());
             } else {
                 image.setVisibility(View.GONE);
             }
 
-            //TODO : authorView image.
+
         }
     }
 }
