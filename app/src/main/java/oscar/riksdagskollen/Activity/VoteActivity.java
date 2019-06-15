@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -92,10 +91,6 @@ public class VoteActivity extends AppCompatActivity{
         motionHolder = findViewById(R.id.motion_holder);
         partyVotesHolder = findViewById(R.id.party_votes_container);
         voteResultChartHolder = findViewById(R.id.vote_activity_chart_holder);
-
-        ((ProgressBar) loadingView.findViewById(R.id.progress_bar)).getIndeterminateDrawable().setColorFilter(
-                RiksdagskollenApp.getColorFromAttribute(R.attr.secondaryLightColor, this),
-                android.graphics.PorterDuff.Mode.MULTIPLY);
 
         titleColor = RiksdagskollenApp.getColorFromAttribute(R.attr.mainBodyTextColor, this);
 

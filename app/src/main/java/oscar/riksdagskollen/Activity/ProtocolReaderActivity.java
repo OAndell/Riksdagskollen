@@ -16,7 +16,6 @@ import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.ProgressBar;
 
 import com.android.volley.VolleyError;
 
@@ -68,10 +67,6 @@ public class ProtocolReaderActivity extends AppCompatActivity {
         AnalyticsManager.getInstance().setCurrentScreen(this, "Protocol doc: " + title);
 
         final ViewGroup loadingView = findViewById(R.id.loading_view);
-
-        ((ProgressBar) loadingView.findViewById(R.id.progress_bar)).getIndeterminateDrawable().setColorFilter(
-                RiksdagskollenApp.getColorFromAttribute(R.attr.secondaryLightColor, this),
-                android.graphics.PorterDuff.Mode.MULTIPLY);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

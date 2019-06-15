@@ -23,7 +23,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,10 +85,6 @@ public class DocumentReaderActivity extends AppCompatActivity {
         TextView authorTV = findViewById(R.id.act_doc_reader_author);
         loadingView = findViewById(R.id.loading_view);
         context = this;
-
-        ((ProgressBar) loadingView.findViewById(R.id.progress_bar)).getIndeterminateDrawable().setColorFilter(
-                RiksdagskollenApp.getColorFromAttribute(R.attr.secondaryLightColor, this),
-                android.graphics.PorterDuff.Mode.MULTIPLY);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(document.getDokumentnamn());
