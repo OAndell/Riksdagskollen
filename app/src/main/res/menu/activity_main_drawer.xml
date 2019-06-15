@@ -86,6 +86,10 @@
                     android:icon="@drawable/ic_search2"
                     android:title="@string/search_nav" />
                 <item
+                    android:id="@+id/twitter_nav"
+                    android:icon="@drawable/ic_search2"
+                    android:title="Riksdagen på Twitter" />
+                <item
                     android:id="@+id/saved_docs"
                     android:icon="@drawable/ic_star_yellow"
                     android:title="@string/saved_docs" />
