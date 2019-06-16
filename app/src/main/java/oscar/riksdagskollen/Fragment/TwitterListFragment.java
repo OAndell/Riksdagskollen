@@ -12,7 +12,6 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 
-import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Adapter.TweetAdapter;
@@ -25,8 +24,6 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
     private TweetAdapter adapter;
     public static final String SECTION_NAME_TWITTER = "twitter";
 
-    //private TwitterUser twitterUser = TwitterUserFactory.getUser(CurrentParties.getV());
-
     public static TwitterListFragment newInstance() {
         TwitterListFragment newInstance = new TwitterListFragment();
         return newInstance;
@@ -35,7 +32,7 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.debate_nav);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Riksdagen på Twitter");
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

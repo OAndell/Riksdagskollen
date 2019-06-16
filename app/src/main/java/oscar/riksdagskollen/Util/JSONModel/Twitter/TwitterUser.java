@@ -1,38 +1,48 @@
 package oscar.riksdagskollen.Util.JSONModel.Twitter;
 
+import android.os.Parcel;
 import android.os.Parcelable;
 
-import oscar.riksdagskollen.RiksdagskollenApp;
-import oscar.riksdagskollen.Util.RiksdagenCallback.TwitterCallback;
+public class TwitterUser implements Parcelable {
 
-public class TwitterUser {
-    public static int TYPE_PARTY_TWITTER = 10001;
-    public static int TYPE_REP_TWITTER = 10002;
+    public static final Creator<TwitterUser> CREATOR = new Creator<TwitterUser>() {
+        @Override
+        public TwitterUser createFromParcel(Parcel source) {
+            return new TwitterUser(source);
+        }
 
-    private Parcelable owner;
-    private String twitterScreenName;
-    private int type;
-    //private ArrayList<Tweet> tweets;
+        @Override
+        public TwitterUser[] newArray(int size) {
+            return new TwitterUser[size];
+        }
+    };
+    private String name;
+    private String screen_name;
 
-    public TwitterUser(Parcelable owner, String twitterScreenName, int type) {
-        this.owner = owner;
-        this.twitterScreenName = twitterScreenName;
-        this.type = type;
+    public TwitterUser() {
     }
 
-    public String getTwitterScreenName() {
-        return twitterScreenName;
+    protected TwitterUser(Parcel in) {
+        this.name = in.readString();
+        this.screen_name = in.readString();
     }
 
-    public Parcelable getOwner() {
-        return owner;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public int getType() {
-        return type;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.name);
+        dest.writeString(this.screen_name);
     }
 
-    public void getTimeline(TwitterCallback callback) {
-        RiksdagskollenApp.getInstance().getTwitterAPIManager().getTweets(twitterScreenName, callback);
+    public String getName() {
+        return name;
+    }
+
+    public String getScreen_name() {
+        return screen_name;
     }
 }

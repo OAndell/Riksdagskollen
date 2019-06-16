@@ -57,7 +57,7 @@ public class TwitterAPIManager {
 
     public void getRiksdagenTweetList(TwitterCallback callback) {
         String subURL = LIST_ENDPOINT + "?owner_screen_name=riksdagskollen&slug=riksdagskollen"
-                + "&tweet_mode=extended";
+                + "&tweet_mode=extended&include_rts=false";
         doGetTweetRequest(subURL, callback);
 
     }

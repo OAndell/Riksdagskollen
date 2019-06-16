@@ -133,6 +133,8 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
     public static class TweetViewHolder extends RecyclerView.ViewHolder {
         private final TextView tweetText;
         private final TextView date;
+        private final TextView authorText;
+        private final TextView authorScreenNameText;
         private final NetworkImageView image;
         private final CircularImageView authorView;
 
@@ -143,10 +145,14 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
             date = textView.findViewById(R.id.publicerad);
             image = textView.findViewById(R.id.image);
             authorView = textView.findViewById(R.id.author_img);
+            authorText = textView.findViewById(R.id.author);
+            authorScreenNameText = textView.findViewById(R.id.screen_name);
 
         }
 
         public void bind(Tweet tweet, final OnItemClickListener listener) {
+            authorText.setText(tweet.getUser().getName());
+            authorScreenNameText.setText("@" + tweet.getUser().getScreen_name());
             if (tweet.isRetweet()) {
                 Tweet reTweet = tweet.getRetweeted_status();
                 String RTString = tweet.getText().split(":")[0];

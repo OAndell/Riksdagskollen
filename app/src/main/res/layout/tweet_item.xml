@@ -53,6 +53,17 @@
                 android:layout_weight="4"
                 android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginTop="8dp"
+                    android:text="Vänsterpartiet"
+                    android:textColor="?attr/mainTitleTextColor"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
 
                 <TextView
                     android:id="@+id/tweet_text"
@@ -75,11 +86,23 @@
 
 
                 <TextView
+                    android:id="@+id/screen_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginBottom="16dp"
+                    android:layout_weight="0.3"
+                    android:text="\@screenname"
+                    android:textColor="?mainBodyTextColor"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+
+
+                <TextView
                     android:id="@+id/publicerad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
                     android:layout_weight="0.3"
                     android:text="Publicerad: 2017-08-19"

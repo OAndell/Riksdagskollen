@@ -7,6 +7,10 @@ public class Tweet implements Parcelable {
 
     private long id;
     private String full_text;
+    private String created_at;
+    private Tweet retweeted_status;
+    private TweetEntities entities;
+
     public static final Creator<Tweet> CREATOR = new Creator<Tweet>() {
         @Override
         public Tweet createFromParcel(Parcel source) {
@@ -18,9 +22,6 @@ public class Tweet implements Parcelable {
             return new Tweet[size];
         }
     };
-    private String created_at;
-    private Tweet retweeted_status;
-    private TweetEntities entities;
 
     public long getId() {
         return id;
@@ -40,14 +41,9 @@ public class Tweet implements Parcelable {
         } else return "";
     }
 
+    private TwitterUser user;
 
-    protected Tweet(Parcel in) {
-        this.id = in.readLong();
-        this.full_text = in.readString();
-        this.created_at = in.readString();
-        this.retweeted_status = in.readParcelable(Tweet.class.getClassLoader());
-        this.entities = in.readParcelable(TweetEntities.class.getClassLoader());
-    }
+
 
     public TweetEntities getEntities() {
         return entities;
@@ -77,6 +73,19 @@ public class Tweet implements Parcelable {
         return 0;
     }
 
+    protected Tweet(Parcel in) {
+        this.id = in.readLong();
+        this.full_text = in.readString();
+        this.created_at = in.readString();
+        this.retweeted_status = in.readParcelable(Tweet.class.getClassLoader());
+        this.entities = in.readParcelable(TweetEntities.class.getClassLoader());
+        this.user = in.readParcelable(TwitterUser.class.getClassLoader());
+    }
+
+    public TwitterUser getUser() {
+        return user;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.id);
@@ -84,5 +93,6 @@ public class Tweet implements Parcelable {
         dest.writeString(this.created_at);
         dest.writeParcelable(this.retweeted_status, flags);
         dest.writeParcelable(this.entities, flags);
+        dest.writeParcelable(this.user, flags);
     }
 }
