@@ -45,7 +45,7 @@ android {
         play {
             // Add API keys to project from local gradle.properties
             dimension 'version'
-            buildConfigField 'String', "SafetyApiKey", SAFETY_API_KEY
+            buildConfigField 'String', "TwitterApiKey", TWITTER_API_KEY
         }
         fdroid {
             dimension 'version'

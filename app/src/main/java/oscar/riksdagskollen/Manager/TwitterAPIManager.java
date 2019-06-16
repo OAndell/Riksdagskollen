@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import oscar.riksdagskollen.BuildConfig;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.JSONModel.Twitter.Tweet;
 import oscar.riksdagskollen.Util.RiksdagenCallback.JSONArrayCallback;
@@ -28,7 +29,7 @@ public class TwitterAPIManager {
     private RequestManager requestManager;
     private Gson gson;
     private String bearerToken;
-    private String apiKey = "==";
+    private String apiKey = BuildConfig.TwitterApiKey;
     private boolean hasAuth = false;
 
 
