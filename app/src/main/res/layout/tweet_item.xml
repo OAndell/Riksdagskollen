@@ -40,8 +40,10 @@
 
                 <oscar.riksdagskollen.Util.View.CircularImageView
                     android:id="@+id/author_img"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:scaleType="fitCenter"
                     android:layout_gravity="bottom" />
 
             </LinearLayout>
@@ -53,16 +55,34 @@
                 android:layout_weight="4"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/author"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_marginTop="8dp"
-                    android:text="Vänsterpartiet"
-                    android:textColor="?attr/mainTitleTextColor"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/author"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:textSize="16sp"
+                        android:text="Vänsterpartiet"
+                        android:textColor="?attr/mainTitleTextColor"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_gravity="start|center_vertical"
+                        android:text="(@vansterpartiet)"
+                        android:textStyle="bold"
+                        android:textColor="@color/cat_light_gray"
+                        android:id="@+id/author_screen_name" />
+
+                </LinearLayout>
 
 
                 <TextView
@@ -86,19 +106,6 @@
 
 
                 <TextView
-                    android:id="@+id/screen_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginBottom="16dp"
-                    android:layout_weight="0.3"
-                    android:text="\@screenname"
-                    android:textColor="?mainBodyTextColor"
-                    android:textSize="14sp"
-                    android:textStyle="normal" />
-
-
-                <TextView
                     android:id="@+id/publicerad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -106,7 +113,7 @@
                     android:layout_marginBottom="16dp"
                     android:layout_weight="0.3"
                     android:text="Publicerad: 2017-08-19"
-                    android:textColor="?mainBodyTextColor"
+                    android:textColor="@color/cat_light_gray"
                     android:textSize="14sp"
                     android:textStyle="normal" />
             </LinearLayout>

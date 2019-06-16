@@ -1,5 +1,6 @@
 package oscar.riksdagskollen.Util.Adapter;
 
+import android.support.v4.app.Fragment;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,10 +10,15 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
+import com.bumptech.glide.Glide;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
@@ -27,6 +33,7 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
             return 0;
         }
     };
+    private Fragment fragment;
     private Comparator<Tweet> mComparator = DEFAULT_COMPARATOR;
     private final SortedList<Tweet> tweets = new SortedList<>(Tweet.class, new SortedList.Callback<Tweet>() {
         @Override
@@ -67,12 +74,11 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
     });
 
 
-    public TweetAdapter(List<Tweet> tweetsList, OnItemClickListener clickListener) {
+    public TweetAdapter(List<Tweet> tweetsList, OnItemClickListener clickListener, Fragment fragment) {
         super(clickListener);
         addAll(tweetsList);
         setSortedList(tweets);
-
-
+        this.fragment = fragment;
     }
 
 
@@ -81,7 +87,7 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
         if (viewType == TYPE_ITEM) {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.tweet_item, parent, false);
-            return new TweetAdapter.TweetViewHolder(itemView);
+            return new TweetAdapter.TweetViewHolder(itemView, fragment);
         } else {
             FrameLayout frameLayout = new FrameLayout(parent.getContext());
             //make sure it fills the space
@@ -134,25 +140,34 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
         private final TextView tweetText;
         private final TextView date;
         private final TextView authorText;
-        private final TextView authorScreenNameText;
         private final NetworkImageView image;
         private final CircularImageView authorView;
+        private final Fragment fragment;
+        private final TextView screenName;
 
 
-        public TweetViewHolder(View textView) {
-            super(textView);
-            tweetText = textView.findViewById(R.id.tweet_text);
-            date = textView.findViewById(R.id.publicerad);
-            image = textView.findViewById(R.id.image);
-            authorView = textView.findViewById(R.id.author_img);
-            authorText = textView.findViewById(R.id.author);
-            authorScreenNameText = textView.findViewById(R.id.screen_name);
-
+        public TweetViewHolder(View view, Fragment fragment) {
+            super(view);
+            tweetText = view.findViewById(R.id.tweet_text);
+            date = view.findViewById(R.id.publicerad);
+            image = view.findViewById(R.id.image);
+            authorView = view.findViewById(R.id.author_img);
+            authorText = view.findViewById(R.id.author);
+            screenName = view.findViewById(R.id.author_screen_name);
+            this.fragment = fragment;
         }
 
         public void bind(Tweet tweet, final OnItemClickListener listener) {
+
             authorText.setText(tweet.getUser().getName());
-            authorScreenNameText.setText("@" + tweet.getUser().getScreen_name());
+            screenName.setText(String.format("@%s", tweet.getUser().getScreen_name()));
+            if (fragment.getActivity() != null) {
+                Glide
+                        .with(fragment)
+                        .load(tweet.getUser().getProfile_image_url_https())
+                        .into(authorView);
+            }
+
             if (tweet.isRetweet()) {
                 Tweet reTweet = tweet.getRetweeted_status();
                 String RTString = tweet.getText().split(":")[0];
@@ -161,7 +176,13 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
             } else {
                 tweetText.setText(tweet.getText());
             }
-            date.setText(tweet.getCreated_at());
+            try {
+                date.setText(getTwitterDate(tweet.getCreated_at()));
+            } catch (ParseException e) {
+                date.setText(tweet.getCreated_at());
+                e.printStackTrace();
+            }
+
             if (tweet.hasMedia()) {
                 image.setVisibility(View.VISIBLE);
                 image.setDefaultImageResId(R.drawable.ic_placeholder_image_web);
@@ -172,6 +193,19 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
             }
 
 
+        }
+
+        private static String getTwitterDate(String date) throws ParseException {
+
+            final String TWITTER = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+            SimpleDateFormat sf = new SimpleDateFormat(TWITTER);
+            sf.setLenient(true);
+
+            Locale locale = new Locale("swe", "sv_SE");
+            DateFormat dateFormat = DateFormat.getDateInstance(
+                    DateFormat.DEFAULT, locale);
+
+            return dateFormat.format(sf.parse(date));
         }
     }
 }

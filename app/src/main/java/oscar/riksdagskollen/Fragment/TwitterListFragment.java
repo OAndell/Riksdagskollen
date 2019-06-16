@@ -45,7 +45,7 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
             public void onItemClick(Object clickedDocument) {
 
             }
-        });
+        }, this);
     }
 
     /**
