@@ -43,6 +43,7 @@ public class TwitterAPIManager {
         return RiksdagskollenApp.getInstance().getTwitterAPIManager();
     }
 
+
     public void getTweets(final String screenName, final TwitterCallback callback) {
         String subURL = TIMELINE_ENDPOINT + "?screen_name=" + screenName
                 + "&tweet_mode=extended&trim_user=true";
@@ -59,8 +60,23 @@ public class TwitterAPIManager {
         String subURL = LIST_ENDPOINT + "?owner_screen_name=riksdagskollen&slug=riksdagskollen"
                 + "&tweet_mode=extended&include_rts=false";
         doGetTweetRequest(subURL, callback);
-
     }
+
+    public void getRiksdagenTweetListNoRT(TwitterCallback callback) {
+        String subURL = LIST_ENDPOINT + "?owner_screen_name=riksdagskollen&slug=riksdagskollen"
+                + "&tweet_mode=extended&include_rts=true";
+        doGetTweetRequest(subURL, callback);
+    }
+
+    public void getRiksdagenTweetListNoRTSineID(TwitterCallback callback, int id) {
+        String subURL = LIST_ENDPOINT + "?owner_screen_name=riksdagskollen&slug=riksdagskollen"
+                + "&tweet_mode=extended&include_rts=true&max_id=" + id;
+        doGetTweetRequest(subURL, callback);
+    }
+
+
+
+
 
     private void doGetTweetRequest(final String subURL, final TwitterCallback callback) {
         if (hasAuth) {
