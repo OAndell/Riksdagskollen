@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'CabinRegular';
+    /* src: url('DejaVuSans.ttf'); This doesn't work */
+    /* src: url('fonts/DejaVuSans.ttf'); Neither is this */
+    src: url('file:///android_asset/fonts/cabin_regular.ttf'); /* but this does */
+}
+
 h1 {
     font-size: 1.2em;
     color: #1b506f;
@@ -61,17 +68,18 @@ p {
     margin-bottom: 0.3em;
     margin-left: 0;
     margin-right: 0;
+    font-family: 'CabinRegular';
 }
 
 li {
     font-size: 1.0em;
-    font-family: 'Sans-serif';
+    font-family: 'CabinRegular';
 
 }
 
 span {
     font-size: 1.0em;
-    font-family: 'Sans-serif';
+    font-family: 'CabinRegular';
 }
 
 td {
@@ -85,6 +93,7 @@ body {
     padding: 0;
     overflow-x:hidden;
     word-wrap: break-word;
+    font-family: 'CabinRegular';
 }
 
 a:link {

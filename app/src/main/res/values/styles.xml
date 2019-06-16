@@ -4,10 +4,11 @@
     <style name="InitialTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/riksdagskollen_splash_layer_list</item>
         <item name="colorPrimary">@color/riksdagBlue</item>
+
     </style>
 
-    <!-- Base application theme. -->
     <style name="DefaultTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:fontFamily">@font/cabin_regular</item>
         <item name="colorPrimary">@color/riksdagBlue</item>
         <item name="colorPrimaryDark">@color/riksdagBlueDark</item>
         <item name="colorAccent">@color/riksdagBlue</item>
@@ -51,6 +52,7 @@
     </style>
 
     <style name="BlackTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:fontFamily">@font/cabin_regular</item>
         <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/white</item>
@@ -97,6 +99,7 @@
     </style>
 
     <style name="WhiteTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:fontFamily">@font/cabin_regular</item>
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">@color/riksdagBlueLight</item>
@@ -207,7 +210,6 @@
     </style>
 
     <style name="PreferenceFragmentStyle">
-
         <item name="android:textColorSecondary">?mainTitleTextColor</item>
         <item name="android:textColor">?mainBodyTextColor</item>
     </style>
