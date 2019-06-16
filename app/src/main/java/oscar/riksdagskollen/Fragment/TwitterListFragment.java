@@ -13,12 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Adapter.TweetAdapter;
-import oscar.riksdagskollen.Util.Enum.CurrentParties;
-import oscar.riksdagskollen.Util.Helper.TwitterUserFactory;
 import oscar.riksdagskollen.Util.JSONModel.Twitter.Tweet;
-import oscar.riksdagskollen.Util.JSONModel.Twitter.TwitterUser;
 import oscar.riksdagskollen.Util.RiksdagenCallback.TwitterCallback;
 
 
@@ -27,7 +25,7 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
     private TweetAdapter adapter;
     public static final String SECTION_NAME_TWITTER = "twitter";
 
-    private TwitterUser twitterUser = TwitterUserFactory.getUser(CurrentParties.getV());
+    //private TwitterUser twitterUser = TwitterUserFactory.getUser(CurrentParties.getV());
 
     public static TwitterListFragment newInstance() {
         TwitterListFragment newInstance = new TwitterListFragment();
@@ -59,7 +57,7 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
      */
     protected void loadNextPage() {
         setLoadingMoreItems(true);
-        twitterUser.getTimeline(new TwitterCallback() {
+        RiksdagskollenApp.getInstance().getTwitterAPIManager().getRiksdagenTweetList(new TwitterCallback() {
             @Override
             public void onTweetsFetched(List<Tweet> tweets) {
                 documentList.addAll(tweets);
@@ -73,7 +71,6 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
 
             }
         });
-
         incrementPage();
     }
 

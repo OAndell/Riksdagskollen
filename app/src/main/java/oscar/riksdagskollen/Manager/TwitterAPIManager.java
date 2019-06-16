@@ -17,7 +17,7 @@ import oscar.riksdagskollen.Util.RiksdagenCallback.JSONRequestCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.TwitterCallback;
 
 interface AuthenticateCallback {
-    public void onAuth();
+    void onAuth();
 }
 
 public class TwitterAPIManager {
@@ -25,6 +25,7 @@ public class TwitterAPIManager {
     private static final String HOST = "https://api.twitter.com/";
     private static final String AUTH_ENDPOINT = "oauth2/token?grant_type=client_credentials";
     private static final String TIMELINE_ENDPOINT = "1.1/statuses/user_timeline.json";
+    private static final String LIST_ENDPOINT = "/1.1/lists/statuses.json";
 
     private RequestManager requestManager;
     private Gson gson;
@@ -43,7 +44,25 @@ public class TwitterAPIManager {
     }
 
     public void getTweets(final String screenName, final TwitterCallback callback) {
-        String subURL = TIMELINE_ENDPOINT + "?screen_name=" + screenName + "&tweet_mode=extended";
+        String subURL = TIMELINE_ENDPOINT + "?screen_name=" + screenName
+                + "&tweet_mode=extended&trim_user=true";
+        doGetTweetRequest(subURL, callback);
+    }
+
+    public void getTweetsNoRT(final String screenName, final TwitterCallback callback) {
+        String subURL = TIMELINE_ENDPOINT + "?screen_name=" + screenName
+                + "&tweet_mode=extended&trim_user=true&include_rts=false";
+        doGetTweetRequest(subURL, callback);
+    }
+
+    public void getRiksdagenTweetList(TwitterCallback callback) {
+        String subURL = LIST_ENDPOINT + "?owner_screen_name=riksdagskollen&slug=riksdagskollen"
+                + "&tweet_mode=extended";
+        doGetTweetRequest(subURL, callback);
+
+    }
+
+    private void doGetTweetRequest(final String subURL, final TwitterCallback callback) {
         if (hasAuth) {
             requestManager.doTwitterGetRequest(subURL, HOST, bearerToken, new JSONArrayCallback() {
                 @Override
@@ -62,7 +81,7 @@ public class TwitterAPIManager {
             Authenticate(new AuthenticateCallback() {
                 @Override
                 public void onAuth() {
-                    getTweets(screenName, callback);
+                    doGetTweetRequest(subURL, callback);
                 }
             });
         }
