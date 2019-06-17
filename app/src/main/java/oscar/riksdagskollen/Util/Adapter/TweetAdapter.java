@@ -160,7 +160,7 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
         public void bind(Tweet tweet, final OnItemClickListener listener) {
 
             authorText.setText(tweet.getUser().getName());
-            screenName.setText(String.format("@%s", tweet.getUser().getScreen_name()));
+            screenName.setText(String.format("(@%s)", tweet.getUser().getScreen_name()));
             if (fragment.getActivity() != null) {
                 Glide
                         .with(fragment)
