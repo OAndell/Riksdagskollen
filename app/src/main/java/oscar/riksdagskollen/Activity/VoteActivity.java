@@ -110,7 +110,7 @@ public class VoteActivity extends AppCompatActivity{
             // Aldready downloaded results
             prepareGraphs(new VoteResults(voteDocument.getVoteResults()));
         } else {
-            app.getRequestManager().getDownloadString("http:" + voteDocument.getDokument_url_html(), new StringRequestCallback() {
+            app.getRequestManager().getDownloadString("https:" + voteDocument.getDokument_url_html(), new StringRequestCallback() {
                 @Override
                 public void onResponse(String response) {
                     VoteResults results = new VoteResults(response);
@@ -348,7 +348,7 @@ public class VoteActivity extends AppCompatActivity{
     }
 
     public static String getBetUrl(Vote document) {
-        String baseURL = "http://riksdagen.se/sv/dokument-lagar/arende/betankande/";
+        String baseURL = "https://riksdagen.se/sv/dokument-lagar/arende/betankande/";
         return baseURL + "_" + document.getSearchableBetId();
     }
 
