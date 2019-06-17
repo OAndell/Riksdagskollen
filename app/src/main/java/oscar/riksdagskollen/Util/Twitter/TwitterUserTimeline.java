@@ -1,11 +1,11 @@
-package oscar.riksdagskollen.Util.JSONModel.Twitter;
+package oscar.riksdagskollen.Util.Twitter;
 
 import android.os.Parcelable;
 
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.RiksdagenCallback.TwitterCallback;
 
-public class TwitterBridge {
+public class TwitterUserTimeline implements TwitterTimeline {
     public static int TYPE_PARTY_TWITTER = 10001;
     public static int TYPE_REP_TWITTER = 10002;
 
@@ -14,7 +14,7 @@ public class TwitterBridge {
     private int type;
     //private ArrayList<Tweet> tweets;
 
-    public TwitterBridge(Parcelable owner, String twitterScreenName, int type) {
+    public TwitterUserTimeline(Parcelable owner, String twitterScreenName, int type) {
         this.owner = owner;
         this.twitterScreenName = twitterScreenName;
         this.type = type;
@@ -33,6 +33,12 @@ public class TwitterBridge {
     }
 
     public void getTimeline(TwitterCallback callback) {
-        RiksdagskollenApp.getInstance().getTwitterAPIManager().getTweets(twitterScreenName, callback);
+        RiksdagskollenApp.getInstance().getTwitterAPIManager().getTweets(twitterScreenName, callback, false);
+    }
+
+    @Override
+    public void getTimelineNoRT(TwitterCallback twitterCallback) {
+        RiksdagskollenApp.getInstance().getTwitterAPIManager().getTweets(twitterScreenName, twitterCallback, true);
+
     }
 }

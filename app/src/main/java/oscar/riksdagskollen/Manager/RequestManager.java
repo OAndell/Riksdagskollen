@@ -22,11 +22,11 @@ import org.json.JSONObject;
 
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.DesktopStringRequest;
-import oscar.riksdagskollen.Util.Helper.TwitterAuthRequest;
-import oscar.riksdagskollen.Util.Helper.TwitterGetRequest;
 import oscar.riksdagskollen.Util.RiksdagenCallback.JSONArrayCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.JSONRequestCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
+import oscar.riksdagskollen.Util.Twitter.TwitterAuthRequest;
+import oscar.riksdagskollen.Util.Twitter.TwitterGetRequest;
 
 
 /**

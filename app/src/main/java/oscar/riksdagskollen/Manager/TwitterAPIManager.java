@@ -44,38 +44,32 @@ public class TwitterAPIManager {
     }
 
 
-    public void getTweets(final String screenName, final TwitterCallback callback) {
+    public void getTweets(final String screenName, final TwitterCallback callback, boolean includeRT) {
         String subURL = TIMELINE_ENDPOINT + "?screen_name=" + screenName
                 + "&tweet_mode=extended&trim_user=true";
+        if (includeRT) {
+            subURL = subURL + "&include_rts=true";
+        }
         doGetTweetRequest(subURL, callback);
     }
 
-    public void getTweetsNoRT(final String screenName, final TwitterCallback callback) {
-        String subURL = TIMELINE_ENDPOINT + "?screen_name=" + screenName
-                + "&tweet_mode=extended&trim_user=true&include_rts=false";
+    public void getTweetList(String ownerScreenname, String slug, TwitterCallback callback, boolean includeRT) {
+        String subURL = LIST_ENDPOINT + "?owner_screen_name=" + ownerScreenname + "&slug=" + slug
+                + "&tweet_mode=extended";
+        if (includeRT) {
+            subURL = subURL + "&include_rts=true";
+        }
         doGetTweetRequest(subURL, callback);
     }
 
-    public void getRiksdagenTweetList(TwitterCallback callback) {
+    public void getTweetListSinceID(String ownerScreenname, String slug, TwitterCallback callback, boolean includeRT, int id) {
         String subURL = LIST_ENDPOINT + "?owner_screen_name=riksdagskollen&slug=riksdagskollen"
-                + "&tweet_mode=extended&include_rts=false";
+                + "&tweet_mode=extended&max_id=" + id;
+        if (includeRT) {
+            subURL = subURL + "&include_rts=true";
+        }
         doGetTweetRequest(subURL, callback);
     }
-
-    public void getRiksdagenTweetListNoRT(TwitterCallback callback) {
-        String subURL = LIST_ENDPOINT + "?owner_screen_name=riksdagskollen&slug=riksdagskollen"
-                + "&tweet_mode=extended&include_rts=true";
-        doGetTweetRequest(subURL, callback);
-    }
-
-    public void getRiksdagenTweetListNoRTSineID(TwitterCallback callback, int id) {
-        String subURL = LIST_ENDPOINT + "?owner_screen_name=riksdagskollen&slug=riksdagskollen"
-                + "&tweet_mode=extended&include_rts=true&max_id=" + id;
-        doGetTweetRequest(subURL, callback);
-    }
-
-
-
 
 
     private void doGetTweetRequest(final String subURL, final TwitterCallback callback) {

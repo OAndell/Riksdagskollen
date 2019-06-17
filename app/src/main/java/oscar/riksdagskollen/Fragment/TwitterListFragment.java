@@ -12,17 +12,19 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 
-import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Adapter.TweetAdapter;
 import oscar.riksdagskollen.Util.JSONModel.Twitter.Tweet;
 import oscar.riksdagskollen.Util.RiksdagenCallback.TwitterCallback;
+import oscar.riksdagskollen.Util.Twitter.TwitterTimeline;
+import oscar.riksdagskollen.Util.Twitter.TwitterTimelineFactory;
 
 
 public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
     private final List<Tweet> documentList = new ArrayList<>();
     private TweetAdapter adapter;
     public static final String SECTION_NAME_TWITTER = "twitter";
+    private TwitterTimeline twitterTimeline;
 
     public static TwitterListFragment newInstance() {
         TwitterListFragment newInstance = new TwitterListFragment();
@@ -33,6 +35,7 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Riksdagen på Twitter");
+        twitterTimeline = TwitterTimelineFactory.getTwitterList(TwitterTimelineFactory.LIST_RIKSDAGEN_ALL);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -54,7 +57,7 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
      */
     protected void loadNextPage() {
         setLoadingMoreItems(true);
-        RiksdagskollenApp.getInstance().getTwitterAPIManager().getRiksdagenTweetList(new TwitterCallback() {
+        twitterTimeline.getTimeline(new TwitterCallback() {
             @Override
             public void onTweetsFetched(List<Tweet> tweets) {
                 documentList.addAll(tweets);

@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Util.Helper;
+package oscar.riksdagskollen.Util.Twitter;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
