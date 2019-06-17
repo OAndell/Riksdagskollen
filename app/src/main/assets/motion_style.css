@@ -1,8 +1,6 @@
 @font-face {
     font-family: 'CabinRegular';
-    /* src: url('DejaVuSans.ttf'); This doesn't work */
-    /* src: url('fonts/DejaVuSans.ttf'); Neither is this */
-    src: url('file:///android_asset/fonts/cabin_regular.ttf'); /* but this does */
+    src: url('file:///android_asset/fonts/cabin_regular_edited.ttf');
 }
 
 h1 {
