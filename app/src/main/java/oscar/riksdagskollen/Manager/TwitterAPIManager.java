@@ -53,6 +53,16 @@ public class TwitterAPIManager {
         doGetTweetRequest(subURL, callback);
     }
 
+
+    public void getTweetsSinceID(final String screenName, final TwitterCallback callback, boolean includeRT, long id) {
+        String subURL = TIMELINE_ENDPOINT + "?screen_name=" + screenName
+                + "&tweet_mode=extended&trim_user=true&max_id=" + id;
+        if (includeRT) {
+            subURL = subURL + "&include_rts=true";
+        }
+        doGetTweetRequest(subURL, callback);
+    }
+
     public void getTweetList(String ownerScreenname, String slug, TwitterCallback callback, boolean includeRT) {
         String subURL = LIST_ENDPOINT + "?owner_screen_name=" + ownerScreenname + "&slug=" + slug
                 + "&tweet_mode=extended";
@@ -62,7 +72,7 @@ public class TwitterAPIManager {
         doGetTweetRequest(subURL, callback);
     }
 
-    public void getTweetListSinceID(String ownerScreenname, String slug, TwitterCallback callback, boolean includeRT, int id) {
+    public void getTweetListSinceID(String ownerScreenname, String slug, TwitterCallback callback, boolean includeRT, long id) {
         String subURL = LIST_ENDPOINT + "?owner_screen_name=riksdagskollen&slug=riksdagskollen"
                 + "&tweet_mode=extended&max_id=" + id;
         if (includeRT) {

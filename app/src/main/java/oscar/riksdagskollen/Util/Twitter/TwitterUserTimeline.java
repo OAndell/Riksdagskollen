@@ -2,7 +2,12 @@ package oscar.riksdagskollen.Util.Twitter;
 
 import android.os.Parcelable;
 
+import com.android.volley.VolleyError;
+
+import java.util.List;
+
 import oscar.riksdagskollen.RiksdagskollenApp;
+import oscar.riksdagskollen.Util.JSONModel.Twitter.Tweet;
 import oscar.riksdagskollen.Util.RiksdagenCallback.TwitterCallback;
 
 public class TwitterUserTimeline implements TwitterTimeline {
@@ -12,12 +17,13 @@ public class TwitterUserTimeline implements TwitterTimeline {
     private Parcelable owner;
     private String twitterScreenName;
     private int type;
-    //private ArrayList<Tweet> tweets;
+    private long finalTweetID;
 
     public TwitterUserTimeline(Parcelable owner, String twitterScreenName, int type) {
         this.owner = owner;
         this.twitterScreenName = twitterScreenName;
         this.type = type;
+        finalTweetID = -1;
     }
 
     public String getTwitterScreenName() {
@@ -32,13 +38,29 @@ public class TwitterUserTimeline implements TwitterTimeline {
         return type;
     }
 
-    public void getTimeline(TwitterCallback callback) {
-        RiksdagskollenApp.getInstance().getTwitterAPIManager().getTweets(twitterScreenName, callback, false);
+    public void getTimeline(final TwitterCallback callback) {
+
+        TwitterCallback localCallback = new TwitterCallback() {
+            @Override
+            public void onTweetsFetched(List<Tweet> tweets) {
+                finalTweetID = tweets.get(tweets.size() - 1).getId();
+                callback.onTweetsFetched(tweets);
+            }
+
+            @Override
+            public void onFail(VolleyError error) {
+            }
+        };
+
+        if (finalTweetID == -1) {
+            RiksdagskollenApp.getInstance().getTwitterAPIManager().getTweets(
+                    twitterScreenName, localCallback, false);
+        } else {
+            RiksdagskollenApp.getInstance().getTwitterAPIManager().getTweetsSinceID(
+                    twitterScreenName, localCallback, false, finalTweetID);
+        }
+
     }
 
-    @Override
-    public void getTimelineNoRT(TwitterCallback twitterCallback) {
-        RiksdagskollenApp.getInstance().getTwitterAPIManager().getTweets(twitterScreenName, twitterCallback, true);
 
-    }
 }
