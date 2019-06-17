@@ -10,20 +10,18 @@ import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.JSONModel.Twitter.Tweet;
 import oscar.riksdagskollen.Util.RiksdagenCallback.TwitterCallback;
 
-public class TwitterUserTimeline implements TwitterTimeline {
+public class TwitterUserTimeline extends TwitterTimeline {
     public static int TYPE_PARTY_TWITTER = 10001;
     public static int TYPE_REP_TWITTER = 10002;
 
     private Parcelable owner;
     private String twitterScreenName;
     private int type;
-    private long finalTweetID;
 
     public TwitterUserTimeline(Parcelable owner, String twitterScreenName, int type) {
         this.owner = owner;
         this.twitterScreenName = twitterScreenName;
         this.type = type;
-        finalTweetID = -1;
     }
 
     public String getTwitterScreenName() {
@@ -52,7 +50,7 @@ public class TwitterUserTimeline implements TwitterTimeline {
             }
         };
 
-        if (finalTweetID == -1) {
+        if (finalTweetID == TwitterTimeline.DEFAULT_TWEET_ID) {
             RiksdagskollenApp.getInstance().getTwitterAPIManager().getTweets(
                     twitterScreenName, localCallback, false);
         } else {

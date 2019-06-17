@@ -8,16 +8,14 @@ import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.JSONModel.Twitter.Tweet;
 import oscar.riksdagskollen.Util.RiksdagenCallback.TwitterCallback;
 
-public class TwitterListTimeline implements TwitterTimeline {
+public class TwitterListTimeline extends TwitterTimeline {
 
     private String ownerScreenName;
     private String slug;
-    private long finalTweetID;
 
     public TwitterListTimeline(String ownerScreenName, String slug) {
         this.ownerScreenName = ownerScreenName;
         this.slug = slug;
-        finalTweetID = -1;
     }
 
     @Override
@@ -28,7 +26,6 @@ public class TwitterListTimeline implements TwitterTimeline {
             public void onTweetsFetched(List<Tweet> tweets) {
                 finalTweetID = tweets.get(tweets.size() - 1).getId();
                 twitterCallback.onTweetsFetched(tweets);
-                System.out.println(finalTweetID);
             }
 
             @Override
@@ -36,7 +33,7 @@ public class TwitterListTimeline implements TwitterTimeline {
             }
         };
 
-        if (finalTweetID == -1) {
+        if (finalTweetID == TwitterTimeline.DEFAULT_TWEET_ID) {
             RiksdagskollenApp.getInstance().getTwitterAPIManager().getTweetList(
                     ownerScreenName, slug, localCallback, false);
         } else {

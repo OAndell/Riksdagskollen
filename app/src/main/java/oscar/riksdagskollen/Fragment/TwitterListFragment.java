@@ -61,7 +61,7 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
             @Override
             public void onTweetsFetched(List<Tweet> tweets) {
                 documentList.addAll(tweets);
-                getAdapter().addAll(documentList);
+                getAdapter().addAll(tweets);
                 setShowLoadingView(false);
                 setLoadingMoreItems(false);
             }
