@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'CabinRegular';
+    src: url('file:///android_asset/fonts/cabin_regular_edited.ttf');
+}
+
 body {background-color: black;
 color: white}
 
@@ -65,17 +70,18 @@ p {
     margin-bottom: 0.3em;
     margin-left: 0;
     margin-right: 0;
+    font-family: 'CabinRegular';
 }
 
 li {
     font-size: 1.0em;
-    font-family: 'Sans-serif';
+    font-family: 'CabinRegular';
 
 }
 
 span {
     font-size: 1.0em;
-    font-family: 'Sans-serif';
+    font-family: 'CabinRegular';
 }
 
 td {
