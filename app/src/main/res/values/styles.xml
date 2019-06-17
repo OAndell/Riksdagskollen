@@ -8,7 +8,7 @@
     </style>
 
     <style name="DefaultTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:fontFamily">@font/cabin_regular</item>
+        <item name="android:fontFamily">@font/lf_regular</item>
         <item name="colorPrimary">@color/riksdagBlue</item>
         <item name="colorPrimaryDark">@color/riksdagBlueDark</item>
         <item name="colorAccent">@color/riksdagBlue</item>
@@ -52,7 +52,7 @@
     </style>
 
     <style name="BlackTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:fontFamily">@font/cabin_regular</item>
+        <item name="android:fontFamily">@font/lf_regular</item>
         <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/white</item>
@@ -99,7 +99,7 @@
     </style>
 
     <style name="WhiteTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:fontFamily">@font/cabin_regular</item>
+        <item name="android:fontFamily">@font/lf_regular</item>
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">@color/riksdagBlueLight</item>
