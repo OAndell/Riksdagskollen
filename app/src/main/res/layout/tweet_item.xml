@@ -49,7 +49,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
-                        android:padding="12dp"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="10dp"
                         android:scaleType="fitCenter" />
 
                 </LinearLayout>
@@ -59,9 +60,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
-                    android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -72,7 +72,7 @@
                             android:id="@+id/author"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="start|center_vertical"
+                            android:layout_gravity="start"
                             android:text="Vänsterpartiet"
                             android:textColor="?attr/mainTitleTextColor"
                             android:textSize="16sp"
@@ -82,57 +82,56 @@
                             android:id="@+id/author_screen_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="start|center_vertical"
-                            android:layout_marginLeft="8dp"
+                            android:layout_gravity="start"
+                            android:layout_marginLeft="6dp"
                             android:text="(@vansterpartiet)"
                             android:textColor="@color/cat_light_gray"
                             android:textSize="16sp"
                             android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tweet_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginTop="8dp"
+                            android:text="För att vår militära alliansfrihet ska bli trovärdig måste alla närmanden mot Nato avbrytas och värdlandsavtalet rivas upp. Sverige ska inte ha militära övningar med Nato, skriver Hanna Gunnarsson (V)"
+                            android:textColor="?mainBodyTextColor"
+                            android:textSize="16sp" />
+
+
+                        <com.android.volley.toolbox.NetworkImageView
+                            android:id="@+id/image"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:adjustViewBounds="true"
+                            android:elevation="3dp" />
+
+
+                        <TextView
+                            android:id="@+id/publicerad"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_marginBottom="16dp"
+                            android:layout_weight="0.3"
+                            android:text="Publicerad: 2017-08-19"
+                            android:textColor="@color/cat_light_gray"
+                            android:textSize="14sp"
+                            android:textStyle="normal" />
 
                     </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
 
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="48dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tweet_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_marginTop="8dp"
-                    android:text="För att vår militära alliansfrihet ska bli trovärdig måste alla närmanden mot Nato avbrytas och värdlandsavtalet rivas upp. Sverige ska inte ha militära övningar med Nato, skriver Hanna Gunnarsson (V)"
-                    android:textColor="?mainBodyTextColor"
-                    android:textSize="16sp" />
-
-
-                <com.android.volley.toolbox.NetworkImageView
-                    android:id="@+id/image"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:adjustViewBounds="true"
-                    android:elevation="3dp" />
-
-
-                <TextView
-                    android:id="@+id/publicerad"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_marginBottom="16dp"
-                    android:layout_weight="0.3"
-                    android:text="Publicerad: 2017-08-19"
-                    android:textColor="@color/cat_light_gray"
-                    android:textSize="14sp"
-                    android:textStyle="normal" />
-
-            </LinearLayout>
 
         </LinearLayout>
 

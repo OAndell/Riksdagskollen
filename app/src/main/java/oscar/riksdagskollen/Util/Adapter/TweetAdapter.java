@@ -160,7 +160,7 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
         public void bind(Tweet tweet, final OnItemClickListener listener) {
 
             authorText.setText(tweet.getUser().getName());
-            screenName.setText(String.format("(@%s)", tweet.getUser().getScreen_name()));
+            screenName.setText(String.format("@%s", tweet.getUser().getScreen_name()));
             if (fragment.getActivity() != null) {
                 Glide
                         .with(fragment)
@@ -202,8 +202,8 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
             sf.setLenient(true);
 
             Locale locale = new Locale("swe", "sv_SE");
-            DateFormat dateFormat = DateFormat.getDateInstance(
-                    DateFormat.DEFAULT, locale);
+            DateFormat dateFormat = DateFormat.getDateTimeInstance(
+                    DateFormat.DEFAULT, DateFormat.SHORT, locale);
 
             return dateFormat.format(sf.parse(date));
         }
