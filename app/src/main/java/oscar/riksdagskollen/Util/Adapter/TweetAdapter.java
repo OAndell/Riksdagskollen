@@ -198,7 +198,7 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
         private static String getTwitterDate(String date) throws ParseException {
 
             final String TWITTER = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
-            SimpleDateFormat sf = new SimpleDateFormat(TWITTER);
+            SimpleDateFormat sf = new SimpleDateFormat(TWITTER, Locale.US);
             sf.setLenient(true);
 
             Locale locale = new Locale("swe", "sv_SE");
