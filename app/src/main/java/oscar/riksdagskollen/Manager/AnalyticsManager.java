@@ -2,6 +2,8 @@ package oscar.riksdagskollen.Manager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 
 import oscar.riksdagskollen.Analytics;
 import oscar.riksdagskollen.RiksdagskollenApp;
@@ -28,6 +30,10 @@ public class AnalyticsManager {
 
     public static AnalyticsManager getInstance() {
         return RiksdagskollenApp.getInstance().getAnalyticsManager();
+    }
+
+    public void logEvent(String event, @Nullable Bundle bundle) {
+        analyticsWrapper.logEvent(event, bundle);
     }
 
 

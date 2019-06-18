@@ -54,7 +54,7 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
 
         @Override
         public void onInserted(int position, int count) {
-            notifyItemRangeInserted(position, count);
+            notifyDataSetChanged();
         }
 
         @Override
@@ -101,7 +101,7 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
             //add our view to a footer view and display it
             prepareHeaderFooter((HeaderFooterViewHolder) holder, v);
         }else {
-            CurrentNews document = newsList.get(position);
+            CurrentNews document = newsList.get(position - headers.size());
             ((CurrentNewsListAdapter.NewsViewHolder) holder).bind(document, this.clickListener);
         }
     }
@@ -117,6 +117,7 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
     @Override
     public void addAll(List<?> items) {
         newsList.addAll((Collection<CurrentNews>) items);
+
     }
 
     @Override

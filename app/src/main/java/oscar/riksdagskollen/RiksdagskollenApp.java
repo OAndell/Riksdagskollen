@@ -40,6 +40,10 @@ public class RiksdagskollenApp extends Application {
     private SavedDocumentManager savedDocumentManager;
     private AnalyticsManager analyticsManager;
 
+    private final static String LAUNCH_COUNT = "launches";
+    private final static String CAN_ASK_FOR_RATING = "can_ask_for_rating";
+    private final static int LAUNCHES_TO_ASK = 15;
+
 
     @Override
     public void onCreate() {
@@ -52,7 +56,6 @@ public class RiksdagskollenApp extends Application {
             analyticsManager.initCrashlytics();
         }
 
-
         requestManager = new RequestManager();
         riksdagenAPIManager = new RiksdagenAPIManager(this);
         themeManager = new ThemeManager(this);
@@ -63,6 +66,7 @@ public class RiksdagskollenApp extends Application {
         representativeManager = new RepresentativeManager(this);
         savedDocumentManager = new SavedDocumentManager(this);
 
+        incrementLaunches();
     }
 
     public void scheduleAndCheckAlertsJob() {
@@ -101,6 +105,30 @@ public class RiksdagskollenApp extends Application {
     public boolean isDataSaveModeActive() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         return preferences.getBoolean("data_save_mode", false);
+    }
+
+    private void incrementLaunches() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int launchCount = preferences.getInt(LAUNCH_COUNT, 0);
+        launchCount++;
+        preferences.edit().putInt(LAUNCH_COUNT, launchCount).apply();
+    }
+
+    public boolean shouldAskForRating() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int launchCount = preferences.getInt(LAUNCH_COUNT, 0);
+        boolean canAskForRating = preferences.getBoolean(CAN_ASK_FOR_RATING, true);
+        return launchCount >= LAUNCHES_TO_ASK && canAskForRating;
+    }
+
+    public void disableRatingQuestion() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferences.edit().putBoolean(CAN_ASK_FOR_RATING, false).apply();
+    }
+
+    public void remindLater() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferences.edit().putInt(LAUNCH_COUNT, LAUNCHES_TO_ASK / 2).apply();
     }
 
     public AnalyticsManager getAnalyticsManager() {
@@ -143,4 +171,6 @@ public class RiksdagskollenApp extends Application {
     public RepresentativeManager getRepresentativeManager() {
         return representativeManager;
     }
+
+
 }

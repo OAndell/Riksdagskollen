@@ -1,5 +1,6 @@
 package oscar.riksdagskollen.Fragment;
 
+import android.content.Context;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,6 +26,8 @@ import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Helper.CustomTabs;
 import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNews;
 import oscar.riksdagskollen.Util.RiksdagenCallback.CurrentNewsCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.RateResultListener;
+import oscar.riksdagskollen.Util.View.PlayRatingQuestionView;
 
 
 /**
@@ -71,6 +74,7 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
                     CustomTabs.openTab(getContext(), newsDoc.getNewsUrl());
             }
         });
+
 
     }
 
@@ -125,9 +129,26 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
      */
     protected void loadNextPage() {
         setLoadingMoreItems(true);
+        final Context context = this.getContext();
+
         RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getCurrentNews(new CurrentNewsCallback() {
             @Override
             public void onNewsFetched(List<CurrentNews> currentNews) {
+
+                if (getPageToLoad() <= 2) {
+                    if (RiksdagskollenApp.getInstance().shouldAskForRating()) {
+                        final PlayRatingQuestionView view = new PlayRatingQuestionView(context);
+                        view.setRateResultListener(new RateResultListener() {
+                            @Override
+                            public void onResult() {
+                                adapter.removeHeader(view);
+                            }
+                        });
+                        adapter.addHeader(view);
+                    }
+
+                }
+
                 setShowLoadingView(false);
                 newsList.addAll(currentNews);
                 getAdapter().addAll(currentNews);
