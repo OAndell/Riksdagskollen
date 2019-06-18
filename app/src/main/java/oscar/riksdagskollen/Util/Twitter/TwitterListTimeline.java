@@ -13,6 +13,10 @@ public class TwitterListTimeline extends TwitterTimeline {
     private String ownerScreenName;
     private String slug;
 
+    /**
+     * @param ownerScreenName twitter screen name
+     * @param slug            name of the list
+     */
     public TwitterListTimeline(String ownerScreenName, String slug) {
         this.ownerScreenName = ownerScreenName;
         this.slug = slug;
@@ -24,13 +28,13 @@ public class TwitterListTimeline extends TwitterTimeline {
         TwitterCallback localCallback = new TwitterCallback() {
             @Override
             public void onTweetsFetched(List<Tweet> tweets) {
+                //Save last tweet ID
                 finalTweetID = tweets.get(tweets.size() - 1).getId();
-                twitterCallback.onTweetsFetched(tweets);
+                twitterCallback.onTweetsFetched(tweets); //Return tweets
             }
 
             @Override
-            public void onFail(VolleyError error) {
-            }
+            public void onFail(VolleyError error) { }
         };
 
         if (finalTweetID == TwitterTimeline.DEFAULT_TWEET_ID) {

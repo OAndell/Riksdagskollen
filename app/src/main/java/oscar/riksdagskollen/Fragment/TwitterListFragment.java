@@ -71,7 +71,6 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
 
             }
         });
-        incrementPage();
     }
 
     @Override
@@ -84,4 +83,10 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
     RiksdagenViewHolderAdapter getAdapter() {
         return adapter;
     }
+
+    @Override
+    protected void resetPageToLoad() {
+        twitterTimeline.reset();
+    }
+
 }

@@ -8,7 +8,7 @@ import oscar.riksdagskollen.Util.JSONModel.Twitter.Tweet;
 
 public interface TwitterCallback {
 
-    void onTweetsFetched(List<Tweet> tweet);
+    void onTweetsFetched(List<Tweet> tweetList);
 
     void onFail(VolleyError error);
 }
