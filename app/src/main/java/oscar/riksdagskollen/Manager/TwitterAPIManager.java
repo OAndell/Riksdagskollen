@@ -114,8 +114,7 @@ public class TwitterAPIManager {
                 try {
                     bearerToken = response.get("access_token").toString();
                     hasAuth = true;
-                    System.out.println("Authenticated");
-                    System.out.println("Token " + bearerToken);
+                    System.out.println("Twitter Authenticated");
                     callback.onAuth();
                 } catch (JSONException e) {
                     e.printStackTrace();
