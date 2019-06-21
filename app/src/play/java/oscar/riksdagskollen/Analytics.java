@@ -2,6 +2,8 @@ package oscar.riksdagskollen;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.FirebaseApp;
@@ -29,5 +31,10 @@ public class Analytics implements AnalyticsWrapper {
             fireBase.setCurrentScreen(activity, screenName, null);
         }
 
+    }
+
+    @Override
+    public void logEvent(String event, @Nullable Bundle bundle) {
+        FirebaseAnalytics.getInstance(context).logEvent(event, bundle);
     }
 }

@@ -68,4 +68,40 @@ public class AnimUtil {
         if (height == 0 || v.getVisibility() == View.GONE) expand(v, listener);
         else collapse(v, listener);
     }
+
+    public static void fadeOut(final View v, Animation.AnimationListener listener) {
+        Animation a = new Animation() {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                v.setAlpha(1 - interpolatedTime);
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        a.setDuration(400);
+        a.setAnimationListener(listener);
+        v.startAnimation(a);
+    }
+
+    public static void fadeIn(final View v, Animation.AnimationListener listener) {
+        Animation a = new Animation() {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                v.setAlpha(interpolatedTime);
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        a.setDuration(400);
+        a.setAnimationListener(listener);
+        v.startAnimation(a);
+    }
 }

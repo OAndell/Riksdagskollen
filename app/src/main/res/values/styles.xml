@@ -7,8 +7,12 @@
 
     </style>
 
-    <style name="DefaultTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="ParentTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:fontFamily">@font/cabin_regular_edited</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="DefaultTheme" parent="ParentTheme">
         <item name="colorPrimary">@color/riksdagBlue</item>
         <item name="colorPrimaryDark">@color/riksdagBlueDark</item>
         <item name="colorAccent">@color/riksdagBlue</item>
@@ -51,8 +55,7 @@
         <item name="fabBackgroundDrawable">@drawable/fab_background_default</item>
     </style>
 
-    <style name="BlackTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:fontFamily">@font/cabin_regular_edited</item>
+    <style name="BlackTheme" parent="ParentTheme">
         <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/white</item>
@@ -98,8 +101,7 @@
         <item name="fabBackgroundDrawable">@drawable/fab_background_dark</item>
     </style>
 
-    <style name="WhiteTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:fontFamily">@font/cabin_regular_edited</item>
+    <style name="WhiteTheme" parent="ParentTheme">
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">@color/riksdagBlueLight</item>
