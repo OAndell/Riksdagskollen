@@ -32,6 +32,7 @@ public class PartyFragment extends Fragment {
     private PartyListFragment listFragment;
     private PartyInfoFragment infoFragment;
     private PartyRepresentativeFragment representativeFragment;
+    private TwitterListFragment twitterListFragment;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private int currentPage = 0;
@@ -65,7 +66,7 @@ public class PartyFragment extends Fragment {
         this.party = getArguments().getParcelable("party");
         infoFragment = PartyInfoFragment.newInstance(party);
         representativeFragment = PartyRepresentativeFragment.newInstance(party);
-
+        twitterListFragment = TwitterListFragment.newInstance(party);
         setHasOptionsMenu(true);
     }
 
@@ -111,6 +112,7 @@ public class PartyFragment extends Fragment {
         adapter.addFragment(listFragment, "Flöde");
         adapter.addFragment(infoFragment, "Parti");
         adapter.addFragment(representativeFragment,"Ledamöter");
+        adapter.addFragment(twitterListFragment, "Twttr");
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

@@ -14,6 +14,7 @@ import java.util.List;
 
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Adapter.TweetAdapter;
+import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.Twitter.Tweet;
 import oscar.riksdagskollen.Util.RiksdagenCallback.TwitterCallback;
 import oscar.riksdagskollen.Util.Twitter.TwitterTimeline;
@@ -21,21 +22,49 @@ import oscar.riksdagskollen.Util.Twitter.TwitterTimelineFactory;
 
 
 public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
+
+
+    public static int TYPE_DEFAULT = 0;
+    public static int TYPE_PARTY = 1;
     private final List<Tweet> documentList = new ArrayList<>();
     private TweetAdapter adapter;
     public static final String SECTION_NAME_TWITTER = "twitter";
     private TwitterTimeline twitterTimeline;
 
+
     public static TwitterListFragment newInstance() {
+        Bundle args = new Bundle();
+        args.putInt("type", TYPE_DEFAULT);
         TwitterListFragment newInstance = new TwitterListFragment();
+        newInstance.setArguments(args);
         return newInstance;
     }
+
+    public static TwitterListFragment newInstance(Party party) {
+        Bundle args = new Bundle();
+        args.putInt("type", TYPE_PARTY);
+        args.putParcelable("party", party);
+        TwitterListFragment newInstance = new TwitterListFragment();
+        newInstance.setArguments(args);
+        return newInstance;
+    }
+
+    public void setTwitterTimeline(TwitterTimeline twitterTimeline) {
+        this.twitterTimeline = twitterTimeline;
+    }
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Riksdagen på Twitter");
-        twitterTimeline = TwitterTimelineFactory.getTwitterList(TwitterTimelineFactory.LIST_RIKSDAGEN_ALL);
+        if (getArguments().getInt("type") == TYPE_PARTY) {
+            Party party = getArguments().getParcelable("party");
+            twitterTimeline = TwitterTimelineFactory.getUser(party);
+        } else {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Riksdagen på Twitter");
+            twitterTimeline = TwitterTimelineFactory.getTwitterList(TwitterTimelineFactory.LIST_RIKSDAGEN_ALL);
+        }
+
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
