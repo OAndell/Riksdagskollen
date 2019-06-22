@@ -25,8 +25,8 @@ public class CurrentNewsPresenter implements CurrentNewsContract.Presenter, Curr
 
     @Override
     public void loadMoreItems() {
-        model.getNews(this);
         view.showLoadingItemsView(true);
+        model.getNews(this);
     }
 
     @Override
@@ -54,6 +54,11 @@ public class CurrentNewsPresenter implements CurrentNewsContract.Presenter, Curr
     }
 
     @Override
+    public void clear() {
+        model.resetPage();
+    }
+
+    @Override
     public boolean isNotificationsEnabled() {
         return AlertManager.getInstance().isAlertEnabledForSection(SECTION_NAME_NEWS);
     }
@@ -75,6 +80,8 @@ public class CurrentNewsPresenter implements CurrentNewsContract.Presenter, Curr
 
     @Override
     public void onFail(VolleyError error) {
+        view.showLoadingItemsView(false);
+        view.showLoadingView(false);
         view.showLoadFailView();
     }
 }

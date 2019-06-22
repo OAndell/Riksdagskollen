@@ -33,6 +33,8 @@ public interface CurrentNewsContract {
 
         void handleItemClick(CurrentNews newsItem, Context context);
 
+        void clear();
+
         boolean isNotificationsEnabled();
     }
 

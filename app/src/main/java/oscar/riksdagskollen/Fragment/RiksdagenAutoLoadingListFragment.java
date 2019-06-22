@@ -30,7 +30,7 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
     private int searchPageToLoad = 1;
     private int pastVisiblesItems;
 
-    protected static final int MIN_DOC = 6;
+    public static final int MIN_DOC = 6;
 
     private RiksdagenViewHolderAdapter adapter;
     private ViewGroup loadingView;
@@ -161,7 +161,7 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         this.loading = loading;
         showNoConnectionWarning(false);
         // The runnables are apparently needed to avoid long warnings
-        if(loading && pageToLoad > 1){
+        if (loading && getAdapter().getItemCount() > 0) {
             recyclerView.post(new Runnable() {
                 public void run() {
                     adapter.addFooter(itemsLoadingView);

@@ -107,6 +107,7 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment im
     protected void clearItems() {
         newsList.clear();
         adapter.clear();
+        presenter.clear();
     }
 
     @Override
