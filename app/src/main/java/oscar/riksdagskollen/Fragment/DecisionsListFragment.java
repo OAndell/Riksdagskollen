@@ -317,7 +317,7 @@ public class DecisionsListFragment extends RiksdagenAutoLoadingListFragment impl
     }
 
     @Override
-    RiksdagenViewHolderAdapter getAdapter() {
+    protected RiksdagenViewHolderAdapter getAdapter() {
         return adapter;
     }
 

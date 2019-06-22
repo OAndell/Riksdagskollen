@@ -120,7 +120,7 @@ public class SearchListFragment extends RiksdagenAutoLoadingListFragment {
     }
 
     @Override
-    RiksdagenViewHolderAdapter getAdapter() {
+    protected RiksdagenViewHolderAdapter getAdapter() {
         return adapter;
     }
 

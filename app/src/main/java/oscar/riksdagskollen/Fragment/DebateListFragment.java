@@ -110,7 +110,7 @@ public class DebateListFragment extends RiksdagenAutoLoadingListFragment {
     }
 
     @Override
-    RiksdagenViewHolderAdapter getAdapter() {
+    protected RiksdagenViewHolderAdapter getAdapter() {
         return adapter;
     }
 }

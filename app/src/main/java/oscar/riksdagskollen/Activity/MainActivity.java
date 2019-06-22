@@ -29,8 +29,8 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import oscar.riksdagskollen.CurrentNews.CurrentNewsListFragment;
 import oscar.riksdagskollen.Fragment.AboutFragment;
-import oscar.riksdagskollen.Fragment.CurrentNewsListFragment;
 import oscar.riksdagskollen.Fragment.DebateListFragment;
 import oscar.riksdagskollen.Fragment.DecisionsListFragment;
 import oscar.riksdagskollen.Fragment.ProtocolListFragment;

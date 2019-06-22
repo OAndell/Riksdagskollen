@@ -109,7 +109,7 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
     }
 
     @Override
-    RiksdagenViewHolderAdapter getAdapter() {
+    protected RiksdagenViewHolderAdapter getAdapter() {
         return adapter;
     }
 

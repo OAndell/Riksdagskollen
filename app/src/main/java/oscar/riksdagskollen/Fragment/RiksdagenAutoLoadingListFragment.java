@@ -119,15 +119,15 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         isSearching = searching;
     }
 
-    int getPageToLoad() {
+    protected int getPageToLoad() {
         return pageToLoad;
     }
 
-    void incrementPage(){
+    protected void incrementPage() {
         pageToLoad++;
     }
 
-    void decrementPage(){
+    protected void decrementPage() {
         pageToLoad--;
     }
 
@@ -151,13 +151,13 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         return searchPageToLoad;
     }
 
-    abstract RiksdagenViewHolderAdapter getAdapter();
+    protected abstract RiksdagenViewHolderAdapter getAdapter();
 
     public boolean isLoadingUntilFull() {
         return loadingUntilFull;
     }
 
-    void setLoadingMoreItems(Boolean loading){
+    protected void setLoadingMoreItems(Boolean loading) {
         this.loading = loading;
         showNoConnectionWarning(false);
         // The runnables are apparently needed to avoid long warnings
@@ -181,7 +181,7 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         return recyclerView;
     }
 
-    void setShowLoadingView(final boolean loading) {
+    protected void setShowLoadingView(final boolean loading) {
         showNoConnectionWarning(false);
 
         if (loading) {

@@ -220,7 +220,7 @@ public class RepresentativeFeedFragment extends RiksdagenAutoLoadingListFragment
     }
 
     @Override
-    RiksdagenViewHolderAdapter getAdapter() {
+    protected RiksdagenViewHolderAdapter getAdapter() {
         return adapter;
     }
 

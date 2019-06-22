@@ -268,7 +268,7 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
     }
 
     @Override
-    RiksdagenViewHolderAdapter getAdapter() {
+    protected RiksdagenViewHolderAdapter getAdapter() {
         return adapter;
     }
 

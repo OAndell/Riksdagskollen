@@ -22,9 +22,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import fr.arnaudguyon.xmltojsonlib.XmlToJson;
+import oscar.riksdagskollen.CurrentNews.CurrentNewsCallback;
+import oscar.riksdagskollen.CurrentNews.CurrentNewsJSONModels.CurrentNews;
+import oscar.riksdagskollen.CurrentNews.CurrentNewsJSONModels.CurrentNewsLink;
 import oscar.riksdagskollen.RiksdagskollenApp;
-import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNews;
-import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNewsLink;
 import oscar.riksdagskollen.Util.JSONModel.Debate;
 import oscar.riksdagskollen.Util.JSONModel.DecisionDocument;
 import oscar.riksdagskollen.Util.JSONModel.Party;
@@ -35,7 +36,6 @@ import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeIn
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeVoteStatistics;
 import oscar.riksdagskollen.Util.JSONModel.Speech;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
-import oscar.riksdagskollen.Util.RiksdagenCallback.CurrentNewsCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.DecisionsCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.JSONRequestCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
