@@ -4,9 +4,9 @@ import android.support.v4.app.Fragment;
 
 import java.lang.ref.SoftReference;
 
+import oscar.riksdagskollen.About.AboutFragment;
 import oscar.riksdagskollen.CurrentNews.CurrentNewsListFragment;
-import oscar.riksdagskollen.Fragment.AboutFragment;
-import oscar.riksdagskollen.Fragment.DebateListFragment;
+import oscar.riksdagskollen.DebateList.DebateListFragment;
 import oscar.riksdagskollen.Fragment.DecisionsListFragment;
 import oscar.riksdagskollen.Fragment.PartyFragment;
 import oscar.riksdagskollen.Fragment.PartyListFragment;

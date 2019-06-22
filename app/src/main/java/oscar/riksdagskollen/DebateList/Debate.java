@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Util.JSONModel;
+package oscar.riksdagskollen.DebateList;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -15,6 +15,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
+import oscar.riksdagskollen.Util.JSONModel.DebateSpeech;
+import oscar.riksdagskollen.Util.JSONModel.Party;
 
 public class Debate implements Parcelable {
 

@@ -52,7 +52,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/DefaultTheme.NoActionBar" />
         <activity android:name=".Activity.PreferencesActivity" />
-        <activity android:name=".Activity.DebateActivity" />
+        <activity android:name=".DebateView.DebateActivity" />
 
         <receiver android:name=".Util.Helper.CustomTabs$CopyBroadcastReceiver" />
 

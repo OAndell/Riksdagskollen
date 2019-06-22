@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Fragment;
+package oscar.riksdagskollen.About;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;

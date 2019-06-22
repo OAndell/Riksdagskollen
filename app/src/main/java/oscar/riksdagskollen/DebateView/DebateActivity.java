@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Activity;
+package oscar.riksdagskollen.DebateView;
 
 import android.content.Context;
 import android.os.Build;

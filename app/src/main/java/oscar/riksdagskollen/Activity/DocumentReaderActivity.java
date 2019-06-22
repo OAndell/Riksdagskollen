@@ -31,6 +31,7 @@ import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.List;
 
+import oscar.riksdagskollen.DebateView.DebateActivity;
 import oscar.riksdagskollen.Manager.AlertManager;
 import oscar.riksdagskollen.Manager.AnalyticsManager;
 import oscar.riksdagskollen.Manager.SavedDocumentManager;
@@ -44,7 +45,7 @@ import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.View.DocumentHtmlView;
 
-import static oscar.riksdagskollen.Activity.DebateActivity.DEBATE_INITIATOR_ID;
+import static oscar.riksdagskollen.DebateView.DebateActivity.DEBATE_INITIATOR_ID;
 
 /**
  * Created by gustavaaro on 2018-03-29.
