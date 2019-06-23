@@ -14,8 +14,8 @@ import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import oscar.riksdagskollen.DebateView.DebateSpeech;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
-import oscar.riksdagskollen.Util.JSONModel.DebateSpeech;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 
 public class Debate implements Parcelable {

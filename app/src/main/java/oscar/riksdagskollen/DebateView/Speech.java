@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Util.JSONModel;
+package oscar.riksdagskollen.DebateView;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -14,9 +14,6 @@ public class Speech implements Parcelable {
 
     public String getTalare() {
         return talare;
-    }
-
-    public Speech() {
     }
 
     public String getSystemnyckel() {

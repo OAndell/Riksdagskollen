@@ -26,6 +26,7 @@ import oscar.riksdagskollen.CurrentNews.CurrentNewsCallback;
 import oscar.riksdagskollen.CurrentNews.CurrentNewsJSONModels.CurrentNews;
 import oscar.riksdagskollen.CurrentNews.CurrentNewsJSONModels.CurrentNewsLink;
 import oscar.riksdagskollen.DebateList.Debate;
+import oscar.riksdagskollen.DebateView.Speech;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.JSONModel.DecisionDocument;
 import oscar.riksdagskollen.Util.JSONModel.Party;
@@ -34,7 +35,6 @@ import oscar.riksdagskollen.Util.JSONModel.Protocol;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeInfo;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeVoteStatistics;
-import oscar.riksdagskollen.Util.JSONModel.Speech;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
 import oscar.riksdagskollen.Util.RiksdagenCallback.DecisionsCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.JSONRequestCallback;
@@ -390,7 +390,7 @@ public class RiksdagenAPIManager {
         });
     }
 
-    public void getSpeech(String protId, String speechNo, final SpeechCallback callback) {
+    public void getSpeech(String protId, final String speechNo, final SpeechCallback callback) {
         String subUrl = "/anforande/" + protId + "-" + speechNo + "/json";
         doApiGetRequest(subUrl, new JSONRequestCallback() {
             @Override
@@ -398,8 +398,7 @@ public class RiksdagenAPIManager {
                 try {
                     JSONObject speechJSON = response.getJSONObject("anforande");
                     Speech speech = gson.fromJson(speechJSON.toString(), Speech.class);
-                    callback.onSpeechFetched(speech);
-
+                    callback.onSpeechFetched(speech, speechNo);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

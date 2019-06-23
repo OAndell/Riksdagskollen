@@ -16,50 +16,13 @@
         android:layout_height="match_parent">
 
 
-        <android.support.v4.widget.NestedScrollView
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/activity_debate_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/debate_scrollview"
-            android:overScrollMode="never">
+            android:layout_height="match_parent">
 
-            <LinearLayout
-                android:id="@+id/document_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+        </android.support.v7.widget.RecyclerView>
 
-
-                <oscar.riksdagskollen.Util.View.DocumentHtmlView
-                    android:id="@+id/document_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </oscar.riksdagskollen.Util.View.DocumentHtmlView>
-
-
-                <TextView
-                    android:id="@+id/debate_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingBottom="8dp"
-                    android:text="Debatt"
-                    android:textColor="?mainTitleTextColor"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/activity_debate_recyclerview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                </android.support.v7.widget.RecyclerView>
-
-            </LinearLayout>
-
-        </android.support.v4.widget.NestedScrollView>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/scroll_hint"

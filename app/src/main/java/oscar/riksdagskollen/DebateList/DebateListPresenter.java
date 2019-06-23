@@ -13,7 +13,9 @@ import oscar.riksdagskollen.Util.Enum.DocumentType;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
 
-import static oscar.riksdagskollen.DebateView.DebateActivity.DEBATE_INITIATOR_ID;
+import static oscar.riksdagskollen.DebateView.DebateViewPresenter.DEBATE_INITIATOR_ID;
+import static oscar.riksdagskollen.DebateView.DebateViewPresenter.INITIATING_DOCUMENT;
+import static oscar.riksdagskollen.DebateView.DebateViewPresenter.SHOW_INITIATING_DOCUMENT;
 import static oscar.riksdagskollen.Fragment.RiksdagenAutoLoadingListFragment.MIN_DOC;
 
 public class DebateListPresenter implements DebateContract.Presenter, PartyDocumentCallback {
@@ -36,10 +38,10 @@ public class DebateListPresenter implements DebateContract.Presenter, PartyDocum
     public void handleItemClick(PartyDocument document, Context context) {
         Intent intent = new Intent(context, DebateActivity.class);
         if (document.getDoktyp().equals(DocumentType.Interpellation.getDocType()))
-            intent.putExtra(DebateActivity.SHOW_INITIATING_DOCUMENT, true);
+            intent.putExtra(SHOW_INITIATING_DOCUMENT, true);
         else
-            intent.putExtra(DebateActivity.SHOW_INITIATING_DOCUMENT, false);
-        intent.putExtra(DebateActivity.INITIATING_DOCUMENT, (PartyDocument) document);
+            intent.putExtra(SHOW_INITIATING_DOCUMENT, false);
+        intent.putExtra(INITIATING_DOCUMENT, (PartyDocument) document);
         if (document.getSenders().size() > 0)
             intent.putExtra(DEBATE_INITIATOR_ID, document.getSenders().get(0));
         context.startActivity(intent);

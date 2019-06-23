@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Util.JSONModel;
+package oscar.riksdagskollen.DebateView;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -12,6 +12,7 @@ public class DebateSpeech implements Parcelable {
     private String talare;
     private String anf_klockslag;
     private String tumnagel;
+    private Speech speech;
 
     public String getTumnagel() {
         return tumnagel;
@@ -44,6 +45,14 @@ public class DebateSpeech implements Parcelable {
     public DebateSpeech() {
     }
 
+    public void setSpeech(Speech speech) {
+        this.speech = speech;
+    }
+
+    public Speech getSpeech() {
+        return speech;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -58,6 +67,7 @@ public class DebateSpeech implements Parcelable {
         dest.writeString(this.talare);
         dest.writeString(this.anf_klockslag);
         dest.writeString(this.tumnagel);
+        dest.writeParcelable(this.speech, flags);
     }
 
     protected DebateSpeech(Parcel in) {
@@ -68,6 +78,7 @@ public class DebateSpeech implements Parcelable {
         this.talare = in.readString();
         this.anf_klockslag = in.readString();
         this.tumnagel = in.readString();
+        this.speech = in.readParcelable(Speech.class.getClassLoader());
     }
 
     public static final Creator<DebateSpeech> CREATOR = new Creator<DebateSpeech>() {
