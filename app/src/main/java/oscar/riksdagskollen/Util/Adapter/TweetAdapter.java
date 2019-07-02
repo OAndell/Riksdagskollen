@@ -1,8 +1,13 @@
 package oscar.riksdagskollen.Util.Adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +24,14 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
+import oscar.riksdagskollen.Util.Helper.CustomTabs;
 import oscar.riksdagskollen.Util.JSONModel.Twitter.Tweet;
+import oscar.riksdagskollen.Util.JSONModel.Twitter.TweetURL;
 import oscar.riksdagskollen.Util.View.CircularImageView;
 
 public class TweetAdapter extends RiksdagenViewHolderAdapter {
@@ -144,6 +153,7 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
         private final CircularImageView authorView;
         private final Fragment fragment;
         private final TextView screenName;
+        private final TextView retweetStatus;
 
 
         public TweetViewHolder(View view, Fragment fragment) {
@@ -154,10 +164,11 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
             authorView = view.findViewById(R.id.author_img);
             authorText = view.findViewById(R.id.author);
             screenName = view.findViewById(R.id.author_screen_name);
+            retweetStatus = view.findViewById(R.id.retweet_status);
             this.fragment = fragment;
         }
 
-        public void bind(Tweet tweet, final OnItemClickListener listener) {
+        void bind(Tweet tweet, final OnItemClickListener listener) {
 
             authorText.setText(tweet.getUser().getName());
             screenName.setText(String.format("@%s", tweet.getUser().getScreen_name()));
@@ -166,21 +177,6 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
                         .with(fragment)
                         .load(tweet.getUser().getProfile_image_url_https())
                         .into(authorView);
-            }
-
-            if (tweet.isRetweet()) {
-                Tweet reTweet = tweet.getRetweeted_status();
-                String RTString = tweet.getText().split(":")[0];
-                tweetText.setText(RTString + ": " + reTweet.getText());
-                tweet = reTweet;
-            } else {
-                tweetText.setText(tweet.getText());
-            }
-            try {
-                date.setText(getTwitterDate(tweet.getCreated_at()));
-            } catch (ParseException e) {
-                date.setText(tweet.getCreated_at());
-                e.printStackTrace();
             }
 
             if (tweet.hasMedia()) {
@@ -192,8 +188,72 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
                 image.setVisibility(View.GONE);
             }
 
+            SpannableStringBuilder builder = new SpannableStringBuilder();
+
+            if (tweet.isRetweet()) {
+                Tweet reTweet = tweet.getRetweeted_status();
+                String RTUser = tweet.getText().split(":")[0].substring(3);
+
+                retweetStatus.setText(String.format("retweetade %s:", RTUser));
+                builder.append(reTweet.getText());
+                tweet = reTweet;
+            } else {
+                retweetStatus.setVisibility(View.GONE);
+                builder.append(tweet.getText());
+            }
+
+
+            Pattern pattern = Pattern.compile("https?://t\\.co/\\S+");
+            final Matcher matcher = pattern.matcher(builder);
+            // Check all occurrences
+            while (matcher.find()) {
+                final String url = matcher.group();
+                // Link to media, remove from tweet and set as link for image
+                if (tweet.hasMedia() && !tweetURLsContainsURL(tweet, url)) {
+                    builder.delete(matcher.start(), matcher.end());
+                    image.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            CustomTabs.openTab(fragment.getContext(), url);
+                        }
+                    });
+                } else {
+                    ClickableSpan clickableSpan = new ClickableSpan() {
+                        @Override
+                        public void onClick(@NonNull View view) {
+                            CustomTabs.openTab(fragment.getContext(), url);
+                        }
+                    };
+                    builder.setSpan(clickableSpan, matcher.start(), matcher.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+
+            }
+
+            tweetText.setText(builder);
+            tweetText.setMovementMethod(LinkMovementMethod.getInstance());
+
+            try {
+                date.setText(getTwitterDate(tweet.getCreated_at()));
+            } catch (ParseException e) {
+                date.setText(tweet.getCreated_at());
+                e.printStackTrace();
+            }
+            System.out.println();
+
+
+
+
 
         }
+
+        private boolean tweetURLsContainsURL(Tweet tweet, String url) {
+            if (!tweet.hasUrls()) return false;
+            for (TweetURL tweetURL : tweet.getTweetURLS()) {
+                if (tweetURL.getUrl().equals(url)) return true;
+            }
+            return false;
+        }
+
 
         private static String getTwitterDate(String date) throws ParseException {
 

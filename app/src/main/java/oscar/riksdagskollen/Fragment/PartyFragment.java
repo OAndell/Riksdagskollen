@@ -113,7 +113,7 @@ public class PartyFragment extends Fragment {
         adapter.addFragment(listFragment, "Flöde");
         adapter.addFragment(infoFragment, "Parti");
         adapter.addFragment(representativeFragment,"Ledamöter");
-        adapter.addFragment(twitterListFragment, "Twttr");
+        adapter.addFragment(twitterListFragment, "Twitter");
 
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
