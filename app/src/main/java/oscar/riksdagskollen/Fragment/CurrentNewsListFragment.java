@@ -141,7 +141,7 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
                         view.setRateResultListener(new RateResultListener() {
                             @Override
                             public void onResult() {
-                                adapter.removeHeader(view);
+                                adapter.removeTopHeader();
                             }
                         });
                         adapter.addHeader(view);
@@ -169,8 +169,9 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
 
     @Override
     protected void clearItems() {
-        newsList.clear();
+        adapter.removeTopHeader();
         adapter.clear();
+        newsList.clear();
     }
 
     private void updateAlertsLatestDocument() {
