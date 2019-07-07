@@ -161,6 +161,7 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
 
             @Override
             public void onFail(VolleyError error) {
+                decrementPage();
                 onLoadFail();
             }
         }, getPageToLoad());
