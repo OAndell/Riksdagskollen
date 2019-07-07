@@ -9,8 +9,6 @@ public class TwitterUser implements Parcelable {
     private String screen_name;
     private String profile_image_url_https;
 
-    public TwitterUser() {
-    }
 
     public String getProfile_image_url_https() {
         return profile_image_url_https;

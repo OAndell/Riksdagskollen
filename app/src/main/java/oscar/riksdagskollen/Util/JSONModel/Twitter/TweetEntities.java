@@ -5,24 +5,11 @@ import android.os.Parcelable;
 
 public class TweetEntities implements Parcelable {
 
-    public static final Creator<TweetEntities> CREATOR = new Creator<TweetEntities>() {
-        @Override
-        public TweetEntities createFromParcel(Parcel source) {
-            return new TweetEntities(source);
-        }
-
-        @Override
-        public TweetEntities[] newArray(int size) {
-            return new TweetEntities[size];
-        }
-    };
     private TweetMedia[] media;
+    private TweetURL[] urls;
 
-    public TweetEntities() {
-    }
-
-    protected TweetEntities(Parcel in) {
-        this.media = in.createTypedArray(TweetMedia.CREATOR);
+    public TweetURL[] getUrls() {
+        return urls;
     }
 
     public TweetMedia[] getMedia() {
@@ -37,5 +24,23 @@ public class TweetEntities implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeTypedArray(this.media, flags);
+        dest.writeTypedArray(this.urls, flags);
     }
+
+    protected TweetEntities(Parcel in) {
+        this.media = in.createTypedArray(TweetMedia.CREATOR);
+        this.urls = in.createTypedArray(TweetURL.CREATOR);
+    }
+
+    public static final Creator<TweetEntities> CREATOR = new Creator<TweetEntities>() {
+        @Override
+        public TweetEntities createFromParcel(Parcel source) {
+            return new TweetEntities(source);
+        }
+
+        @Override
+        public TweetEntities[] newArray(int size) {
+            return new TweetEntities[size];
+        }
+    };
 }

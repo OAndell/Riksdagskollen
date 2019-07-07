@@ -36,6 +36,7 @@ public class PartyFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private int currentPage = 0;
+    private int alpha = 255;
     private Menu menu;
 
     private static final String TAG = "Partyfragment";
@@ -81,6 +82,8 @@ public class PartyFragment extends Fragment {
         tabLayout = getActivity().findViewById(R.id.result_tabs);
         tabLayout.setVisibility(View.VISIBLE);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+
         return view;
 
     }
@@ -112,8 +115,9 @@ public class PartyFragment extends Fragment {
         adapter.addFragment(listFragment, "Flöde");
         adapter.addFragment(infoFragment, "Parti");
         adapter.addFragment(representativeFragment,"Ledamöter");
-        adapter.addFragment(twitterListFragment, "Twttr");
+        adapter.addFragment(twitterListFragment, "Twitter");
 
+        viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -127,9 +131,10 @@ public class PartyFragment extends Fragment {
 
             @Override
             public void onPageScrollStateChanged(int state) {
+
+
             }
         });
-        viewPager.setAdapter(adapter);
     }
 
     private void updateMenuItemAlpha(float positionOffset) {
@@ -138,17 +143,22 @@ public class PartyFragment extends Fragment {
         MenuItem notif = menu.findItem(R.id.notification_menu_item);
 
         if (notif != null && filter != null) {
-            int alpha = (int) (255 - positionOffset * 255 - 255 * currentPage);
+            int newAlpha = (int) (255 - positionOffset * 255 - 255 * currentPage);
+            if (newAlpha < 0) newAlpha = 0;
+
+            //Detect a visual bug where difference is too big
+            if (Math.abs(newAlpha - alpha) > 200) newAlpha = alpha;
+
+            alpha = newAlpha;
             filter.getIcon().setAlpha(alpha);
             notif.getIcon().setAlpha(alpha);
-            if (currentPage > 0 && notif.isVisible() && filter.isVisible()) {
-                notif.setVisible(false);
-                filter.setVisible(false);
-            } else if (currentPage == 0 && !notif.isVisible() && !filter.isVisible()) {
-                notif.setVisible(true);
-                filter.setVisible(true);
+            if (currentPage > 0 && notif.isEnabled() && filter.isEnabled()) {
+                notif.setEnabled(false);
+                filter.setEnabled(false);
+            } else if (currentPage == 0 && !notif.isEnabled() && !filter.isEnabled()) {
+                notif.setEnabled(true);
+                filter.setEnabled(true);
             }
-
         }
     }
 
