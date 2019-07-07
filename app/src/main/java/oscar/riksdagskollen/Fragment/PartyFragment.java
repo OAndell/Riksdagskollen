@@ -82,6 +82,8 @@ public class PartyFragment extends Fragment {
         tabLayout = getActivity().findViewById(R.id.result_tabs);
         tabLayout.setVisibility(View.VISIBLE);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+
         return view;
 
     }

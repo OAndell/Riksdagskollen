@@ -188,6 +188,7 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
                 image.setVisibility(View.GONE);
             }
 
+
             SpannableStringBuilder builder = new SpannableStringBuilder();
 
             if (tweet.isRetweet()) {
@@ -238,7 +239,15 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
                 date.setText(tweet.getCreated_at());
                 e.printStackTrace();
             }
-            System.out.println();
+
+
+            final Tweet finalTweet = tweet;
+            tweetText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(finalTweet);
+                }
+            });
 
 
 

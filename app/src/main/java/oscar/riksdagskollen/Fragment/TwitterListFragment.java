@@ -14,6 +14,7 @@ import java.util.List;
 
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Adapter.TweetAdapter;
+import oscar.riksdagskollen.Util.Helper.CustomTabs;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.Twitter.Tweet;
 import oscar.riksdagskollen.Util.RiksdagenCallback.TwitterCallback;
@@ -75,6 +76,9 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
         adapter = new TweetAdapter(documentList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object clickedDocument) {
+                Tweet tweet = (Tweet) clickedDocument;
+                String url = "https://twitter.com/" + tweet.getUser().getScreen_name() + "/status/" + tweet.getId();
+                CustomTabs.openTab(getContext(), url);
 
             }
         }, this);
