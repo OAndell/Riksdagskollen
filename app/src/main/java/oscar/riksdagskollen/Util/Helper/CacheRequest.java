@@ -64,7 +64,7 @@ public class CacheRequest extends Request<NetworkResponse> {
     public enum CachingPolicy {
 
         DO_NOT_CACHE(0, 0),
-        SHORT_TIME_CACHE(12 * 60 * 60 * 1000, 10 * 60 * 1000), // 12h, 10m
+        SHORT_TIME_CACHE(3 * 60 * 60 * 1000, 10 * 60 * 1000), // 3h, 10m
         MEDIUM_TIME_CACHE(24 * 60 * 60 * 1000, 2 * 60 * 60 * 1000), // 24h, 2h
         LONG_TIME_CACHE(72 * 60 * 60 * 1000, 48 * 60 * 60 * 1000); // 3d, 2d
 
