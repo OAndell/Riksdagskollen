@@ -1,5 +1,6 @@
 package oscar.riksdagskollen.Util.Adapter;
 
+import android.support.v4.app.Fragment;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -7,9 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
+import com.bumptech.glide.Glide;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -31,6 +33,7 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
         }
     };
     private Comparator<CurrentNews> mComparator = DEFAULT_COMPARATOR;
+    private Fragment fragment;
     private final SortedList<CurrentNews> newsList = new SortedList<>(CurrentNews.class, new SortedList.Callback<CurrentNews>() {
         @Override
         public int compare(CurrentNews o1, CurrentNews o2) {
@@ -68,11 +71,12 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
         }
     });
 
-    public CurrentNewsListAdapter(List<CurrentNews> items, final OnItemClickListener listener) {
+    public CurrentNewsListAdapter(List<CurrentNews> items, Fragment fragment, final OnItemClickListener listener) {
         super(listener);
         setSortedList(newsList);
         addAll(items);
         this.clickListener = listener;
+        this.fragment = fragment;
     }
 
     @Override
@@ -102,7 +106,7 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
             prepareHeaderFooter((HeaderFooterViewHolder) holder, v);
         }else {
             CurrentNews document = newsList.get(position - headers.size());
-            ((CurrentNewsListAdapter.NewsViewHolder) holder).bind(document, this.clickListener);
+            ((CurrentNewsListAdapter.NewsViewHolder) holder).bind(document, this.clickListener, fragment);
         }
     }
 
@@ -154,7 +158,7 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
         private final TextView body;
         private final TextView date;
         private final TextView imageText;
-        private final NetworkImageView image;
+        private final ImageView image;
 
         public NewsViewHolder(View textView) {
             super(textView);
@@ -165,7 +169,7 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
             image =  textView.findViewById(R.id.image);
         }
 
-        public void bind(final CurrentNews item ,final OnItemClickListener listener) {
+        public void bind(final CurrentNews item, final OnItemClickListener listener, Fragment fragment) {
             title.setText(item.getTitel());
             body.setText(Html.fromHtml(parseString(item.getSummary())));
             date.setText(item.getPublicerad());
@@ -175,9 +179,11 @@ public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
             if (item.getImg_url() != null && !RiksdagskollenApp.getInstance().isDataSaveModeActive()) {
                 image.setVisibility(View.VISIBLE);
                 //Fix better default image... maybe
-                image.setDefaultImageResId(R.drawable.ic_placeholder_image_web);
-                image.setImageUrl("https://riksdagen.se" + item.getImg_url(),
-                        RiksdagskollenApp.getInstance().getRequestManager().getmImageLoader());
+                Glide
+                        .with(fragment)
+                        .load("https://riksdagen.se" + item.getImg_url())
+                        .into(image);
+
             } else {
                 image.setVisibility(View.GONE);
             }

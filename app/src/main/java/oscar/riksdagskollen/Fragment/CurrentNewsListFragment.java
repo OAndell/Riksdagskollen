@@ -66,7 +66,7 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
-        adapter = new CurrentNewsListAdapter(newsList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
+        adapter = new CurrentNewsListAdapter(newsList, this, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {
                 CurrentNews newsDoc = (CurrentNews) document;
