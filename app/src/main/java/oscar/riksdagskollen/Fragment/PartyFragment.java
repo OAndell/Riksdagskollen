@@ -81,8 +81,7 @@ public class PartyFragment extends Fragment {
         // Set Tabs inside Toolbar
         tabLayout = getActivity().findViewById(R.id.result_tabs);
         tabLayout.setVisibility(View.VISIBLE);
-        tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(viewPager);
         return view;
 

@@ -6,6 +6,7 @@
     <attr name="loadingViewAccentColor" format="color" />
     <attr name="toolbarTitleTextColor" format="color" />
 
+
     <attr name="mainTitleTextColor" format="color" />
     <attr name="mainBodyTextColor" format="color" />
     <attr name="debateTextColor" format="color" />
@@ -22,6 +23,7 @@
     <attr name="speakBubbleIncomingDrawable" format="reference" />
     <attr name="speakBubbleOutgoingDrawable" format="reference" />
     <attr name="fabBackgroundDrawable" format="reference" />
+    <attr name="twitterLogo" format="reference" />
 
 
 </resources>
