@@ -55,6 +55,7 @@
         android:id="@+id/result_tabs"
         android:background="?colorPrimary"
         android:visibility="gone"
+        android:theme="@style/TabLayout_Theme"
         app:tabTextColor="?attr/secondaryDarkColor"
         app:tabSelectedTextColor="?attr/secondaryLightColor"
         app:tabIndicatorColor="?attr/secondaryLightColor"

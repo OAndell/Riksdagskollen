@@ -88,7 +88,7 @@
                 <item
                     android:id="@+id/twitter_nav"
                     android:icon="?twitterLogo"
-                    android:title="Riksdagen på Twitter" />
+                    android:title="@string/twitter_nav" />
                 <item
                     android:id="@+id/saved_docs"
                     android:icon="@drawable/ic_star_yellow"
