@@ -15,14 +15,18 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.CacheRequest;
 import oscar.riksdagskollen.Util.Helper.CachedJSONObjectRequest;
 import oscar.riksdagskollen.Util.Helper.DesktopStringRequest;
+import oscar.riksdagskollen.Util.RiksdagenCallback.JSONArrayCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.JSONRequestCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
+import oscar.riksdagskollen.Util.Twitter.TwitterAuthRequest;
+import oscar.riksdagskollen.Util.Twitter.TwitterGetRequest;
 
 
 /**
@@ -81,6 +85,38 @@ public class RequestManager {
     private Request doCachedJsonRequest(int method, JSONObject jsonRequest, String subURL, String host, CacheRequest.CachingPolicy cachingPolicy, JSONRequestCallback callback) {
         String url = host + subURL;
         return queueCachedJSONRequest(jsonRequest, url, method, cachingPolicy, callback);
+    }
+
+    public void doTwitterAuthRequest(JSONObject jsonRequest, String subURL, String host, String apiKey, final JSONRequestCallback callback) {
+        System.out.println("Making request to: " + host + subURL);
+        TwitterAuthRequest request = new TwitterAuthRequest(POST, host + subURL, apiKey, jsonRequest, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                callback.onRequestSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onRequestFail(error);
+            }
+        });
+        requestQueue.add(request);
+    }
+
+    public void doTwitterGetRequest(String subURL, String host, String token, final JSONArrayCallback callback) {
+        System.out.println("Making request to: " + host + subURL);
+        TwitterGetRequest request = new TwitterGetRequest(GET, host + subURL, token, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                callback.onRequestSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onRequestFail(error);
+            }
+        });
+        requestQueue.add(request);
     }
 
 
