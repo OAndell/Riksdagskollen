@@ -14,19 +14,15 @@ import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import oscar.riksdagskollen.RiksdagskollenApp;
+import oscar.riksdagskollen.Util.Helper.CacheRequest;
+import oscar.riksdagskollen.Util.Helper.CachedJSONObjectRequest;
 import oscar.riksdagskollen.Util.Helper.DesktopStringRequest;
-import oscar.riksdagskollen.Util.RiksdagenCallback.JSONArrayCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.JSONRequestCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
-import oscar.riksdagskollen.Util.Twitter.TwitterAuthRequest;
-import oscar.riksdagskollen.Util.Twitter.TwitterGetRequest;
 
 
 /**
@@ -47,12 +43,12 @@ public class RequestManager {
     private final ImageLoader mImageLoader;
 
     public RequestManager(){
-        cache = new DiskBasedCache(RiksdagskollenApp.getInstance().getCacheDir(), 1024 * 1024);
+        cache = new DiskBasedCache(RiksdagskollenApp.getInstance().getCacheDir(), 1024 * 1024 * 100); // 100MB cache size
         requestQueue = new RequestQueue(cache, network);
         requestQueue.start();
 
         mImageLoader = new ImageLoader(this.requestQueue, new ImageLoader.ImageCache() {
-            private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(10);
+            private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(500);
             public void putBitmap(String url, Bitmap bitmap) {
                 mCache.put(url, bitmap);
             }
@@ -67,74 +63,30 @@ public class RequestManager {
     }
 
     public Request doGetRequest(String subURL, String host, JSONRequestCallback callback) {
-        return doJsonRequest(GET, null, subURL, host, callback);
+        return doCachedJsonRequest(GET, null, subURL, host, CacheRequest.CachingPolicy.DO_NOT_CACHE, callback);
     }
 
-    public void doStringGetRequest(String subURL, String host, StringRequestCallback callback) {
-        doStringRequest(GET, subURL, host, callback);
+    public Request doCachedGetRequest(String subURL, String host, CacheRequest.CachingPolicy cachingPolicy, JSONRequestCallback callback) {
+        return doCachedJsonRequest(GET, null, subURL, host, cachingPolicy, callback);
     }
 
-    public void doPostRequest(JSONObject jsonRequest, String subURL, String host, JSONRequestCallback callback) {
-        doJsonRequest(POST, jsonRequest, subURL, host, callback);
+    public void doCachedStringGetRequest(String url, CacheRequest.CachingPolicy cachingPolicy, StringRequestCallback callback) {
+        queueCachedStringRequest(GET, url, cachingPolicy, callback);
     }
 
-    public void doTwitterAuthRequest(JSONObject jsonRequest, String subURL, String host, String apiKey, final JSONRequestCallback callback) {
-        System.out.println("Making request to: " + host + subURL);
-        TwitterAuthRequest request = new TwitterAuthRequest(POST, host + subURL, apiKey, jsonRequest, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                callback.onRequestSuccess(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                callback.onRequestFail(error);
-            }
-        });
-        requestQueue.add(request);
+    public void doStringGetRequest(String url, StringRequestCallback callback) {
+        queueCachedStringRequest(GET, url, CacheRequest.CachingPolicy.DO_NOT_CACHE, callback);
     }
 
-    public void doTwitterGetRequest(String subURL, String host, String token, final JSONArrayCallback callback) {
-        System.out.println("Making request to: " + host + subURL);
-        TwitterGetRequest request = new TwitterGetRequest(GET, host + subURL, token, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                callback.onRequestSuccess(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                callback.onRequestFail(error);
-            }
-        });
-        requestQueue.add(request);
-    }
-
-
-    public void doPutRequest(JSONObject jsonRequest, String subURL, String host, JSONRequestCallback callback) {
-        doJsonRequest(PUT, jsonRequest, subURL, host, callback);
-    }
-
-    public void doDeleteRequest(String subURL, String host, JSONRequestCallback callback) {
-        doJsonRequest(DELETE, null, subURL, host, callback);
-    }
-
-    public void doPatchRequest(JSONObject jsonRequest, String subURL, String host, JSONRequestCallback callback) {
-        doJsonRequest(PATCH, jsonRequest, subURL, host, callback);
-    }
-
-    private Request doJsonRequest(int method, JSONObject jsonRequest, String subURL, String host, JSONRequestCallback callback) {
+    private Request doCachedJsonRequest(int method, JSONObject jsonRequest, String subURL, String host, CacheRequest.CachingPolicy cachingPolicy, JSONRequestCallback callback) {
         String url = host + subURL;
-        return queueJSONRequest(jsonRequest, url, method, callback);
+        return queueCachedJSONRequest(jsonRequest, url, method, cachingPolicy, callback);
     }
 
-    private void doStringRequest(int method, String subURL, String host, StringRequestCallback callback) {
-        queueStringRequest(subURL,method,callback);
-    }
 
-    private Request queueJSONRequest(final JSONObject jsonRequest, final String url, final int method, final JSONRequestCallback callback) {
-        System.out.println("Making request to: " + url);
-        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(method, url, jsonRequest, new Response.Listener<JSONObject>() {
+    private Request queueCachedJSONRequest(final JSONObject jsonRequest, final String url, final int method, CacheRequest.CachingPolicy cachingPolicy, final JSONRequestCallback callback) {
+        System.out.println("Making request (" + cachingPolicy.name() + ") to: " + url);
+        final CachedJSONObjectRequest jsonObjectRequest = new CachedJSONObjectRequest(method, url, cachingPolicy, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 callback.onRequestSuccess(response);
@@ -151,9 +103,9 @@ public class RequestManager {
     }
 
 
-    private Request queueStringRequest(final String url, final int method, final StringRequestCallback callback) {
+    private Request queueCachedStringRequest(final int method, final String url, CacheRequest.CachingPolicy cachingPolicy, final StringRequestCallback callback) {
         System.out.println("Making string-request to: " + url);
-        final StringRequest request = new DesktopStringRequest(method, url, new Response.Listener<String>() {
+        final Request request = new DesktopStringRequest(method, url, cachingPolicy, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 callback.onResponse(response);
@@ -174,6 +126,6 @@ public class RequestManager {
         url = url.replaceAll("ö", "%C3%B6");
         url = url.replaceAll("å", "%C3%A5");
         url = url.replaceAll("ä", "%C3%A4");
-        return queueStringRequest(url, GET, callback);
+        return queueCachedStringRequest(GET, url, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, callback);
     }
 }
