@@ -63,7 +63,7 @@ public class RiksdagenAPIManager {
 
     private final RequestManager requestManager;
     private final Gson gson;
-    private static final String HOST = "http://data.riksdagen.se";
+    private static final String HOST = "https://data.riksdagen.se";
 
 
     public RiksdagenAPIManager(RiksdagskollenApp app) {
