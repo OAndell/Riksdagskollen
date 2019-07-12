@@ -51,7 +51,7 @@
 
     </android.support.design.widget.CollapsingToolbarLayout>
 
-    <android.support.design.widget.TabLayout
+    <oscar.riksdagskollen.Util.Helper.CustomTabLayout
         android:id="@+id/result_tabs"
         android:background="?colorPrimary"
         android:visibility="gone"
