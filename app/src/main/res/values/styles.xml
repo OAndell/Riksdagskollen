@@ -220,9 +220,5 @@
         <item name="android:textColor">?mainBodyTextColor</item>
     </style>
 
-    <style name="TabLayout_Theme" parent="@style/DefaultTheme">
-        <item name="android:singleLine">true</item>
-    </style>
-
 
 </resources>
