@@ -51,9 +51,9 @@
 
     </android.support.design.widget.CollapsingToolbarLayout>
 
-    <android.support.design.widget.TabLayout
+    <oscar.riksdagskollen.Util.Helper.CustomTabLayout
         android:id="@+id/result_tabs"
-        android:background="?colorPrimary"
+        android:background="?attr/colorPrimary"
         android:visibility="gone"
         app:tabTextColor="?attr/secondaryDarkColor"
         app:tabSelectedTextColor="?attr/secondaryLightColor"

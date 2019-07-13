@@ -93,9 +93,10 @@ public abstract class RiksdagenViewHolderAdapter extends RecyclerView.Adapter<Re
     }
 
     //remove a header from the adapter
-    public void removeHeader(View header){
-        if(headers.contains(header)){
+    public void removeTopHeader() {
+        if (!headers.isEmpty()) {
             //animate
+            View header = headers.get(0);
             notifyItemRemoved(headers.indexOf(header));
             headers.remove(header);
             if(header.getParent() != null) {

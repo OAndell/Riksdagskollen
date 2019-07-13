@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.CurrentNews;
+package oscar.riksdagskollen.News;
 
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
@@ -15,8 +15,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import oscar.riksdagskollen.CurrentNews.CurrentNewsJSONModels.CurrentNews;
 import oscar.riksdagskollen.Fragment.RiksdagenAutoLoadingListFragment;
+import oscar.riksdagskollen.News.Data.CurrentNews;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RateResultListener;
@@ -57,7 +57,7 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment im
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        adapter = new CurrentNewsListAdapter(newsList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
+        adapter = new CurrentNewsListAdapter(newsList, this, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {
                 presenter.handleItemClick((CurrentNews) document, getContext());
@@ -108,6 +108,8 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment im
         newsList.clear();
         adapter.clear();
         presenter.clear();
+        // Remove play rating view if there is one
+        adapter.removeTopHeader();
     }
 
     @Override
@@ -139,7 +141,7 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment im
         view.setRateResultListener(new RateResultListener() {
             @Override
             public void onResult() {
-                adapter.removeHeader(view);
+                adapter.removeTopHeader();
             }
         });
         adapter.addHeader(view);

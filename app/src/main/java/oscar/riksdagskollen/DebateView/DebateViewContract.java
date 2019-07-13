@@ -2,6 +2,7 @@ package oscar.riksdagskollen.DebateView;
 
 import android.os.Bundle;
 
+import oscar.riksdagskollen.DebateView.Data.Speech;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.RiksdagenCallback.ProtocolCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.SpeechCallback;

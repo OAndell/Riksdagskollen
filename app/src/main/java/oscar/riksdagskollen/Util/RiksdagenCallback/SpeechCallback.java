@@ -2,7 +2,7 @@ package oscar.riksdagskollen.Util.RiksdagenCallback;
 
 import com.android.volley.VolleyError;
 
-import oscar.riksdagskollen.DebateView.Speech;
+import oscar.riksdagskollen.DebateView.Data.Speech;
 
 public interface SpeechCallback {
 

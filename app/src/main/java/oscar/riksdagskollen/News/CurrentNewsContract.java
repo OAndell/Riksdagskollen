@@ -1,10 +1,10 @@
-package oscar.riksdagskollen.CurrentNews;
+package oscar.riksdagskollen.News;
 
 import android.content.Context;
 
 import java.util.List;
 
-import oscar.riksdagskollen.CurrentNews.CurrentNewsJSONModels.CurrentNews;
+import oscar.riksdagskollen.News.Data.CurrentNews;
 
 public interface CurrentNewsContract {
 
@@ -44,6 +44,8 @@ public interface CurrentNewsContract {
         int getPageToLoad();
 
         void incrementPage();
+
+        void decrementPage();
 
         void resetPage();
     }

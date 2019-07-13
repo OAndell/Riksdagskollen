@@ -30,7 +30,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import oscar.riksdagskollen.About.AboutFragment;
-import oscar.riksdagskollen.CurrentNews.CurrentNewsListFragment;
 import oscar.riksdagskollen.DebateList.DebateListFragment;
 import oscar.riksdagskollen.Fragment.DecisionsListFragment;
 import oscar.riksdagskollen.Fragment.ProtocolListFragment;
@@ -41,6 +40,7 @@ import oscar.riksdagskollen.Fragment.TwitterListFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
 import oscar.riksdagskollen.Manager.AnalyticsManager;
 import oscar.riksdagskollen.Manager.ThemeManager;
+import oscar.riksdagskollen.News.CurrentNewsListFragment;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;

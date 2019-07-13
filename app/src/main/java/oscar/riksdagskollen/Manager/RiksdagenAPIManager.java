@@ -22,12 +22,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import fr.arnaudguyon.xmltojsonlib.XmlToJson;
-import oscar.riksdagskollen.CurrentNews.CurrentNewsCallback;
-import oscar.riksdagskollen.CurrentNews.CurrentNewsJSONModels.CurrentNews;
-import oscar.riksdagskollen.CurrentNews.CurrentNewsJSONModels.CurrentNewsLink;
-import oscar.riksdagskollen.DebateList.Debate;
-import oscar.riksdagskollen.DebateView.Speech;
+import oscar.riksdagskollen.DebateList.Data.Debate;
+import oscar.riksdagskollen.DebateView.Data.Speech;
+import oscar.riksdagskollen.News.CurrentNewsCallback;
+import oscar.riksdagskollen.News.Data.CurrentNews;
+import oscar.riksdagskollen.News.Data.CurrentNewsLink;
 import oscar.riksdagskollen.RiksdagskollenApp;
+import oscar.riksdagskollen.Util.Helper.CacheRequest;
 import oscar.riksdagskollen.Util.JSONModel.DecisionDocument;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
@@ -62,7 +63,7 @@ public class RiksdagenAPIManager {
 
     private final RequestManager requestManager;
     private final Gson gson;
-    private static final String HOST = "http://data.riksdagen.se";
+    private static final String HOST = "https://data.riksdagen.se";
 
 
     public RiksdagenAPIManager(RiksdagskollenApp app) {
@@ -78,8 +79,16 @@ public class RiksdagenAPIManager {
         return requestManager.doGetRequest(subURL, HOST, callback);
     }
 
-    private void doApiGetStringRequest(String subURL, StringRequestCallback callback) {
-        requestManager.doStringGetRequest(subURL, HOST, callback);
+    private Request doCachedApiGetRequest(String subURL, CacheRequest.CachingPolicy cachingPolicy, JSONRequestCallback callback) {
+        return requestManager.doCachedGetRequest(subURL, HOST, cachingPolicy, callback);
+    }
+
+    private void doCachedApiGetStringRequest(String url, CacheRequest.CachingPolicy cachingPolicy, StringRequestCallback callback) {
+        requestManager.doCachedStringGetRequest(url, cachingPolicy, callback);
+    }
+
+    private void doApiGetStringRequest(String url, StringRequestCallback callback) {
+        requestManager.doStringGetRequest(url, callback);
     }
 
     public void getDocumentsForParty(Party party, int page, final PartyDocumentCallback callback) {
@@ -95,7 +104,7 @@ public class RiksdagenAPIManager {
                 .registerTypeAdapter(Debate.class, new Debate.DebateDezerializer())
                 .create();
 
-        doApiGetRequest(subURL, new JSONRequestCallback() {
+        doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(final JSONObject response) {
                 try {
@@ -118,7 +127,7 @@ public class RiksdagenAPIManager {
     public void getDebates(int page, final PartyDocumentCallback callback) {
         String subURL = "/dokumentlista/?sok=&doktyp=ip,bet,kam-ad&sort=datum&sortorder=desc&utformat=json" + "&p=" + page;
 
-        doApiGetRequest(subURL, new JSONRequestCallback() {
+        doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(final JSONObject response) {
 
@@ -151,7 +160,7 @@ public class RiksdagenAPIManager {
     public void getCurrentNews(final CurrentNewsCallback callback, int page) {
         String subURL = "/dokumentlista/?avd=aktuellt&sort=datum&sortorder=desc&lang=sv&cmskategori=startsida&utformat=json"
                 + "&p=" + page;
-        doApiGetRequest(subURL, new JSONRequestCallback() {
+        doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -182,7 +191,7 @@ public class RiksdagenAPIManager {
      */
     public void getDecisions(final DecisionsCallback callback, int page) {
         String subURL = "/dokumentlista/?doktyp=bet&sort=datum&sortorder=desc&dokstat=beslutade&utformat=json" + "&p=" + page;
-        doApiGetRequest(subURL, new JSONRequestCallback() {
+        doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(final JSONObject response) {
                 try {
@@ -209,7 +218,7 @@ public class RiksdagenAPIManager {
      */
     public void getDecisionWithId(final DecisionsCallback callback, String id) {
         String subURL = "/dokumentlista/?doktyp=bet&utformat=json&dok_id=" + id;
-        doApiGetRequest(subURL, new JSONRequestCallback() {
+        doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -244,8 +253,9 @@ public class RiksdagenAPIManager {
             // ugly fix to return a request if representative was already downloaded
             return new JsonArrayRequest(null, null, null);
         } else {
+
             final String subURL = "/personlista/?iid=" + iid + "&utformat=json";
-            return doApiGetRequest(subURL, new JSONRequestCallback() {
+            return doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new JSONRequestCallback() {
                 @Override
                 public void onRequestSuccess(final JSONObject response) {
                     Gson gson = new GsonBuilder()
@@ -293,7 +303,7 @@ public class RiksdagenAPIManager {
             return;
         }
 
-        doApiGetRequest(subURL, new JSONRequestCallback() {
+        doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(final JSONObject response) {
                 try {
@@ -317,7 +327,6 @@ public class RiksdagenAPIManager {
                     } else {
                         JSONObject jsonDocuments = response.getJSONObject("personlista").getJSONObject("person");
                         Representative representative = gson.fromJson(jsonDocuments.toString(), Representative.class);
-                        RiksdagskollenApp.getInstance().getRepresentativeManager().addRepresentative(representative);
                         callback.onPersonFetched(representative);
                     }
                 } catch (JSONException e) {
@@ -334,20 +343,19 @@ public class RiksdagenAPIManager {
     }
 
     public void getDocumentBody(PartyDocument document, StringRequestCallback callback) {
-        if (document == null) {
-            // Very long motion, used for testing by sending null as an argument
-            requestManager.getDownloadString("http://data.riksdagen.se/dokument/H5023752.html", callback);
-        } else if (document.isMotion()) {
-            requestManager.getDownloadString("http:" + document.getDokument_url_html(), callback);
+
+        // Documents are very seldom (if ever) subject to change, use aggressive caching
+        if (document.isMotion()) {
+            requestManager.doCachedStringGetRequest("http:" + document.getDokument_url_html(), CacheRequest.CachingPolicy.LONG_TIME_CACHE, callback);
         } else {
-            doApiGetStringRequest("http:" + document.getDokument_url_html(), callback);
+            doCachedApiGetStringRequest("http:" + document.getDokument_url_html(), CacheRequest.CachingPolicy.LONG_TIME_CACHE, callback);
         }
     }
 
     public void getProtocols(final ProtocolCallback callback, int page) {
         String subURL = "/dokumentlista/?sok=&doktyp=prot&sort=datum&sortorder=desc&utformat=json" + "&p=" + page;
 
-        doApiGetRequest(subURL, new JSONRequestCallback() {
+        doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -368,7 +376,7 @@ public class RiksdagenAPIManager {
 
     public void getProtocolForDate(String date, String rm, final ProtocolCallback callback) {
         String subUrl = "/dokumentlista/?doktyp=prot&rm=" + rm + "&from=" + date + "&tom=" + date + "&sort=rel&sortorder=desc&utformat=json";
-        doApiGetRequest(subUrl, new JSONRequestCallback() {
+        doCachedApiGetRequest(subUrl, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
 
@@ -392,7 +400,7 @@ public class RiksdagenAPIManager {
 
     public void getSpeech(String protId, final String speechNo, final SpeechCallback callback) {
         String subUrl = "/anforande/" + protId + "-" + speechNo + "/json";
-        doApiGetRequest(subUrl, new JSONRequestCallback() {
+        doCachedApiGetRequest(subUrl, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -413,8 +421,8 @@ public class RiksdagenAPIManager {
 
     public void getVotes(final VoteCallback callback, int page) {
         String subURL = "/dokumentlista/?sok=&doktyp=votering&sort=datum&sortorder=desc&utformat=json" + "&p=" + page;
-        ;
-        doApiGetRequest(subURL, new JSONRequestCallback() {
+
+        doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -436,7 +444,7 @@ public class RiksdagenAPIManager {
 
     public void searchVotesForDecision(DecisionDocument decision, final VoteCallback callback) {
         String subURL = "/dokumentlista/?sok=" + decision.getRm() + ":" + decision.getBeteckning() + "&doktyp=votering&sort=datum&sortorder=desc&utformat=json";
-        doApiGetRequest(subURL, new JSONRequestCallback() {
+        doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -508,7 +516,8 @@ public class RiksdagenAPIManager {
 
     public void getAllCurrentRepresentatives(final RepresentativeListCallback callback) {
         String subUrl = "/personlista/?utformat=json";
-        doApiGetRequest(subUrl, new JSONRequestCallback() {
+        // Current representatives
+        doCachedApiGetRequest(subUrl, CacheRequest.CachingPolicy.LONG_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(final JSONObject response) {
                 final Gson gson = new GsonBuilder()
@@ -561,7 +570,7 @@ public class RiksdagenAPIManager {
             callback.onPersonListFetched(repsForParty);
         } else {
             String subUrl = "/personlista/?parti=" + party + "&utformat=json";
-            doApiGetRequest(subUrl, new JSONRequestCallback() {
+            doCachedApiGetRequest(subUrl, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new JSONRequestCallback() {
                 @Override
                 public void onRequestSuccess(JSONObject response) {
                     Gson gson = new GsonBuilder()
@@ -583,12 +592,13 @@ public class RiksdagenAPIManager {
                 }
             });
         }
+
     }
 
 
     public void getMotionByID(String id, final PartyDocumentCallback callback) {
         String subURL = "/dokumentlista/?sok=\"" + id + "\"&doktyp=mot,prop&sort=datum&sortorder=desc&utformat=json";
-        doApiGetRequest(subURL, new JSONRequestCallback() {
+        doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.LONG_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -621,7 +631,7 @@ public class RiksdagenAPIManager {
                 .registerTypeAdapter(Debate.class, new Debate.DebateDezerializer())
                 .create();
 
-        doApiGetRequest(subURL, new JSONRequestCallback() {
+        doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -647,7 +657,7 @@ public class RiksdagenAPIManager {
 
     public void searchForReply(PartyDocument document, final PartyDocumentCallback callback) {
         String subURL = "/dokumentlista/?sok=" + document.getRm() + ":" + document.getBeteckning() + "&doktyp=frs&sort=datum&sortorder=desc&utformat=json";
-        doApiGetRequest(subURL, new JSONRequestCallback() {
+        doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -673,7 +683,7 @@ public class RiksdagenAPIManager {
 
     public void searchForQuestion(PartyDocument document, final PartyDocumentCallback callback) {
         String subURL = "/dokumentlista/?sok=" + document.getRm() + ":" + document.getBeteckning() + "&doktyp=fr&sort=datum&sortorder=desc&utformat=json";
-        doApiGetRequest(subURL, new JSONRequestCallback() {
+        doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -698,7 +708,7 @@ public class RiksdagenAPIManager {
 
     public void getDocument(String docId, final PartyDocumentCallback callback) {
         String subUrl = "/dokumentlista/?sok=" + docId + "&sort=rel&sortorder=desc&rapport=&utformat=json";
-        doApiGetRequest(subUrl, new JSONRequestCallback() {
+        doCachedApiGetRequest(subUrl, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -761,7 +771,8 @@ public class RiksdagenAPIManager {
 
     public void getVoteStatisticsForRepresentative(String iid, final VoteStatisticsCallback callback) {
         String url = "http://data.riksdagen.se/voteringlista/?iid=" + iid + "&utformat=XML&gruppering=namn";
-        doApiGetStringRequest(url, new StringRequestCallback() {
+
+        doCachedApiGetStringRequest(url, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new StringRequestCallback() {
             @Override
             public void onResponse(String response) {
                 try {

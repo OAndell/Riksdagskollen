@@ -6,6 +6,8 @@ import com.android.volley.VolleyError;
 
 import java.util.List;
 
+import oscar.riksdagskollen.DebateView.Data.DebateSpeech;
+import oscar.riksdagskollen.DebateView.Data.Speech;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Protocol;
 import oscar.riksdagskollen.Util.RiksdagenCallback.ProtocolCallback;

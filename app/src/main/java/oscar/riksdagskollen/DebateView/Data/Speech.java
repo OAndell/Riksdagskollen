@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.DebateView;
+package oscar.riksdagskollen.DebateView.Data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -9,9 +9,9 @@ import org.junit.Test;
 
 import java.util.List;
 
-import oscar.riksdagskollen.CurrentNews.CurrentNewsCallback;
-import oscar.riksdagskollen.CurrentNews.CurrentNewsJSONModels.CurrentNews;
 import oscar.riksdagskollen.Manager.RiksdagenAPIManager;
+import oscar.riksdagskollen.News.CurrentNewsCallback;
+import oscar.riksdagskollen.News.Data.CurrentNews;
 import oscar.riksdagskollen.Util.JSONModel.DecisionDocument;
 import oscar.riksdagskollen.Util.JSONModel.Protocol;
 import oscar.riksdagskollen.Util.JSONModel.Vote;

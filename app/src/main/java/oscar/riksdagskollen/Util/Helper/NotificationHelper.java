@@ -15,9 +15,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import oscar.riksdagskollen.Activity.MainActivity;
-import oscar.riksdagskollen.CurrentNews.CurrentNewsJSONModels.CurrentNews;
-import oscar.riksdagskollen.CurrentNews.CurrentNewsListFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
+import oscar.riksdagskollen.News.CurrentNewsListFragment;
+import oscar.riksdagskollen.News.Data.CurrentNews;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;

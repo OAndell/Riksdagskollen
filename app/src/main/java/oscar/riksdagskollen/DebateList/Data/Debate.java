@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.DebateList;
+package oscar.riksdagskollen.DebateList.Data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -14,7 +14,7 @@ import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import oscar.riksdagskollen.DebateView.DebateSpeech;
+import oscar.riksdagskollen.DebateView.Data.DebateSpeech;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 

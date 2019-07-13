@@ -53,6 +53,7 @@
         <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
 
         <item name="fabBackgroundDrawable">@drawable/fab_background_default</item>
+        <item name="twitterLogo">@drawable/twitter_logo_blue</item>
     </style>
 
     <style name="BlackTheme" parent="ParentTheme">
@@ -99,6 +100,7 @@
         <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
 
         <item name="fabBackgroundDrawable">@drawable/fab_background_dark</item>
+        <item name="twitterLogo">@drawable/twitter_logo_whiteonimage</item>
     </style>
 
     <style name="WhiteTheme" parent="ParentTheme">
@@ -142,6 +144,8 @@
         <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
 
         <item name="fabBackgroundDrawable">@drawable/fab_background_light</item>
+        <item name="twitterLogo">@drawable/twitter_logo_blue</item>
+
     </style>
 
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">

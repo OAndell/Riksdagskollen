@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.CurrentNews;
+package oscar.riksdagskollen.News;
 
 import java.util.Observable;
 
@@ -16,6 +16,11 @@ public class CurrentNewsModel extends Observable implements CurrentNewsContract.
     public void incrementPage() {
         pageToLoad++;
     }
+
+    public void decrementPage() {
+        pageToLoad--;
+    }
+
 
     public void resetPage() {
         pageToLoad = 1;

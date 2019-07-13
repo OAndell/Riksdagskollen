@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
+import oscar.riksdagskollen.DebateView.Data.DebateSpeech;
+import oscar.riksdagskollen.DebateView.Data.Speech;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;

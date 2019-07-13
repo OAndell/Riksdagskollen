@@ -12,6 +12,7 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 
+import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Adapter.TweetAdapter;
 import oscar.riksdagskollen.Util.Helper.CustomTabs;
@@ -62,7 +63,7 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
             Party party = getArguments().getParcelable("party");
             twitterTimeline = TwitterTimelineFactory.getUser(party);
         } else {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Riksdagen på Twitter");
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.twitter_nav);
             twitterTimeline = TwitterTimelineFactory.getTwitterList(TwitterTimelineFactory.LIST_RIKSDAGEN_ALL);
         }
 

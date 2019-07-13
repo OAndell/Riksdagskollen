@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.CurrentNews;
+package oscar.riksdagskollen.News;
 
 import android.content.Context;
 
@@ -6,12 +6,12 @@ import com.android.volley.VolleyError;
 
 import java.util.List;
 
-import oscar.riksdagskollen.CurrentNews.CurrentNewsJSONModels.CurrentNews;
 import oscar.riksdagskollen.Manager.AlertManager;
+import oscar.riksdagskollen.News.Data.CurrentNews;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.CustomTabs;
 
-import static oscar.riksdagskollen.CurrentNews.CurrentNewsListFragment.SECTION_NAME_NEWS;
+import static oscar.riksdagskollen.News.CurrentNewsListFragment.SECTION_NAME_NEWS;
 
 public class CurrentNewsPresenter implements CurrentNewsContract.Presenter, CurrentNewsCallback {
 
@@ -27,6 +27,7 @@ public class CurrentNewsPresenter implements CurrentNewsContract.Presenter, Curr
     public void loadMoreItems() {
         view.showLoadingItemsView(true);
         model.getNews(this);
+        model.incrementPage();
     }
 
     @Override
@@ -75,11 +76,11 @@ public class CurrentNewsPresenter implements CurrentNewsContract.Presenter, Curr
             }
             updateAlertsLatestDocument(currentNews.get(0).getId());
         }
-        model.incrementPage();
     }
 
     @Override
     public void onFail(VolleyError error) {
+
         view.showLoadingItemsView(false);
         view.showLoadingView(false);
         view.showLoadFailView();
