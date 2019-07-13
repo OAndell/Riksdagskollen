@@ -138,6 +138,7 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment {
                 if (getPageToLoad() <= 2) {
                     if (RiksdagskollenApp.getInstance().shouldAskForRating()) {
                         final PlayRatingQuestionView view = new PlayRatingQuestionView(context);
+                        adapter.removeTopHeader();
                         view.setRateResultListener(new RateResultListener() {
                             @Override
                             public void onResult() {
