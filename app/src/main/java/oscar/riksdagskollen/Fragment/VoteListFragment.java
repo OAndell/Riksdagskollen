@@ -249,7 +249,7 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
                     }
                     if (!isLoadingUntilFull()) setLoadingMoreItems(false);
                     setShowLoadingView(false);
-                    notificationItem.setVisible(true);
+                    if (notificationItem != null) notificationItem.setVisible(true);
                 }
 
                 @Override
