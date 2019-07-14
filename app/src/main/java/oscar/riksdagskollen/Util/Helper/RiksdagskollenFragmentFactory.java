@@ -4,9 +4,8 @@ import android.support.v4.app.Fragment;
 
 import java.lang.ref.SoftReference;
 
-import oscar.riksdagskollen.Fragment.AboutFragment;
-import oscar.riksdagskollen.Fragment.CurrentNewsListFragment;
-import oscar.riksdagskollen.Fragment.DebateListFragment;
+import oscar.riksdagskollen.About.AboutFragment;
+import oscar.riksdagskollen.DebateList.DebateListFragment;
 import oscar.riksdagskollen.Fragment.DecisionsListFragment;
 import oscar.riksdagskollen.Fragment.PartyFragment;
 import oscar.riksdagskollen.Fragment.PartyListFragment;
@@ -16,6 +15,7 @@ import oscar.riksdagskollen.Fragment.SavedDocumentsFragment;
 import oscar.riksdagskollen.Fragment.SearchListFragment;
 import oscar.riksdagskollen.Fragment.TwitterListFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
+import oscar.riksdagskollen.News.CurrentNewsListFragment;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 

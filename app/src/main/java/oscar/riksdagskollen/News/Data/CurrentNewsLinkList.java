@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels;
+package oscar.riksdagskollen.News.Data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

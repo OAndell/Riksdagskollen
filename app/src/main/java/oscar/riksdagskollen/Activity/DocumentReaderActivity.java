@@ -31,6 +31,7 @@ import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.List;
 
+import oscar.riksdagskollen.DebateView.DebateActivity;
 import oscar.riksdagskollen.Manager.AlertManager;
 import oscar.riksdagskollen.Manager.AnalyticsManager;
 import oscar.riksdagskollen.Manager.SavedDocumentManager;
@@ -44,7 +45,9 @@ import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.View.DocumentHtmlView;
 
-import static oscar.riksdagskollen.Activity.DebateActivity.DEBATE_INITIATOR_ID;
+import static oscar.riksdagskollen.DebateView.DebateViewPresenter.DEBATE_INITIATOR_ID;
+import static oscar.riksdagskollen.DebateView.DebateViewPresenter.INITIATING_DOCUMENT;
+import static oscar.riksdagskollen.DebateView.DebateViewPresenter.SHOW_INITIATING_DOCUMENT;
 
 /**
  * Created by gustavaaro on 2018-03-29.
@@ -126,8 +129,8 @@ public class DocumentReaderActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, DebateActivity.class);
-                    intent.putExtra(DebateActivity.SHOW_INITIATING_DOCUMENT, false);
-                    intent.putExtra(DebateActivity.INITIATING_DOCUMENT, document);
+                    intent.putExtra(SHOW_INITIATING_DOCUMENT, false);
+                    intent.putExtra(INITIATING_DOCUMENT, document);
                     if (document.getSenders().size() > 0)
                         intent.putExtra(DEBATE_INITIATOR_ID, document.getSenders().get(0));
                     startActivity(intent);

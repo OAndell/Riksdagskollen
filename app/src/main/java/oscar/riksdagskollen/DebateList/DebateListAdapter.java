@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Util.Adapter;
+package oscar.riksdagskollen.DebateList;
 
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -24,6 +24,7 @@ import java.util.List;
 
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
+import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.Enum.DocumentType;
 import oscar.riksdagskollen.Util.JSONModel.Intressent;
@@ -199,10 +200,6 @@ public class DebateListAdapter extends RiksdagenViewHolderAdapter {
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
-        if (holder instanceof oscar.riksdagskollen.Util.Adapter.PartyListViewholderAdapter.PartyListViewHolder) {
-            oscar.riksdagskollen.Util.Adapter.PartyListViewholderAdapter.PartyListViewHolder viewHolder = ((oscar.riksdagskollen.Util.Adapter.PartyListViewholderAdapter.PartyListViewHolder) holder);
-            if (viewHolder.imageUrlRequest != null) viewHolder.imageUrlRequest.cancel();
-        }
     }
 
     static class IPDebateListViewHolder extends RecyclerView.ViewHolder {

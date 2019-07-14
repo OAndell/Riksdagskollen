@@ -22,11 +22,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import fr.arnaudguyon.xmltojsonlib.XmlToJson;
+import oscar.riksdagskollen.DebateList.Data.Debate;
+import oscar.riksdagskollen.DebateView.Data.Speech;
+import oscar.riksdagskollen.News.CurrentNewsCallback;
+import oscar.riksdagskollen.News.Data.CurrentNews;
+import oscar.riksdagskollen.News.Data.CurrentNewsLink;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.CacheRequest;
-import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNews;
-import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNewsLink;
-import oscar.riksdagskollen.Util.JSONModel.Debate;
 import oscar.riksdagskollen.Util.JSONModel.DecisionDocument;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
@@ -34,9 +36,7 @@ import oscar.riksdagskollen.Util.JSONModel.Protocol;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeInfo;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeVoteStatistics;
-import oscar.riksdagskollen.Util.JSONModel.Speech;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
-import oscar.riksdagskollen.Util.RiksdagenCallback.CurrentNewsCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.DecisionsCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.JSONRequestCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
@@ -398,7 +398,7 @@ public class RiksdagenAPIManager {
         });
     }
 
-    public void getSpeech(String protId, String speechNo, final SpeechCallback callback) {
+    public void getSpeech(String protId, final String speechNo, final SpeechCallback callback) {
         String subUrl = "/anforande/" + protId + "-" + speechNo + "/json";
         doCachedApiGetRequest(subUrl, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new JSONRequestCallback() {
             @Override
@@ -406,8 +406,7 @@ public class RiksdagenAPIManager {
                 try {
                     JSONObject speechJSON = response.getJSONObject("anforande");
                     Speech speech = gson.fromJson(speechJSON.toString(), Speech.class);
-                    callback.onSpeechFetched(speech);
-
+                    callback.onSpeechFetched(speech, speechNo);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

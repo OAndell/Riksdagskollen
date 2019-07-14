@@ -98,7 +98,7 @@ public class ProtocolListFragment extends RiksdagenAutoLoadingListFragment {
     }
 
     @Override
-    RiksdagenViewHolderAdapter getAdapter() {
+    protected RiksdagenViewHolderAdapter getAdapter() {
         return adapter;
     }
 }

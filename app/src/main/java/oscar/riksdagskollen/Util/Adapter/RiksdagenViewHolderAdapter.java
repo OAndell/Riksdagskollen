@@ -16,13 +16,13 @@ import java.util.List;
 public abstract class RiksdagenViewHolderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private SortedList<?> sortedList;
-    final List<View> headers = new ArrayList<>();
-    final List<View> footers = new ArrayList<>();
+    protected final List<View> headers = new ArrayList<>();
+    protected final List<View> footers = new ArrayList<>();
 
     protected static final int TYPE_HEADER = 111;
     protected static final int TYPE_FOOTER = 222;
-    static final int TYPE_ITEM = 333;
-    OnItemClickListener clickListener;
+    protected static final int TYPE_ITEM = 333;
+    protected OnItemClickListener clickListener;
 
     public interface OnItemClickListener {
 
@@ -38,7 +38,7 @@ public abstract class RiksdagenViewHolderAdapter extends RecyclerView.Adapter<Re
         }
     }
 
-    RiksdagenViewHolderAdapter(OnItemClickListener clickListener) {
+    protected RiksdagenViewHolderAdapter(OnItemClickListener clickListener) {
         this.clickListener = clickListener;
     }
 
@@ -72,7 +72,7 @@ public abstract class RiksdagenViewHolderAdapter extends RecyclerView.Adapter<Re
         return sortedList.size();
     }
 
-    void prepareHeaderFooter(HeaderFooterViewHolder vh, View view){
+    protected void prepareHeaderFooter(HeaderFooterViewHolder vh, View view) {
         //empty out our FrameLayout and replace with our header/footer
         vh.base.removeAllViews();
         try {

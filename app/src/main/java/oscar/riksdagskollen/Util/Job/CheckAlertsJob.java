@@ -13,15 +13,15 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import oscar.riksdagskollen.Fragment.CurrentNewsListFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
 import oscar.riksdagskollen.Manager.AlertManager;
+import oscar.riksdagskollen.News.CurrentNewsCallback;
+import oscar.riksdagskollen.News.CurrentNewsListFragment;
+import oscar.riksdagskollen.News.Data.CurrentNews;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.NotificationHelper;
-import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNews;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
-import oscar.riksdagskollen.Util.RiksdagenCallback.CurrentNewsCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.VoteCallback;
 

@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Util.Adapter;
+package oscar.riksdagskollen.News;
 
 import android.support.v4.app.Fragment;
 import android.support.v7.util.SortedList;
@@ -17,15 +17,16 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
+import oscar.riksdagskollen.News.Data.CurrentNews;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
-import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNews;
+import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 
 /**
  * Created by oscar on 2018-03-29.
  */
 
-public class CurrentNewsListAdapter  extends RiksdagenViewHolderAdapter{
+public class CurrentNewsListAdapter extends RiksdagenViewHolderAdapter {
     private static final Comparator<CurrentNews> DEFAULT_COMPARATOR = new Comparator<CurrentNews>() {
         @Override
         public int compare(CurrentNews a, CurrentNews b) {

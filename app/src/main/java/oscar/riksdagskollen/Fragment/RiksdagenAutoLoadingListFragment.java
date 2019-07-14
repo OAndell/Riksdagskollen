@@ -30,7 +30,7 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
     private int searchPageToLoad = 1;
     private int pastVisiblesItems;
 
-    protected static final int MIN_DOC = 6;
+    public static final int MIN_DOC = 6;
 
     private RiksdagenViewHolderAdapter adapter;
     private ViewGroup loadingView;
@@ -119,15 +119,15 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         isSearching = searching;
     }
 
-    int getPageToLoad() {
+    protected int getPageToLoad() {
         return pageToLoad;
     }
 
-    void incrementPage(){
+    protected void incrementPage() {
         pageToLoad++;
     }
 
-    void decrementPage(){
+    protected void decrementPage() {
         pageToLoad--;
     }
 
@@ -151,17 +151,17 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         return searchPageToLoad;
     }
 
-    abstract RiksdagenViewHolderAdapter getAdapter();
+    protected abstract RiksdagenViewHolderAdapter getAdapter();
 
     public boolean isLoadingUntilFull() {
         return loadingUntilFull;
     }
 
-    void setLoadingMoreItems(Boolean loading){
+    protected void setLoadingMoreItems(Boolean loading) {
         this.loading = loading;
         showNoConnectionWarning(false);
         // The runnables are apparently needed to avoid long warnings
-        if(loading && pageToLoad > 1){
+        if (loading && getAdapter().getItemCount() > 0) {
             recyclerView.post(new Runnable() {
                 public void run() {
                     adapter.addFooter(itemsLoadingView);
@@ -181,7 +181,7 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         return recyclerView;
     }
 
-    void setShowLoadingView(final boolean loading) {
+    protected void setShowLoadingView(final boolean loading) {
         showNoConnectionWarning(false);
 
         if (loading) {

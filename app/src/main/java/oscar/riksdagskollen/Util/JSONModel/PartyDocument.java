@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
+import oscar.riksdagskollen.DebateList.Data.Debate;
+
 /**
  * Created by gustavaaro on 2018-03-25.
  */

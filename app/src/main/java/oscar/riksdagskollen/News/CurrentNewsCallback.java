@@ -1,10 +1,10 @@
-package oscar.riksdagskollen.Util.RiksdagenCallback;
+package oscar.riksdagskollen.News;
 
 import com.android.volley.VolleyError;
 
 import java.util.List;
 
-import oscar.riksdagskollen.Util.JSONModel.CurrentNewsModels.CurrentNews;
+import oscar.riksdagskollen.News.Data.CurrentNews;
 
 /**
  * Created by oscar on 2018-03-28.

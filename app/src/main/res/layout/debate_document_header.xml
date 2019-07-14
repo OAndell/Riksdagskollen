@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/document_container">
+
+
+    <oscar.riksdagskollen.Util.View.DocumentHtmlView
+        android:id="@+id/document_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </oscar.riksdagskollen.Util.View.DocumentHtmlView>
+
+
+    <TextView
+        android:id="@+id/debate_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="8dp"
+        android:text="Debatt"
+        android:textColor="?mainTitleTextColor"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+
+</LinearLayout>

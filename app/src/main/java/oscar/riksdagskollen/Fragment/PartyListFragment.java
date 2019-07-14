@@ -256,7 +256,7 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
     }
 
     @Override
-    RiksdagenViewHolderAdapter getAdapter() {
+    protected RiksdagenViewHolderAdapter getAdapter() {
         return adapter;
     }
 
