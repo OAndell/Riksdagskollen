@@ -114,9 +114,9 @@ public class RepresentativeTabFragment extends Fragment {
             int alpha = (int) (255 - positionOffset * 255) - 255 * currentPage;
             filter.getIcon().setAlpha(alpha);
             if (alpha <= 0 && filter.isVisible()) {
-                filter.setVisible(false);
+                filter.setEnabled(false);
             } else if (alpha > 0 && !filter.isVisible()) {
-                filter.setVisible(true);
+                filter.setEnabled(true);
             }
 
         }
