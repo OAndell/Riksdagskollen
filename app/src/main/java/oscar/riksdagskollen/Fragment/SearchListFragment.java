@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 
@@ -22,13 +23,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import oscar.riksdagskollen.Activity.DocumentReaderActivity;
+import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
 import oscar.riksdagskollen.Manager.RiksdagenAPIManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.PartyListViewholderAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
+import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
 
 public class SearchListFragment extends RiksdagenAutoLoadingListFragment {
 
@@ -79,10 +83,30 @@ public class SearchListFragment extends RiksdagenAutoLoadingListFragment {
         setHasOptionsMenu(true);
         adapter = new PartyListViewholderAdapter(documentList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Object document) {
-                Intent intent = new Intent(getContext(), DocumentReaderActivity.class);
-                intent.putExtra("document", ((PartyDocument) document));
-                startActivity(intent);
+            public void onItemClick(final Object document) {
+
+                PartyDocument partyDocument = ((PartyDocument) document);
+                if (partyDocument.getDatabase() != null && partyDocument.getDatabase().equals("ledamot")) {
+                    RiksdagenAPIManager.getInstance().getRepresentative(((PartyDocument) document).getId(), new RepresentativeCallback() {
+                        @Override
+                        public void onPersonFetched(Representative representative) {
+                            Intent repDetailsIntent = new Intent(getContext(), RepresentativeDetailActivity.class);
+                            repDetailsIntent.putExtra("representative", representative);
+                            startActivity(repDetailsIntent);
+                        }
+
+                        @Override
+                        public void onFail(VolleyError error) {
+                            Toast.makeText(getContext(), "Kunde inte hämta ledamot", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } else {
+                    Intent intent = new Intent(getContext(), DocumentReaderActivity.class);
+                    intent.putExtra("document", partyDocument);
+                    startActivity(intent);
+                }
+
+
             }
         }, this);
     }

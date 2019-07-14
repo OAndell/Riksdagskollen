@@ -32,6 +32,71 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
     private Debate debatt;
     private String debattnamn;
     private String debattdag;
+    private String database;
+
+    protected PartyDocument(Parcel in) {
+        id = in.readString();
+        undertitel = in.readString();
+        titel = in.readString();
+        rm = in.readString();
+        typ = in.readString();
+        beteckning = in.readString();
+        publicerad = in.readString();
+        doktyp = in.readString();
+        dokument_url_text = in.readString();
+        dokument_url_html = in.readString();
+        traff = in.readString();
+        summary = in.readString();
+        dokumentnamn = in.readString();
+        datum = in.readString();
+        dokintressent = in.readParcelable(DokIntressent.class.getClassLoader());
+        saved = in.readLong();
+        debatt = in.readParcelable(Debate.class.getClassLoader());
+        debattnamn = in.readString();
+        debattdag = in.readString();
+        database = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(undertitel);
+        dest.writeString(titel);
+        dest.writeString(rm);
+        dest.writeString(typ);
+        dest.writeString(beteckning);
+        dest.writeString(publicerad);
+        dest.writeString(doktyp);
+        dest.writeString(dokument_url_text);
+        dest.writeString(dokument_url_html);
+        dest.writeString(traff);
+        dest.writeString(summary);
+        dest.writeString(dokumentnamn);
+        dest.writeString(datum);
+        dest.writeParcelable(dokintressent, flags);
+        dest.writeLong(saved);
+        dest.writeParcelable(debatt, flags);
+        dest.writeString(debattnamn);
+        dest.writeString(debattdag);
+        dest.writeString(database);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<PartyDocument> CREATOR = new Creator<PartyDocument>() {
+        @Override
+        public PartyDocument createFromParcel(Parcel in) {
+            return new PartyDocument(in);
+        }
+
+        @Override
+        public PartyDocument[] newArray(int size) {
+            return new PartyDocument[size];
+        }
+    };
 
     public Debate getDebatt() {
         return debatt;
@@ -94,7 +159,7 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
     }
 
     public boolean isMotion(){
-        return dokumentnamn.equalsIgnoreCase("motion");
+        return dokumentnamn != null && dokumentnamn.equalsIgnoreCase("motion");
     }
 
     public String getDatum() {
@@ -115,6 +180,10 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
 
     public String getDebattdag() {
         return debattdag;
+    }
+
+    public String getDatabase() {
+        return database;
     }
 
     @Override
@@ -158,56 +227,6 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
         return result;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
-        dest.writeString(this.undertitel);
-        dest.writeString(this.titel);
-        dest.writeString(this.rm);
-        dest.writeString(this.typ);
-        dest.writeString(this.beteckning);
-        dest.writeString(this.publicerad);
-        dest.writeString(this.doktyp);
-        dest.writeString(this.dokument_url_text);
-        dest.writeString(this.dokument_url_html);
-        dest.writeString(this.traff);
-        dest.writeString(this.summary);
-        dest.writeString(this.dokumentnamn);
-        dest.writeString(this.datum);
-        dest.writeParcelable(this.dokintressent, flags);
-        dest.writeLong(this.saved);
-        dest.writeParcelable(this.debatt, flags);
-        dest.writeString(this.debattnamn);
-        dest.writeString(this.debattdag);
-    }
-
-    protected PartyDocument(Parcel in) {
-        this.id = in.readString();
-        this.undertitel = in.readString();
-        this.titel = in.readString();
-        this.rm = in.readString();
-        this.typ = in.readString();
-        this.beteckning = in.readString();
-        this.publicerad = in.readString();
-        this.doktyp = in.readString();
-        this.dokument_url_text = in.readString();
-        this.dokument_url_html = in.readString();
-        this.traff = in.readString();
-        this.summary = in.readString();
-        this.dokumentnamn = in.readString();
-        this.datum = in.readString();
-        this.dokintressent = in.readParcelable(DokIntressent.class.getClassLoader());
-        this.saved = in.readLong();
-        this.debatt = in.readParcelable(Debate.class.getClassLoader());
-        this.debattnamn = in.readString();
-        this.debattdag = in.readString();
-    }
-
     public ArrayList<String> getSenders() {
         if (getDokintressent() == null) {
             return new ArrayList<String>();
@@ -221,15 +240,4 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
         return senders;
     }
 
-    public static final Creator<PartyDocument> CREATOR = new Creator<PartyDocument>() {
-        @Override
-        public PartyDocument createFromParcel(Parcel source) {
-            return new PartyDocument(source);
-        }
-
-        @Override
-        public PartyDocument[] newArray(int size) {
-            return new PartyDocument[size];
-        }
-    };
 }

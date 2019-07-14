@@ -13,6 +13,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -66,6 +67,12 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
         final View repHeaderLayout = findViewById(R.id.rep_header_layout);
         repHeaderLayout.setVisibility(View.VISIBLE);
         representative = getIntent().getParcelableExtra("representative");
+        // Old representative
+        if (representative.getParti() == null || representative.getIntressent_id() == null) {
+            Toast.makeText(this, "Kunde inte hämta ledamot", Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
 
         AnalyticsManager.getInstance().setCurrentScreen(this, "Representative: " + representative.getIntressent_id());
 
@@ -89,7 +96,10 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
         CircularImageView portrait = findViewById(R.id.representative_portrait);
         ImageView partyLogo = findViewById(R.id.representative_portrait_party_logo);
 
+
         partyLogo.setImageResource(CurrentParties.getParty(representative.getParti().toLowerCase()).getDrawableLogo());
+
+
         Glide
                 .with(this)
                 .load(representative.getBild_url_192())

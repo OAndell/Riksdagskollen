@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -114,11 +113,10 @@ public class RepresentativeTabFragment extends Fragment {
         if (filter != null) {
             int alpha = (int) (255 - positionOffset * 255) - 255 * currentPage;
             filter.getIcon().setAlpha(alpha);
-            Log.d("Pary", "updateMenuItemAlpha: " + alpha);
             if (alpha <= 0 && filter.isVisible()) {
-                filter.setVisible(false);
+                filter.setEnabled(false);
             } else if (alpha > 0 && !filter.isVisible()) {
-                filter.setVisible(true);
+                filter.setEnabled(true);
             }
 
         }

@@ -21,9 +21,9 @@ import oscar.riksdagskollen.Util.JSONModel.Party;
 public class Debate implements Parcelable {
 
 
-    private DebateSpeech[] anforande;
+    private DebateStatement[] anforande;
 
-    public DebateSpeech[] getAnforande() {
+    public DebateStatement[] getAnforande() {
         return anforande;
     }
 
@@ -52,7 +52,7 @@ public class Debate implements Parcelable {
 
     protected Debate(Parcel in) {
         System.out.println(in.toString());
-        this.anforande = in.createTypedArray(DebateSpeech.CREATOR);
+        this.anforande = in.createTypedArray(DebateStatement.CREATOR);
     }
 
     public static final Parcelable.Creator<Debate> CREATOR = new Parcelable.Creator<Debate>() {

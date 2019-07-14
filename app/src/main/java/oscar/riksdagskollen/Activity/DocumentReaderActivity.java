@@ -120,7 +120,7 @@ public class DocumentReaderActivity extends AppCompatActivity {
             findViewById(R.id.act_doc_reader_label_author).setVisibility(View.GONE);
         }
 
-        if (document.getDoktyp().equals("ip") && document.getDebatt() != null && document.getDebattdag() != null) {
+        if (document.getDoktyp() != null && document.getDoktyp().equals("ip") && document.getDebatt() != null && document.getDebattdag() != null) {
 
             Button replyButton = findViewById(R.id.reply_button);
             replyButton.setVisibility(View.VISIBLE);
@@ -146,52 +146,54 @@ public class DocumentReaderActivity extends AppCompatActivity {
 
     private void searchForReplyOrQuestion() {
         //Tries to find a response to the document if the doc has type = "fr"
-        if (document.getTyp().equals("fr")) {
-            app.getRiksdagenAPIManager().searchForReply(document, new PartyDocumentCallback() {
-                @Override
-                public void onDocumentsFetched(List<PartyDocument> documents) {
-                    final PartyDocument reply = documents.get(0);
-                    Button replyButton = findViewById(R.id.reply_button);
-                    replyButton.setVisibility(View.VISIBLE);
-                    replyButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(context, DocumentReaderActivity.class);
-                            intent.putExtra("document", (reply));
-                            startActivity(intent);
-                        }
-                    });
-                    app.getAlertManager().setAlertEnabledForDoc(document, false);
-                }
+        if (document.getTyp() != null) {
+            if (document.getTyp().equals("fr")) {
+                app.getRiksdagenAPIManager().searchForReply(document, new PartyDocumentCallback() {
+                    @Override
+                    public void onDocumentsFetched(List<PartyDocument> documents) {
+                        final PartyDocument reply = documents.get(0);
+                        Button replyButton = findViewById(R.id.reply_button);
+                        replyButton.setVisibility(View.VISIBLE);
+                        replyButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(context, DocumentReaderActivity.class);
+                                intent.putExtra("document", (reply));
+                                startActivity(intent);
+                            }
+                        });
+                        app.getAlertManager().setAlertEnabledForDoc(document, false);
+                    }
 
-                @Override
-                public void onFail(VolleyError error) {
-                    notificationItem.setVisible(true);
-                    findViewById(R.id.notification_tip).setVisibility(View.VISIBLE);
-                }
-            });
-        } else if (document.getTyp().equals("frs")) {
-            app.getRiksdagenAPIManager().searchForQuestion(document, new PartyDocumentCallback() {
-                @Override
-                public void onDocumentsFetched(List<PartyDocument> documents) {
-                    final PartyDocument reply = documents.get(0);
-                    Button replyButton = findViewById(R.id.reply_button);
-                    replyButton.setText("Läs fråga");
-                    replyButton.setVisibility(View.VISIBLE);
-                    replyButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(context, DocumentReaderActivity.class);
-                            intent.putExtra("document", (reply));
-                            startActivity(intent);
-                        }
-                    });
-                }
+                    @Override
+                    public void onFail(VolleyError error) {
+                        notificationItem.setVisible(true);
+                        findViewById(R.id.notification_tip).setVisibility(View.VISIBLE);
+                    }
+                });
+            } else if (document.getTyp().equals("frs")) {
+                app.getRiksdagenAPIManager().searchForQuestion(document, new PartyDocumentCallback() {
+                    @Override
+                    public void onDocumentsFetched(List<PartyDocument> documents) {
+                        final PartyDocument reply = documents.get(0);
+                        Button replyButton = findViewById(R.id.reply_button);
+                        replyButton.setText("Läs fråga");
+                        replyButton.setVisibility(View.VISIBLE);
+                        replyButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(context, DocumentReaderActivity.class);
+                                intent.putExtra("document", (reply));
+                                startActivity(intent);
+                            }
+                        });
+                    }
 
-                @Override
-                public void onFail(VolleyError error) {
-                }
-            });
+                    @Override
+                    public void onFail(VolleyError error) {
+                    }
+                });
+            }
         }
     }
 
