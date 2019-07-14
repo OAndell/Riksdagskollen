@@ -29,7 +29,7 @@ import oscar.riksdagskollen.Manager.RiksdagenAPIManager;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.DebateAdapter;
-import oscar.riksdagskollen.Util.JSONModel.DebateSpeech;
+import oscar.riksdagskollen.Util.JSONModel.DebateStatement;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Protocol;
 import oscar.riksdagskollen.Util.RiksdagenCallback.OnDocumentHtmlViewLoadedCallback;
@@ -148,9 +148,9 @@ public class DebateActivity extends AppCompatActivity {
     }
 
     private void refreshAdapter() {
-        final DebateSpeech[] speeches = initiatingDocument.getDebatt().getAnforande();
-        List<DebateSpeech> debateSpeeches = Arrays.asList(speeches);
-        DebateAdapter adapter = new DebateAdapter(this, new ArrayList<>(debateSpeeches), debateProtocolId, debateInitiatorId);
+        final DebateStatement[] speeches = initiatingDocument.getDebatt().getAnforande();
+        List<DebateStatement> debateStatements = Arrays.asList(speeches);
+        DebateAdapter adapter = new DebateAdapter(this, new ArrayList<>(debateStatements), debateProtocolId, debateInitiatorId);
         recyclerView.setAdapter(adapter);
     }
 

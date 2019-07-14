@@ -23,7 +23,7 @@ import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
-import oscar.riksdagskollen.Util.JSONModel.DebateSpeech;
+import oscar.riksdagskollen.Util.JSONModel.DebateStatement;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.JSONModel.Speech;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
@@ -33,7 +33,7 @@ import oscar.riksdagskollen.Util.View.CircularImageView;
 public class DebateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private ArrayList<DebateSpeech> debateSpeeches;
+    private ArrayList<DebateStatement> debateStatements;
     private String protocolId;
     private String debateInitiatior;
     private HashMap<String, Speech> speechDetails = new HashMap<>();
@@ -42,8 +42,8 @@ public class DebateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final int TYPE_INCOMING = 222;
 
 
-    public DebateAdapter(Context context, ArrayList<DebateSpeech> speeches, String protocolId, String debateInitiator) {
-        this.debateSpeeches = speeches;
+    public DebateAdapter(Context context, ArrayList<DebateStatement> speeches, String protocolId, String debateInitiator) {
+        this.debateStatements = speeches;
         this.context = context;
         this.protocolId = protocolId;
         this.debateInitiatior = debateInitiator;
@@ -68,9 +68,9 @@ public class DebateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final DebateViewHolderItem debateView = (DebateViewHolderItem) holder;
-        debateView.speakerName.setText(debateSpeeches.get(position).getTalare());
-        debateView.time.setText(debateSpeeches.get(position).getAnf_klockslag());
-        int drawableResource = CurrentParties.getParty(debateSpeeches.get(position).getParti()).getDrawableLogo();
+        debateView.speakerName.setText(debateStatements.get(position).getTalare());
+        debateView.time.setText(debateStatements.get(position).getAnf_klockslag());
+        int drawableResource = CurrentParties.getParty(debateStatements.get(position).getParti()).getDrawableLogo();
         debateView.partyLogo.setImageResource(drawableResource);
         debateView.setLoading(true);
 
@@ -81,16 +81,16 @@ public class DebateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
         });
 
-        Speech speechDetail = speechDetails.get(debateSpeeches.get(position).getAnf_nummer());
+        Speech speechDetail = speechDetails.get(debateStatements.get(position).getAnf_nummer());
         if (speechDetail != null) {
             debateView.setLoading(false);
             debateView.speech.setText(Html.fromHtml(cleanupSpeech(speechDetail.getAnforandetext())));
         } else {
             RiksdagskollenApp.getInstance().getRiksdagenAPIManager()
-                    .getSpeech(protocolId, debateSpeeches.get(position).getAnf_nummer(), new SpeechCallback() {
+                    .getSpeech(protocolId, debateStatements.get(position).getAnf_nummer(), new SpeechCallback() {
                         @Override
                         public void onSpeechFetched(Speech speech) {
-                            speechDetails.put(debateSpeeches.get(position).getAnf_nummer(), speech);
+                            speechDetails.put(debateStatements.get(position).getAnf_nummer(), speech);
                             debateView.setLoading(false);
                             debateView.speech.setText(Html.fromHtml(cleanupSpeech(speech.getAnforandetext())));
                         }
@@ -104,7 +104,7 @@ public class DebateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
         RiksdagskollenApp.getInstance().getRiksdagenAPIManager()
-                .getRepresentative(debateSpeeches.get(position).getIntressent_id(), new RepresentativeCallback() {
+                .getRepresentative(debateStatements.get(position).getIntressent_id(), new RepresentativeCallback() {
                     @Override
                     public void onPersonFetched(final Representative representative) {
 
@@ -141,7 +141,7 @@ public class DebateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public int getItemViewType(int position) {
         //check what type our position is, based on the assumption that the order is headers > sortedList > footers
-        if (debateSpeeches.get(position).getIntressent_id().equals(debateInitiatior)) {
+        if (debateStatements.get(position).getIntressent_id().equals(debateInitiatior)) {
             return TYPE_OUTGOING;
         } else if (debateInitiatior != null) {
             return TYPE_INCOMING;
@@ -159,7 +159,7 @@ public class DebateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemCount() {
-        return debateSpeeches.size();
+        return debateStatements.size();
     }
 
 
