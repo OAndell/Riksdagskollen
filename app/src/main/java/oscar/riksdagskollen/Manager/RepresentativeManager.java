@@ -63,7 +63,9 @@ public class RepresentativeManager {
     }
 
     private void addRepresentativeToParty(String party, Representative representative) {
-        representatives.get(party.toLowerCase()).put(representative.getIntressent_id(), representative);
+        if (party != null && representative.getIntressent_id() != null) {
+            representatives.get(party.toLowerCase()).put(representative.getIntressent_id(), representative);
+        }
     }
 
     public ArrayList<Representative> getCurrentRepresentatives() {
