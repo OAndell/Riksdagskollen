@@ -3,7 +3,7 @@ package oscar.riksdagskollen.DebateView.Data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class DebateSpeech implements Parcelable {
+public class DebateStatement implements Parcelable {
 
     private String parti;
     private String anf_nummer;
@@ -42,7 +42,7 @@ public class DebateSpeech implements Parcelable {
         return anf_klockslag;
     }
 
-    public DebateSpeech() {
+    public DebateStatement() {
     }
 
     public void setSpeech(Speech speech) {
@@ -70,7 +70,7 @@ public class DebateSpeech implements Parcelable {
         dest.writeParcelable(this.speech, flags);
     }
 
-    protected DebateSpeech(Parcel in) {
+    protected DebateStatement(Parcel in) {
         this.parti = in.readString();
         this.anf_nummer = in.readString();
         this.anf_datumtid = in.readString();
@@ -81,15 +81,15 @@ public class DebateSpeech implements Parcelable {
         this.speech = in.readParcelable(Speech.class.getClassLoader());
     }
 
-    public static final Creator<DebateSpeech> CREATOR = new Creator<DebateSpeech>() {
+    public static final Creator<DebateStatement> CREATOR = new Creator<DebateStatement>() {
         @Override
-        public DebateSpeech createFromParcel(Parcel source) {
-            return new DebateSpeech(source);
+        public DebateStatement createFromParcel(Parcel source) {
+            return new DebateStatement(source);
         }
 
         @Override
-        public DebateSpeech[] newArray(int size) {
-            return new DebateSpeech[size];
+        public DebateStatement[] newArray(int size) {
+            return new DebateStatement[size];
         }
     };
 }

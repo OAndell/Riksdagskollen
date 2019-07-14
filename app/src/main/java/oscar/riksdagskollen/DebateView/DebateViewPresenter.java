@@ -6,7 +6,7 @@ import com.android.volley.VolleyError;
 
 import java.util.List;
 
-import oscar.riksdagskollen.DebateView.Data.DebateSpeech;
+import oscar.riksdagskollen.DebateView.Data.DebateStatement;
 import oscar.riksdagskollen.DebateView.Data.Speech;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Protocol;
@@ -57,8 +57,8 @@ public class DebateViewPresenter implements DebateViewContract.Presenter, Protoc
     public void onProtocolsFetched(List<Protocol> protocols) {
         if (protocols.size() == 1) {
             model.setProtocolId(protocols.get(0).getId());
-            for (DebateSpeech debateSpeech : model.getInitiatingDocument().getDebatt().getAnforande()) {
-                model.getSpeech(debateSpeech.getAnf_nummer(), this);
+            for (DebateStatement debateStatement : model.getInitiatingDocument().getDebatt().getAnforande()) {
+                model.getSpeech(debateStatement.getAnf_nummer(), this);
             }
         } else {
             view.showFailToastAndFinish();

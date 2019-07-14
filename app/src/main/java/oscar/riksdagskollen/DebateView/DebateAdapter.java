@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
-import oscar.riksdagskollen.DebateView.Data.DebateSpeech;
+import oscar.riksdagskollen.DebateView.Data.DebateStatement;
 import oscar.riksdagskollen.DebateView.Data.Speech;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
@@ -34,20 +34,20 @@ import oscar.riksdagskollen.Util.View.CircularImageView;
 public class DebateAdapter extends RiksdagenViewHolderAdapter {
 
     private Context context;
-    private ArrayList<DebateSpeech> debateSpeeches;
+    private ArrayList<DebateStatement> debateStatements;
     private String debateInitiatior;
 
     private static final int TYPE_OUTGOING = 444;
     private static final int TYPE_INCOMING = 555;
 
-    DebateAdapter(Context context, ArrayList<DebateSpeech> speeches, String debateInitiator) {
+    DebateAdapter(Context context, ArrayList<DebateStatement> speeches, String debateInitiator) {
         super(new OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {
 
             }
         });
-        this.debateSpeeches = speeches;
+        this.debateStatements = speeches;
         this.context = context;
         this.debateInitiatior = debateInitiator;
     }
@@ -75,9 +75,9 @@ public class DebateAdapter extends RiksdagenViewHolderAdapter {
     }
 
     void setSpeechDetail(Speech speech, String anf) {
-        for (int i = 0; i < debateSpeeches.size(); i++) {
-            if (debateSpeeches.get(i).getAnf_nummer().equals(anf)) {
-                debateSpeeches.get(i).setSpeech(speech);
+        for (int i = 0; i < debateStatements.size(); i++) {
+            if (debateStatements.get(i).getAnf_nummer().equals(anf)) {
+                debateStatements.get(i).setSpeech(speech);
                 notifyItemChanged(i + headers.size());
                 break;
             }
@@ -97,14 +97,14 @@ public class DebateAdapter extends RiksdagenViewHolderAdapter {
             View v = headers.get(position);
             //add our view to a header view and display it
             prepareHeaderFooter((HeaderFooterViewHolder) holder, v);
-        } else if (position >= headers.size() + debateSpeeches.size()) {
-            View v = footers.get(position - debateSpeeches.size() - headers.size());
+        } else if (position >= headers.size() + debateStatements.size()) {
+            View v = footers.get(position - debateStatements.size() - headers.size());
             //add our view to a footer view and display it
             prepareHeaderFooter((HeaderFooterViewHolder) holder, v);
         } else {
             final DebateViewHolderItem debateView = (DebateViewHolderItem) holder;
-            DebateSpeech debateSpeech = debateSpeeches.get(position - headers.size());
-            debateView.bind(debateSpeech);
+            DebateStatement debateStatement = debateStatements.get(position - headers.size());
+            debateView.bind(debateStatement);
         }
     }
 
@@ -114,11 +114,11 @@ public class DebateAdapter extends RiksdagenViewHolderAdapter {
         //check what type our position is, based on the assumption that the order is headers > sortedList > footers
         if (position < headers.size()) {
             return TYPE_HEADER;
-        } else if (position >= headers.size() + debateSpeeches.size()) {
+        } else if (position >= headers.size() + debateStatements.size()) {
             return TYPE_FOOTER;
         }
 
-        if (debateSpeeches.get(position - headers.size()).getIntressent_id().equals(debateInitiatior)) {
+        if (debateStatements.get(position - headers.size()).getIntressent_id().equals(debateInitiatior)) {
             return TYPE_OUTGOING;
         } else if (debateInitiatior != null) {
             return TYPE_INCOMING;
@@ -133,7 +133,7 @@ public class DebateAdapter extends RiksdagenViewHolderAdapter {
 
     @Override
     public int getItemCount() {
-        return debateSpeeches.size();
+        return debateStatements.size();
     }
 
     @Override
@@ -174,10 +174,10 @@ public class DebateAdapter extends RiksdagenViewHolderAdapter {
             partyLogo = itemView.findViewById(R.id.debate_item_portrait_party_logo);
         }
 
-        void bind(final DebateSpeech debateSpeech) {
-            speakerName.setText(debateSpeech.getTalare());
-            time.setText(debateSpeech.getAnf_klockslag());
-            int drawableResource = CurrentParties.getParty(debateSpeech.getParti()).getDrawableLogo();
+        void bind(final DebateStatement debateStatement) {
+            speakerName.setText(debateStatement.getTalare());
+            time.setText(debateStatement.getAnf_klockslag());
+            int drawableResource = CurrentParties.getParty(debateStatement.getParti()).getDrawableLogo();
             partyLogo.setImageResource(drawableResource);
             setLoading(true);
             speakerName.setOnClickListener(new View.OnClickListener() {
@@ -186,14 +186,14 @@ public class DebateAdapter extends RiksdagenViewHolderAdapter {
 
                 }
             });
-            Speech speechDetail = debateSpeech.getSpeech();
+            Speech speechDetail = debateStatement.getSpeech();
             if (speechDetail != null) {
                 setLoading(false);
                 speech.setText(Html.fromHtml(cleanupSpeech(speechDetail.getAnforandetext())));
             }
 
             RiksdagskollenApp.getInstance().getRiksdagenAPIManager()
-                    .getRepresentative(debateSpeech.getIntressent_id(), new RepresentativeCallback() {
+                    .getRepresentative(debateStatement.getIntressent_id(), new RepresentativeCallback() {
                         @Override
                         public void onPersonFetched(final Representative representative) {
 

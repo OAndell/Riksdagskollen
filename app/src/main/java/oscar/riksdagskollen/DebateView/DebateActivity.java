@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import oscar.riksdagskollen.DebateView.Data.DebateSpeech;
+import oscar.riksdagskollen.DebateView.Data.DebateStatement;
 import oscar.riksdagskollen.DebateView.Data.Speech;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
@@ -98,9 +98,9 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
 
     @Override
     public void setUpAdapter(PartyDocument initiatingDocument, String initiatorId) {
-        final DebateSpeech[] speeches = initiatingDocument.getDebatt().getAnforande();
-        List<DebateSpeech> debateSpeeches = Arrays.asList(speeches);
-        adapter = new DebateAdapter(this, new ArrayList<>(debateSpeeches), initiatorId);
+        final DebateStatement[] speeches = initiatingDocument.getDebatt().getAnforande();
+        List<DebateStatement> debateStatements = Arrays.asList(speeches);
+        adapter = new DebateAdapter(this, new ArrayList<>(debateStatements), initiatorId);
         recyclerView.setAdapter(adapter);
     }
 

@@ -14,7 +14,7 @@ import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import oscar.riksdagskollen.DebateView.Data.DebateSpeech;
+import oscar.riksdagskollen.DebateView.Data.DebateStatement;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 

@@ -144,6 +144,7 @@ public class CurrentNewsListFragment extends RiksdagenAutoLoadingListFragment im
                 adapter.removeTopHeader();
             }
         });
+        adapter.removeTopHeader();
         adapter.addHeader(view);
     }
 
