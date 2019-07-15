@@ -52,10 +52,10 @@ public class TwitterUserTimeline extends TwitterTimeline {
 
         if (finalTweetID == TwitterTimeline.DEFAULT_TWEET_ID) {
             RiksdagskollenApp.getInstance().getTwitterAPIManager().getTweets(
-                    twitterScreenName, localCallback, false);
+                    twitterScreenName, localCallback, includeRT);
         } else {
             RiksdagskollenApp.getInstance().getTwitterAPIManager().getTweetsSinceID(
-                    twitterScreenName, localCallback, false, finalTweetID);
+                    twitterScreenName, localCallback, includeRT, finalTweetID);
         }
 
     }

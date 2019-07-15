@@ -47,8 +47,8 @@ public class TwitterAPIManager {
     public void getTweets(final String screenName, final TwitterCallback callback, boolean includeRT) {
         String subURL = TIMELINE_ENDPOINT + "?screen_name=" + screenName
                 + "&tweet_mode=extended"; //TODO trim user might be a good idea here since we already know it.
-        if (includeRT) {
-            subURL = subURL + "&include_rts=true";
+        if (!includeRT) {
+            subURL = subURL + "&include_rts=false";
         }
         doGetTweetRequest(subURL, callback);
     }
@@ -57,8 +57,8 @@ public class TwitterAPIManager {
     public void getTweetsSinceID(final String screenName, final TwitterCallback callback, boolean includeRT, long id) {
         String subURL = TIMELINE_ENDPOINT + "?screen_name=" + screenName
                 + "&tweet_mode=extended&&max_id=" + id;
-        if (includeRT) {
-            subURL = subURL + "&include_rts=true";
+        if (!includeRT) {
+            subURL = subURL + "&include_rts=false";
         }
         doGetTweetRequest(subURL, callback);
     }
@@ -66,8 +66,8 @@ public class TwitterAPIManager {
     public void getTweetList(String ownerScreenname, String slug, TwitterCallback callback, boolean includeRT) {
         String subURL = LIST_ENDPOINT + "?owner_screen_name=" + ownerScreenname + "&slug=" + slug
                 + "&tweet_mode=extended";
-        if (includeRT) {
-            subURL = subURL + "&include_rts=true";
+        if (!includeRT) {
+            subURL = subURL + "&include_rts=false";
         }
         doGetTweetRequest(subURL, callback);
     }
@@ -75,8 +75,8 @@ public class TwitterAPIManager {
     public void getTweetListSinceID(String ownerScreenname, String slug, TwitterCallback callback, boolean includeRT, long id) {
         String subURL = LIST_ENDPOINT + "?owner_screen_name=riksdagskollen&slug=riksdagskollen"
                 + "&tweet_mode=extended&max_id=" + id;
-        if (includeRT) {
-            subURL = subURL + "&include_rts=true";
+        if (!includeRT) {
+            subURL = subURL + "&include_rts=falseß";
         }
         doGetTweetRequest(subURL, callback);
     }

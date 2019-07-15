@@ -12,7 +12,6 @@ public class TwitterListTimeline extends TwitterTimeline {
 
     private String ownerScreenName;
     private String slug;
-
     /**
      * @param ownerScreenName twitter screen name
      * @param slug            name of the list
@@ -39,12 +38,13 @@ public class TwitterListTimeline extends TwitterTimeline {
 
         if (finalTweetID == TwitterTimeline.DEFAULT_TWEET_ID) {
             RiksdagskollenApp.getInstance().getTwitterAPIManager().getTweetList(
-                    ownerScreenName, slug, localCallback, false);
+                    ownerScreenName, slug, localCallback, includeRT);
         } else {
             RiksdagskollenApp.getInstance().getTwitterAPIManager().getTweetListSinceID(
-                    ownerScreenName, slug, localCallback, false, finalTweetID);
+                    ownerScreenName, slug, localCallback, includeRT, finalTweetID);
 
         }
     }
+
 
 }

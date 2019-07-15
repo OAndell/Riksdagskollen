@@ -8,6 +8,8 @@ import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 public class TwitterTimelineFactory {
 
     public static final int LIST_RIKSDAGEN_ALL = 101;
+    public static final int LIST_RIKSDAGEN_PARTIES = 102;
+
 
 
     public static TwitterUserTimeline getUser(Party party) {
@@ -51,9 +53,10 @@ public class TwitterTimelineFactory {
 
     public static TwitterListTimeline getTwitterList(int type) {
         switch (type) {
-            case LIST_RIKSDAGEN_ALL:
+            case LIST_RIKSDAGEN_PARTIES:
                 return new TwitterListTimeline("riksdagskollen", "riksdagskollen");
-
+            case LIST_RIKSDAGEN_ALL:
+                return new TwitterListTimeline("Riksdagskollen", "riksdagskollen-ledamoter");
             default:
                 return null;
         }

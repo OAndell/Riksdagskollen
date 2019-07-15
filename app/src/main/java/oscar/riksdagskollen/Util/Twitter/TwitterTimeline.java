@@ -11,6 +11,7 @@ public abstract class TwitterTimeline {
 
     protected static long DEFAULT_TWEET_ID = -1;
     protected long finalTweetID;
+    protected boolean includeRT = true;
 
     public TwitterTimeline() {
         this.finalTweetID = DEFAULT_TWEET_ID;
@@ -18,6 +19,10 @@ public abstract class TwitterTimeline {
 
     public void reset() {
         finalTweetID = DEFAULT_TWEET_ID;
+    }
+
+    public void setIncludeRT(boolean includeRT) {
+        this.includeRT = includeRT;
     }
 
     /**
