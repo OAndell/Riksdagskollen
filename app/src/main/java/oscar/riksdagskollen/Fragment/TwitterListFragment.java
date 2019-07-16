@@ -70,8 +70,13 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
         return newInstance;
     }
 
-    public void setTwitterTimeline(TwitterTimeline twitterTimeline) {
-        this.twitterTimeline = twitterTimeline;
+
+    private void applyPreferences() {
+        int preferredList = preferences.getInt(PREFERENCE_LIST, TwitterTimelineFactory.LIST_RIKSDAGEN_ALL);
+        twitterTimeline = TwitterTimelineFactory.getTwitterList(preferredList);
+        boolean inculdeRT = preferences.getBoolean(PREFERENCE_RETWEET, true);
+        twitterTimeline.setIncludeRT(inculdeRT);
+
     }
 
 
@@ -86,12 +91,7 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.twitter_nav);
             preferences = getActivity().getSharedPreferences(SHARED_PREFERENCE, getActivity().MODE_PRIVATE);
             editor = preferences.edit();
-
-            int preferredList = preferences.getInt(PREFERENCE_LIST, TwitterTimelineFactory.LIST_RIKSDAGEN_ALL);
-            twitterTimeline = TwitterTimelineFactory.getTwitterList(preferredList);
-            boolean inculdeRT = preferences.getBoolean(PREFERENCE_RETWEET, true);
-            twitterTimeline.setIncludeRT(inculdeRT);
-
+            applyPreferences();
             setHasOptionsMenu(true);
         }
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -166,12 +166,8 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 editor.apply();
-                                twitterTimeline = TwitterTimelineFactory.getTwitterList(
-                                        preferences.getInt(PREFERENCE_LIST,
-                                                TwitterTimelineFactory.LIST_RIKSDAGEN_ALL));
-                                clearItems();
-                                resetPageToLoad();
-                                loadNextPage();
+                                applyPreferences();
+                                refresh();
                                 dialogInterface.dismiss();
                             }
                         })
