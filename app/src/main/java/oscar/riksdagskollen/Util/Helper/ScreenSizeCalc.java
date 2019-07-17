@@ -6,6 +6,9 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
+/**
+ * Source: https://medium.com/@elsenovraditya/set-tab-minimum-width-of-scrollable-tablayout-programmatically-8146d6101efe
+ */
 public class ScreenSizeCalc {
 
     private static final int WIDTH_INDEX = 0;

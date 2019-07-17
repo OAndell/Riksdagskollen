@@ -6,6 +6,10 @@ import android.util.AttributeSet;
 
 import java.lang.reflect.Field;
 
+
+/**
+ * Source: https://medium.com/@elsenovraditya/set-tab-minimum-width-of-scrollable-tablayout-programmatically-8146d6101efe
+ */
 public class CustomTabLayout extends TabLayout {
 
     private static final int WIDTH_INDEX = 0;

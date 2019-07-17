@@ -3,9 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menu_info"
+        android:icon="@drawable/ic_baseline_info_24px"
+        android:title="Info"
+        android:visible="true"
+        app:showAsAction="always"></item>
+
+    <item
         android:id="@+id/menu_filter"
         android:icon="@drawable/ic_filter"
         android:title="Filtrera"
         android:visible="true"
         app:showAsAction="always"></item>
+
 </menu>
