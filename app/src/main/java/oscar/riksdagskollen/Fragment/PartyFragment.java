@@ -128,11 +128,11 @@ public class PartyFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
+
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
 
             }
         });
@@ -154,14 +154,20 @@ public class PartyFragment extends Fragment {
             filter.getIcon().setAlpha(alpha);
             notif.getIcon().setAlpha(alpha);
             if (currentPage > 0 && notif.isEnabled() && filter.isEnabled()) {
+                filter.getIcon().setAlpha(0);
+                notif.getIcon().setAlpha(0);
                 notif.setEnabled(false);
                 filter.setEnabled(false);
             } else if (currentPage == 0 && !notif.isEnabled() && !filter.isEnabled()) {
                 notif.setEnabled(true);
                 filter.setEnabled(true);
+            } else if (currentPage > 0) {
+                filter.getIcon().setAlpha(0);
+                notif.getIcon().setAlpha(0);
             }
         }
     }
+
 
     static class Adapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();

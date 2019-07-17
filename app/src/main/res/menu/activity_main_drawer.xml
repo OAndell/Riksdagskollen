@@ -99,7 +99,7 @@
                     android:title="@string/feedback" />
                 <item
                     android:id="@+id/about_nav"
-                    android:icon="@drawable/ic_baseline_info_24px"
+                    android:icon="@drawable/ic_baseline_info_accent24px"
                     android:title="@string/about" />
             </group>
         </menu>

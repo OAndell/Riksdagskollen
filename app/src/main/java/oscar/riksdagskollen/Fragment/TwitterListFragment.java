@@ -41,9 +41,6 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
     public static final String PREFERENCE_RETWEET = "retweet.preference";
     public static final String PREFERENCE_LIST = "list.preference";
 
-
-
-
     private final List<Tweet> documentList = new ArrayList<>();
     private TweetAdapter adapter;
     public static final String SECTION_NAME_TWITTER = "twitter";
@@ -51,7 +48,6 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private LayoutInflater inflater;
-
 
     public static TwitterListFragment newInstance() {
         Bundle args = new Bundle();
@@ -88,7 +84,7 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
             Party party = getArguments().getParcelable("party");
             twitterTimeline = TwitterTimelineFactory.getUser(party);
         } else {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.twitter_nav);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Twitter");
             preferences = getActivity().getSharedPreferences(SHARED_PREFERENCE, getActivity().MODE_PRIVATE);
             editor = preferences.edit();
             applyPreferences();
@@ -182,6 +178,15 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
                 return true;
             }
         });
+        final MenuItem infoItem = menu.findItem(R.id.menu_info);
+        infoItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+
+                return true;
+            }
+        });
+
         super.onCreateOptionsMenu(menu, menuInflater);
     }
 
@@ -204,7 +209,6 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
                 if (isChecked) {
                     editor.putInt(PREFERENCE_LIST, prefAll);
                 }
-
             }
         });
 
