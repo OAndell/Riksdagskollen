@@ -182,7 +182,21 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
         infoItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-
+                final AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom)
+                        .setTitle("Om Rikstagen på Twitter")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        })
+                        .setMessage("Denna sida visar tweets från användare i listorna:\n\n" +
+                                "twitter.com/Riksdagskollen/lists/riksdagskollen-ledamoter\n\n" +
+                                "twitter.com/Riksdagskollen/lists/riksdagskollen\n\n" +
+                                "Om det finns fel i listorna eller saknas personer kan man höra av " +
+                                "sig till @Riksdagskollen på Twitter. ")
+                        .create();
+                dialog.show();
                 return true;
             }
         });

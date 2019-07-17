@@ -59,6 +59,17 @@ public class AboutFragment extends Fragment {
                 CustomTabs.openTab(getContext(), getResources().getString(R.string.github));
             }
         });
+
+        TextView twitterLink = view.findViewById(R.id.twitter_link);
+        content = new SpannableString(twitterLink.getText());
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+        twitterLink.setText(content);
+        twitterLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CustomTabs.openTab(getContext(), "https://twitter.com/Riksdagskollen");
+            }
+        });
         
         final AttributionPresenter attributionPresenter = new AttributionPresenter.Builder(getContext())
                 .addAttributions(

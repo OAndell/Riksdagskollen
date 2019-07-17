@@ -53,6 +53,36 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|left"
+            android:text="Twitter:"
+            android:textColor="?attr/mainTitleTextColor"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/twitter_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:gravity="center_vertical|left"
+            android:maxLines="2"
+            android:text="\@Riksdagskollen"
+            android:textColor="?attr/mainBodyTextColor"
+            android:textSize="15sp" />
+
+
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/show_licenses_button"
