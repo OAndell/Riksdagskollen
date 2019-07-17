@@ -47,6 +47,7 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         scrollHint = findViewById(R.id.scroll_hint);
 
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.setNavigationBarColor(RiksdagskollenApp.getColorFromAttribute(R.attr.mainBackgroundColor, this));

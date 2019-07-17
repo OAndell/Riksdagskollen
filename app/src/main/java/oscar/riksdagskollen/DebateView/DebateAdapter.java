@@ -30,6 +30,7 @@ import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.View.CircularImageView;
+import oscar.riksdagskollen.Util.View.DebateWebTvView;
 
 public class DebateAdapter extends RiksdagenViewHolderAdapter {
 
@@ -77,6 +78,7 @@ public class DebateAdapter extends RiksdagenViewHolderAdapter {
     void setSpeechDetail(Speech speech, String anf) {
         for (int i = 0; i < debateStatements.size(); i++) {
             if (debateStatements.get(i).getAnf_nummer().equals(anf)) {
+
                 debateStatements.get(i).setSpeech(speech);
                 notifyItemChanged(i + headers.size());
                 break;
@@ -161,6 +163,8 @@ public class DebateAdapter extends RiksdagenViewHolderAdapter {
         Context context;
         ProgressBar loadingView;
         LinearLayout speechInfoView;
+        DebateWebTvView webTvView;
+
 
         DebateViewHolderItem(View itemView, Context context) {
             super(itemView);
@@ -172,9 +176,14 @@ public class DebateAdapter extends RiksdagenViewHolderAdapter {
             speechInfoView = itemView.findViewById(R.id.debate_item_info);
             portrait = itemView.findViewById(R.id.debate_item_portrait);
             partyLogo = itemView.findViewById(R.id.debate_item_portrait_party_logo);
+            webTvView = itemView.findViewById(R.id.web_tv_view);
         }
 
+
         void bind(final DebateStatement debateStatement) {
+            if (webTvView != null && debateStatement.getWebTVUrl() != null) {
+                webTvView.loadUrl(debateStatement.getWebTVUrl());
+            }
             speakerName.setText(debateStatement.getTalare());
             time.setText(debateStatement.getAnf_klockslag());
             int drawableResource = CurrentParties.getParty(debateStatement.getParti()).getDrawableLogo();

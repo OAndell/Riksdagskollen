@@ -58,6 +58,7 @@ public class DebateViewPresenter implements DebateViewContract.Presenter, Protoc
         if (protocols.size() == 1) {
             model.setProtocolId(protocols.get(0).getId());
             for (DebateStatement debateStatement : model.getInitiatingDocument().getDebatt().getAnforande()) {
+                debateStatement.setWebTVUrl(createWebTVUrl(debateStatement));
                 model.getSpeech(debateStatement.getAnf_nummer(), this);
             }
         } else {
@@ -68,6 +69,26 @@ public class DebateViewPresenter implements DebateViewContract.Presenter, Protoc
     @Override
     public void onSpeechFetched(Speech speech, String anf) {
         view.setSpeechForAnforande(speech, anf);
+    }
+
+
+    private String createWebTVUrl(DebateStatement debateStatement) {
+
+        String start = debateStatement.getVideo_url().split("pos=")[1];
+        String end = "";
+        try {
+            int startSec = Integer.parseInt(start);
+            int endSec = startSec + Integer.parseInt(debateStatement.getAnf_sekunder());
+            end = Integer.toString(endSec);
+        } catch (NumberFormatException e) {
+            return "";
+        }
+
+        return String.format("http://www.riksdagen.se/views/pages/embedpage.aspx" +
+                        "?did=%s&start=%s&end=%s",
+                model.getInitiatingDocument().getId(),
+                start,
+                end);
     }
 
     @Override

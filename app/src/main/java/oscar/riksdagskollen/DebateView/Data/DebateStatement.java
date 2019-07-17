@@ -12,7 +12,26 @@ public class DebateStatement implements Parcelable {
     private String talare;
     private String anf_klockslag;
     private String tumnagel;
+    private String video_url;
+    private String anf_sekunder;
     private Speech speech;
+    private String webTVUrl;
+
+    public String getWebTVUrl() {
+        return webTVUrl;
+    }
+
+    public void setWebTVUrl(String webTVUrl) {
+        this.webTVUrl = webTVUrl;
+    }
+
+    public String getVideo_url() {
+        return video_url;
+    }
+
+    public String getAnf_sekunder() {
+        return anf_sekunder;
+    }
 
     public String getTumnagel() {
         return tumnagel;
@@ -67,7 +86,10 @@ public class DebateStatement implements Parcelable {
         dest.writeString(this.talare);
         dest.writeString(this.anf_klockslag);
         dest.writeString(this.tumnagel);
+        dest.writeString(this.video_url);
+        dest.writeString(this.anf_sekunder);
         dest.writeParcelable(this.speech, flags);
+        dest.writeString(this.webTVUrl);
     }
 
     protected DebateStatement(Parcel in) {
@@ -78,7 +100,10 @@ public class DebateStatement implements Parcelable {
         this.talare = in.readString();
         this.anf_klockslag = in.readString();
         this.tumnagel = in.readString();
+        this.video_url = in.readString();
+        this.anf_sekunder = in.readString();
         this.speech = in.readParcelable(Speech.class.getClassLoader());
+        this.webTVUrl = in.readString();
     }
 
     public static final Creator<DebateStatement> CREATOR = new Creator<DebateStatement>() {
