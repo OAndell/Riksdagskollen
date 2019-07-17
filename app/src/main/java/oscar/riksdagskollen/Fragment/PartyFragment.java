@@ -38,6 +38,8 @@ public class PartyFragment extends Fragment {
     private ViewPager viewPager;
     private int currentPage = 0;
     private int alpha = 255;
+    private MenuItem notif;
+    private MenuItem filter;
     private Menu menu;
 
     private static final String TAG = "Partyfragment";
@@ -55,10 +57,21 @@ public class PartyFragment extends Fragment {
 
     @Override
     public void onDetach() {
-        super.onDetach();
         tabLayout.setVisibility(View.GONE);
-        currentPage = 0;
-        updateMenuItemAlpha(0);
+        restoreMenuItems();
+        super.onDetach();
+    }
+
+    private void restoreMenuItems() {
+        if (filter != null) {
+            filter.getIcon().setAlpha(255);
+            filter.setEnabled(true);
+        }
+
+        if (notif != null) {
+            notif.getIcon().setAlpha(255);
+            notif.setEnabled(true);
+        }
     }
 
 
@@ -107,6 +120,8 @@ public class PartyFragment extends Fragment {
         if (RiksdagskollenApp.getInstance().getAlertManager().isAlertEnabledForParty(party.getID())) {
             menu.findItem(R.id.notification_menu_item).setIcon(R.drawable.ic_notification_enabled);
         }
+        this.filter = menu.findItem(R.id.menu_filter);
+        this.notif = menu.findItem(R.id.notification_menu_item);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -138,10 +153,9 @@ public class PartyFragment extends Fragment {
         });
     }
 
+
     private void updateMenuItemAlpha(float positionOffset) {
         if (menu == null) return;
-        MenuItem filter = menu.findItem(R.id.menu_filter);
-        MenuItem notif = menu.findItem(R.id.notification_menu_item);
 
         if (notif != null && filter != null) {
             int newAlpha = (int) (255 - positionOffset * 255 - 255 * currentPage);
