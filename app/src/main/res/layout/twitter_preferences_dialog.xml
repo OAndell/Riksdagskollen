@@ -11,12 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:textColor="?mainBodyTextColor"
         android:text="Ledamöter och Partier" />
 
     <CheckBox
         android:id="@+id/checkBox2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="?mainBodyTextColor"
         android:layout_margin="10dp"
         android:text="Endast Riksdagspartier" />
 
@@ -31,5 +33,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:textColor="?mainBodyTextColor"
         android:text="Inkludera Retweets" />
 </LinearLayout>
