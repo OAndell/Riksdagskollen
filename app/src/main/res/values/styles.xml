@@ -193,6 +193,7 @@
         <item name="colorControlActivated">?attr/buttonColor</item>
         <item name="android:background">?attr/mainBackgroundColor</item>
         <item name="android:textColor">?attr/mainTitleTextColor</item>
+        <item name="android:textColorPrimary">?attr/mainBodyTextColor</item>
         <item name="textColorAlertDialogListItem">?attr/mainBodyTextColor</item>
     </style>
 
