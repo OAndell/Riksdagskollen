@@ -183,7 +183,7 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 final AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom)
-                        .setTitle("Om Rikstagen på Twitter")
+                        .setTitle("Om Riksdagen på Twitter")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {

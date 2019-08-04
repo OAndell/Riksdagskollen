@@ -1,12 +1,10 @@
 package oscar.riksdagskollen.Activity;
 
-import android.arch.core.BuildConfig;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Point;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,6 +46,7 @@ import oscar.riksdagskollen.Util.Helper.AppBarStateChangeListener;
 import oscar.riksdagskollen.Util.Helper.CustomTabs;
 import oscar.riksdagskollen.Util.Helper.NotificationHelper;
 import oscar.riksdagskollen.Util.Helper.RiksdagskollenFragmentFactory;
+import oscar.riksdagskollen.Util.View.GiveFeedbackView;
 
 import static oscar.riksdagskollen.Util.Helper.NotificationHelper.NEWS_ITEM_URL_KEY;
 
@@ -421,14 +420,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void sendFeedback() {
-        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                "mailto", "oscar@andell.eu", null));
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Tankar kring Riksdagskollen");
-        emailIntent.putExtra(Intent.EXTRA_TEXT,
-                "\n\nSysteminformation:" +
-                        "\nApp-version: " + BuildConfig.VERSION_NAME +
-                        "\nSdk-version: " + Build.VERSION.SDK_INT);
-        startActivity(Intent.createChooser(emailIntent, "Skicka ett mail"));
+        final AlertDialog dialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom)
+                .setTitle("Ge oss feedback")
+                .setView(new GiveFeedbackView(this))
+                .setPositiveButton("Avbryt", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .create();
+        dialog.show();
     }
 
 

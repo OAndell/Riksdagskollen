@@ -188,6 +188,14 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
                 image.setVisibility(View.GONE);
             }
 
+            final Tweet tweetF = tweet;
+            authorView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CustomTabs.openTab(fragment.getContext(), "https://twitter.com/" + tweetF.getUser().getScreen_name());
+                }
+            });
+
 
             SpannableStringBuilder builder = new SpannableStringBuilder();
 
@@ -248,12 +256,6 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
                 }
             });
 
-            authorView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    CustomTabs.openTab(fragment.getContext(), "https://twitter.com/" + finalTweet.getUser().getScreen_name());
-                }
-            });
 
         }
 
