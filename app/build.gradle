@@ -21,9 +21,9 @@ android {
         applicationId "se.oandell.riksdagen"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 28
+        versionCode 29
 
-        versionName "2.12.1"
+        versionName "2.13.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
