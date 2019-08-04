@@ -219,7 +219,16 @@ public class TweetAdapter extends RiksdagenViewHolderAdapter {
                 final String url = matcher.group();
                 // Link to media, remove from tweet and set as link for image
                 if (tweet.hasMedia() && !tweetURLsContainsURL(tweet, url)) {
-                    builder.delete(matcher.start(), matcher.end());
+                    try {
+                        builder.delete(matcher.start(), matcher.end());
+                    } catch (Exception e) {
+                        // Quick fix if image url cannot be matched.
+                        //  Tweet that caused error:
+                        // SR-journalist om ungdomar som engagerar sig för klimatet och erbjuder konstruktiv lösning: "trams", "välbeställda ungdomar"
+                        //    (tweeten nu borttagen, från denna tråd:  https://t.co/HSBdHB6NLb
+                        System.out.println("Failed to match tweet image URL");
+                        e.printStackTrace();
+                    }
                     image.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
