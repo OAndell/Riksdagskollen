@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="4dp"
@@ -95,14 +94,6 @@
             android:layout_height="wrap_content"
             android:textColor="?debateTextColor"
             android:visibility="gone" />
-
-        <oscar.riksdagskollen.Util.View.DebateWebTvView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/web_tv_view"
-            tools:ignore="WebViewLayout">
-
-        </oscar.riksdagskollen.Util.View.DebateWebTvView>
 
     </LinearLayout>
 

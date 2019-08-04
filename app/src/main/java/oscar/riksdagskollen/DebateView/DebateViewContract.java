@@ -1,5 +1,6 @@
 package oscar.riksdagskollen.DebateView;
 
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import oscar.riksdagskollen.DebateView.Data.Speech;
@@ -44,6 +45,12 @@ public interface DebateViewContract {
         void hideScrollHint();
 
         void setSpeechForAnforande(Speech speech, String anfNummer);
+
+        void setUpWebTvView(PartyDocument initiatingDocument);
+
+        void loadDebate();
+
+        ConnectivityManager getConnectivityManager();
     }
 
     interface Presenter {

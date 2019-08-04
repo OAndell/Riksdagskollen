@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:id="@+id/show_web_tv_header"
+        android:orientation="horizontal"
+        android:weightSum="20">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="2dp"
+            android:layout_weight="17"
+            android:text="Visa debatten i Riksdagens Webb-tv"
+            android:textColor="?attr/mainTitleTextColor"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/web_tv_expand_icon"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_weight="3"
+            android:adjustViewBounds="true"
+            android:scaleType="center"
+            app:srcCompat="@drawable/ic_expand" />
+
+    </LinearLayout>
+
+
+    <oscar.riksdagskollen.Util.View.DebateWebTvView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/tv_view"
+        android:visibility="gone">
+
+    </oscar.riksdagskollen.Util.View.DebateWebTvView>
+
+
+</LinearLayout>

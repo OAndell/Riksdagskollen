@@ -1,5 +1,7 @@
 package oscar.riksdagskollen.DebateView;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import com.android.volley.VolleyError;
@@ -49,16 +51,24 @@ public class DebateViewPresenter implements DebateViewContract.Presenter, Protoc
             view.hideScrollHint();
         }
 
+        view.setUpWebTvView(model.getInitiatingDocument());
+        ConnectivityManager connManager = view.getConnectivityManager();
+        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        // To avoid unnecessary data usage, only pre-load if wifi is connected
+        if (mWifi.isConnected()) {
+            view.loadDebate();
+        }
 
         model.getProtocolForDate(this);
     }
+
 
     @Override
     public void onProtocolsFetched(List<Protocol> protocols) {
         if (protocols.size() == 1) {
             model.setProtocolId(protocols.get(0).getId());
             for (DebateStatement debateStatement : model.getInitiatingDocument().getDebatt().getAnforande()) {
-                debateStatement.setWebTVUrl(createWebTVUrl(debateStatement));
                 model.getSpeech(debateStatement.getAnf_nummer(), this);
             }
         } else {

@@ -1,5 +1,7 @@
 package oscar.riksdagskollen.DebateView;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,8 +27,10 @@ import oscar.riksdagskollen.DebateView.Data.DebateStatement;
 import oscar.riksdagskollen.DebateView.Data.Speech;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
+import oscar.riksdagskollen.Util.Helper.AnimUtil;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.RiksdagenCallback.OnDocumentHtmlViewLoadedCallback;
+import oscar.riksdagskollen.Util.View.DebateWebTvView;
 import oscar.riksdagskollen.Util.View.DocumentHtmlView;
 
 public class DebateActivity extends AppCompatActivity implements DebateViewContract.View {
@@ -32,9 +38,14 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
     private ViewGroup loadingView;
     private TextView debateLabel;
     private Button scrollHint;
+    private LinearLayout webTVHeader;
+    private DebateWebTvView debateWebTvView;
+    private ImageView expansionArrow;
     private DocumentHtmlView documentHtmlView;
     private DebateViewContract.Presenter presenter = new DebateViewPresenter(this);
     private DebateAdapter adapter;
+    private boolean isWebTVExpanded = false;
+    private boolean firstExpand = true;
 
 
     @Override
@@ -46,6 +57,9 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
         loadingView = findViewById(R.id.loading_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         scrollHint = findViewById(R.id.scroll_hint);
+        debateWebTvView = findViewById(R.id.tv_view);
+        webTVHeader = findViewById(R.id.show_web_tv_header);
+        expansionArrow = findViewById(R.id.web_tv_expand_icon);
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -105,6 +119,7 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
         recyclerView.setAdapter(adapter);
     }
 
+
     @Override
     public void showInitiatingDocument(PartyDocument initiatingDocument) {
         final View header = getLayoutInflater().inflate(R.layout.debate_document_header, null);
@@ -137,5 +152,47 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
     @Override
     public void setSpeechForAnforande(Speech speech, String anf) {
         adapter.setSpeechDetail(speech, anf);
+    }
+
+    @Override
+    public void setUpWebTvView(PartyDocument debateDocument) {
+        webTVHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isWebTVExpanded = !isWebTVExpanded;
+
+                if (isWebTVExpanded) expandWebTv();
+                else collapseWebTv();
+            }
+        });
+
+        debateWebTvView = findViewById(R.id.tv_view);
+        debateWebTvView.setDebate(debateDocument);
+    }
+
+    @Override
+    public void loadDebate() {
+        debateWebTvView.loadDebate();
+    }
+
+    @Override
+    public ConnectivityManager getConnectivityManager() {
+        return (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+    }
+
+    private void expandWebTv() {
+        if (firstExpand) {
+            loadDebate();
+            firstExpand = false;
+        }
+        AnimUtil.expand(debateWebTvView, null);
+        int rotationAngle = 180;  //toggle
+        expansionArrow.animate().rotation(rotationAngle).setDuration(200).start();
+    }
+
+    private void collapseWebTv() {
+        AnimUtil.collapse(debateWebTvView, null);
+        int rotationAngle = 0;  //toggle
+        expansionArrow.animate().rotation(rotationAngle).setDuration(200).start();
     }
 }

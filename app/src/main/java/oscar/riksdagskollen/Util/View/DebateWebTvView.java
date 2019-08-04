@@ -10,36 +10,43 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import oscar.riksdagskollen.DebateView.Data.DebateStatement;
+import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.RiksdagenCallback.OnDocumentHtmlViewLoadedCallback;
 
 public class DebateWebTvView extends WebView {
 
-    private DebateStatement debateStatement;
+    private PartyDocument debate;
     private Context context;
     private OnDocumentHtmlViewLoadedCallback loadedCallack;
-
-
-    public DebateWebTvView(Context context, DebateStatement debateStatement) {
-        super(context);
-        this.context = context;
-        this.debateStatement = debateStatement;
-        setupWebView();
-    }
 
     public DebateWebTvView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setupWebView();
     }
 
-    public void setDebateStatement(DebateStatement debateStatement) {
-        this.debateStatement = debateStatement;
+    public void setDebate(PartyDocument debate) {
+        this.debate = debate;
         setupWebView();
     }
 
 
     public void setLoadedCallack(OnDocumentHtmlViewLoadedCallback loadedCallack) {
         this.loadedCallack = loadedCallack;
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+    }
+
+    public void loadDebate() {
+        loadUrl(getDebateURL());
+    }
+
+    public String getDebateURL() {
+        return String.format("http://www.riksdagen.se/views/pages/embedpage.aspx" +
+                        "?did=%s",
+                debate.getId());
     }
 
     private void setupWebView() {
