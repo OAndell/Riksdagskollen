@@ -33,7 +33,7 @@ import oscar.riksdagskollen.Util.RiksdagenCallback.OnDocumentHtmlViewLoadedCallb
 import oscar.riksdagskollen.Util.View.DebateWebTvView;
 import oscar.riksdagskollen.Util.View.DocumentHtmlView;
 
-public class DebateActivity extends AppCompatActivity implements DebateViewContract.View {
+public class DebateActivity extends AppCompatActivity implements DebateViewContract.View, DebateAdapter.WebTvListener {
     private RecyclerView recyclerView;
     private ViewGroup loadingView;
     private TextView debateLabel;
@@ -117,6 +117,7 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
         List<DebateStatement> debateStatements = Arrays.asList(speeches);
         adapter = new DebateAdapter(this, new ArrayList<>(debateStatements), initiatorId);
         recyclerView.setAdapter(adapter);
+        adapter.setWebTvListener(this);
     }
 
 
@@ -181,6 +182,8 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
     }
 
     private void expandWebTv() {
+        adapter.setShowPlayLabel(true);
+        adapter.notifyDataSetChanged();
         if (firstExpand) {
             loadDebate();
             firstExpand = false;
@@ -191,8 +194,19 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
     }
 
     private void collapseWebTv() {
+        adapter.setShowPlayLabel(false);
+        adapter.notifyDataSetChanged();
         AnimUtil.collapse(debateWebTvView, null);
         int rotationAngle = 0;  //toggle
         expansionArrow.animate().rotation(rotationAngle).setDuration(200).start();
+    }
+
+    private void playDebateFromSecond(int start) {
+        if (debateWebTvView != null && isWebTVExpanded) debateWebTvView.setCurrentTime(start);
+    }
+
+    @Override
+    public void onPlayLabelPressed(int second) {
+        playDebateFromSecond(second);
     }
 }

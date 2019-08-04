@@ -36,9 +36,12 @@ public class DebateAdapter extends RiksdagenViewHolderAdapter {
     private Context context;
     private ArrayList<DebateStatement> debateStatements;
     private String debateInitiatior;
+    private boolean showPlayLabel = false;
 
     private static final int TYPE_OUTGOING = 444;
     private static final int TYPE_INCOMING = 555;
+
+    private WebTvListener webTvListener;
 
     DebateAdapter(Context context, ArrayList<DebateStatement> speeches, String debateInitiator) {
         super(new OnItemClickListener() {
@@ -52,6 +55,13 @@ public class DebateAdapter extends RiksdagenViewHolderAdapter {
         this.debateInitiatior = debateInitiator;
     }
 
+    public void setShowPlayLabel(boolean showPlayLabel) {
+        this.showPlayLabel = showPlayLabel;
+    }
+
+    public void setWebTvListener(WebTvListener webTvListener) {
+        this.webTvListener = webTvListener;
+    }
 
     @NonNull
     @Override
@@ -130,8 +140,6 @@ public class DebateAdapter extends RiksdagenViewHolderAdapter {
     }
 
 
-
-
     @Override
     public int getItemCount() {
         return debateStatements.size();
@@ -152,10 +160,12 @@ public class DebateAdapter extends RiksdagenViewHolderAdapter {
 
     }
 
-    static class DebateViewHolderItem extends RecyclerView.ViewHolder {
+    class DebateViewHolderItem extends RecyclerView.ViewHolder {
         TextView speakerName;
         TextView time;
         TextView speech;
+        TextView playLabel;
+
         CircularImageView portrait;
         ImageView partyLogo;
         Context context;
@@ -173,6 +183,7 @@ public class DebateAdapter extends RiksdagenViewHolderAdapter {
             speechInfoView = itemView.findViewById(R.id.debate_item_info);
             portrait = itemView.findViewById(R.id.debate_item_portrait);
             partyLogo = itemView.findViewById(R.id.debate_item_portrait_party_logo);
+            playLabel = itemView.findViewById(R.id.play_statement);
         }
 
 
@@ -192,6 +203,25 @@ public class DebateAdapter extends RiksdagenViewHolderAdapter {
             if (speechDetail != null) {
                 setLoading(false);
                 speech.setText(Html.fromHtml(cleanupSpeech(speechDetail.getAnforandetext())));
+            }
+            int visibility = showPlayLabel ? View.VISIBLE : View.GONE;
+            playLabel.setVisibility(visibility);
+
+            if (showPlayLabel) {
+                playLabel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (webTvListener != null) {
+                            String start = debateStatement.getVideo_url().split("pos=")[1];
+                            try {
+                                int startSec = Integer.parseInt(start);
+                                webTvListener.onPlayLabelPressed(startSec);
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
             }
 
             RiksdagskollenApp.getInstance().getRiksdagenAPIManager()
@@ -247,6 +277,10 @@ public class DebateAdapter extends RiksdagenViewHolderAdapter {
         }
 
 
+    }
+
+    interface WebTvListener {
+        void onPlayLabelPressed(int second);
     }
 
 

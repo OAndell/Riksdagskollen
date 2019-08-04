@@ -18,6 +18,7 @@ public class DebateWebTvView extends WebView {
     private PartyDocument debate;
     private Context context;
     private OnDocumentHtmlViewLoadedCallback loadedCallack;
+    private String videoSelector = "document.querySelector(\"body > div.row.ng-scope > div > div > div > div > div.video-include.ng-scope > div:nth-child(4) > video\")";
 
     public DebateWebTvView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -47,6 +48,13 @@ public class DebateWebTvView extends WebView {
         return String.format("http://www.riksdagen.se/views/pages/embedpage.aspx" +
                         "?did=%s",
                 debate.getId());
+    }
+
+    public void setCurrentTime(int seconds) {
+        this.loadUrl("javascript:(function(){" +
+                "v = " + videoSelector + "; " +
+                "v.currentTime = " + seconds + "; " +
+                " })()");
     }
 
     private void setupWebView() {
