@@ -4,13 +4,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:paddingRight="16dp"
+    android:paddingLeft="16dp">
 
     <LinearLayout
+        android:id="@+id/show_web_tv_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
-        android:id="@+id/show_web_tv_header"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:weightSum="20">
 
@@ -18,8 +20,7 @@
             android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginTop="2dp"
+            android:layout_gravity="start|center_vertical"
             android:layout_weight="17"
             android:text="Visa debatten i Riksdagens Webb-tv"
             android:textColor="?attr/mainTitleTextColor"
@@ -29,9 +30,9 @@
         <ImageView
             android:id="@+id/web_tv_expand_icon"
             android:layout_width="0dp"
-            android:layout_height="25dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
             android:layout_weight="3"
-            android:layout_marginTop="6dp"
             android:adjustViewBounds="true"
             android:scaleType="center"
             app:srcCompat="@drawable/ic_expand" />

@@ -54,6 +54,7 @@ public class DebateWebTvView extends WebView {
         this.loadUrl("javascript:(function(){" +
                 "v = " + videoSelector + "; " +
                 "v.currentTime = " + seconds + "; " +
+                "v.play();" +
                 " })()");
     }
 

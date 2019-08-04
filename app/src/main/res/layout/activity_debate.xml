@@ -5,13 +5,13 @@
     android:background="?attr/mainBackgroundColor"
     android:orientation="vertical">
 
-    <include layout="@layout/riksdagen_toolbar"></include>
+    <include layout="@layout/riksdagen_toolbar" />
 
     <include
         layout="@layout/loading_view"
-        android:visibility="visible"></include>
+        android:visibility="visible" />
 
-    <include layout="@layout/web_tv_header"></include>
+    <include layout="@layout/web_tv_header" />
 
     <FrameLayout
         android:layout_width="match_parent"
