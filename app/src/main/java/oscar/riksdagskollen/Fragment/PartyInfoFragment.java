@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
@@ -42,11 +42,17 @@ public class PartyInfoFragment extends Fragment {
     private static final String PARTY_INFO_PREFERENCES = "party_info";
     private static final String SUMMARY_SUFFIX = "_summary";
     private static final String IDEOLOGY_SUFFIX = "_ideology";
+    private WikiPartyInfoExtractor wikiResponse = null;
+    private ArrayList<Representative> leaders = new ArrayList<>();
+    private FlexboxLayout leadersLayout;
+    private final Fragment fragment = this;
+    private ViewGroup loadingView;
+    private final RiksdagskollenApp app = RiksdagskollenApp.getInstance();
 
 
-    public static PartyInfoFragment newInstance(Party party){
+    public static PartyInfoFragment newInstance(Party party) {
         Bundle args = new Bundle();
-        args.putParcelable("party",party);
+        args.putParcelable("party", party);
         PartyInfoFragment newInstance = new PartyInfoFragment();
         newInstance.setArguments(args);
         return newInstance;
@@ -56,111 +62,75 @@ public class PartyInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.party = getArguments().getParcelable("party");
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(party.getName());
-        return inflater.inflate(R.layout.fragment_party_info,null);
+        return inflater.inflate(R.layout.fragment_party_info, container, false);
     }
 
 
-
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        this.party = getArguments().getParcelable("party");
-
-        final ViewGroup loadingView = view.findViewById(R.id.loading_view);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        loadingView = view.findViewById(R.id.loading_view);
 
         //Set party logo
         ImageView partyLogoView = view.findViewById(R.id.party_logo);
         partyLogoView.setImageResource(party.getDrawableLogo());
 
         //Fill view with party leaders
-        final FlexboxLayout leadersLayout = view.findViewById(R.id.leadersLayout);
-        final RiksdagskollenApp app = RiksdagskollenApp.getInstance();
-        final Fragment fragment = this;
         final TextView partyWikiInfo = view.findViewById(R.id.about_party_wiki);
         final TextView source = view.findViewById(R.id.source_tv);
         final TextView ideologyView = view.findViewById(R.id.ideology);
+        leadersLayout = view.findViewById(R.id.leadersLayout);
 
         partyWikiInfo.setText(getCachedWikiInfo(getSummaryKey()));
         ideologyView.setText(getCachedWikiInfo(getIdeologyKey()));
 
+        if (wikiResponse == null) {
+            app.getRequestManager().getDownloadString(party.getWikiUrl(), new StringRequestCallback() {
+                @Override
+                public void onResponse(String response) {
+                    wikiResponse = new WikiPartyInfoExtractor(response);
+                    partyWikiInfo.setText(wikiResponse.getPartySummary());
+                    source.setText("Källa: Wikipedia\n" + wikiResponse.getLastUpdated());
+                    ideologyView.setText(wikiResponse.getPartyIdeology());
+                    saveWikiResults(wikiResponse);
+                }
 
-        app.getRequestManager().getDownloadString(party.getWikiUrl(), new StringRequestCallback() {
-            @Override
-            public void onResponse(String response) {
-                WikiPartyInfoExtractor partyInfoExtractor = new WikiPartyInfoExtractor(response);
-                partyWikiInfo.setText(partyInfoExtractor.getPartySummary());
-                source.setText("Källa: Wikipedia\n" + partyInfoExtractor.getLastUpdated());
-                ideologyView.setText(partyInfoExtractor.getPartyIdeology());
-                saveWikiResults(partyInfoExtractor);
-            }
+                @Override
+                public void onFail(VolleyError error) {
 
-            @Override
-            public void onFail(VolleyError error) {
-
-            }
-        });
-
-        // Hack to fill the view, since flexboxlayput does not support min-height
-        for (int i = 0; i < 4; i++) {
-            View portraitView = LayoutInflater.from(getActivity()).inflate(R.layout.intressent_layout_big, null);
-            leadersLayout.addView(portraitView);
+                }
+            });
+        } else {
+            partyWikiInfo.setText(wikiResponse.getPartySummary());
+            source.setText("Källa: Wikipedia\n" + wikiResponse.getLastUpdated());
+            ideologyView.setText(wikiResponse.getPartyIdeology());
         }
 
 
-        app.getRiksdagenAPIManager().getPartyLeaders(party.getName(), new PartyLeadersCallback() {
-            @Override
-            public void onPersonFetched(final ArrayList<Representative> leaders) {
-                leadersLayout.removeAllViews();
-                for (int i =0; i < leaders.size(); i++) {
-                    final Representative tmpRep = leaders.get(i);
-                    if (getActivity() == null) break;
+        // Hack to fill the view, since flexboxlayput does not support min-height
 
-                    final View portraitView = LayoutInflater.from(getActivity()).inflate(R.layout.intressent_layout_big, null);
-                    final ImageView portrait = portraitView.findViewById(R.id.intressent_portait);
+        for (int i = 0; i < 5; i++) {
+            View portraitView = LayoutInflater.from(getActivity()).inflate(R.layout.intressent_layout_big, leadersLayout, false);
+            leadersLayout.addView(portraitView);
+        }
 
-                    leadersLayout.addView(portraitView);
+        if (this.leaders.isEmpty()) {
+            app.getRiksdagenAPIManager().getPartyLeaders(party.getName(), new PartyLeadersCallback() {
+                @Override
+                public void onPersonFetched(final ArrayList<Representative> downloadedLeaders) {
+                    leaders.clear();
+                    leaders.addAll(downloadedLeaders);
+                    setupLeaderView();
+                }
 
-                    app.getRiksdagenAPIManager().getRepresentative(tmpRep.getTilltalsnamn(), tmpRep.getEfternamn(), party.getID(), tmpRep.getSourceid(), new RepresentativeCallback() {
-                        @Override
-                        public void onPersonFetched(final Representative representative) {
-
-                            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                                portrait.setImageResource(R.drawable.ic_person);
-                            }
-                            if (fragment.getActivity() != null) {
-                                Glide
-                                        .with(fragment)
-                                        .load(representative.getBild_url_192())
-                                        .into(portrait);
-                            }
-
-                            portrait.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Intent repDetailsIntent = new Intent(getContext(), RepresentativeDetailActivity.class);
-                                    repDetailsIntent.putExtra("representative", representative);
-                                    startActivity(repDetailsIntent);
-                                }
-                            });
-                            TextView nameTv = portraitView.findViewById(R.id.intressent_name);
-                            nameTv.setText(representative.getTilltalsnamn() + " " + representative.getEfternamn() + "\n" + representative.getDescriptiveRole());
-                        }
-
-                        @Override
-                        public void onFail(VolleyError error) {
-                            portraitView.setVisibility(View.GONE);
-                        }
-                    });
+                @Override
+                public void onFail(VolleyError error) {
 
                 }
-                loadingView.setVisibility(View.GONE);
-            }
+            });
+        } else {
+            setupLeaderView();
+        }
 
-            @Override
-            public void onFail(VolleyError error) {
-
-            }
-        });
 
         //ideology
 
@@ -176,7 +146,53 @@ public class PartyInfoFragment extends Fragment {
             }
         });
 
+    }
 
+    private void setupLeaderView() {
+        leadersLayout.removeAllViews();
+        for (int i = 0; i < leaders.size(); i++) {
+            final Representative tmpRep = leaders.get(i);
+            if (getActivity() == null) break;
+
+            final View portraitView = LayoutInflater.from(getActivity()).inflate(R.layout.intressent_layout_big, null);
+            final ImageView portrait = portraitView.findViewById(R.id.intressent_portait);
+
+            leadersLayout.addView(portraitView);
+
+            app.getRiksdagenAPIManager().getRepresentative(tmpRep.getTilltalsnamn(), tmpRep.getEfternamn(), party.getID(), tmpRep.getSourceid(), new RepresentativeCallback() {
+                @Override
+                public void onPersonFetched(final Representative representative) {
+
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                        portrait.setImageResource(R.drawable.ic_person);
+                    }
+                    if (fragment.getActivity() != null) {
+                        Glide
+                                .with(fragment)
+                                .load(representative.getBild_url_192())
+                                .into(portrait);
+                    }
+
+                    portrait.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent repDetailsIntent = new Intent(getContext(), RepresentativeDetailActivity.class);
+                            repDetailsIntent.putExtra("representative", representative);
+                            startActivity(repDetailsIntent);
+                        }
+                    });
+                    TextView nameTv = portraitView.findViewById(R.id.intressent_name);
+                    nameTv.setText(representative.getTilltalsnamn() + " " + representative.getEfternamn() + "\n" + representative.getDescriptiveRole());
+                }
+
+                @Override
+                public void onFail(VolleyError error) {
+                    portraitView.setVisibility(View.GONE);
+                }
+            });
+
+        }
+        loadingView.setVisibility(View.GONE);
     }
 
     private String getCachedWikiInfo(String key) {
@@ -188,6 +204,12 @@ public class PartyInfoFragment extends Fragment {
             info = party.getIdeology();
         }
         return info;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putInt("dummy", 1);
+        super.onSaveInstanceState(outState);
     }
 
     private void saveWikiResults(WikiPartyInfoExtractor infoExtractor) {

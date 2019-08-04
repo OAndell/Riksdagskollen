@@ -50,7 +50,6 @@ public class PartyFragment extends Fragment {
         args.putParcelable("party",party);
         PartyFragment newInstance = new PartyFragment();
         newInstance.setArguments(args);
-        newInstance.setRetainInstance(true);
         return newInstance;
     }
 
@@ -91,6 +90,7 @@ public class PartyFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_party,container, false);
         // Setting ViewPager for each Tabs
         viewPager = view.findViewById(R.id.viewpager);
+        viewPager.setOffscreenPageLimit(4);
         setupViewPager();
         // Set Tabs inside Toolbar
         tabLayout = getActivity().findViewById(R.id.result_tabs);
