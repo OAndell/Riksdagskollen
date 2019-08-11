@@ -2,15 +2,16 @@ package oscar.riksdagskollen.Util.View;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
-import android.support.graphics.drawable.Animatable2Compat;
-import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+import androidx.vectordrawable.graphics.drawable.Animatable2Compat;
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
+
 import oscar.riksdagskollen.R;
 
-public class LoadingView extends android.support.v7.widget.AppCompatImageView {
+public class LoadingView extends androidx.appcompat.widget.AppCompatImageView {
     private Context context;
 
     public LoadingView(Context context) {

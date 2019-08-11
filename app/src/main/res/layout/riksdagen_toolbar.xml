@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.AppBarLayout android:layout_width="match_parent"
+<com.google.android.material.appbar.AppBarLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:theme="@style/AppTheme.AppBarOverlay"
@@ -8,7 +8,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <android.support.design.widget.CollapsingToolbarLayout
+    <com.google.android.material.appbar.CollapsingToolbarLayout
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
         android:layout_width="match_parent"
         app:titleEnabled="false"
@@ -23,7 +23,7 @@
         android:id="@+id/collapsing_layout"
         android:fitsSystemWindows="true">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -35,7 +35,7 @@
             style="@style/ToolbarStyle"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -49,7 +49,7 @@
             android:id="@+id/rep_header_layout"
             layout="@layout/representative_header_layout" />
 
-    </android.support.design.widget.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     <oscar.riksdagskollen.Util.Helper.CustomTabLayout
         android:id="@+id/result_tabs"
@@ -64,4 +64,4 @@
         app:tabGravity="fill"
         app:tabMode="fixed" />
 
-</android.support.design.widget.AppBarLayout>
+</com.google.android.material.appbar.AppBarLayout>

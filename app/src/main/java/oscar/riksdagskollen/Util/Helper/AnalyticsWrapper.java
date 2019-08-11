@@ -3,7 +3,8 @@ package oscar.riksdagskollen.Util.Helper;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 public interface AnalyticsWrapper {
 

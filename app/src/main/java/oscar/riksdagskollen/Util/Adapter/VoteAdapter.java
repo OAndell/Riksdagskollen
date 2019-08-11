@@ -2,10 +2,6 @@ package oscar.riksdagskollen.Util.Adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.v7.util.SortedList;
-import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +10,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SortedList;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;

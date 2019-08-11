@@ -6,6 +6,21 @@
     android:paddingLeft="10dp"
     android:paddingRight="50dp">
 
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ledamöter och Partier" />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Endast Riksdagspartier" />
+    </RadioGroup>
+
     <CheckBox
         android:id="@+id/checkBox1"
         android:layout_width="match_parent"

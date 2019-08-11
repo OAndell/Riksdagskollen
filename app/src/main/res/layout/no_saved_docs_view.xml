@@ -15,7 +15,7 @@
         android:layout_gravity="center_horizontal"
         android:text="Du har inga sparade dokument ännu. Klicka på stjärnan längst upp när du läser ett partidokument du vill spara" />
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="160dp"
         android:layout_height="160dp"
         android:layout_gravity="center_horizontal"

@@ -15,10 +15,11 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
-public class CircularImageView extends android.support.v7.widget.AppCompatImageView {
+import androidx.annotation.Nullable;
+
+public class CircularImageView extends androidx.appcompat.widget.AppCompatImageView {
     Context mContext;
 
     public CircularImageView(Context context) {

@@ -2,8 +2,9 @@ package oscar.riksdagskollen.Util.Job;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.android.volley.VolleyError;
 import com.evernote.android.job.Job;

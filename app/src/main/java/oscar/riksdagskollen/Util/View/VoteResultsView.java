@@ -2,8 +2,9 @@ package oscar.riksdagskollen.Util.View;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
 import android.widget.LinearLayout;
+
+import androidx.core.content.ContextCompat;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.XAxis;

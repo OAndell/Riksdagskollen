@@ -1,8 +1,9 @@
 package oscar.riksdagskollen.Util.Helper;
 
 import android.content.Context;
-import android.support.design.widget.TabLayout;
 import android.util.AttributeSet;
+
+import com.google.android.material.tabs.TabLayout;
 
 import java.lang.reflect.Field;
 

@@ -1,8 +1,9 @@
 package oscar.riksdagskollen.Manager;
 
 import android.graphics.Bitmap;
-import android.support.v4.util.LruCache;
 import android.util.Log;
+
+import androidx.collection.LruCache;
 
 import com.android.volley.Cache;
 import com.android.volley.Network;

@@ -1,6 +1,6 @@
 package oscar.riksdagskollen.Util.Helper;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 import java.lang.ref.SoftReference;
 

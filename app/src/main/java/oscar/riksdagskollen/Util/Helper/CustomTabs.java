@@ -12,11 +12,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.annotation.ColorInt;
-import android.support.customtabs.CustomTabsIntent;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.TypedValue;
 import android.widget.Toast;
+
+import androidx.annotation.ColorInt;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import oscar.riksdagskollen.R;
 
