@@ -25,10 +25,10 @@ import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
 import oscar.riksdagskollen.DebateView.Data.DebateStatement;
 import oscar.riksdagskollen.DebateView.Data.Speech;
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.RepresentativeList.data.Representative;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
-import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.View.CircularImageView;
 

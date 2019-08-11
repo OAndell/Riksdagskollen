@@ -25,11 +25,11 @@ import java.util.ArrayList;
 
 import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.RepresentativeList.data.Representative;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.CustomTabs;
 import oscar.riksdagskollen.Util.Helper.WikiPartyInfoExtractor;
 import oscar.riksdagskollen.Util.JSONModel.Party;
-import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyLeadersCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;

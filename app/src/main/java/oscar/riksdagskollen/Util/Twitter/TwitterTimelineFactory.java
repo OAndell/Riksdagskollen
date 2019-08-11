@@ -1,9 +1,9 @@
 package oscar.riksdagskollen.Util.Twitter;
 
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.RepresentativeList.data.Representative;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.JSONModel.Party;
-import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 
 public class TwitterTimelineFactory {
 

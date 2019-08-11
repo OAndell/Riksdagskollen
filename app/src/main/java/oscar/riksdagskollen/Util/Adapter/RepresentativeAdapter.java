@@ -18,8 +18,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.RepresentativeList.data.Representative;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
-import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.View.CircularImageView;
 
 /**

@@ -27,11 +27,11 @@ import oscar.riksdagskollen.Activity.DocumentReaderActivity;
 import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
 import oscar.riksdagskollen.Manager.RiksdagenAPIManager;
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.RepresentativeList.data.Representative;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.PartyListViewholderAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
-import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
 

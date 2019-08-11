@@ -44,7 +44,7 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_party_list,null);
+        View view = inflater.inflate(R.layout.fragment_autoloading_list, null);
         recyclerView = view.findViewById(R.id.recycler_view);
         adapter = getAdapter();
         recyclerView.setAdapter(adapter);
@@ -178,7 +178,7 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         }
     }
 
-    RecyclerView getRecyclerView() {
+    protected RecyclerView getRecyclerView() {
         return recyclerView;
     }
 

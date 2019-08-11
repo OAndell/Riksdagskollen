@@ -21,11 +21,11 @@ import java.util.Comparator;
 import java.util.List;
 
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.RepresentativeList.data.Representative;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.JSONModel.DokIntressent;
 import oscar.riksdagskollen.Util.JSONModel.Intressent;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
-import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.View.CircularImageView;
 

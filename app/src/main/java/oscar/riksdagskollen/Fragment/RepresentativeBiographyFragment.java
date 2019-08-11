@@ -15,8 +15,8 @@ import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 
 import oscar.riksdagskollen.R;
+import oscar.riksdagskollen.RepresentativeList.data.Representative;
 import oscar.riksdagskollen.Util.Helper.CustomTabs;
-import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 
 /**
  * Created by oscar on 2018-09-28.

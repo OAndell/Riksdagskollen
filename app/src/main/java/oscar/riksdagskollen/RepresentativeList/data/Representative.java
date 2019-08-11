@@ -1,10 +1,15 @@
-package oscar.riksdagskollen.Util.JSONModel.RepresentativeModels;
+package oscar.riksdagskollen.RepresentativeList.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeInfo;
+import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeInfoList;
+import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeMission;
+import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeMissionList;
 
 /**
  * Created by oscar on 2018-03-27.
@@ -208,10 +213,11 @@ public class Representative implements Parcelable {
     private String getCurrentPartyRole() {
         if (personuppdrag.getUppdrag().size() == 0) return null;
         for (RepresentativeMission mission : personuppdrag.getUppdrag()) {
-            if (mission.typ.equals("partiuppdrag") && mission.tom == null) {
+            if (mission.getTyp().equals("partiuppdrag") && mission.getTom() == null) {
                 // Status can be "active" or "inactive" etc
-                if (mission.status != null) return mission.status + " " + mission.roll_kod;
-                return mission.roll_kod;
+                if (mission.getStatus() != null)
+                    return mission.getStatus() + " " + mission.getRoll_kod();
+                return mission.getRoll_kod();
             }
         }
         // No current party role
@@ -251,17 +257,19 @@ public class Representative implements Parcelable {
     private String getCurrentOrMostRecentRole() {
         if (personuppdrag.getUppdrag().size() == 0) return "";
         for (RepresentativeMission mission : personuppdrag.getUppdrag()) {
-            if (mission.tom == null) {
+            if (mission.getTom() == null) {
                 // Status can be "active" or "inactive" etc
-                if (mission.status != null) return mission.status + " " + mission.roll_kod;
-                return mission.roll_kod;
+                if (mission.getStatus() != null)
+                    return mission.getStatus() + " " + mission.getRoll_kod();
+                return mission.getRoll_kod();
             }
         }
 
         // If all else fails, just return the first role in the list
         RepresentativeMission mostRecent = personuppdrag.getUppdrag().get(0);
-        if (mostRecent.status != null) return mostRecent.status + " " + mostRecent.roll_kod;
-        return mostRecent.roll_kod;
+        if (mostRecent.getStatus() != null)
+            return mostRecent.getStatus() + " " + mostRecent.getRoll_kod();
+        return mostRecent.getRoll_kod();
     }
 
     public ArrayList<RepresentativeMission> getPersonuppdrag() {

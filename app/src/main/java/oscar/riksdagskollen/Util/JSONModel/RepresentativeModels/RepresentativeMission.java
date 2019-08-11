@@ -46,11 +46,35 @@ public class RepresentativeMission implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.organ_kod);
-        dest.writeString(this.roll_kod);
-        dest.writeString(this.status);
-        dest.writeString(this.typ);
-        dest.writeString(this.from);
-        dest.writeString(this.tom);
+        dest.writeString(this.getOrgan_kod());
+        dest.writeString(this.getRoll_kod());
+        dest.writeString(this.getStatus());
+        dest.writeString(this.getTyp());
+        dest.writeString(this.getFrom());
+        dest.writeString(this.getTom());
+    }
+
+    public String getOrgan_kod() {
+        return organ_kod;
+    }
+
+    public String getRoll_kod() {
+        return roll_kod;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getTyp() {
+        return typ;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public String getTom() {
+        return tom;
     }
 }

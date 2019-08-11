@@ -4,7 +4,7 @@ import com.android.volley.VolleyError;
 
 import java.util.ArrayList;
 
-import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
+import oscar.riksdagskollen.RepresentativeList.data.Representative;
 
 /**
  * Created by oscar on 2018-08-27.

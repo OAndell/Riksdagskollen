@@ -9,8 +9,8 @@ import com.evernote.android.job.JobRequest;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+import oscar.riksdagskollen.RepresentativeList.data.Representative;
 import oscar.riksdagskollen.RiksdagskollenApp;
-import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.Representative;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeListCallback;
 
 /**

@@ -10,12 +10,12 @@ import oscar.riksdagskollen.Fragment.DecisionsListFragment;
 import oscar.riksdagskollen.Fragment.PartyFragment;
 import oscar.riksdagskollen.Fragment.PartyListFragment;
 import oscar.riksdagskollen.Fragment.ProtocolListFragment;
-import oscar.riksdagskollen.Fragment.RepresentativeListFragment;
 import oscar.riksdagskollen.Fragment.SavedDocumentsFragment;
 import oscar.riksdagskollen.Fragment.SearchListFragment;
 import oscar.riksdagskollen.Fragment.TwitterListFragment;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
 import oscar.riksdagskollen.News.CurrentNewsListFragment;
+import oscar.riksdagskollen.RepresentativeList.RepresentativeListFragment;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 
