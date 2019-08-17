@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity
 
         if (incoming.hasExtra(NotificationHelper.DOCUMENT_KEY)) {
             Intent docIntent = new Intent(this, DocumentReaderActivity.class);
-            docIntent.putExtra("document", incoming.getParcelableExtra("document"));
+            docIntent.putExtra("document", (Bundle) incoming.getParcelableExtra("document"));
             startActivity(docIntent);
         } else if (incoming.hasExtra(NotificationHelper.SECTION_NAME_KEY)) {
             switch (incoming.getStringExtra(NotificationHelper.SECTION_NAME_KEY)) {
