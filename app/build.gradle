@@ -51,6 +51,7 @@ android {
             buildConfigField 'String', "TwitterApiKey", TWITTER_API_KEY
         }
         fdroid {
+            buildConfigField('String', 'TwitterApiKey', '"Dummy key, not used"')
             dimension 'version'
             buildConfigField 'String', "TwitterApiKey", TWITTER_API_KEY
         }

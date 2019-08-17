@@ -20,6 +20,7 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import oscar.riksdagskollen.BuildConfig;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.CustomTabLayout;
@@ -133,7 +134,10 @@ public class PartyFragment extends Fragment {
         adapter.addFragment(listFragment, "Flöde");
         adapter.addFragment(infoFragment, "Parti");
         adapter.addFragment(representativeFragment,"Ledamöter");
-        adapter.addFragment(twitterListFragment, "Twitter");
+        // Only have twitter on play version
+        if (BuildConfig.FLAVOR.equalsIgnoreCase("play")) {
+            adapter.addFragment(twitterListFragment, "Twitter");
+        }
 
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
