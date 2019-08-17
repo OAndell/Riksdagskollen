@@ -8,34 +8,24 @@
 
     <RadioGroup
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:id="@+id/twitter_pref_radio_group">
 
         <RadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ledamöter och Partier" />
+            android:id="@+id/rb_all"
+            android:text="Ledamöter och Partier"
+            android:textColor="?mainBodyTextColor" />
 
         <RadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Endast Riksdagspartier" />
+            android:id="@+id/rb_parties"
+            android:text="Endast Riksdagspartier"
+            android:textColor="?mainBodyTextColor" />
     </RadioGroup>
-
-    <CheckBox
-        android:id="@+id/checkBox1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:textColor="?mainBodyTextColor"
-        android:text="Ledamöter och Partier" />
-
-    <CheckBox
-        android:id="@+id/checkBox2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="?mainBodyTextColor"
-        android:layout_margin="10dp"
-        android:text="Endast Riksdagspartier" />
 
     <View
         android:id="@+id/divider2"

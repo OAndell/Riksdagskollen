@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.RadioGroup;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -73,7 +73,6 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
         twitterTimeline = TwitterTimelineFactory.getTwitterList(preferredList);
         boolean inculdeRT = preferences.getBoolean(PREFERENCE_RETWEET, true);
         twitterTimeline.setIncludeRT(inculdeRT);
-
     }
 
 
@@ -209,40 +208,21 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
         final int prefAll = TwitterTimelineFactory.LIST_RIKSDAGEN_ALL;
         final int prefParties = TwitterTimelineFactory.LIST_RIKSDAGEN_PARTIES;
 
-        final CheckBox optionAll = dialogView.findViewById(R.id.checkBox1);
-        final CheckBox optionParties = dialogView.findViewById(R.id.checkBox2);
-        CheckBox optionRetweet = dialogView.findViewById(R.id.checkBox3);
+        final RadioGroup radioGroup = dialogView.findViewById(R.id.twitter_pref_radio_group);
+        if (preferences.getInt(PREFERENCE_LIST, prefAll) == prefAll) radioGroup.check(R.id.rb_all);
+        else radioGroup.check(R.id.rb_parties);
+        radioGroup.setOnCheckedChangeListener((rg, id) -> {
+            if (id == R.id.rb_all) editor.putInt(PREFERENCE_LIST, prefAll);
+            else editor.putInt(PREFERENCE_LIST, prefParties);
 
-        optionAll.setChecked(preferences.getInt(PREFERENCE_LIST, prefAll) == prefAll);
-        optionParties.setChecked(preferences.getInt(PREFERENCE_LIST, prefAll) == prefParties);
+        });
+
+        CheckBox optionRetweet = dialogView.findViewById(R.id.checkBox3);
         optionRetweet.setChecked(preferences.getBoolean(PREFERENCE_RETWEET, true));
 
-        optionAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                optionParties.setChecked(!isChecked); //Toggle the other option.
-                if (isChecked) {
-                    editor.putInt(PREFERENCE_LIST, prefAll);
-                }
-            }
-        });
-
-        optionParties.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                optionAll.setChecked(!isChecked);
-                if (isChecked) {
-                    editor.putInt(PREFERENCE_LIST, prefParties);
-                }
-            }
-        });
-
-        optionRetweet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                editor.putBoolean(PREFERENCE_RETWEET, isChecked);
-            }
-        });
+        optionRetweet.setOnCheckedChangeListener((compoundButton, isChecked) ->
+                editor.putBoolean(PREFERENCE_RETWEET, isChecked)
+        );
 
 
     }
