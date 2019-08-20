@@ -16,6 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
+import oscar.riksdagskollen.Util.View.SpeedyLayoutManager;
 
 /**
  * Created by gustavaaro on 2018-04-04.
@@ -50,15 +51,10 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setNestedScrollingEnabled(true);
         refreshLayout = view.findViewById(R.id.refreshLayout);
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refresh();
-            }
-        });
+        refreshLayout.setOnRefreshListener(this::refresh);
         noConnectionWarning = view.findViewById(R.id.no_connection_warning);
 
-        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        final LinearLayoutManager mLayoutManager = new SpeedyLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -163,18 +159,10 @@ public abstract class RiksdagenAutoLoadingListFragment extends Fragment {
         showNoConnectionWarning(false);
         // The runnables are apparently needed to avoid long warnings
         if (loading && getAdapter().getItemCount() > 0) {
-            recyclerView.post(new Runnable() {
-                public void run() {
-                    adapter.addFooter(itemsLoadingView);
-                }
-            });
+            recyclerView.post(() -> adapter.addFooter(itemsLoadingView));
         } else {
             refreshLayout.setRefreshing(false);
-            recyclerView.post(new Runnable() {
-                public void run() {
-                    adapter.removeFooter(itemsLoadingView);
-                }
-            });
+            recyclerView.post(() -> adapter.removeFooter(itemsLoadingView));
         }
     }
 

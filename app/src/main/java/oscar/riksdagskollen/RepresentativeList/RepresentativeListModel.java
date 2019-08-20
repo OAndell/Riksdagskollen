@@ -1,21 +1,20 @@
 package oscar.riksdagskollen.RepresentativeList;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
 import oscar.riksdagskollen.Manager.RepresentativeManager;
+import oscar.riksdagskollen.RepresentativeList.RepresentativeAdapter.SortingMode;
 import oscar.riksdagskollen.RepresentativeList.data.Representative;
 import oscar.riksdagskollen.RiksdagskollenApp;
-import oscar.riksdagskollen.Util.Adapter.RepresentativeAdapter;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 
 public class RepresentativeListModel implements RepresentativeListContract.Model, RepresentativeManager.RepresentativeDownloadListener {
     private final List<Representative> representativeList = new ArrayList<>();
     private boolean ascending = true;
-    private Comparator<Representative> currentComparator = RepresentativeAdapter.NAME_COMPARATOR;
+    private SortingMode sortingMode = SortingMode.NAME;
     private HashMap<String, Boolean> currentFilter = new HashMap<>();
     private HashMap<String, Boolean> oldFilter = new HashMap<>();
     private RepresentativeListContract.Presenter presenter;
@@ -62,12 +61,12 @@ public class RepresentativeListModel implements RepresentativeListContract.Model
         return (ArrayList<Representative>) representativeList;
     }
 
-    public void setCurrentComparator(Comparator<Representative> currentComparator) {
-        this.currentComparator = currentComparator;
+    public void setSortingMode(SortingMode sortingMode) {
+        this.sortingMode = sortingMode;
     }
 
-    public Comparator<Representative> getCurrentComparator() {
-        return currentComparator;
+    public SortingMode getSortingMode() {
+        return sortingMode;
     }
 
     public void setOldFilter(HashMap<String, Boolean> oldFilter) {

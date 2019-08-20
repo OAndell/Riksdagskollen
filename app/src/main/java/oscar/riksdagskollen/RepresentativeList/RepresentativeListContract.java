@@ -1,10 +1,10 @@
 package oscar.riksdagskollen.RepresentativeList;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
+import oscar.riksdagskollen.RepresentativeList.RepresentativeAdapter.SortingMode;
 import oscar.riksdagskollen.RepresentativeList.data.Representative;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 
@@ -23,9 +23,9 @@ public interface RepresentativeListContract {
 
         HashMap<String, Boolean> getCurrentFilter();
 
-        void setCurrentComparator(Comparator<Representative> currentComparator);
+        void setSortingMode(SortingMode sortingMode);
 
-        Comparator<Representative> getCurrentComparator();
+        SortingMode getSortingMode();
 
         void setOldFilter(HashMap<String, Boolean> oldFilter);
 
@@ -53,7 +53,7 @@ public interface RepresentativeListContract {
 
         void showFilterDialog(ArrayList<Party> parties, boolean[] checked, CharSequence[] displayNames);
 
-        void swapAdapter(Comparator<Representative> comparator, ArrayList<Representative> filteredList);
+        void swapAdapter(SortingMode sortingMode, boolean ascending, ArrayList<Representative> filteredList);
 
         void refreshSortOrderIcon(boolean isAscending);
     }
@@ -71,5 +71,7 @@ public interface RepresentativeListContract {
         void onFilterItemPressed();
 
         void onDestroy();
+
+        boolean shouldFilterIndicators();
     }
 }

@@ -15,9 +15,9 @@ import java.util.List;
 
 import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
 import oscar.riksdagskollen.Manager.RepresentativeManager;
+import oscar.riksdagskollen.RepresentativeList.RepresentativeAdapter;
 import oscar.riksdagskollen.RepresentativeList.data.Representative;
 import oscar.riksdagskollen.RiksdagskollenApp;
-import oscar.riksdagskollen.Util.Adapter.RepresentativeAdapter;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeListCallback;
@@ -88,7 +88,7 @@ public class PartyRepresentativeFragment extends RiksdagenAutoLoadingListFragmen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new RepresentativeAdapter(representativeList, RepresentativeAdapter.NAME_COMPARATOR, this, new RiksdagenViewHolderAdapter.OnItemClickListener() {
+        adapter = new RepresentativeAdapter(representativeList, RepresentativeAdapter.SortingMode.NAME, true, this, new RiksdagenViewHolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object document) {
                 Intent repDetailsIntent = new Intent(getContext(), RepresentativeDetailActivity.class);

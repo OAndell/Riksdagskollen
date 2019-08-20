@@ -1,11 +1,10 @@
 package oscar.riksdagskollen.RepresentativeList;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 
+import oscar.riksdagskollen.RepresentativeList.RepresentativeAdapter.SortingMode;
 import oscar.riksdagskollen.RepresentativeList.data.Representative;
-import oscar.riksdagskollen.Util.Adapter.RepresentativeAdapter;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 
@@ -53,6 +52,7 @@ public class RepresentativeListPresenter implements RepresentativeListContract.P
         }
     }
 
+
     private HashMap<String, Boolean> getFilter() {
         return model.getCurrentFilter();
     }
@@ -75,36 +75,27 @@ public class RepresentativeListPresenter implements RepresentativeListContract.P
 
     @Override
     public void sortingOptionPressed(SortingParameter sortingParameter) {
-        Comparator<Representative> comparator = null;
+
+        SortingMode sortingMode = model.getSortingMode();
         switch (sortingParameter) {
             case NAME:
-                comparator = model.isSortOrderAscending() ?
-                        RepresentativeAdapter.NAME_COMPARATOR :
-                        new ReverseOrder<>(RepresentativeAdapter.NAME_COMPARATOR);
+                sortingMode = SortingMode.NAME;
                 break;
             case SURNAME:
-                comparator = model.isSortOrderAscending() ?
-                        RepresentativeAdapter.SURNAME_COMPARATOR :
-                        new ReverseOrder<>(RepresentativeAdapter.SURNAME_COMPARATOR);
+                sortingMode = SortingMode.SURNAME;
                 break;
             case AGE:
-                comparator = model.isSortOrderAscending() ?
-                        RepresentativeAdapter.AGE_COMPARATOR :
-                        new ReverseOrder<>(RepresentativeAdapter.AGE_COMPARATOR);
+                sortingMode = SortingMode.AGE;
                 break;
             case DISTRICT:
-                comparator = model.isSortOrderAscending() ?
-                        RepresentativeAdapter.DISTRICT_COMPARATOR :
-                        new ReverseOrder<>(RepresentativeAdapter.DISTRICT_COMPARATOR);
+                sortingMode = SortingMode.DISTRICT;
                 break;
             case SORT_ORDER:
                 model.setSortOrderAscending(!model.isSortOrderAscending());
                 view.refreshSortOrderIcon(model.isSortOrderAscending());
-                comparator = new ReverseOrder<>(model.getCurrentComparator());
         }
-        model.setCurrentComparator(comparator);
-        view.swapAdapter(comparator, filter(model.getRepresentatives()));
-
+        model.setSortingMode(sortingMode);
+        view.swapAdapter(sortingMode, model.isSortOrderAscending(), filter(model.getRepresentatives()));
     }
 
     @Override
@@ -128,19 +119,13 @@ public class RepresentativeListPresenter implements RepresentativeListContract.P
         model.onDestroy();
     }
 
-
-    private class ReverseOrder<T> implements Comparator<T> {
-        private Comparator<T> delegate;
-
-        ReverseOrder(Comparator<T> delegate) {
-            this.delegate = delegate;
-        }
-
-        public int compare(T a, T b) {
-            //reverse order of a and b!!!
-            return this.delegate.compare(b, a);
-        }
+    @Override
+    public boolean shouldFilterIndicators() {
+        return model.getSortingMode() == SortingMode.AGE;
     }
+
+
+
 
 
 }

@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Util.Adapter;
+package oscar.riksdagskollen.RepresentativeList;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +19,7 @@ import java.util.List;
 
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RepresentativeList.data.Representative;
+import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.View.CircularImageView;
 
@@ -28,39 +29,28 @@ import oscar.riksdagskollen.Util.View.CircularImageView;
 
 public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
 
+    public enum SortingMode {
+        NAME,
+        SURNAME,
+        AGE,
+        DISTRICT
+    }
 
-    public static Comparator<Representative> NAME_COMPARATOR = new Comparator<Representative>() {
-        @Override
-        public int compare(Representative a, Representative b) {
-            return a.getTilltalsnamn().compareTo(b.getTilltalsnamn());
-        }
-    };
 
-    public static Comparator<Representative> SURNAME_COMPARATOR = new Comparator<Representative>() {
-        @Override
-        public int compare(Representative a, Representative b) {
-            return a.getEfternamn().compareTo(b.getEfternamn());
-        }
-    };
+    public static Comparator<Representative> NAME_COMPARATOR = (a, b) -> a.getTilltalsnamn().compareTo(b.getTilltalsnamn());
 
-    public static Comparator<Representative> AGE_COMPARATOR = new Comparator<Representative>() {
-        @Override
-        public int compare(Representative a, Representative b) {
-            return a.getAge().compareTo(b.getAge());
-        }
-    };
+    public static Comparator<Representative> SURNAME_COMPARATOR = (a, b) -> a.getEfternamn().compareTo(b.getEfternamn());
 
-    public static Comparator<Representative> DISTRICT_COMPARATOR = new Comparator<Representative>() {
-        @Override
-        public int compare(Representative a, Representative b) {
-            return a.getValkrets().compareTo(b.getValkrets());
-        }
-    };
+    public static Comparator<Representative> AGE_COMPARATOR = (a, b) -> a.getAge().compareTo(b.getAge());
+
+    public static Comparator<Representative> DISTRICT_COMPARATOR = (a, b) -> a.getValkrets().compareTo(b.getValkrets());
 
     //Sort alphabetically after first name
 
     private Comparator<Representative> mComparator;
     private Fragment fragment;
+    private SortingMode sortingMode;
+    private boolean ascending;
 
     private final SortedList<Representative> representativeList = new SortedList<>(Representative.class, new SortedList.Callback<Representative>() {
         @Override
@@ -98,17 +88,52 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
             notifyItemMoved(fromPosition, toPosition);
         }
 
+
     });
 
+    @Override
+    public long getItemId(int position) {
+        return Long.parseLong(representativeList.get(position).getIntressent_id());
+    }
 
-    public RepresentativeAdapter(List<Representative> items, Comparator<Representative> comparator, Fragment fragment, final RiksdagenViewHolderAdapter.OnItemClickListener listener) {
+    public RepresentativeAdapter(List<Representative> items, SortingMode sortingMode, boolean ascending, Fragment fragment, final RiksdagenViewHolderAdapter.OnItemClickListener listener) {
         super(listener);
+        this.sortingMode = sortingMode;
+        switch (sortingMode) {
+            case NAME:
+                mComparator = NAME_COMPARATOR;
+                break;
+            case SURNAME:
+                mComparator = SURNAME_COMPARATOR;
+                break;
+            case AGE:
+                mComparator = AGE_COMPARATOR;
+                break;
+            case DISTRICT:
+                mComparator = DISTRICT_COMPARATOR;
+                break;
+        }
+        if (!ascending) mComparator = new ReverseOrder<>(mComparator);
+
         this.fragment = fragment;
-        this.mComparator = comparator;
         setSortedList(representativeList);
         addAll(items);
         this.clickListener = listener;
     }
+
+    public String getIndicatorStringAtIndex(int index) {
+        if (sortingMode.equals(SortingMode.NAME)) {
+            return representativeList.get(index).getTilltalsnamn().substring(0, 1);
+        } else if (sortingMode.equals(SortingMode.AGE)) {
+            return representativeList.get(index).getAge();
+        } else if (sortingMode.equals(SortingMode.DISTRICT)) {
+            return representativeList.get(index).getValkrets().substring(0, 1);
+        } else if (sortingMode.equals(SortingMode.SURNAME)) {
+            return representativeList.get(index).getEfternamn().substring(0, 1);
+        }
+        return "";
+    }
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -222,6 +247,19 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
                 title.setText(titleStr);
 
             }
+        }
+    }
+
+    private class ReverseOrder<T> implements Comparator<T> {
+        private Comparator<T> delegate;
+
+        ReverseOrder(Comparator<T> delegate) {
+            this.delegate = delegate;
+        }
+
+        public int compare(T a, T b) {
+            //reverse order of a and b!!!
+            return this.delegate.compare(b, a);
         }
     }
 
