@@ -46,14 +46,19 @@ android {
     flavorDimensions 'version'
     productFlavors {
         play {
-            // Add API keys to project from local gradle.properties
+            // Add API key to project from local gradle.properties if exists
+            // If not, add variable to be able to compile
             dimension 'version'
-            buildConfigField 'String', "TwitterApiKey", TWITTER_API_KEY
+            if (project.hasProperty('TWITTER_API_KEY')){
+                buildConfigField 'String', "TwitterApiKey", TWITTER_API_KEY
+            } else {
+                buildConfigField('String', 'TwitterApiKey', '"Dummy key"')
+            }
         }
         fdroid {
-            buildConfigField('String', 'TwitterApiKey', '"Dummy key, not used"')
+            // Twitter not used in Fdroid version but variable is needed to compile
+            buildConfigField('String', 'TwitterApiKey', '"Dummy key"')
             dimension 'version'
-            buildConfigField 'String', "TwitterApiKey", TWITTER_API_KEY
         }
     }
     compileOptions{
