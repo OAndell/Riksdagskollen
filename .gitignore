@@ -7,6 +7,8 @@
 /build
 /captures
 .externalNativeBuild
-.idea/
+.idea/*
 fabric.properties
 google-services.json
+google_play.json
+/fastlane/report.xml

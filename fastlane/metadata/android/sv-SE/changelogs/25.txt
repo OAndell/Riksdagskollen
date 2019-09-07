@@ -1,0 +1,4 @@
+- Ny funktionalitet för att läsa debatter i Riksdagen.  
+- Visa interpellationssvar.
+- Ny sökfunktion för dokument.
+- Fix för bugg där appen kraschar vid vissa nyheter.

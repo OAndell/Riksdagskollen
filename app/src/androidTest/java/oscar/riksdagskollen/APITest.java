@@ -1,6 +1,6 @@
 package oscar.riksdagskollen;
 
-import android.test.suitebuilder.annotation.SmallTest;
+import androidx.test.filters.SmallTest;
 
 import com.android.volley.VolleyError;
 

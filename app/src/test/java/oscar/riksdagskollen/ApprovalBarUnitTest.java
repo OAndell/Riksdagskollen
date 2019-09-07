@@ -1,5 +1,6 @@
 package oscar.riksdagskollen;
 
+
 import android.test.mock.MockContext;
 
 import org.junit.Before;

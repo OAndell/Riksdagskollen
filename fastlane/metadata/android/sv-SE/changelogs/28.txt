@@ -1,0 +1,4 @@
+- Partiers twitterflöden integrerade i appen.
+- Ny font.
+- Utökad caching av data för optimering av dataanvändning
+- Små fixar och förbättringar.

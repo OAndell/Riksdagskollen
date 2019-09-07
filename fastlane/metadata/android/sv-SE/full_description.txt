@@ -1,0 +1,17 @@
+Ovinklad och oberoende politisk information och nyheter direkt från källan. 
+Den här appen hjälper dig att hålla koll på vad som händer i Sveriges riksdag, specifika ledamöters arbete, resultatet på omröstningar, motioner och mera. 
+
+Riksdagskollen låter dig bland annat:
+ - Följa partierna och deras dagliga arbete i riksdagen
+ - Följa specifika ledamöter och se vilka frågor de driver 
+ - Läsa de motioner som partierna lägger fram och de frågor de ställer till regeringen och andra ledamöter
+ - Hålla koll på de beslut som tas och hur de olika partierna röstar i specifika frågor
+
+Appen använder riksdagens officiella API för att hämta det senaste från riksdagshuset.
+
+All källkod finns tillgänglig på Github. Har du några idéer? Bidra gärna!
+https://github.com/OAndell/Riksdagskollen/
+
+
+
+Nyckelord: Socialdemokraterna (S), Moderaterna (M),  Sverigedemokraterna (SD),  Miljöpartiet (MP), Centerpartiet (C), Vänsterpartiet (V), Liberalerna (L), Kristdemokraterna (KD), riksdag, sverige, beslut, riksdagen, partier, svensk politik, politik

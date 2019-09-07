@@ -1,14 +1,9 @@
 package oscar.riksdagskollen;
 
 
-import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.contrib.DrawerActions;
-import android.support.test.espresso.contrib.NavigationViewActions;
-import android.support.test.filters.LargeTest;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
-import android.support.test.uiautomator.UiDevice;
-import android.view.Gravity;
+import androidx.test.filters.LargeTest;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,14 +11,10 @@ import org.junit.runner.RunWith;
 
 import oscar.riksdagskollen.Activity.MainActivity;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.action.ViewActions.swipeUp;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
-import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static oscar.riksdagskollen.Utils.expandCollapseItemsInRecyclerView;
+import static oscar.riksdagskollen.Utils.navigateTo;
+import static oscar.riksdagskollen.Utils.pressItemsInRecyclerView;
+import static oscar.riksdagskollen.Utils.scrollView;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -146,72 +137,4 @@ public class AutomatedUITests {
         navigateTo(R.id.about_nav);
     }
 
-
-    private void navigateTo(int menuId) {
-        System.out.println("Opening drawer");
-        onView(withId(R.id.drawer_layout))
-                .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-                .perform(DrawerActions.open());
-        onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(menuId));
-    }
-
-
-    private void scrollView(int viewId) {
-        onView(withId(viewId)).perform(swipeUp());
-        onView(withId(viewId)).perform(swipeUp());
-        onView(withId(viewId)).perform(swipeUp());
-        onView(withId(viewId)).perform(swipeUp());
-        onView(withId(viewId)).perform(swipeUp());
-        onView(withId(viewId)).perform(swipeUp());
-        onView(withId(viewId)).perform(swipeUp());
-        onView(withId(viewId)).perform(swipeUp());
-        onView(withId(viewId)).perform(swipeUp());
-        onView(withId(viewId)).perform(swipeUp());
-        onView(withId(viewId)).perform(swipeUp());
-        onView(withId(viewId)).perform(swipeUp());
-        onView(withId(viewId)).perform(swipeUp());
-    }
-
-    // Test clicking on the 40 first items in the recyclerview defined
-    private void pressItemsInRecyclerView(int recyclerViewId, int numberOfItemsToTest) {
-        System.out.println("Pressing items in view");
-        for (int i = 0; i < numberOfItemsToTest; i++) {
-            onView(withId(recyclerViewId))
-                    .perform(actionOnItemAtPosition(i, scrollTo()));
-            onView(withId(recyclerViewId))
-                    .perform(actionOnItemAtPosition(i, click()));
-            System.out.println("Sleeping");
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            pressBack();
-        }
-    }
-
-    // Test click to expand and then collapse the 40 first items in the recyclerview defined
-    private void expandCollapseItemsInRecyclerView(int recyclerViewId, int numberOfItemsToTest) {
-        System.out.println("Pressing items in view");
-        for (int i = 0; i < numberOfItemsToTest; i++) {
-            onView(withId(recyclerViewId))
-                    .perform(actionOnItemAtPosition(i, scrollTo()));
-            onView(withId(recyclerViewId))
-                    .perform(actionOnItemAtPosition(i, click()));
-            System.out.println("Sleeping");
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            onView(withId(recyclerViewId))
-                    .perform(actionOnItemAtPosition(i, click()));
-        }
-    }
-
-    private void pressBack() {
-        UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        mDevice.pressBack();
-    }
 }
