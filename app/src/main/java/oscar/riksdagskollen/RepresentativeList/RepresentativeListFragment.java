@@ -1,5 +1,6 @@
 package oscar.riksdagskollen.RepresentativeList;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.os.Build;
@@ -14,6 +15,8 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 
 import com.reddit.indicatorfastscroll.FastScrollItemIndicator;
 import com.reddit.indicatorfastscroll.FastScrollerThumbView;
@@ -203,10 +206,16 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
 
     @Override
     public void swapAdapter(SortingMode sortingMode, boolean ascending, ArrayList<Representative> filteredList) {
-        adapter = new RepresentativeAdapter(filteredList, sortingMode, ascending, this, document -> {
+        final Activity activity = getActivity();
+        adapter = new RepresentativeAdapter(filteredList, sortingMode, ascending, this, (document, extra) -> {
+            if (activity == null) return;
             Intent repDetailsIntent = new Intent(getContext(), RepresentativeDetailActivity.class);
             repDetailsIntent.putExtra("representative", (Representative) document);
-            startActivity(repDetailsIntent);
+            Pair<View, String> p1 = Pair.create(extra.get("rep_image_view"), "rep_image_view");
+            Pair<View, String> p2 = Pair.create(extra.get("party_image_view"), "party_image_view");
+            ActivityOptionsCompat options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation(activity, p1, p2);
+            startActivity(repDetailsIntent, options.toBundle());
         });
 
         if (getRecyclerView() != null) {

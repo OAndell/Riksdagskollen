@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.VolleyError;
@@ -174,13 +176,13 @@ public class PartyInfoFragment extends Fragment {
                                 .into(portrait);
                     }
 
-                    portrait.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent repDetailsIntent = new Intent(getContext(), RepresentativeDetailActivity.class);
-                            repDetailsIntent.putExtra("representative", representative);
-                            startActivity(repDetailsIntent);
-                        }
+                    portrait.setOnClickListener(view -> {
+                        Intent repDetailsIntent = new Intent(getContext(), RepresentativeDetailActivity.class);
+                        repDetailsIntent.putExtra("representative", representative);
+                        Pair<View, String> p1 = Pair.create(portrait, "rep_image_view");
+                        ActivityOptionsCompat options = ActivityOptionsCompat.
+                                makeSceneTransitionAnimation(getActivity(), p1);
+                        startActivity(repDetailsIntent, options.toBundle());
                     });
                     TextView nameTv = portraitView.findViewById(R.id.intressent_name);
                     nameTv.setText(representative.getTilltalsnamn() + " " + representative.getEfternamn() + "\n" + representative.getDescriptiveRole());

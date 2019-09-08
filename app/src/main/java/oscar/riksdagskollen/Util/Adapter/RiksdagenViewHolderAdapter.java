@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SortedList;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -26,8 +27,11 @@ public abstract class RiksdagenViewHolderAdapter extends RecyclerView.Adapter<Re
     protected OnItemClickListener clickListener;
 
     public interface OnItemClickListener {
-
         void onItemClick(Object document);
+    }
+
+    public interface OnItemClickListenerWithExtra {
+        void onItemClick(Object document, HashMap<String, View> viewMapExtra);
     }
 
 

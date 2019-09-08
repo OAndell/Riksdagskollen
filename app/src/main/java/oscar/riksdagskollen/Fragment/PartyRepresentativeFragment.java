@@ -1,5 +1,6 @@
 package oscar.riksdagskollen.Fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 
 import com.android.volley.VolleyError;
 
@@ -88,13 +91,16 @@ public class PartyRepresentativeFragment extends RiksdagenAutoLoadingListFragmen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new RepresentativeAdapter(representativeList, RepresentativeAdapter.SortingMode.NAME, true, this, new RiksdagenViewHolderAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Object document) {
-                Intent repDetailsIntent = new Intent(getContext(), RepresentativeDetailActivity.class);
-                repDetailsIntent.putExtra("representative", (Representative) document);
-                startActivity(repDetailsIntent);
-            }
+        final Activity activity = getActivity();
+        adapter = new RepresentativeAdapter(representativeList, RepresentativeAdapter.SortingMode.NAME, true, this, (document, extra) -> {
+            if (activity == null) return;
+            Intent repDetailsIntent = new Intent(getContext(), RepresentativeDetailActivity.class);
+            repDetailsIntent.putExtra("representative", (Representative) document);
+            Pair<View, String> p1 = Pair.create(extra.get("rep_image_view"), "rep_image_view");
+            Pair<View, String> p2 = Pair.create(extra.get("party_image_view"), "party_image_view");
+            ActivityOptionsCompat options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation(activity, p1, p2);
+            startActivity(repDetailsIntent, options.toBundle());
         });
 
     }
