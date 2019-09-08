@@ -1,3 +1,2 @@
-json_key_file "/Users/gustavaaro/Downloads/google_play.json"
-#sactions/supply/ #setup to get one
-package_name("se.oandell.riksdagen") # e.g. com.krausefx.app
+json_key_file "./google_play.json"
+package_name("se.oandell.riksdagen")
