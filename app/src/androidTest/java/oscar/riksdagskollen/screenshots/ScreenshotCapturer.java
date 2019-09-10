@@ -32,6 +32,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static oscar.riksdagskollen.Utils.atPosition;
 import static oscar.riksdagskollen.Utils.navigateTo;
 import static oscar.riksdagskollen.Utils.pressDeviceBackButton;
+import static oscar.riksdagskollen.Utils.pressItemInRecyclerView;
+import static oscar.riksdagskollen.Utils.pressItemsInRecyclerView;
 import static oscar.riksdagskollen.Utils.pressItemsInRecyclerViewWithDelay;
 import static oscar.riksdagskollen.Utils.scrollView;
 import static oscar.riksdagskollen.Utils.waitALittle;
@@ -107,7 +109,7 @@ public class ScreenshotCapturer {
 
         // Getting decision list screenshot
         navigateTo(R.id.dec_nav);
-        pressItemsInRecyclerViewWithDelay(R.id.recycler_view, 1);
+        pressItemInRecyclerView(R.id.recycler_view, 1, null);
         waitALittle();
         Screengrab.screenshot("decisions");
 

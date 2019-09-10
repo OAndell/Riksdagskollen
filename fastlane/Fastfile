@@ -55,6 +55,7 @@ platform :android do
       build_type: 'AndroidTest'
     )
     capture_android_screenshots
+    sh "./screenshot_rename.sh"
   end
   desc "Upload generated screenshots to Google play"
   lane :upload_screenshots do

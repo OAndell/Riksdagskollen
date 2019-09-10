@@ -4,6 +4,7 @@ import android.view.Gravity;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
@@ -85,6 +86,17 @@ public class Utils {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void pressItemInRecyclerView(int recyclerViewId, int index, @Nullable Boolean other) {
+            onView(withId(recyclerViewId))
+                    .perform(actionOnItemAtPosition(index, click()));
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
     }
 
     public static void scrollView(int viewId) {
