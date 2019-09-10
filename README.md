@@ -17,6 +17,8 @@ Android app to keep track of the Swedish parliament.
  * Read new questions, motions and other documents put forward by the parties.
 
 ## Screenshots:
-<img src="https://raw.githubusercontent.com/OAndell/Riksdagskollen/master/screenshots/news.png" width="300"> <img src="https://raw.githubusercontent.com/OAndell/Riksdagskollen/master/screenshots/menu.png" width="300">
-<img src="https://raw.githubusercontent.com/OAndell/Riksdagskollen/master/screenshots/vote.png" width="300"> <img src="https://raw.githubusercontent.com/OAndell/Riksdagskollen/master/screenshots/motion.png" width="300">
-<img src="https://raw.githubusercontent.com/OAndell/Riksdagskollen/master/screenshots/decision.png" width="300">
+<img src="fastlane/metadata/android/sv-SE/images/phoneScreenshots/news.png" width="300"> <img src="fastlane/metadata/android/sv-SE/images/phoneScreenshots/debate.png" width="300">
+<img src="fastlane/metadata/android/sv-SE/images/phoneScreenshots/vote.png" width="300"> <img src="fastlane/metadata/android/sv-SE/images/phoneScreenshots/party.png" width="300">
+<img src="fastlane/metadata/android/sv-SE/images/phoneScreenshots/decisions.png" width="300">
+<img src="fastlane/metadata/android/sv-SE/images/phoneScreenshots/representative.png" width="300">
+<img src="fastlane/metadata/android/sv-SE/images/phoneScreenshots/representatives.png" width="300">
