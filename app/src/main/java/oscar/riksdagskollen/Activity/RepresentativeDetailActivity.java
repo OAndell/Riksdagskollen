@@ -158,7 +158,7 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                supportFinishAfterTransition();
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);

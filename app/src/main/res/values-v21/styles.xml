@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="ParentTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:fontFamily">@font/cabin_regular_edited</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:windowContentTransitions">true</item>
-    </style>
-</resources>

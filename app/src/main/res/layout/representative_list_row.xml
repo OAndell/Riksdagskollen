@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.cardview.widget.CardView
+    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -137,15 +137,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="8dp">
+                    android:layout_marginTop="8dp">
 
                     <oscar.riksdagskollen.Util.View.CircularImageView
                         android:id="@+id/rep_card_portrait"
                         android:layout_width="100dp"
                         android:layout_height="120dp"
                         android:layout_weight="10"
-                        android:transitionName="rep_image_view"
                         android:scaleType="fitCenter"
                         app:srcCompat="@drawable/ic_person_secondary" />
 
@@ -157,7 +155,6 @@
                         android:layout_marginBottom="20dp"
                         android:layout_marginRight="20dp"
                         android:layout_weight="3"
-                        android:transitionName="party_image_view"
                         android:scaleType="fitEnd"
                         android:src="@drawable/slogo" />
 

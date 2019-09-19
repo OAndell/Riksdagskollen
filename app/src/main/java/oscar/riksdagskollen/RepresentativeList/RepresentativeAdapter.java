@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide;
 
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 
 import oscar.riksdagskollen.R;
@@ -52,7 +51,6 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
     private Fragment fragment;
     private SortingMode sortingMode;
     private boolean ascending;
-    private OnItemClickListenerWithExtra clickListener;
 
     private final SortedList<Representative> representativeList = new SortedList<>(Representative.class, new SortedList.Callback<Representative>() {
         @Override
@@ -98,8 +96,8 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
         return Long.parseLong(representativeList.get(position).getIntressent_id());
     }
 
-    public RepresentativeAdapter(List<Representative> items, SortingMode sortingMode, boolean ascending, Fragment fragment, final RiksdagenViewHolderAdapter.OnItemClickListenerWithExtra listener) {
-        super(null);
+    public RepresentativeAdapter(List<Representative> items, SortingMode sortingMode, boolean ascending, Fragment fragment, final RiksdagenViewHolderAdapter.OnItemClickListener listener) {
+        super(listener);
         this.sortingMode = sortingMode;
         switch (sortingMode) {
             case NAME:
@@ -214,7 +212,7 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
 
         }
 
-        public void bind(final Representative item, final RiksdagenViewHolderAdapter.OnItemClickListenerWithExtra listener) {
+        public void bind(final Representative item, final RiksdagenViewHolderAdapter.OnItemClickListener listener) {
             name.setText(item.getTilltalsnamn() + " " + item.getEfternamn());
             valkrets.setText(item.getValkrets());
             born.setText(item.getAge() + " år");
@@ -232,10 +230,12 @@ public class RepresentativeAdapter extends RiksdagenViewHolderAdapter {
             } catch (Exception e) {//No party found, Does not belong to a party
                 partyLogo.setVisibility(View.GONE);
             }
-            HashMap<String, View> viewMap = new HashMap<>();
-            viewMap.put("rep_image_view", portrait);
-            viewMap.put("party_image_view", partyLogo);
-            itemView.setOnClickListener(v -> listener.onItemClick(item, viewMap));
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(item);
+                }
+            });
         }
 
         private void setTitle(Representative representative) {
