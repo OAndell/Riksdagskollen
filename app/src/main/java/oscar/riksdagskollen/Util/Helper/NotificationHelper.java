@@ -37,6 +37,9 @@ public class NotificationHelper {
     public static void showNewsNotification(CurrentNews currentNews, Context context) {
         createMonitorChannel(context);
 
+        // Don't show notification if currentnewsitem is broken
+        if (!isNewsItemValid(currentNews)) return;
+
         Intent intent = getIntent(context);
         intent.putExtra(NEWS_ITEM_URL_KEY, currentNews.getNewsUrl());
         intent.putExtra(SECTION_NAME_KEY, CurrentNewsListFragment.SECTION_NAME_NEWS);
@@ -58,6 +61,13 @@ public class NotificationHelper {
                 Html.fromHtml(parseString(currentNews.getSummary())).toString(),
                 date.getTime());
 
+    }
+
+    private static boolean isNewsItemValid(CurrentNews item) {
+        return item.getTitel() != null &&
+                item.getSummary() != null &&
+                item.getNewsUrl() != null &&
+                item.getPublicerad() != null;
     }
 
     public static void showPartyNotification(String partyId, Context context) {
