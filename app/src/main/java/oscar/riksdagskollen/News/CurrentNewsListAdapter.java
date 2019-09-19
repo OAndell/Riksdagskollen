@@ -172,8 +172,19 @@ public class CurrentNewsListAdapter extends RiksdagenViewHolderAdapter {
         }
 
         public void bind(final CurrentNews item, final OnItemClickListener listener, Fragment fragment) {
-            title.setText(item.getTitel());
-            body.setText(Html.fromHtml(parseString(item.getSummary())));
+
+            if (item.getTitel() == null) {
+                title.setText("(Ingen titel ännu...)");
+            } else {
+                title.setText(item.getTitel());
+            }
+
+            if (item.getSummary() != null) {
+                body.setText(Html.fromHtml(parseString(item.getSummary())));
+            } else {
+                body.setText("(Ingen sammanfattning ännu...)");
+            }
+
             date.setText(item.getPublicerad());
             imageText.setText(item.getImg_fotograf());
 
