@@ -72,6 +72,8 @@ public interface RepresentativeListContract {
 
         void onDestroy();
 
+        SortingMode getSortingMode();
+
         boolean shouldFilterIndicators();
     }
 }

@@ -1,5 +1,7 @@
 package oscar.riksdagskollen.RepresentativeList;
 
+import android.content.SharedPreferences;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,19 +15,26 @@ import oscar.riksdagskollen.Util.JSONModel.Party;
 
 public class RepresentativeListModel implements RepresentativeListContract.Model, RepresentativeManager.RepresentativeDownloadListener {
     private final List<Representative> representativeList = new ArrayList<>();
-    private boolean ascending = true;
-    private SortingMode sortingMode = SortingMode.NAME;
+    private boolean ascending;
+    private SortingMode sortingMode;
     private HashMap<String, Boolean> currentFilter = new HashMap<>();
     private HashMap<String, Boolean> oldFilter = new HashMap<>();
     private RepresentativeListContract.Presenter presenter;
+    private SharedPreferences preferences;
+    private final String SORTING_MODE_KEY = "SORTING_MODE";
+    private final String SORTING_ASCENDING_KEY = "SORTING_ASCENDING";
 
 
-    RepresentativeListModel(RepresentativeListContract.Presenter presenter) {
+    RepresentativeListModel(RepresentativeListContract.Presenter presenter, SharedPreferences preferences) {
         this.presenter = presenter;
 
         for (Party party : CurrentParties.getParties()) {
             currentFilter.put(party.getID(), true);
         }
+        this.preferences = preferences;
+        String sortingModeString = preferences.getString(SORTING_MODE_KEY, "NAME");
+        ascending = preferences.getBoolean(SORTING_ASCENDING_KEY, true);
+        sortingMode = SortingMode.valueOf(sortingModeString);
     }
 
     @Override
@@ -49,6 +58,9 @@ public class RepresentativeListModel implements RepresentativeListContract.Model
     @Override
     public void setSortOrderAscending(boolean ascending) {
         this.ascending = ascending;
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(SORTING_ASCENDING_KEY, ascending);
+        editor.apply();
     }
 
     @Override
@@ -62,6 +74,9 @@ public class RepresentativeListModel implements RepresentativeListContract.Model
     }
 
     public void setSortingMode(SortingMode sortingMode) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(SORTING_MODE_KEY, sortingMode.name());
+        editor.apply();
         this.sortingMode = sortingMode;
     }
 

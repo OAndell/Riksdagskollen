@@ -1,5 +1,7 @@
 package oscar.riksdagskollen.RepresentativeList;
 
+import android.content.SharedPreferences;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,9 +28,9 @@ public class RepresentativeListPresenter implements RepresentativeListContract.P
         SORT_ORDER
     }
 
-    RepresentativeListPresenter(RepresentativeListContract.View view) {
+    RepresentativeListPresenter(RepresentativeListContract.View view, SharedPreferences preferences) {
         this.view = view;
-        this.model = new RepresentativeListModel(this);
+        this.model = new RepresentativeListModel(this, preferences);
         model.initRepresentatives();
     }
 
@@ -36,7 +38,8 @@ public class RepresentativeListPresenter implements RepresentativeListContract.P
     public void onRepresentativesDataChanged() {
         view.clearAdapter();
         view.showLoadingView(false);
-        view.addRepresentativesToView(model.getRepresentatives());
+        view.swapAdapter(model.getSortingMode(), model.isSortOrderAscending(), model.getRepresentatives());
+        //view.addRepresentativesToView(model.getRepresentatives());
         view.showLoadingItemsView(false);
     }
 
@@ -122,6 +125,11 @@ public class RepresentativeListPresenter implements RepresentativeListContract.P
     @Override
     public void onDestroy() {
         model.onDestroy();
+    }
+
+    @Override
+    public SortingMode getSortingMode() {
+        return model.getSortingMode();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package oscar.riksdagskollen.RepresentativeList;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,6 +33,8 @@ import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.View.FilterDialog;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by oscar on 2018-09-27.
  */
@@ -58,7 +61,9 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter = new RepresentativeListPresenter(this);
+        SharedPreferences preferences = getActivity().getSharedPreferences("representatives", MODE_PRIVATE);
+        presenter = new RepresentativeListPresenter(this, preferences);
+
         if (Build.VERSION.SDK_INT >= 21) {
             FastScrollerView fastScrollerView = view.findViewById(R.id.fastscroller);
             fastScrollerView.setVisibility(View.VISIBLE);
@@ -77,8 +82,14 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
                     }
             );
         }
+
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        swapAdapter(SortingMode.NAME, true, new ArrayList<>());
+    }
 
     @Override
     public void onResume() {
@@ -139,11 +150,6 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        swapAdapter(SortingMode.NAME, true, new ArrayList<>());
-    }
 
     //not used for this fragment
     @Override
