@@ -1,6 +1,5 @@
 package oscar.riksdagskollen.Fragment;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.VolleyError;
@@ -30,6 +28,7 @@ import oscar.riksdagskollen.Util.Enum.DocumentType;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
+import oscar.riksdagskollen.Util.View.FilterDialog;
 
 /**
  * Created by gustavaaro on 2018-03-26.
@@ -139,34 +138,15 @@ public class PartyListFragment extends RiksdagenAutoLoadingListFragment implemen
 
                 final SharedPreferences.Editor editor = preferences.edit();
 
+                FilterDialog dialog = new FilterDialog("Filtrera partiflöde", items, checked);
+                dialog.setItemSelectedListener((which, isChecked) -> {
+                    editor.putBoolean(DocumentType.getPartyDokTypes().get(which).getDocType(), isChecked);
+                });
+                dialog.setPositiveButtonListener(v -> editor.apply());
+                dialog.setNegativeButtonListener(v -> editor.clear());
+                dialog.setOnDismissListener(dialogInterface -> editor.clear());
+                dialog.show(getFragmentManager(), "dialog");
 
-                AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom)
-                        .setTitle("Filtrera partiflöde")
-                        .setMultiChoiceItems(items, checked, new DialogInterface.OnMultiChoiceClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
-                                editor.putBoolean(DocumentType.getPartyDokTypes().get(indexSelected).getDocType(), isChecked);
-                            }
-                        }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                editor.apply();
-                            }
-                        }).setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                editor.clear();
-                            }
-                        })
-                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialogInterface) {
-                                editor.clear();
-                            }
-                        })
-                        .create();
-
-                dialog.show();
                 break;
         }
         return super.onOptionsItemSelected(item);

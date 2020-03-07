@@ -1,6 +1,5 @@
 package oscar.riksdagskollen.Fragment;
 
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 
@@ -31,6 +29,7 @@ import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Enum.DecicionCategory;
 import oscar.riksdagskollen.Util.JSONModel.DecisionDocument;
 import oscar.riksdagskollen.Util.RiksdagenCallback.DecisionsCallback;
+import oscar.riksdagskollen.Util.View.FilterDialog;
 
 /**
  * Created by gustavaaro on 2018-06-16.
@@ -338,38 +337,23 @@ public class DecisionsListFragment extends RiksdagenAutoLoadingListFragment impl
         }
 
         final HashMap<String, Boolean> changes = new HashMap<>();
-
-        AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom)
-                .setTitle("Filtrera sökresultat efter kategori")
-                .setMultiChoiceItems(items, checked, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
-                        changes.put(categories[indexSelected].getId(), isChecked);
-                    }
-                }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        for (String catId : changes.keySet()) {
-                            searchFilter.put(catId, changes.get(catId));
-                        }
-                        applyFilter();
-                    }
-                }).setNegativeButton("", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        changes.clear();
-                        dialogInterface.dismiss();
-                    }
-                })
-                .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        changes.clear();
-                    }
-                })
-                .create();
-
-        dialog.show();
+        FilterDialog dialog = new FilterDialog("Filtrera sökresultat efter kategori", items, checked);
+        dialog.setItemSelectedListener((which, isChecked) -> {
+            changes.put(categories[which].getId(), isChecked);
+        });
+        dialog.setPositiveButtonListener(v -> {
+            for (String catId : changes.keySet()) {
+                searchFilter.put(catId, changes.get(catId));
+            }
+            applyFilter();
+        });
+        dialog.setNegativeButtonListener(v -> {
+            changes.clear();
+        });
+        dialog.setOnDismissListener(dialogInterface -> {
+            changes.clear();
+        });
+        dialog.show(getFragmentManager(), "dialog");
 
     }
 
@@ -383,33 +367,13 @@ public class DecisionsListFragment extends RiksdagenAutoLoadingListFragment impl
 
         final SharedPreferences.Editor editor = preferences.edit();
 
-
-        AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom)
-                .setTitle("Filtrera beslut efter kategori")
-                .setMultiChoiceItems(items, checked, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
-                        editor.putBoolean(DecicionCategory.getAllCategories().get(indexSelected).getId(), isChecked);
-                    }
-                }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        editor.apply();
-                    }
-                }).setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        editor.clear();
-                    }
-                })
-                .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        editor.clear();
-                    }
-                })
-                .create();
-
-        dialog.show();
+        FilterDialog dialog = new FilterDialog("Filtrera beslut efter kategori", items, checked);
+        dialog.setItemSelectedListener((which, isChecked) -> {
+            editor.putBoolean(DecicionCategory.getAllCategories().get(which).getId(), isChecked);
+        });
+        dialog.setPositiveButtonListener(v -> editor.apply());
+        dialog.setNegativeButtonListener(v -> editor.clear());
+        dialog.setOnDismissListener(dialogInterface -> editor.clear());
+        dialog.show(getFragmentManager(), "dialog");
     }
 }

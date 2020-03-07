@@ -8,6 +8,11 @@ import oscar.riksdagskollen.RepresentativeList.data.Representative;
 import oscar.riksdagskollen.Util.Enum.CurrentParties;
 import oscar.riksdagskollen.Util.JSONModel.Party;
 
+import static oscar.riksdagskollen.RepresentativeList.RepresentativeAdapter.SortingMode.AGE;
+import static oscar.riksdagskollen.RepresentativeList.RepresentativeAdapter.SortingMode.DISTRICT;
+import static oscar.riksdagskollen.RepresentativeList.RepresentativeAdapter.SortingMode.NAME;
+import static oscar.riksdagskollen.RepresentativeList.RepresentativeAdapter.SortingMode.SURNAME;
+
 public class RepresentativeListPresenter implements RepresentativeListContract.Presenter {
 
     private RepresentativeListContract.View view;
@@ -79,16 +84,16 @@ public class RepresentativeListPresenter implements RepresentativeListContract.P
         SortingMode sortingMode = model.getSortingMode();
         switch (sortingParameter) {
             case NAME:
-                sortingMode = SortingMode.NAME;
+                sortingMode = NAME;
                 break;
             case SURNAME:
-                sortingMode = SortingMode.SURNAME;
+                sortingMode = SURNAME;
                 break;
             case AGE:
-                sortingMode = SortingMode.AGE;
+                sortingMode = AGE;
                 break;
             case DISTRICT:
-                sortingMode = SortingMode.DISTRICT;
+                sortingMode = DISTRICT;
                 break;
             case SORT_ORDER:
                 model.setSortOrderAscending(!model.isSortOrderAscending());
@@ -121,7 +126,7 @@ public class RepresentativeListPresenter implements RepresentativeListContract.P
 
     @Override
     public boolean shouldFilterIndicators() {
-        return model.getSortingMode() == SortingMode.AGE;
+        return model.getSortingMode() == AGE;
     }
 
 

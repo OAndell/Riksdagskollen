@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.reddit.indicatorfastscroll.FastScrollItemIndicator;
@@ -31,6 +30,7 @@ import oscar.riksdagskollen.RepresentativeList.data.Representative;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.JSONModel.Party;
+import oscar.riksdagskollen.Util.View.FilterDialog;
 
 /**
  * Created by oscar on 2018-09-27.
@@ -121,22 +121,14 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
     public void showFilterDialog(final ArrayList<Party> parties, boolean[] checked, CharSequence[] displayNames) {
 
         final HashMap<String, Boolean> changes = new HashMap<>();
-
-        AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom)
-                .setTitle("Filtrera ledamöter")
-                .setMultiChoiceItems(displayNames, checked,
-                        (dialogInterface, indexSelected, isChecked) ->
-                                changes.put(parties.get(indexSelected).getID(), isChecked)
-                )
-                .setPositiveButton("Ok", (dialogInterface, id) -> presenter.onDataFiltered(changes))
-                .setNegativeButton("Avbryt", (dialogInterface, id) -> {
-                    changes.clear();
-                    dialogInterface.dismiss();
-                })
-                .setOnDismissListener(dialogInterface -> changes.clear())
-                .create();
-
-        dialog.show();
+        FilterDialog dialog = new FilterDialog("Filtrera ledamöter", displayNames, checked);
+        dialog.setItemSelectedListener((which, isChecked) -> {
+            changes.put(parties.get(which).getID(), isChecked);
+        });
+        dialog.setPositiveButtonListener(v -> presenter.onDataFiltered(changes));
+        dialog.setNegativeButtonListener(v -> changes.clear());
+        dialog.setOnDismissListener(dialogInterface -> changes.clear());
+        dialog.show(getFragmentManager(), "dialog");
     }
 
 
@@ -150,7 +142,7 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        swapAdapter(SortingMode.NAME, true, new ArrayList<Representative>());
+        swapAdapter(SortingMode.NAME, true, new ArrayList<>());
     }
 
     //not used for this fragment
@@ -223,7 +215,6 @@ public class RepresentativeListFragment extends RiksdagenAutoLoadingListFragment
         }
         getActivity().runOnUiThread(() -> ((Animatable) sortOrderItem.getIcon()).start());
     }
-
     @Override
     protected void clearItems() {
     }
