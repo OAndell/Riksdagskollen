@@ -1,6 +1,9 @@
 package oscar.riksdagskollen.DebateView;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,8 +35,14 @@ import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.AnimUtil;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.RiksdagenCallback.OnDocumentHtmlViewLoadedCallback;
-import oscar.riksdagskollen.Util.View.DebateWebTvView;
 import oscar.riksdagskollen.Util.View.DocumentHtmlView;
+import oscar.riksdagskollen.Util.WebTV.DebateWebTvView;
+import oscar.riksdagskollen.Util.WebTV.JSInterface;
+
+import static oscar.riksdagskollen.Util.WebTV.DebateWebTvView.ACTION_PAUSE;
+import static oscar.riksdagskollen.Util.WebTV.DebateWebTvView.ACTION_PLAY;
+import static oscar.riksdagskollen.Util.WebTV.DebateWebTvView.ACTION_SEEK_BACKWARD;
+import static oscar.riksdagskollen.Util.WebTV.DebateWebTvView.ACTION_SEEK_FORWARD;
 
 public class DebateActivity extends AppCompatActivity implements DebateViewContract.View, DebateAdapter.WebTvListener {
     private RecyclerView recyclerView;
@@ -47,6 +57,37 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
     private DebateAdapter adapter;
     private boolean isWebTVExpanded = false;
     private boolean firstExpand = true;
+    private NotificationManagerCompat notificationManager;
+
+    private BroadcastReceiver mediaPlaybackReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() == null) return;
+
+            switch (intent.getAction()) {
+                case ACTION_PLAY:
+                    playDebate();
+                    break;
+
+                case ACTION_PAUSE:
+                    pauseDebate();
+                    break;
+
+                case ACTION_SEEK_FORWARD:
+                    seekForward();
+                    break;
+
+                case ACTION_SEEK_BACKWARD:
+                    seekBackward();
+                    break;
+
+                case Intent.ACTION_HEADSET_PLUG:
+                    pauseDebate();
+                    break;
+            }
+        }
+    };
+
 
 
     @Override
@@ -62,6 +103,14 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
         webTVHeader = findViewById(R.id.show_web_tv_header);
         expansionArrow = findViewById(R.id.web_tv_expand_icon);
 
+        notificationManager = NotificationManagerCompat.from(this);
+
+        IntentFilter filter = new IntentFilter(ACTION_PAUSE);
+        filter.addAction(ACTION_PLAY);
+        filter.addAction(ACTION_SEEK_BACKWARD);
+        filter.addAction(ACTION_SEEK_FORWARD);
+        filter.addAction(Intent.ACTION_HEADSET_PLUG);
+        registerReceiver(mediaPlaybackReceiver, filter);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -71,6 +120,14 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
         presenter.handleExtrasAndSetupView(getIntent().getExtras());
     }
 
+
+    @Override
+    protected void onDestroy() {
+        notificationManager.cancel(JSInterface.NOTIF_ID);
+        unregisterReceiver(mediaPlaybackReceiver);
+        if (debateWebTvView != null) debateWebTvView.removeJavascriptInterface("JSOUT");
+        super.onDestroy();
+    }
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
@@ -204,6 +261,22 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
 
     private void playDebateFromSecond(int start) {
         if (debateWebTvView != null && isWebTVExpanded) debateWebTvView.setCurrentTime(start);
+    }
+
+    private void playDebate() {
+        if (debateWebTvView != null) debateWebTvView.play();
+    }
+
+    private void pauseDebate() {
+        if (debateWebTvView != null) debateWebTvView.pause();
+    }
+
+    private void seekForward() {
+        if (debateWebTvView != null) debateWebTvView.seekForward();
+    }
+
+    private void seekBackward() {
+        if (debateWebTvView != null) debateWebTvView.seekBackward();
     }
 
     @Override

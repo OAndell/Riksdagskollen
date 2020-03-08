@@ -42,13 +42,13 @@
     </LinearLayout>
 
 
-    <oscar.riksdagskollen.Util.View.DebateWebTvView
+    <oscar.riksdagskollen.Util.WebTV.DebateWebTvView
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:id="@+id/tv_view"
         android:visibility="gone">
 
-    </oscar.riksdagskollen.Util.View.DebateWebTvView>
+    </oscar.riksdagskollen.Util.WebTV.DebateWebTvView>
 
 
 </LinearLayout>

@@ -1,6 +1,5 @@
 package oscar.riksdagskollen;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -8,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.util.TypedValue;
 
 import androidx.annotation.ColorInt;
+import androidx.multidex.MultiDexApplication;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
@@ -31,7 +31,7 @@ import oscar.riksdagskollen.Util.Job.DownloadAllRepresentativesJob;
  * Created by gustavaaro on 2018-03-25.
  */
 
-public class RiksdagskollenApp extends Application {
+public class RiksdagskollenApp extends MultiDexApplication {
 
     private static RiksdagskollenApp instance;
     private RequestManager requestManager;
