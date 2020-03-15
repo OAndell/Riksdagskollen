@@ -111,7 +111,7 @@ public class DebateViewPresenter implements DebateViewContract.Presenter, Protoc
 
     @Override
     public void onDebateAudioSource(String sourceUrl) {
-        view.prepareAudioPlayer(sourceUrl);
+        view.prepareAudioPlayer(sourceUrl, model.getInitiatingDocument());
     }
 
     @Override

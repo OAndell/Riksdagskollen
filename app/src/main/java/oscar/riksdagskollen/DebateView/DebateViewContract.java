@@ -55,7 +55,7 @@ public interface DebateViewContract {
 
         void hideAudioPlayer();
 
-        void prepareAudioPlayer(String audioSourceUrl);
+        void prepareAudioPlayer(String audioSourceUrl, PartyDocument debateDocument);
 
         ConnectivityManager getConnectivityManager();
     }

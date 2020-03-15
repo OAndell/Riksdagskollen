@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <uses-sdk tools:overrideLibrary="com.reddit.indicatorfastscroll" />
 
@@ -60,6 +61,8 @@
             android:theme="@style/DefaultTheme.NoActionBar" />
         <activity android:name=".Activity.PreferencesActivity" />
         <activity android:name=".DebateView.DebateActivity" />
+
+        <service android:name=".DebateView.AudioPlayerService" />
 
         <receiver android:name=".Util.Helper.CustomTabs$CopyBroadcastReceiver" />
 
