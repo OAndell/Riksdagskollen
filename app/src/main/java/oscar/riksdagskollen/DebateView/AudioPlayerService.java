@@ -11,10 +11,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
-
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -24,9 +22,14 @@ import com.google.android.exoplayer2.ui.PlayerNotificationManager;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
-import oscar.riksdagskollen.Activity.MainActivity;
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationManagerCompat;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
+
+import static oscar.riksdagskollen.DebateView.DebateViewPresenter.DEBATE_INITIATOR_ID;
+import static oscar.riksdagskollen.DebateView.DebateViewPresenter.INITIATING_DOCUMENT;
+import static oscar.riksdagskollen.DebateView.DebateViewPresenter.SHOW_INITIATING_DOCUMENT;
 
 public class AudioPlayerService extends Service {
     private final IBinder mBinder = new LocalBinder();
@@ -36,6 +39,7 @@ public class AudioPlayerService extends Service {
     private PlayerNotificationManager playerNotificationManager;
     private MediaSource audioMediaSource;
     private Context context = this;
+    private Intent parentIntent;
 
     private String CHANNEL_ID = "WEB_DEBATE_AUDIO_PLAYER";
 
@@ -78,9 +82,26 @@ public class AudioPlayerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        releasePlayer();
-        debateDocument = intent.getParcelableExtra(DEBATE_DOCUMENT);
+        PartyDocument newDebateDocument = intent.getParcelableExtra(DEBATE_DOCUMENT);
+        if (debateDocument != null && !newDebateDocument.getId().equals(debateDocument.getId())) {
+            releasePlayer();
+        }
+
+        debateDocument = newDebateDocument;
         audioSourceUrl = intent.getStringExtra(AUDIO_SOURCE_URL);
+
+
+        //Recreate intent that triggered the audioPlayer
+        parentIntent = new Intent(context, DebateActivity.class);
+        parentIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        Bundle bundle = intent.getExtras();
+        parentIntent.putExtra(INITIATING_DOCUMENT,
+                (PartyDocument) bundle.getParcelable(INITIATING_DOCUMENT));
+        parentIntent.putExtra(SHOW_INITIATING_DOCUMENT,
+                bundle.getBoolean(SHOW_INITIATING_DOCUMENT, false));
+        parentIntent.putExtra(DEBATE_INITIATOR_ID,
+                bundle.getString(DEBATE_INITIATOR_ID));
+
         if (player == null) {
             startPlayer();
         }
@@ -106,7 +127,7 @@ public class AudioPlayerService extends Service {
                 context,
                 CHANNEL_ID,
                 99,
-                new DescriptionAdapter(), new PlayerNotificationManager.NotificationListener() {
+                new DescriptionAdapter(parentIntent), new PlayerNotificationManager.NotificationListener() {
             @Override
             public void onNotificationCancelled(int notificationId, boolean dismissedByUser) {
                 stopSelf();
@@ -159,6 +180,12 @@ public class AudioPlayerService extends Service {
     private class DescriptionAdapter implements
             PlayerNotificationManager.MediaDescriptionAdapter {
 
+        private Intent parentIntent;
+
+        DescriptionAdapter(Intent parentIntent) {
+            this.parentIntent = parentIntent;
+        }
+
 
         @Override
         public String getCurrentContentTitle(Player player) {
@@ -181,11 +208,13 @@ public class AudioPlayerService extends Service {
         @Nullable
         @Override
         public PendingIntent createCurrentContentIntent(Player player) {
-            final Intent intent = new Intent(context, MainActivity.class);
+            //TODO remove dead code if we want to use current method
+            /*final Intent intent = new Intent(context, MainActivity.class);
             intent.setAction(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);*/
+
+            PendingIntent contentIntent = PendingIntent.getActivity(context, 0, parentIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             return contentIntent;
         }
     }
