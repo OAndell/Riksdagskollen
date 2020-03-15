@@ -7,8 +7,8 @@ import android.content.ServiceConnection;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +19,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.util.Util;
 
@@ -26,11 +32,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import oscar.riksdagskollen.DebateView.Data.DebateStatement;
 import oscar.riksdagskollen.DebateView.Data.Speech;
 import oscar.riksdagskollen.R;
@@ -41,10 +42,6 @@ import oscar.riksdagskollen.Util.View.DocumentHtmlView;
 import oscar.riksdagskollen.Util.WebTV.DebateAudioPlayerView;
 import oscar.riksdagskollen.Util.WebTV.DebatePlayer;
 import oscar.riksdagskollen.Util.WebTV.DebateWebTvView;
-
-import static oscar.riksdagskollen.DebateView.DebateViewPresenter.DEBATE_INITIATOR_ID;
-import static oscar.riksdagskollen.DebateView.DebateViewPresenter.INITIATING_DOCUMENT;
-import static oscar.riksdagskollen.DebateView.DebateViewPresenter.SHOW_INITIATING_DOCUMENT;
 
 
 public class DebateActivity extends AppCompatActivity implements DebateViewContract.View, DebateAdapter.WebTvListener {
@@ -74,7 +71,7 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
     private DebatePlayer currentPlayer = null;
 
     private AudioPlayerService audioPlayerService;
-    private Intent intent;
+    private Intent audioServiceIntent;
     private boolean bound = false;
 
 
@@ -89,7 +86,6 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            System.out.println("DISCONNECTED SERVICE ASÅDOJ A");
             bound = false;
         }
     };
@@ -118,29 +114,32 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
             Window window = getWindow();
             window.setNavigationBarColor(RiksdagskollenApp.getColorFromAttribute(R.attr.mainBackgroundColor, this));
         }
-
         presenter.handleExtrasAndSetupView(getIntent().getExtras());
-
     }
 
 
     @Override
     public void onStart() {
         super.onStart();
+        if (!bound) {
+            startAudioService();
+        }
     }
 
     @Override
     protected void onStop() {
-        unbindService(mConnection);
-        bound = false;
         super.onStop();
+        if (bound) {
+            unbindService(mConnection);
+            bound = false;
+        }
     }
 
     private void initializePlayer() {
         if (bound) {
             SimpleExoPlayer player = audioPlayerService.getPlayerInstance();
             audioPlayerControllView.setPlayer(player);
-            System.out.println(player.getApplicationLooper() == Looper.getMainLooper());
+
         }
     }
 
@@ -268,22 +267,18 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
 
     @Override
     public void prepareAudioPlayer(String audioSourceUrl, PartyDocument debateDocument) {
-        intent = new Intent(this, AudioPlayerService.class);
-        intent.putExtra(AudioPlayerService.DEBATE_DOCUMENT, debateDocument);
-        intent.putExtra(AudioPlayerService.AUDIO_SOURCE_URL, audioSourceUrl);
-
+        audioServiceIntent = new Intent(this, AudioPlayerService.class);
+        audioServiceIntent.putExtra(AudioPlayerService.DEBATE_DOCUMENT, debateDocument);
+        audioServiceIntent.putExtra(AudioPlayerService.AUDIO_SOURCE_URL, audioSourceUrl);
 
         //insert variables to recreate parent Intent
-        Bundle bundle = getIntent().getExtras();
-
-        intent.putExtra(INITIATING_DOCUMENT,
-                (PartyDocument) bundle.getParcelable(INITIATING_DOCUMENT));
-        intent.putExtra(SHOW_INITIATING_DOCUMENT,
-                bundle.getBoolean(SHOW_INITIATING_DOCUMENT, false));
-        intent.putExtra(DEBATE_INITIATOR_ID,
-                bundle.getString(DEBATE_INITIATOR_ID));
-
-        //audioPlayerControllView.setupMediaSource(audioSourceUrl);
+        audioServiceIntent.putExtras(getIntent());
+        if (getIntent().getBooleanExtra(AudioPlayerService.OPEN_FROM_NOTIFICATION, false)) {
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                audioPlayerHeader.performClick();
+            }, 300);
+        }
     }
 
     @Override
@@ -291,13 +286,19 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
         return (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
+    private void startAudioService() {
+        if (audioServiceIntent != null) {
+            Util.startForegroundService(this, audioServiceIntent);
+            bindService(audioServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
+            initializePlayer();
+        }
+    }
+
     private void expandAudioPlayer() {
         adapter.setShowPlayLabel(true);
         adapter.notifyDataSetChanged();
         if (firstAudioPlayerExpand) {
-            Util.startForegroundService(this, intent);
-            bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-            initializePlayer();
+            startAudioService();
             firstAudioPlayerExpand = false;
         }
         AnimUtil.expand(audioPlayerControllView, null);
