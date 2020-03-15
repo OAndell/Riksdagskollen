@@ -5,6 +5,7 @@ import com.android.volley.VolleyError;
 import oscar.riksdagskollen.Manager.RiksdagenAPIManager;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
+import oscar.riksdagskollen.Util.RiksdagenCallback.DebateAudioSourceCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.ProtocolCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.SpeechCallback;
 
@@ -27,6 +28,10 @@ public class DebateViewModel implements DebateViewContract.Model {
     @Override
     public void getSpeech(String anf, SpeechCallback callback) {
         RiksdagskollenApp.getInstance().getRiksdagenAPIManager().getSpeech(protocolId, anf, callback);
+    }
+
+    public void getDebateAudioSourceUrl(DebateAudioSourceCallback callback) {
+        RiksdagenAPIManager.getInstance().getDebateAudioSource(initiatingDocument, callback);
     }
 
 

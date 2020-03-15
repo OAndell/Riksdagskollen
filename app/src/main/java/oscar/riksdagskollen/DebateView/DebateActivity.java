@@ -1,9 +1,6 @@
 package oscar.riksdagskollen.DebateView;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,7 +17,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,60 +30,36 @@ import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.AnimUtil;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
-import oscar.riksdagskollen.Util.RiksdagenCallback.OnDocumentHtmlViewLoadedCallback;
 import oscar.riksdagskollen.Util.View.DocumentHtmlView;
+import oscar.riksdagskollen.Util.WebTV.DebateAudioPlayerView;
+import oscar.riksdagskollen.Util.WebTV.DebatePlayer;
 import oscar.riksdagskollen.Util.WebTV.DebateWebTvView;
-import oscar.riksdagskollen.Util.WebTV.JSInterface;
-
-import static oscar.riksdagskollen.Util.WebTV.DebateWebTvView.ACTION_PAUSE;
-import static oscar.riksdagskollen.Util.WebTV.DebateWebTvView.ACTION_PLAY;
-import static oscar.riksdagskollen.Util.WebTV.DebateWebTvView.ACTION_SEEK_BACKWARD;
-import static oscar.riksdagskollen.Util.WebTV.DebateWebTvView.ACTION_SEEK_FORWARD;
 
 public class DebateActivity extends AppCompatActivity implements DebateViewContract.View, DebateAdapter.WebTvListener {
     private RecyclerView recyclerView;
     private ViewGroup loadingView;
     private TextView debateLabel;
     private Button scrollHint;
+
+    private LinearLayout audioPlayerHeader;
+    private DebateAudioPlayerView audioPlayerControllView;
+
     private LinearLayout webTVHeader;
     private DebateWebTvView debateWebTvView;
-    private ImageView expansionArrow;
+
+    private ImageView webExpansionArrow;
+    private ImageView audioExpansionArrow;
+
     private DocumentHtmlView documentHtmlView;
     private DebateViewContract.Presenter presenter = new DebateViewPresenter(this);
     private DebateAdapter adapter;
+
     private boolean isWebTVExpanded = false;
-    private boolean firstExpand = true;
-    private NotificationManagerCompat notificationManager;
+    private boolean firstWebTvExpand = true;
 
-    private BroadcastReceiver mediaPlaybackReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction() == null) return;
-
-            switch (intent.getAction()) {
-                case ACTION_PLAY:
-                    playDebate();
-                    break;
-
-                case ACTION_PAUSE:
-                    pauseDebate();
-                    break;
-
-                case ACTION_SEEK_FORWARD:
-                    seekForward();
-                    break;
-
-                case ACTION_SEEK_BACKWARD:
-                    seekBackward();
-                    break;
-
-                case Intent.ACTION_HEADSET_PLUG:
-                    pauseDebate();
-                    break;
-            }
-        }
-    };
-
+    private boolean isAudioPlayerExpanded = false;
+    private boolean firstAudioPlayerExpand = true;
+    private DebatePlayer currentPlayer = null;
 
 
     @Override
@@ -99,18 +71,15 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
         loadingView = findViewById(R.id.loading_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         scrollHint = findViewById(R.id.scroll_hint);
+
+        audioPlayerControllView = findViewById(R.id.player_controller_view);
+        audioPlayerHeader = findViewById(R.id.show_audio_player_header);
+
         debateWebTvView = findViewById(R.id.tv_view);
         webTVHeader = findViewById(R.id.show_web_tv_header);
-        expansionArrow = findViewById(R.id.web_tv_expand_icon);
 
-        notificationManager = NotificationManagerCompat.from(this);
-
-        IntentFilter filter = new IntentFilter(ACTION_PAUSE);
-        filter.addAction(ACTION_PLAY);
-        filter.addAction(ACTION_SEEK_BACKWARD);
-        filter.addAction(ACTION_SEEK_FORWARD);
-        filter.addAction(Intent.ACTION_HEADSET_PLUG);
-        registerReceiver(mediaPlaybackReceiver, filter);
+        webExpansionArrow = findViewById(R.id.web_tv_expand_icon);
+        audioExpansionArrow = findViewById(R.id.audio_expand_icon);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -118,14 +87,12 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
         }
 
         presenter.handleExtrasAndSetupView(getIntent().getExtras());
+
     }
 
 
     @Override
     protected void onDestroy() {
-        notificationManager.cancel(JSInterface.NOTIF_ID);
-        unregisterReceiver(mediaPlaybackReceiver);
-        if (debateWebTvView != null) debateWebTvView.removeJavascriptInterface("JSOUT");
         super.onDestroy();
     }
 
@@ -187,17 +154,9 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
         documentHtmlView.setDocument(initiatingDocument);
         adapter.addHeader(header);
 
-        documentHtmlView.setLoadedCallack(new OnDocumentHtmlViewLoadedCallback() {
-            @Override
-            public void onDocumentLoaded() {
-                loadingView.setVisibility(View.GONE);
-                scrollHint.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        recyclerView.smoothScrollBy(0, header.getMeasuredHeight() - recyclerView.computeVerticalScrollOffset());
-                    }
-                });
-            }
+        documentHtmlView.setLoadedCallack(() -> {
+            loadingView.setVisibility(View.GONE);
+            scrollHint.setOnClickListener(view -> recyclerView.smoothScrollBy(0, header.getMeasuredHeight() - recyclerView.computeVerticalScrollOffset()));
         });
     }
 
@@ -214,19 +173,34 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
     }
 
     @Override
-    public void setUpWebTvView(PartyDocument debateDocument) {
-        webTVHeader.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isWebTVExpanded = !isWebTVExpanded;
+    public void setUpPlayers(PartyDocument debateDocument) {
+        webTVHeader.setOnClickListener(view -> {
+            isWebTVExpanded = !isWebTVExpanded;
 
-                if (isWebTVExpanded) expandWebTv();
-                else collapseWebTv();
+            if (isAudioPlayerExpanded && isWebTVExpanded) {
+                isAudioPlayerExpanded = false;
+                collapseAudioPlayer();
             }
+
+            if (isWebTVExpanded) expandWebTv();
+            else collapseWebTv();
+        });
+
+        audioPlayerHeader.setOnClickListener(v -> {
+            isAudioPlayerExpanded = !isAudioPlayerExpanded;
+
+            if (isWebTVExpanded && isAudioPlayerExpanded) {
+                isWebTVExpanded = false;
+                collapseWebTv();
+            }
+
+            if (isAudioPlayerExpanded) expandAudioPlayer();
+            else collapseAudioPlayer();
         });
 
         debateWebTvView = findViewById(R.id.tv_view);
         debateWebTvView.setDebate(debateDocument);
+        audioPlayerControllView.setDebate(debateDocument);
     }
 
     @Override
@@ -235,20 +209,52 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
     }
 
     @Override
+    public void hideAudioPlayer() {
+        audioPlayerHeader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void prepareAudioPlayer(String audioSourceUrl) {
+        audioPlayerControllView.setupMediaSource(audioSourceUrl);
+    }
+
+    @Override
     public ConnectivityManager getConnectivityManager() {
         return (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+    }
+
+    private void expandAudioPlayer() {
+        adapter.setShowPlayLabel(true);
+        adapter.notifyDataSetChanged();
+        if (firstAudioPlayerExpand) {
+            audioPlayerControllView.setupPlayer();
+            firstAudioPlayerExpand = false;
+        }
+        AnimUtil.expand(audioPlayerControllView, null);
+        int rotationAngle = 180;  //toggle
+        audioExpansionArrow.animate().rotation(rotationAngle).setDuration(200).start();
+        currentPlayer = audioPlayerControllView;
+    }
+
+    private void collapseAudioPlayer() {
+        adapter.setShowPlayLabel(false);
+        adapter.notifyDataSetChanged();
+        AnimUtil.collapse(audioPlayerControllView, null);
+        int rotationAngle = 0;  //toggle
+        audioExpansionArrow.animate().rotation(rotationAngle).setDuration(200).start();
     }
 
     private void expandWebTv() {
         adapter.setShowPlayLabel(true);
         adapter.notifyDataSetChanged();
-        if (firstExpand) {
+        if (firstWebTvExpand) {
             loadDebate();
-            firstExpand = false;
+            firstWebTvExpand = false;
         }
         AnimUtil.expand(debateWebTvView, null);
         int rotationAngle = 180;  //toggle
-        expansionArrow.animate().rotation(rotationAngle).setDuration(200).start();
+        webExpansionArrow.animate().rotation(rotationAngle).setDuration(200).start();
+        currentPlayer = debateWebTvView;
     }
 
     private void collapseWebTv() {
@@ -256,27 +262,28 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
         adapter.notifyDataSetChanged();
         AnimUtil.collapse(debateWebTvView, null);
         int rotationAngle = 0;  //toggle
-        expansionArrow.animate().rotation(rotationAngle).setDuration(200).start();
+        webExpansionArrow.animate().rotation(rotationAngle).setDuration(200).start();
     }
 
     private void playDebateFromSecond(int start) {
-        if (debateWebTvView != null && isWebTVExpanded) debateWebTvView.setCurrentTime(start);
+        if (currentPlayer != null && (isWebTVExpanded || isAudioPlayerExpanded))
+            currentPlayer.seekTo(start);
     }
 
     private void playDebate() {
-        if (debateWebTvView != null) debateWebTvView.play();
+        if (currentPlayer != null) currentPlayer.play();
     }
 
     private void pauseDebate() {
-        if (debateWebTvView != null) debateWebTvView.pause();
+        if (currentPlayer != null) currentPlayer.pause();
     }
 
     private void seekForward() {
-        if (debateWebTvView != null) debateWebTvView.seekForward();
+        if (currentPlayer != null) currentPlayer.fastForward();
     }
 
     private void seekBackward() {
-        if (debateWebTvView != null) debateWebTvView.seekBackward();
+        if (currentPlayer != null) currentPlayer.fastRewind();
     }
 
     @Override

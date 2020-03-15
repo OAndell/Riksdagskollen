@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ import oscar.riksdagskollen.Util.JSONModel.Protocol;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeInfo;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeVoteStatistics;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
+import oscar.riksdagskollen.Util.RiksdagenCallback.DebateAudioSourceCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.DecisionsCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.JSONRequestCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyDocumentCallback;
@@ -769,6 +771,33 @@ public class RiksdagenAPIManager {
     }
 
 
+    public void getDebateAudioSource(PartyDocument debateDocument, DebateAudioSourceCallback callback) {
+        String url = String.format("https://data.riksdagen.se/dokumentstatus/%s.webbtvxml", debateDocument.getId());
+        doCachedApiGetStringRequest(url, CacheRequest.CachingPolicy.LONG_TIME_CACHE, new StringRequestCallback() {
+            @Override
+            public void onResponse(String xml) {
+                String url = "";
+                try {
+                    Document doc = Jsoup.parse(xml, "", Parser.xmlParser());
+                    Elements els = doc.select("dokumentstatus > webbmedia > media > bandbredd > kvalitet > url");
+                    url = els.first().text();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    callback.onAudioSourceFail(new VolleyError("Failed to parse XML"));
+                }
+                if (url.isEmpty())
+                    callback.onAudioSourceFail(new VolleyError("Failed to get audio source url"));
+                else callback.onDebateAudioSource(url);
+            }
+
+            @Override
+            public void onFail(VolleyError error) {
+                callback.onAudioSourceFail(error);
+            }
+        });
+    }
+
+
     public void getVoteStatisticsForRepresentative(String iid, final VoteStatisticsCallback callback) {
         String url = "http://data.riksdagen.se/voteringlista/?iid=" + iid + "&utformat=XML&gruppering=namn";
 
@@ -802,13 +831,13 @@ public class RiksdagenAPIManager {
                     callback.onStatisticsFetched(stats);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    callback.onFail(new VolleyError("Failed to parse JSON"));
+                    callback.onAudioSourceFail(new VolleyError("Failed to parse JSON"));
                 }
             }
 
             @Override
             public void onRequestFail(VolleyError error) {
-                callback.onFail(error);
+                callback.onAudioSourceFail(error);
             }*/
         });
 

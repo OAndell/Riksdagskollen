@@ -12,10 +12,11 @@ import oscar.riksdagskollen.DebateView.Data.DebateStatement;
 import oscar.riksdagskollen.DebateView.Data.Speech;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Protocol;
+import oscar.riksdagskollen.Util.RiksdagenCallback.DebateAudioSourceCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.ProtocolCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.SpeechCallback;
 
-public class DebateViewPresenter implements DebateViewContract.Presenter, ProtocolCallback, SpeechCallback {
+public class DebateViewPresenter implements DebateViewContract.Presenter, ProtocolCallback, SpeechCallback, DebateAudioSourceCallback {
 
     public static final String SPEECHES = "speeches";
     public static final String DEBATE_INITIATOR_ID = "debate_initiator_id";
@@ -51,7 +52,8 @@ public class DebateViewPresenter implements DebateViewContract.Presenter, Protoc
             view.hideScrollHint();
         }
 
-        view.setUpWebTvView(model.getInitiatingDocument());
+        view.setUpPlayers(model.getInitiatingDocument());
+
         ConnectivityManager connManager = view.getConnectivityManager();
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
@@ -61,6 +63,7 @@ public class DebateViewPresenter implements DebateViewContract.Presenter, Protoc
         }
 
         model.getProtocolForDate(this);
+        model.getDebateAudioSourceUrl(this);
     }
 
 
@@ -104,5 +107,17 @@ public class DebateViewPresenter implements DebateViewContract.Presenter, Protoc
     @Override
     public void onFail(VolleyError error) {
         view.showFailToastAndFinish();
+    }
+
+    @Override
+    public void onDebateAudioSource(String sourceUrl) {
+        view.prepareAudioPlayer(sourceUrl);
+    }
+
+    @Override
+    public void onAudioSourceFail(VolleyError error) {
+        System.out.println(error);
+        // Failed to get audio source url
+        view.hideAudioPlayer();
     }
 }

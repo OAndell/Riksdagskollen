@@ -13,19 +13,10 @@ import android.webkit.WebViewClient;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.RiksdagenCallback.OnDocumentHtmlViewLoadedCallback;
 
-public class DebateWebTvView extends WebView {
+public class DebateWebTvView extends WebView implements DebatePlayer {
 
     private PartyDocument debate;
-    private Context context;
     private OnDocumentHtmlViewLoadedCallback loadedCallack;
-    private String videoSelector = "document.querySelector(\"body > div.row.ng-scope > div > div > div > div > div.video-include.ng-scope > div:nth-child(4) > video\")";
-
-    public static final String ACTION_PLAY = "ACTION_PLAY";
-    public static final String ACTION_PAUSE = "ACTION_PAUSE";
-    public static final String ACTION_SEEK_FORWARD = "ACTION_SEEK_FORWARD";
-    public static final String ACTION_SEEK_BACKWARD = "ACTION_SEEK_BACKWARD";
-
-
 
 
     public DebateWebTvView(Context context, AttributeSet attrs) {
@@ -59,8 +50,7 @@ public class DebateWebTvView extends WebView {
     }
 
     public String getDebateURL() {
-        return String.format("http://www.riksdagen.se/views/pages/embedpage.aspx" +
-                        "?did=%s",
+        return String.format("http://www.riksdagen.se/views/pages/embedpage.aspx?did=%s",
                 debate.getId());
     }
 
@@ -72,21 +62,19 @@ public class DebateWebTvView extends WebView {
         this.loadUrl("javascript:mediaElement.pause();");
     }
 
-    public void setCurrentTime(int seconds) {
-
+    public void seekTo(int seconds) {
         this.loadUrl("javascript:mediaElement.currentTime = " + seconds + ";");
     }
 
-    public void seekForward() {
+    public void fastForward() {
         this.loadUrl("javascript:mediaElement.currentTime = mediaElement.currentTime + " + 30 + ";");
 
     }
 
-    public void seekBackward() {
+    public void fastRewind() {
         this.loadUrl("javascript:mediaElement.currentTime = mediaElement.currentTime - " + 30 + ";");
 
     }
-
 
 
     private void setupWebView() {
@@ -101,12 +89,6 @@ public class DebateWebTvView extends WebView {
         getSettings().setPluginState(WebSettings.PluginState.ON);
         setWebChromeClient(new WebChromeClient());
 
-        if (debate != null) {
-            addJavascriptInterface(new JSInterface(getContext(), debate.getTitel(), debate.getUndertitel()), "JSOUT");
-        }
-
-
-
         //Disable text-select to make consistent with rest of app
         setLongClickable(false);
         setOnLongClickListener(new OnLongClickListener() {
@@ -117,6 +99,7 @@ public class DebateWebTvView extends WebView {
         });
 
     }
+
 
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
@@ -154,11 +137,9 @@ public class DebateWebTvView extends WebView {
                     "        mediaElement = media;" +
                     "        media.onplay = function(){" +
                     "            mediaElement = media;" +
-                    "            JSOUT.mediaAction('true');" +
                     "        };" +
                     "        media.onpause = function(){" +
                     "            mediaElement = media;" +
-                    "            JSOUT.mediaAction('false');" +
                     "        };" +
                     "    } " +
                     "}";

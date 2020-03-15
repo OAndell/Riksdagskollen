@@ -11,6 +11,7 @@
         layout="@layout/loading_view"
         android:visibility="visible" />
 
+    <include layout="@layout/web_audio_player_header" />
     <include layout="@layout/web_tv_header" />
 
     <FrameLayout

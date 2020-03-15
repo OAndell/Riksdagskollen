@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import oscar.riksdagskollen.DebateView.Data.Speech;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
+import oscar.riksdagskollen.Util.RiksdagenCallback.DebateAudioSourceCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.ProtocolCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.SpeechCallback;
 
@@ -28,6 +29,8 @@ public interface DebateViewContract {
 
         PartyDocument getInitiatingDocument();
 
+        void getDebateAudioSourceUrl(DebateAudioSourceCallback callback);
+
         void setInitiatingDocument(PartyDocument initiatingDocument);
     }
 
@@ -46,9 +49,13 @@ public interface DebateViewContract {
 
         void setSpeechForAnforande(Speech speech, String anfNummer);
 
-        void setUpWebTvView(PartyDocument initiatingDocument);
+        void setUpPlayers(PartyDocument initiatingDocument);
 
         void loadDebate();
+
+        void hideAudioPlayer();
+
+        void prepareAudioPlayer(String audioSourceUrl);
 
         ConnectivityManager getConnectivityManager();
     }

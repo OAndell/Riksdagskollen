@@ -9,7 +9,7 @@
     android:layout_marginTop="16dp">
 
     <LinearLayout
-        android:id="@+id/show_web_tv_header"
+        android:id="@+id/show_audio_player_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -24,13 +24,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:layout_weight="17"
-            android:text="Titta på debatten i Riksdagens Webb-tv"
+            android:text="Lyssna på debatten"
             android:textColor="?attr/mainTitleTextColor"
             android:textSize="16sp"
             android:textStyle="bold" />
 
         <ImageView
-            android:id="@+id/web_tv_expand_icon"
+            android:id="@+id/audio_expand_icon"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_gravity="center_vertical"
@@ -42,13 +42,19 @@
     </LinearLayout>
 
 
-    <oscar.riksdagskollen.Util.WebTV.DebateWebTvView
+    <oscar.riksdagskollen.Util.WebTV.DebateAudioPlayerView
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:id="@+id/tv_view"
+        android:id="@+id/player_controller_view"
+        android:layout_gravity="center"
+        app:fastforward_increment="30000"
+        app:rewind_increment="30000"
+        app:surface_type="surface_view"
+
+        app:controller_layout_id="@layout/audio_player_controls"
         android:visibility="gone">
 
-    </oscar.riksdagskollen.Util.WebTV.DebateWebTvView>
+    </oscar.riksdagskollen.Util.WebTV.DebateAudioPlayerView>
 
 
 </LinearLayout>

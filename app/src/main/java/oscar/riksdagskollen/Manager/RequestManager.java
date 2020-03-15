@@ -142,17 +142,9 @@ public class RequestManager {
 
     private Request queueCachedStringRequest(final int method, final String url, CacheRequest.CachingPolicy cachingPolicy, final StringRequestCallback callback) {
         System.out.println("Making string-request to: " + url);
-        final Request request = new DesktopStringRequest(method, url, cachingPolicy, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                callback.onResponse(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                callback.onFail(error);
-            }
-        });
+        final Request request = new DesktopStringRequest(method, url, cachingPolicy,
+                response -> callback.onResponse(response),
+                error -> callback.onFail(error));
 
         return requestQueue.add(request);
     }

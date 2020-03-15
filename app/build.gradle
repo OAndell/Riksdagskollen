@@ -4,6 +4,7 @@ import java.util.regex.Pattern
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
+
     }
 }
 
@@ -108,6 +109,8 @@ dependencies {
     implementation 'androidx.core:core:1.2.0'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation "androidx.multidex:multidex:$multidex_version"
+    implementation 'com.google.android.exoplayer:exoplayer:2.11.0'
+
 
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
