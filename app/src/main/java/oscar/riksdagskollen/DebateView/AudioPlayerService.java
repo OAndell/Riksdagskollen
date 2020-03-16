@@ -35,8 +35,10 @@ public class AudioPlayerService extends Service {
     private PlayerNotificationManager playerNotificationManager;
     private Context context = this;
     private Intent parentIntent;
+    private boolean initialNotification = true;
 
     private String CHANNEL_ID = "WEB_DEBATE_AUDIO_PLAYER";
+
 
     public static final String DEBATE_DOCUMENT = "DEBATE_DOCUMENT";
     public static final String AUDIO_SOURCE_URL = "AUDIO_SOURCE_URL";
@@ -129,7 +131,8 @@ public class AudioPlayerService extends Service {
 
             @Override
             public void onNotificationPosted(int notificationId, Notification notification, boolean ongoing) {
-                if (player.getPlayWhenReady()) {
+                if (player.getPlayWhenReady() || initialNotification) {
+                    initialNotification = false;
                     startForeground(notificationId, notification);
                 }
             }
@@ -147,6 +150,7 @@ public class AudioPlayerService extends Service {
 
         playerNotificationManager.setSmallIcon(R.drawable.riksdagskollen_logo_small);
         playerNotificationManager.setPlayer(player);
+
     }
 
     public class LocalBinder extends Binder {
