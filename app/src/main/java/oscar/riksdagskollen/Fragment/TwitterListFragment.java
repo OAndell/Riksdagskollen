@@ -12,15 +12,14 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.RadioGroup;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.VolleyError;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.Util.Adapter.RiksdagenViewHolderAdapter;
 import oscar.riksdagskollen.Util.Adapter.TweetAdapter;
@@ -71,8 +70,8 @@ public class TwitterListFragment extends RiksdagenAutoLoadingListFragment {
     private void applyPreferences() {
         int preferredList = preferences.getInt(PREFERENCE_LIST, TwitterTimelineFactory.LIST_RIKSDAGEN_ALL);
         twitterTimeline = TwitterTimelineFactory.getTwitterList(preferredList);
-        boolean inculdeRT = preferences.getBoolean(PREFERENCE_RETWEET, true);
-        twitterTimeline.setIncludeRT(inculdeRT);
+        boolean includeRT = preferences.getBoolean(PREFERENCE_RETWEET, true);
+        twitterTimeline.setIncludeRT(includeRT);
     }
 
 
