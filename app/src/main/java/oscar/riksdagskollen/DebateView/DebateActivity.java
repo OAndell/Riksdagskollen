@@ -19,12 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.util.Util;
 
@@ -32,6 +26,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import oscar.riksdagskollen.DebateView.Data.DebateStatement;
 import oscar.riksdagskollen.DebateView.Data.Speech;
 import oscar.riksdagskollen.R;
@@ -263,6 +262,13 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
     @Override
     public void hideAudioPlayer() {
         audioPlayerHeader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideDebateTranscript() {
+        Toast.makeText(this, "Debatt ej ännu transkriberad", Toast.LENGTH_LONG).show();
+        recyclerView.setVisibility(View.GONE);
+        expandWebTv();
     }
 
     @Override

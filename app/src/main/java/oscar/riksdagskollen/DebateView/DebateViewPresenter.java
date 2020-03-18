@@ -106,7 +106,7 @@ public class DebateViewPresenter implements DebateViewContract.Presenter, Protoc
 
     @Override
     public void onFail(VolleyError error) {
-        view.showFailToastAndFinish();
+        view.hideDebateTranscript();
     }
 
     @Override
