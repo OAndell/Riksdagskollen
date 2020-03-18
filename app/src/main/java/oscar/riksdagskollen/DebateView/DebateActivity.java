@@ -266,9 +266,9 @@ public class DebateActivity extends AppCompatActivity implements DebateViewContr
 
     @Override
     public void hideDebateTranscript() {
-        Toast.makeText(this, "Debatt ej ännu transkriberad", Toast.LENGTH_LONG).show();
         recyclerView.setVisibility(View.GONE);
-        expandWebTv();
+        Toast.makeText(this, "Debatt ännu ej transkriberad", Toast.LENGTH_LONG).show();
+        expandAudioPlayer();
     }
 
     @Override
