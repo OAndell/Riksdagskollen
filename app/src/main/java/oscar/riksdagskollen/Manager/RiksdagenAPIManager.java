@@ -19,6 +19,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -377,7 +378,7 @@ public class RiksdagenAPIManager {
     }
 
     public void getProtocolForDate(String date, String rm, final ProtocolCallback callback) {
-        String subUrl = "/dokumentlista/?doktyp=prot&rm=" + rm + "&from=" + date + "&tom=" + date + "&sort=rel&sortorder=desc&utformat=json";
+        String subUrl = "/dokumentlista/?doktyp=prot&rm=" + URLEncoder.encode(rm) + "&from=" + date + "&tom=" + date + "&sort=rel&sortorder=desc&utformat=json";
         doCachedApiGetRequest(subUrl, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
@@ -401,13 +402,14 @@ public class RiksdagenAPIManager {
     }
 
     public void getSpeech(String protId, final String speechNo, final SpeechCallback callback) {
-        String subUrl = "/anforande/" + protId + "-" + speechNo + "/json";
-        doCachedApiGetRequest(subUrl, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new JSONRequestCallback() {
+        String url = HOST + "/anforande/" + protId + "-" + speechNo;
+        doCachedApiGetStringRequest(url, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new StringRequestCallback() {
             @Override
-            public void onRequestSuccess(JSONObject response) {
+            public void onResponse(String response) {
                 try {
-                    JSONObject speechJSON = response.getJSONObject("anforande");
-                    Speech speech = gson.fromJson(speechJSON.toString(), Speech.class);
+                    JSONObject jsonObject = new XmlToJson.Builder(response).build().toJson();
+                    jsonObject = jsonObject.getJSONObject("anforande");
+                    Speech speech = gson.fromJson(jsonObject.toString(), Speech.class);
                     callback.onSpeechFetched(speech, speechNo);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -415,7 +417,7 @@ public class RiksdagenAPIManager {
             }
 
             @Override
-            public void onRequestFail(VolleyError error) {
+            public void onFail(VolleyError error) {
 
             }
         });
