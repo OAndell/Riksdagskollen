@@ -4,8 +4,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.android.volley.VolleyError;
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
@@ -14,6 +12,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
 import oscar.riksdagskollen.Fragment.VoteListFragment;
 import oscar.riksdagskollen.Manager.AlertManager;
 import oscar.riksdagskollen.News.CurrentNewsCallback;
@@ -163,7 +162,6 @@ public class CheckAlertsJob extends Job {
                     }
                 }, 1);
                 break;
-
             default:
                 countDownLatch.countDown();
         }

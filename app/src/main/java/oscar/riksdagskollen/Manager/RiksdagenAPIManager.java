@@ -401,6 +401,10 @@ public class RiksdagenAPIManager {
         });
     }
 
+    /**
+     * "doCachedApiGetStringRequest" instead of "doCachedApiGetRequest" because of (temporary?)
+     * bug in Riksdagens API.
+     */
     public void getSpeech(String protId, final String speechNo, final SpeechCallback callback) {
         String url = HOST + "/anforande/" + protId + "-" + speechNo;
         doCachedApiGetStringRequest(url, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new StringRequestCallback() {
