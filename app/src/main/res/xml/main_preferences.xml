@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <PreferenceCategory android:title="Integritet">
 
-    <PreferenceCategory android:title="Data-använding">
+        <SwitchPreference
+            android:title="Dela anonym användningsinformation"
+            android:defaultValue="true"
+            android:key="send_analytics"
+            android:summary="Hjälp utvecklarna av Riksdagskollen genom att anonymt dela loggar och information om hur appen används för att vi lättare ska kunna åtgärda buggar och förbättra applikationen." />
+        />
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory android:title="Data-användning">
 
         <SwitchPreference
             android:title="Datasparläge (experimentellt)"

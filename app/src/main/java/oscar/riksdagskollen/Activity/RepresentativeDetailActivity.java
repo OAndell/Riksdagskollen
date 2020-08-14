@@ -75,7 +75,7 @@ public class RepresentativeDetailActivity extends AppCompatActivity {
             return;
         }
 
-        AnalyticsManager.getInstance().setCurrentScreen(this, "Representative: " + representative.getIntressent_id());
+        AnalyticsManager.getInstance().logMessage("Representative: " + representative.toString());
 
         collapsingToolbarLayout = findViewById(R.id.collapsing_layout);
         collapsingToolbarLayout.setTitleEnabled(true);

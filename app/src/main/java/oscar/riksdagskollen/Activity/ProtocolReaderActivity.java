@@ -65,7 +65,7 @@ public class ProtocolReaderActivity extends AppCompatActivity {
         docID = getIntent().getStringExtra("id");
 
 
-        AnalyticsManager.getInstance().setCurrentScreen(this, "Protocol doc: " + title);
+        AnalyticsManager.getInstance().logMessage("Opened protocol: " + title);
 
         final ViewGroup loadingView = findViewById(R.id.loading_view);
 

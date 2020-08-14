@@ -90,6 +90,15 @@ public class Vote implements Parcelable {
     }
 
     @Override
+    public String toString() {
+        String string = "";
+        if (titel != null) string += titel + " ";
+        if (id != null) string += id + " ";
+        return string;
+    }
+
+
+    @Override
     public int describeContents() {
         return 0;
     }

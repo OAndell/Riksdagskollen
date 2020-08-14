@@ -37,5 +37,9 @@ public class AnalyticsManager {
         analyticsWrapper.logEvent(event, bundle);
     }
 
+    public void logMessage(String logMessage) {
+        analyticsWrapper.log(logMessage);
+    }
+
 
 }

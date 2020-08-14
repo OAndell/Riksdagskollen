@@ -27,6 +27,7 @@ public interface DebateViewContract {
 
         void setDebateInitiatorId(String initiatorId);
 
+
         PartyDocument getInitiatingDocument();
 
         void getDebateAudioSourceUrl(DebateAudioSourceCallback callback);

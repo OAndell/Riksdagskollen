@@ -80,8 +80,7 @@ public class DocumentReaderActivity extends AppCompatActivity {
             Window window = getWindow();
             window.setNavigationBarColor(RiksdagskollenApp.getColorFromAttribute(R.attr.mainBackgroundColor, this));
         }
-
-        AnalyticsManager.getInstance().setCurrentScreen(this, "Motion doc: " + document.getId());
+        AnalyticsManager.getInstance().logMessage("Document opened: " + document.toString());
 
         String intresentId = getIntent().getStringExtra("intressent");
 

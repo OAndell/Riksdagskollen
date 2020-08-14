@@ -66,6 +66,9 @@
 
         <receiver android:name=".Util.Helper.CustomTabs$CopyBroadcastReceiver" />
 
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="${enableCrashReporting}" />
 
     </application>
 

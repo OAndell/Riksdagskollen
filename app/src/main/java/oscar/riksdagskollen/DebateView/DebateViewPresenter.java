@@ -10,7 +10,7 @@ import java.util.List;
 
 import oscar.riksdagskollen.DebateView.Data.DebateStatement;
 import oscar.riksdagskollen.DebateView.Data.Speech;
-import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
+import oscar.riksdagskollen.Manager.AnalyticsManager;
 import oscar.riksdagskollen.Util.JSONModel.Protocol;
 import oscar.riksdagskollen.Util.RiksdagenCallback.DebateAudioSourceCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.ProtocolCallback;
@@ -34,9 +34,10 @@ public class DebateViewPresenter implements DebateViewContract.Presenter, Protoc
 
     @Override
     public void handleExtrasAndSetupView(Bundle bundle) {
-        model.setInitiatingDocument((PartyDocument) bundle.getParcelable(INITIATING_DOCUMENT));
+        model.setInitiatingDocument(bundle.getParcelable(INITIATING_DOCUMENT));
         model.setDebateInitiatorId(bundle.getString(DEBATE_INITIATOR_ID));
         model.setShouldShowInitiatingDocument(bundle.getBoolean(SHOW_INITIATING_DOCUMENT, false));
+        AnalyticsManager.getInstance().logMessage("Opened debate: " + model.getInitiatingDocument().toString());
 
         String debateName = "Debatt";
         if (model.getInitiatingDocument().getDebattnamn() != null)
@@ -61,6 +62,7 @@ public class DebateViewPresenter implements DebateViewContract.Presenter, Protoc
         if (mWifi.isConnected()) {
             view.loadDebate();
         }
+
 
         model.getProtocolForDate(this);
         model.getDebateAudioSourceUrl(this);

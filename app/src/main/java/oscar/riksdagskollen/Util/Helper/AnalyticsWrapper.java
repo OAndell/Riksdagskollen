@@ -12,6 +12,8 @@ public interface AnalyticsWrapper {
 
     void setCurrentScreen(Activity activity, String screenName);
 
+    void log(String logMessage);
+
     void logEvent(String event, @Nullable Bundle bundle);
 
 }

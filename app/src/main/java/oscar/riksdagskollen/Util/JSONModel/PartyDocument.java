@@ -188,7 +188,10 @@ public class PartyDocument extends java.lang.Object implements Parcelable {
 
     @Override
     public String toString() {
-        return getTitel();
+        String string = "";
+        if (titel != null) string += titel + " ";
+        if (id != null) string += id + " ";
+        return string;
     }
 
     public PartyDocument(String publicerad, String titel) {

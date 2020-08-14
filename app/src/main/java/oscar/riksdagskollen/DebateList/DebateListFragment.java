@@ -43,12 +43,7 @@ public class DebateListFragment extends RiksdagenAutoLoadingListFragment impleme
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new DebateListAdapter(documentList, new RiksdagenViewHolderAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Object clickedDocument) {
-                presenter.handleItemClick((PartyDocument) clickedDocument, getContext());
-            }
-        }, this);
+        adapter = new DebateListAdapter(documentList, clickedDocument -> presenter.handleItemClick((PartyDocument) clickedDocument, getContext()), this);
     }
 
     /**

@@ -102,7 +102,7 @@ public class VoteActivity extends AppCompatActivity{
 
         final Vote voteDocument = getIntent().getParcelableExtra("document");
 
-        AnalyticsManager.getInstance().setCurrentScreen(this, "Vote doc: " + voteDocument.getId());
+        AnalyticsManager.getInstance().logMessage("Vote doc: " + voteDocument.toString());
 
         final TextView title = findViewById(R.id.vote_title);
         title.setText(voteDocument.getTitel());

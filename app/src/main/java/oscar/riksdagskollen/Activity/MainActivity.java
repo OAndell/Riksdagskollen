@@ -18,6 +18,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -313,9 +314,8 @@ public class MainActivity extends AppCompatActivity
         return id > 0 && resources.getBoolean(id);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
         // Ugly hack to prevent News menu item to be checked forever
@@ -323,82 +323,82 @@ public class MainActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.news_nav:
-                analyticsManager.setCurrentScreen(this, CurrentNewsListFragment.SECTION_NAME_NEWS);
+                analyticsManager.logMessage("Opened: " + CurrentNewsListFragment.SECTION_NAME_NEWS);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(CurrentNewsListFragment.SECTION_NAME_NEWS)).commit();
                 break;
             case R.id.votes_nav:
-                analyticsManager.setCurrentScreen(this, VoteListFragment.SECTION_NAME_VOTE);
+                analyticsManager.logMessage("Opened: " + VoteListFragment.SECTION_NAME_VOTE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(VoteListFragment.SECTION_NAME_VOTE)).commit();
                 break;
             case R.id.dec_nav:
-                analyticsManager.setCurrentScreen(this, DecisionsListFragment.SECTION_NAME_DECISIONS);
+                analyticsManager.logMessage("Opened: " + DecisionsListFragment.SECTION_NAME_DECISIONS);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(DecisionsListFragment.SECTION_NAME_DECISIONS)).commit();
                 break;
             case R.id.rep_nav:
-                analyticsManager.setCurrentScreen(this, RepresentativeListFragment.SECTION_NAME_REPS);
+                analyticsManager.logMessage("Opened: " + RepresentativeListFragment.SECTION_NAME_REPS);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(RepresentativeListFragment.SECTION_NAME_REPS)).commit();
                 break;
             case R.id.prot_nav:
-                analyticsManager.setCurrentScreen(this, ProtocolListFragment.SECTION_NAME_protocol);
+                analyticsManager.logMessage("Opened: " + ProtocolListFragment.SECTION_NAME_protocol);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(ProtocolListFragment.SECTION_NAME_protocol)).commit();
                 break;
             case R.id.debate_nav:
-                analyticsManager.setCurrentScreen(this, DebateListFragment.SECTION_NAME_DEBATE);
+                analyticsManager.logMessage("Opened: " + DebateListFragment.SECTION_NAME_DEBATE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(DebateListFragment.SECTION_NAME_DEBATE)).commit();
                 break;
             case R.id.s_nav:
-                analyticsManager.setCurrentScreen(this, CurrentParties.getS().getID());
+                analyticsManager.logMessage("Opened: " + CurrentParties.getS().getID());
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(CurrentParties.getS().getID())).commit();
                 break;
             case R.id.m_nav:
-                analyticsManager.setCurrentScreen(this, CurrentParties.getM().getID());
+                analyticsManager.logMessage("Opened: " + CurrentParties.getM().getID());
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(CurrentParties.getM().getID())).commit();
                 break;
             case R.id.sd_nav:
-                analyticsManager.setCurrentScreen(this, CurrentParties.getSD().getID());
+                analyticsManager.logMessage("Opened: " + CurrentParties.getSD().getID());
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(CurrentParties.getSD().getID())).commit();
                 break;
             case R.id.mp_nav:
-                analyticsManager.setCurrentScreen(this, CurrentParties.getMP().getID());
+                analyticsManager.logMessage("Opened: " + CurrentParties.getMP().getID());
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(CurrentParties.getMP().getID())).commit();
                 break;
             case R.id.c_nav:
-                analyticsManager.setCurrentScreen(this, CurrentParties.getC().getID());
+                analyticsManager.logMessage("Opened: " + CurrentParties.getC().getID());
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(CurrentParties.getC().getID())).commit();
                 break;
             case R.id.v_nav:
-                analyticsManager.setCurrentScreen(this, CurrentParties.getV().getID());
+                analyticsManager.logMessage("Opened: " + CurrentParties.getV().getID());
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(CurrentParties.getV().getID())).commit();
                 break;
             case R.id.l_nav:
-                analyticsManager.setCurrentScreen(this, CurrentParties.getL().getID());
+                analyticsManager.logMessage("Opened: " + CurrentParties.getL().getID());
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(CurrentParties.getL().getID())).commit();
                 break;
             case R.id.kd_nav:
-                analyticsManager.setCurrentScreen(this, CurrentParties.getKD().getID());
+                analyticsManager.logMessage("Opened: " + CurrentParties.getKD().getID());
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(CurrentParties.getKD().getID())).commit();
                 break;
             case R.id.search_nav:
-                analyticsManager.setCurrentScreen(this, SearchListFragment.SECTION_NAME_SEARCH);
+                analyticsManager.logMessage("Opened: " + SearchListFragment.SECTION_NAME_SEARCH);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(SearchListFragment.SECTION_NAME_SEARCH)).commit();
                 break;
             case R.id.about_nav:
-                analyticsManager.setCurrentScreen(this, AboutFragment.SECTION_NAME_ABOUT);
+                analyticsManager.logMessage("Opened: " + AboutFragment.SECTION_NAME_ABOUT);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(AboutFragment.SECTION_NAME_ABOUT)).commit();
                 break;
@@ -406,12 +406,12 @@ public class MainActivity extends AppCompatActivity
                 sendFeedback();
                 break;
             case R.id.saved_docs:
-                analyticsManager.setCurrentScreen(this, SavedDocumentsFragment.SECTION_NAME_SAVED);
+                analyticsManager.logMessage("Opened: " + SavedDocumentsFragment.SECTION_NAME_SAVED);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(SavedDocumentsFragment.SECTION_NAME_SAVED)).commit();
                 break;
             case R.id.twitter_nav:
-                analyticsManager.setCurrentScreen(this, TwitterListFragment.SECTION_NAME_TWITTER);
+                analyticsManager.logMessage("Opened: " + TwitterListFragment.SECTION_NAME_TWITTER);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(TwitterListFragment.SECTION_NAME_TWITTER)).commit();
                 break;

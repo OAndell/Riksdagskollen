@@ -47,7 +47,7 @@ public class SearchedVoteAcitivity extends AppCompatActivity{
         ArrayList<Vote> votes = getIntent().getParcelableArrayListExtra("votes");
         DecisionDocument document = getIntent().getParcelableExtra("document");
 
-        AnalyticsManager.getInstance().setCurrentScreen(this, "Searched vote activity: " + document.getDok_id());
+        AnalyticsManager.getInstance().logMessage("Searched vote activity: " + document.toString());
 
         VoteListFragment fragment = VoteListFragment.newInstance(votes);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).commit();

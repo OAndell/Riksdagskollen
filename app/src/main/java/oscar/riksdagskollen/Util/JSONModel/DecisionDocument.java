@@ -105,6 +105,15 @@ public class DecisionDocument implements Parcelable {
     }
 
     @Override
+    public String toString() {
+        String string = "";
+        if (titel != null) string += titel + " ";
+        if (dok_id != null) string += dok_id + " ";
+        return string;
+    }
+
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

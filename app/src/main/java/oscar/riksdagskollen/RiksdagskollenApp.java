@@ -53,11 +53,7 @@ public class RiksdagskollenApp extends MultiDexApplication {
         super.onCreate();
         instance = this;
         analyticsManager = new AnalyticsManager(this);
-
-        // Set up Crashlytics, disabled for debug builds
-        if (!BuildConfig.DEBUG) {
-            analyticsManager.initCrashlytics();
-        }
+        analyticsManager.initCrashlytics();
 
         requestManager = new RequestManager();
         riksdagenAPIManager = new RiksdagenAPIManager(this);
