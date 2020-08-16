@@ -22,6 +22,11 @@ public class Analytics implements AnalyticsWrapper {
     }
 
     @Override
+    public void log(String logMessage) {
+
+    }
+
+    @Override
     public void logEvent(String event, @Nullable Bundle bundle) {
 
     }
