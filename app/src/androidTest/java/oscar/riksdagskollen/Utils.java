@@ -99,6 +99,12 @@ public class Utils {
 
     }
 
+    public static void performFling(int viewId) {
+        onView(withId(viewId)).perform(swipeUp());
+        onView(withId(viewId)).perform(swipeUp());
+        onView(withId(viewId)).perform(swipeUp());
+    }
+
     public static void scrollView(int viewId) {
         onView(withId(viewId)).perform(swipeUp());
         onView(withId(viewId)).perform(swipeUp());

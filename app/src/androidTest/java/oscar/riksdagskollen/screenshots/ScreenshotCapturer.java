@@ -34,6 +34,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static oscar.riksdagskollen.Utils.atPosition;
 import static oscar.riksdagskollen.Utils.navigateToAndReapplyTheme;
+import static oscar.riksdagskollen.Utils.performFling;
 import static oscar.riksdagskollen.Utils.pressDeviceBackButton;
 import static oscar.riksdagskollen.Utils.pressItemInRecyclerView;
 import static oscar.riksdagskollen.Utils.pressItemsInRecyclerViewWithDelay;
@@ -74,9 +75,13 @@ public class ScreenshotCapturer {
         waitALittle();
         // Getting news screenshot
         Screengrab.screenshot("news");
+        waitALittle();
 
         // Getting representative list screenshot
         navigateToAndReapplyTheme(R.id.rep_nav, activityRule);
+        waitALittle();
+        performFling(R.id.recycler_view);
+        waitALittle();
         Screengrab.screenshot("representatives");
 
         // Getting representative screenshot
