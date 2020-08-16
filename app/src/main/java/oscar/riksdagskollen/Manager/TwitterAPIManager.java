@@ -1,5 +1,7 @@
 package oscar.riksdagskollen.Manager;
 
+import android.net.Uri;
+
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 
@@ -25,7 +27,7 @@ public class TwitterAPIManager {
     private static final String HOST = "https://api.twitter.com/";
     private static final String AUTH_ENDPOINT = "oauth2/token?grant_type=client_credentials";
     private static final String TIMELINE_ENDPOINT = "1.1/statuses/user_timeline.json";
-    private static final String LIST_ENDPOINT = "/1.1/lists/statuses.json";
+    private static final String LIST_ENDPOINT = "1.1/lists/statuses.json";
 
     private RequestManager requestManager;
     private Gson gson;
@@ -45,39 +47,54 @@ public class TwitterAPIManager {
 
 
     public void getTweets(final String screenName, final TwitterCallback callback, boolean includeRT) {
-        String subURL = TIMELINE_ENDPOINT + "?screen_name=" + screenName
-                + "&tweet_mode=extended"; //TODO trim user might be a good idea here since we already know it.
-        if (!includeRT) {
-            subURL = subURL + "&include_rts=false";
-        }
+
+        String subURL = Uri.parse(TIMELINE_ENDPOINT)
+                .buildUpon()
+                .appendQueryParameter("screen_name", screenName)
+                .appendQueryParameter("tweet_mode", "extended")
+                .appendQueryParameter("include_rts", Boolean.toString(includeRT))
+                .build().toString();
+
         doGetTweetRequest(subURL, callback);
     }
 
 
     public void getTweetsSinceID(final String screenName, final TwitterCallback callback, boolean includeRT, long id) {
-        String subURL = TIMELINE_ENDPOINT + "?screen_name=" + screenName
-                + "&tweet_mode=extended&&max_id=" + id;
-        if (!includeRT) {
-            subURL = subURL + "&include_rts=false";
-        }
+
+        String subURL = Uri.parse(TIMELINE_ENDPOINT)
+                .buildUpon()
+                .appendQueryParameter("screen_name", screenName)
+                .appendQueryParameter("tweet_mode", "extended")
+                .appendQueryParameter("max_id", Long.toString(id))
+                .appendQueryParameter("include_rts", Boolean.toString(includeRT))
+                .build().toString();
+
         doGetTweetRequest(subURL, callback);
     }
 
     public void getTweetList(String ownerScreenname, String slug, TwitterCallback callback, boolean includeRT) {
-        String subURL = LIST_ENDPOINT + "?owner_screen_name=" + ownerScreenname + "&slug=" + slug
-                + "&tweet_mode=extended";
-        if (!includeRT) {
-            subURL = subURL + "&include_rts=false";
-        }
+
+        String subURL = Uri.parse(LIST_ENDPOINT)
+                .buildUpon()
+                .appendQueryParameter("owner_screen_name", ownerScreenname)
+                .appendQueryParameter("slug", slug)
+                .appendQueryParameter("tweet_mode", "extended")
+                .appendQueryParameter("include_rts", Boolean.toString(includeRT))
+                .build().toString();
+
         doGetTweetRequest(subURL, callback);
     }
 
     public void getTweetListSinceID(String ownerScreenname, String slug, TwitterCallback callback, boolean includeRT, long id) {
-        String subURL = LIST_ENDPOINT + "?owner_screen_name=riksdagskollen&slug=riksdagskollen"
-                + "&tweet_mode=extended&max_id=" + id;
-        if (!includeRT) {
-            subURL = subURL + "&include_rts=falseß";
-        }
+        String subURL = Uri.parse(LIST_ENDPOINT)
+                .buildUpon()
+                .appendQueryParameter("owner_screen_name", ownerScreenname)
+                .appendQueryParameter("slug", slug)
+                .appendQueryParameter("tweet_mode", "extended")
+                .appendQueryParameter("max_id", Long.toString(id))
+                .appendQueryParameter("include_rts", Boolean.toString(includeRT))
+                .build().toString();
+
         doGetTweetRequest(subURL, callback);
     }
 
@@ -123,7 +140,7 @@ public class TwitterAPIManager {
 
             @Override
             public void onRequestFail(VolleyError error) {
-
+                System.out.println("FAIL: " + error.networkResponse);
             }
         });
     }

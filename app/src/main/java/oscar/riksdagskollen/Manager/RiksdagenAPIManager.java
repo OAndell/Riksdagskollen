@@ -1,5 +1,6 @@
 package oscar.riksdagskollen.Manager;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -19,7 +20,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -61,8 +61,8 @@ import oscar.riksdagskollen.Util.RiksdagenCallback.VoteStatisticsCallback;
 public class RiksdagenAPIManager {
 
 
-    public static String SEARCH_OPTION_REL = "sort=rel";
-    public static String SEARCH_OPTION_DATE = "sort=datum";
+    public static String SEARCH_OPTION_REL = "rel";
+    public static String SEARCH_OPTION_DATE = "datum";
 
     private final RequestManager requestManager;
     private final Gson gson;
@@ -99,9 +99,18 @@ public class RiksdagenAPIManager {
     }
 
     public void getDocumentsForParty(String partyid, int page, final PartyDocumentCallback callback) {
-        String subURL = "/dokumentlista/?avd=dokument&del=dokument&fcs=1&sort=datum&sortorder=desc&utformat=json"
-                + "&parti=" + partyid
-                + "&p=" + page;
+
+        String subURL = Uri.parse("/dokumentlista/")
+                .buildUpon()
+                .appendQueryParameter("avd", "dokument")
+                .appendQueryParameter("del", "dokument")
+                .appendQueryParameter("fcs", "1")
+                .appendQueryParameter("parti", partyid)
+                .appendQueryParameter("sort", SEARCH_OPTION_DATE)
+                .appendQueryParameter("sortorder", "desc")
+                .appendQueryParameter("utformat", "json")
+                .appendQueryParameter("p", Integer.toString(page))
+                .build().toString();
 
         final Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Debate.class, new Debate.DebateDezerializer())
@@ -128,7 +137,14 @@ public class RiksdagenAPIManager {
     }
 
     public void getDebates(int page, final PartyDocumentCallback callback) {
-        String subURL = "/dokumentlista/?sok=&doktyp=ip,bet,kam-ad&sort=datum&sortorder=desc&utformat=json" + "&p=" + page;
+        String subURL = Uri.parse("/dokumentlista/")
+                .buildUpon()
+                .appendQueryParameter("doktyp", "ip,bet,kam-ad")
+                .appendQueryParameter("sort", SEARCH_OPTION_DATE)
+                .appendQueryParameter("sortorder", "desc")
+                .appendQueryParameter("utformat", "json")
+                .appendQueryParameter("p", Integer.toString(page))
+                .build().toString();
 
         doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
@@ -161,8 +177,18 @@ public class RiksdagenAPIManager {
      * @param callback callback which a List of currentNews is returned to
      */
     public void getCurrentNews(final CurrentNewsCallback callback, int page) {
-        String subURL = "/dokumentlista/?avd=aktuellt&sort=datum&sortorder=desc&lang=sv&cmskategori=startsida&utformat=json"
-                + "&p=" + page;
+
+        String subURL = Uri.parse("/dokumentlista/")
+                .buildUpon()
+                .appendQueryParameter("avd", "aktuellt")
+                .appendQueryParameter("sort", SEARCH_OPTION_DATE)
+                .appendQueryParameter("sortorder", "desc")
+                .appendQueryParameter("lang", "sv")
+                .appendQueryParameter("cmskategori", "startsida")
+                .appendQueryParameter("utformat", "json")
+                .appendQueryParameter("p", Integer.toString(page))
+                .build().toString();
+
         doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
@@ -193,7 +219,16 @@ public class RiksdagenAPIManager {
      * @param callback callback which a List of the latest decisions is returned to
      */
     public void getDecisions(final DecisionsCallback callback, int page) {
-        String subURL = "/dokumentlista/?doktyp=bet&sort=datum&sortorder=desc&dokstat=beslutade&utformat=json" + "&p=" + page;
+        String subURL = Uri.parse("/dokumentlista/")
+                .buildUpon()
+                .appendQueryParameter("doktyp", "bet")
+                .appendQueryParameter("sort", SEARCH_OPTION_DATE)
+                .appendQueryParameter("sortorder", "desc")
+                .appendQueryParameter("dokstat", "beslutade")
+                .appendQueryParameter("utformat", "json")
+                .appendQueryParameter("p", Integer.toString(page))
+                .build().toString();
+
         doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(final JSONObject response) {
@@ -220,7 +255,14 @@ public class RiksdagenAPIManager {
      * @param callback callback which a List of one specific decision is returned to
      */
     public void getDecisionWithId(final DecisionsCallback callback, String id) {
-        String subURL = "/dokumentlista/?doktyp=bet&utformat=json&dok_id=" + id;
+
+        String subURL = Uri.parse("/dokumentlista/")
+                .buildUpon()
+                .appendQueryParameter("doktyp", "bet")
+                .appendQueryParameter("dok_id", id)
+                .appendQueryParameter("utformat", "json")
+                .build().toString();
+
         doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
@@ -257,7 +299,12 @@ public class RiksdagenAPIManager {
             return new JsonArrayRequest(null, null, null);
         } else {
 
-            final String subURL = "/personlista/?iid=" + iid + "&utformat=json";
+            String subURL = Uri.parse("/personlista/")
+                    .buildUpon()
+                    .appendQueryParameter("iid", iid)
+                    .appendQueryParameter("utformat", "json")
+                    .build().toString();
+
             return doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new JSONRequestCallback() {
                 @Override
                 public void onRequestSuccess(final JSONObject response) {
@@ -295,9 +342,14 @@ public class RiksdagenAPIManager {
      */
     //Not sure if this even works with the API
     public void getRepresentative(String fname, String ename, String partyID, final String sourceId, final RepresentativeCallback callback) {
-
-        String subURL = "/personlista/?iid=&fnamn=" + fname.trim() + "&ename=" + ename.trim() + "&parti=" + partyID + "&rdlstatus=samtliga&utformat=json";
-        subURL = subURL.replaceAll(" ", "%20");
+        String subURL = Uri.parse("/personlista/")
+                .buildUpon()
+                .appendQueryParameter("fnamn", fname.trim())
+                .appendQueryParameter("ename", ename.trim())
+                .appendQueryParameter("parti", partyID)
+                .appendQueryParameter("utformat", "json")
+                .appendQueryParameter("rdlstatus", "samtliga")
+                .build().toString();
 
         Representative representative = RiksdagskollenApp.getInstance().getRepresentativeManager().findRepresentative(partyID, sourceId);
 
@@ -356,7 +408,15 @@ public class RiksdagenAPIManager {
     }
 
     public void getProtocols(final ProtocolCallback callback, int page) {
-        String subURL = "/dokumentlista/?sok=&doktyp=prot&sort=datum&sortorder=desc&utformat=json" + "&p=" + page;
+
+        String subURL = Uri.parse("/dokumentlista/")
+                .buildUpon()
+                .appendQueryParameter("doktyp", "prot")
+                .appendQueryParameter("sort", SEARCH_OPTION_DATE)
+                .appendQueryParameter("sortorder", "desc")
+                .appendQueryParameter("utformat", "json")
+                .appendQueryParameter("p", Integer.toString(page))
+                .build().toString();
 
         doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
@@ -378,8 +438,18 @@ public class RiksdagenAPIManager {
     }
 
     public void getProtocolForDate(String date, String rm, final ProtocolCallback callback) {
-        String subUrl = "/dokumentlista/?doktyp=prot&rm=" + URLEncoder.encode(rm) + "&from=" + date + "&tom=" + date + "&sort=rel&sortorder=desc&utformat=json";
-        doCachedApiGetRequest(subUrl, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
+        String subURL = Uri.parse("/dokumentlista/")
+                .buildUpon()
+                .appendQueryParameter("doktyp", "prot")
+                .appendQueryParameter("rm", rm)
+                .appendQueryParameter("from", date)
+                .appendQueryParameter("tom", date)
+                .appendQueryParameter("sort", SEARCH_OPTION_REL)
+                .appendQueryParameter("sortorder", "desc")
+                .appendQueryParameter("utformat", "json")
+                .build().toString();
+
+        doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
 
@@ -401,19 +471,20 @@ public class RiksdagenAPIManager {
         });
     }
 
-    /**
-     * "doCachedApiGetStringRequest" instead of "doCachedApiGetRequest" because of (temporary?)
-     * bug in Riksdagens API.
-     */
+
     public void getSpeech(String protId, final String speechNo, final SpeechCallback callback) {
-        String url = HOST + "/anforande/" + protId + "-" + speechNo;
-        doCachedApiGetStringRequest(url, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new StringRequestCallback() {
+
+        String subUrl = Uri.parse("/anforande/").buildUpon()
+                .appendEncodedPath(protId + "-" + speechNo)
+                .appendEncodedPath("json")
+                .toString();
+
+        doCachedApiGetRequest(subUrl, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new JSONRequestCallback() {
             @Override
-            public void onResponse(String response) {
+            public void onRequestSuccess(JSONObject response) {
                 try {
-                    JSONObject jsonObject = new XmlToJson.Builder(response).build().toJson();
-                    jsonObject = jsonObject.getJSONObject("anforande");
-                    Speech speech = gson.fromJson(jsonObject.toString(), Speech.class);
+                    JSONObject speechJSON = response.getJSONObject("anforande");
+                    Speech speech = gson.fromJson(speechJSON.toString(), Speech.class);
                     callback.onSpeechFetched(speech, speechNo);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -421,14 +492,21 @@ public class RiksdagenAPIManager {
             }
 
             @Override
-            public void onFail(VolleyError error) {
+            public void onRequestFail(VolleyError error) {
                 callback.onFail(error);
             }
         });
     }
 
     public void getVotes(final VoteCallback callback, int page) {
-        String subURL = "/dokumentlista/?sok=&doktyp=votering&sort=datum&sortorder=desc&utformat=json" + "&p=" + page;
+        String subURL = Uri.parse("/dokumentlista/")
+                .buildUpon()
+                .appendQueryParameter("doktyp", "votering")
+                .appendQueryParameter("sort", SEARCH_OPTION_DATE)
+                .appendQueryParameter("sortorder", "desc")
+                .appendQueryParameter("utformat", "json")
+                .appendQueryParameter("p", Integer.toString(page))
+                .build().toString();
 
         doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
@@ -451,7 +529,15 @@ public class RiksdagenAPIManager {
     }
 
     public void searchVotesForDecision(DecisionDocument decision, final VoteCallback callback) {
-        String subURL = "/dokumentlista/?sok=" + decision.getRm() + ":" + decision.getBeteckning() + "&doktyp=votering&sort=datum&sortorder=desc&utformat=json";
+        String subURL = Uri.parse("/dokumentlista/")
+                .buildUpon()
+                .appendQueryParameter("sok", decision.getRm() + ":" + decision.getBeteckning())
+                .appendQueryParameter("doktyp", "votering")
+                .appendQueryParameter("sort", SEARCH_OPTION_DATE)
+                .appendQueryParameter("sortorder", "desc")
+                .appendQueryParameter("utformat", "json")
+                .build().toString();
+
         doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
@@ -475,9 +561,16 @@ public class RiksdagenAPIManager {
     /**
      * Search query for all document types with search string
      */
-    public void searchForDocument(String search, String sort_option, int pageToLoad, final PartyDocumentCallback callback) {
+    public void searchForDocument(String search, String sortOption, int pageToLoad, final PartyDocumentCallback callback) {
+        String subURL = Uri.parse("/dokumentlista/")
+                .buildUpon()
+                .appendQueryParameter("sok", search)
+                .appendQueryParameter("sort", sortOption)
+                .appendQueryParameter("sortorder", "desc")
+                .appendQueryParameter("utformat", "json")
+                .appendQueryParameter("p", Integer.toString(pageToLoad))
+                .build().toString();
 
-        String subURL = "/dokumentlista/?sok=" + search + "&" + sort_option + "&sortorder=desc&utformat=json" + "&p=" + pageToLoad;
         doApiGetRequest(subURL, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
@@ -496,14 +589,23 @@ public class RiksdagenAPIManager {
 
             @Override
             public void onRequestFail(VolleyError error) {
-
+                callback.onFail(error);
             }
         });
     }
 
     public void searchForDecision(final DecisionsCallback callback, String search, int pageToLoad) {
-        String subURL = "/dokumentlista/?sok=" + search + "&sort=rel&sortorder=desc&doktyp=bet&utformat=json" + "&p=" + pageToLoad;
-        doApiGetRequest(subURL, new JSONRequestCallback() {
+        String subUrl = Uri.parse("/dokumentlista/")
+                .buildUpon()
+                .appendQueryParameter("sok", search)
+                .appendQueryParameter("doktyp", "bet")
+                .appendQueryParameter("sort", "rel")
+                .appendQueryParameter("sortorder", "desc")
+                .appendQueryParameter("utformat", "json")
+                .appendQueryParameter("p", Integer.toString(pageToLoad))
+                .build().toString();
+
+        doApiGetRequest(subUrl, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -523,7 +625,11 @@ public class RiksdagenAPIManager {
     }
 
     public void getAllCurrentRepresentatives(final RepresentativeListCallback callback) {
-        String subUrl = "/personlista/?utformat=json";
+        String subUrl = Uri.parse("/personlista/")
+                .buildUpon()
+                .appendQueryParameter("utformat", "json")
+                .build().toString();
+
         // Current representatives
         doCachedApiGetRequest(subUrl, CacheRequest.CachingPolicy.LONG_TIME_CACHE, new JSONRequestCallback() {
             @Override
@@ -577,7 +683,12 @@ public class RiksdagenAPIManager {
         if (repsForParty != null && !repsForParty.isEmpty()) {
             callback.onPersonListFetched(repsForParty);
         } else {
-            String subUrl = "/personlista/?parti=" + party + "&utformat=json";
+            String subUrl = Uri.parse("/personlista/")
+                    .buildUpon()
+                    .appendQueryParameter("parti", party)
+                    .appendQueryParameter("utformat", "json")
+                    .build().toString();
+
             doCachedApiGetRequest(subUrl, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new JSONRequestCallback() {
                 @Override
                 public void onRequestSuccess(JSONObject response) {
@@ -605,8 +716,16 @@ public class RiksdagenAPIManager {
 
 
     public void getMotionByID(String id, final PartyDocumentCallback callback) {
-        String subURL = "/dokumentlista/?sok=\"" + id + "\"&doktyp=mot,prop&sort=datum&sortorder=desc&utformat=json";
-        doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.LONG_TIME_CACHE, new JSONRequestCallback() {
+        String subUrl = Uri.parse("/dokumentlista/")
+                .buildUpon()
+                .appendQueryParameter("sok", id)
+                .appendQueryParameter("doktyp", "mot,prop")
+                .appendQueryParameter("sort", "datum")
+                .appendQueryParameter("sortorder", "desc")
+                .appendQueryParameter("utformat", "json")
+                .build().toString();
+
+        doCachedApiGetRequest(subUrl, CacheRequest.CachingPolicy.LONG_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -631,9 +750,15 @@ public class RiksdagenAPIManager {
 
     public void getDocumentsForRepresentative(String intressentId, int page, final RepresentativeDocumentCallback callback) {
 
-        String subURL = "/dokumentlista/?avd=dokument&sort=datum&sortorder=datum&utformat=json"
-                + "&iid=" + intressentId
-                + "&p=" + page;
+        String subURL = Uri.parse("/dokumentlista/")
+                .buildUpon()
+                .appendQueryParameter("avd", "dokument")
+                .appendQueryParameter("iid", intressentId)
+                .appendQueryParameter("sort", SEARCH_OPTION_DATE)
+                .appendQueryParameter("sortorder", "desc")
+                .appendQueryParameter("utformat", "json")
+                .appendQueryParameter("p", Integer.toString(page))
+                .build().toString();
 
         final Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Debate.class, new Debate.DebateDezerializer())
@@ -664,7 +789,15 @@ public class RiksdagenAPIManager {
     }
 
     public void searchForReply(PartyDocument document, final PartyDocumentCallback callback) {
-        String subURL = "/dokumentlista/?sok=" + document.getRm() + ":" + document.getBeteckning() + "&doktyp=frs&sort=datum&sortorder=desc&utformat=json";
+        String subURL = Uri.parse("/dokumentlista/")
+                .buildUpon()
+                .appendQueryParameter("sok", document.getRm() + ":" + document.getBeteckning())
+                .appendQueryParameter("doktyp", "frs")
+                .appendQueryParameter("sort", SEARCH_OPTION_DATE)
+                .appendQueryParameter("sortorder", "desc")
+                .appendQueryParameter("utformat", "json")
+                .build().toString();
+
         doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
@@ -690,7 +823,16 @@ public class RiksdagenAPIManager {
 
 
     public void searchForQuestion(PartyDocument document, final PartyDocumentCallback callback) {
-        String subURL = "/dokumentlista/?sok=" + document.getRm() + ":" + document.getBeteckning() + "&doktyp=fr&sort=datum&sortorder=desc&utformat=json";
+
+        String subURL = Uri.parse("/dokumentlista/")
+                .buildUpon()
+                .appendQueryParameter("sok", document.getRm() + ":" + document.getBeteckning())
+                .appendQueryParameter("doktyp", "fr")
+                .appendQueryParameter("sort", SEARCH_OPTION_DATE)
+                .appendQueryParameter("sortorder", "desc")
+                .appendQueryParameter("utformat", "json")
+                .build().toString();
+
         doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
@@ -715,8 +857,16 @@ public class RiksdagenAPIManager {
     }
 
     public void getDocument(String docId, final PartyDocumentCallback callback) {
-        String subUrl = "/dokumentlista/?sok=" + docId + "&sort=rel&sortorder=desc&rapport=&utformat=json";
-        doCachedApiGetRequest(subUrl, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new JSONRequestCallback() {
+
+        String subURL = Uri.parse("/dokumentlista/")
+                .buildUpon()
+                .appendQueryParameter("sok", docId)
+                .appendQueryParameter("sort", SEARCH_OPTION_REL)
+                .appendQueryParameter("sortorder", "desc")
+                .appendQueryParameter("utformat", "json")
+                .build().toString();
+
+        doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
@@ -740,12 +890,18 @@ public class RiksdagenAPIManager {
     }
 
 
-    public Request getPartyLeaders(String partyName, final PartyLeadersCallback callback) {
-        //need to remove swedish chars
+    public void getPartyLeaders(String partyName, final PartyLeadersCallback callback) {
+
+        // Need to remove swedish chars
         partyName = partyName.replace("ö", "o");
         partyName = partyName.replace("ä", "a");
-        String partyInfoUrl = "https://riksdagen.se/sv/ledamoter-partier/" + partyName;
-        return requestManager.getDownloadString(partyInfoUrl, new StringRequestCallback() {
+
+        String partyInfoUrl = Uri.parse("https://riksdagen.se/sv/ledamoter-partier/")
+                .buildUpon()
+                .appendPath(partyName)
+                .build().toString();
+
+        requestManager.getDownloadString(partyInfoUrl, new StringRequestCallback() {
             @Override
             public void onResponse(String response) {
                 ArrayList<Representative> representatives = new ArrayList<>();
@@ -771,14 +927,19 @@ public class RiksdagenAPIManager {
 
             @Override
             public void onFail(VolleyError error) {
-
+                callback.onFail(error);
             }
         });
     }
 
 
     public void getDebateAudioSource(PartyDocument debateDocument, DebateAudioSourceCallback callback) {
-        String url = String.format("https://data.riksdagen.se/dokumentstatus/%s.webbtvxml", debateDocument.getId());
+
+        String url = Uri.parse("https://data.riksdagen.se/dokumentstatus/")
+                .buildUpon()
+                .appendEncodedPath(debateDocument.getId() + ".webbtvxml")
+                .build().toString();
+
         doCachedApiGetStringRequest(url, CacheRequest.CachingPolicy.LONG_TIME_CACHE, new StringRequestCallback() {
             @Override
             public void onResponse(String xml) {
@@ -805,7 +966,13 @@ public class RiksdagenAPIManager {
 
 
     public void getVoteStatisticsForRepresentative(String iid, final VoteStatisticsCallback callback) {
-        String url = "http://data.riksdagen.se/voteringlista/?iid=" + iid + "&utformat=XML&gruppering=namn";
+
+        String url = Uri.parse("http://data.riksdagen.se/voteringlista/")
+                .buildUpon()
+                .appendQueryParameter("iid", iid)
+                .appendQueryParameter("utformat", "XML")
+                .appendQueryParameter("gruppering", "namn")
+                .build().toString();
 
         doCachedApiGetStringRequest(url, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new StringRequestCallback() {
             @Override
