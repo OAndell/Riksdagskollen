@@ -6,7 +6,9 @@ import android.Manifest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,6 +19,7 @@ import oscar.riksdagskollen.Activity.MainActivity;
 import oscar.riksdagskollen.R;
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
+import tools.fastlane.screengrab.cleanstatusbar.CleanStatusBar;
 import tools.fastlane.screengrab.locale.LocaleTestRule;
 import tools.fastlane.screengrab.locale.LocaleUtil;
 
@@ -30,10 +33,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static oscar.riksdagskollen.Utils.atPosition;
-import static oscar.riksdagskollen.Utils.navigateTo;
+import static oscar.riksdagskollen.Utils.navigateToAndReapplyTheme;
 import static oscar.riksdagskollen.Utils.pressDeviceBackButton;
 import static oscar.riksdagskollen.Utils.pressItemInRecyclerView;
-import static oscar.riksdagskollen.Utils.pressItemsInRecyclerView;
 import static oscar.riksdagskollen.Utils.pressItemsInRecyclerViewWithDelay;
 import static oscar.riksdagskollen.Utils.scrollView;
 import static oscar.riksdagskollen.Utils.waitALittle;
@@ -59,17 +61,52 @@ public class ScreenshotCapturer {
         LocaleUtil.changeDeviceLocaleTo(LocaleUtil.getTestLocale());
     }
 
+    @BeforeClass
+    public static void beforeAll() {
+        CleanStatusBar.enableWithDefaults();
+    }
+
     @Test
     public void testTakeScreenshot() {
         Screengrab.setDefaultScreenshotStrategy(new UiAutomatorScreenshotStrategy());
-        navigateTo(R.id.about_nav);
-        navigateTo(R.id.news_nav);
+        // Fix colors being off for some reason by reapplying theme
+        navigateToAndReapplyTheme(R.id.news_nav, activityRule);
         waitALittle();
         // Getting news screenshot
         Screengrab.screenshot("news");
 
+        // Getting representative list screenshot
+        navigateToAndReapplyTheme(R.id.rep_nav, activityRule);
+        Screengrab.screenshot("representatives");
+
+        // Getting representative screenshot
+        pressItemInRecyclerView(R.id.recycler_view, 1);
+        waitALittle();
+        Screengrab.screenshot("representative");
+        pressDeviceBackButton();
+
+        // Getting party screenshot
+        navigateToAndReapplyTheme(R.id.m_nav, activityRule);
+        onView(withId(R.id.viewpager)).perform(swipeLeft());
+        waitALittle();
+        Screengrab.screenshot("party");
+
+        // Getting decision list screenshot
+        navigateToAndReapplyTheme(R.id.dec_nav, activityRule);
+        pressItemInRecyclerView(R.id.recycler_view, 1);
+        waitALittle();
+        Screengrab.screenshot("decisions");
+
+        // Getting vote details screenshot
+        navigateToAndReapplyTheme(R.id.votes_nav, activityRule);
+        pressItemsInRecyclerViewWithDelay(R.id.recycler_view, 1);
+        waitALittle();
+        Screengrab.screenshot("vote");
+
+        pressDeviceBackButton();
+
         // Getting a debate screenshot
-        navigateTo(R.id.debate_nav);
+        navigateToAndReapplyTheme(R.id.debate_nav, activityRule);
 
         // Check after a "Aktuell Debatt" item for a nice screenshot
         scrollView(R.id.recycler_view);
@@ -78,7 +115,7 @@ public class ScreenshotCapturer {
                     .perform(actionOnItemAtPosition(i, scrollTo()));
             try {
                 onView(withId(R.id.recycler_view))
-                        .check(matches(atPosition(i, hasDescendant(withText("Aktuell Debatt")))));
+                        .check(matches(atPosition(i, (hasDescendant(withText("Betänkande"))))));
                 onView(withId(R.id.recycler_view))
                         .perform(actionOnItemAtPosition(i, click()));
                 break;
@@ -87,38 +124,16 @@ public class ScreenshotCapturer {
             }
         }
         waitALittle();
+        onView(withId(R.id.show_audio_player_header)).perform(click());
+        waitALittle();
         Screengrab.screenshot("debate");
         pressDeviceBackButton();
 
-        // Getting representative list screenshot
-        navigateTo(R.id.rep_nav);
-        waitALittle();
-        Screengrab.screenshot("representatives");
+    }
 
-        // Getting representative screenshot
-        pressItemsInRecyclerViewWithDelay(R.id.recycler_view, 1);
-        waitALittle();
-        Screengrab.screenshot("representative");
-        pressDeviceBackButton();
-
-        // Getting party screenshot
-        navigateTo(R.id.m_nav);
-        onView(withId(R.id.viewpager)).perform(swipeLeft());
-        waitALittle();
-        Screengrab.screenshot("party");
-
-        // Getting decision list screenshot
-        navigateTo(R.id.dec_nav);
-        pressItemInRecyclerView(R.id.recycler_view, 1, null);
-        waitALittle();
-        Screengrab.screenshot("decisions");
-
-        // Getting vote details screenshot
-        navigateTo(R.id.votes_nav);
-        pressItemsInRecyclerViewWithDelay(R.id.recycler_view, 1);
-        waitALittle();
-        Screengrab.screenshot("vote");
-
+    @AfterClass
+    public static void afterAll() {
+        CleanStatusBar.disable();
     }
 
 

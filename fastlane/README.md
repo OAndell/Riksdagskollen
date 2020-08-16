@@ -12,7 +12,7 @@ Install _fastlane_ using
 ```
 [sudo] gem install fastlane -NV
 ```
-or alternatively using `brew cask install fastlane`
+or alternatively using `brew install fastlane`
 
 # Available Actions
 ## Android
@@ -31,11 +31,6 @@ Submit a new Beta Build to Crashlytics Beta
 fastlane android deploy
 ```
 Deploy a new version to the Google Play
-### android install_demo
-```
-fastlane android install_demo
-```
-Install quick demo application
 ### android generate_screenshots
 ```
 fastlane android generate_screenshots

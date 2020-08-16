@@ -4,12 +4,12 @@ import android.view.Gravity;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
 import androidx.test.uiautomator.UiDevice;
 
 import org.hamcrest.Description;
@@ -88,14 +88,14 @@ public class Utils {
         }
     }
 
-    public static void pressItemInRecyclerView(int recyclerViewId, int index, @Nullable Boolean other) {
-            onView(withId(recyclerViewId))
-                    .perform(actionOnItemAtPosition(index, click()));
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+    public static void pressItemInRecyclerView(int recyclerViewId, int index) {
+        onView(withId(recyclerViewId))
+                .perform(actionOnItemAtPosition(index, click()));
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -124,6 +124,11 @@ public class Utils {
                 .perform(NavigationViewActions.navigateTo(menuId));
     }
 
+    public static void navigateToAndReapplyTheme(int menuId, ActivityTestRule activityTestRule) {
+        navigateTo(menuId);
+        reApplyTheme(activityTestRule);
+    }
+
     public static Matcher<View> atPosition(final int position, @NonNull final Matcher<View> itemMatcher) {
 
         return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
@@ -145,6 +150,12 @@ public class Utils {
         };
     }
 
+    public static void reApplyTheme(ActivityTestRule rule) {
+        rule.getActivity().runOnUiThread(() -> {
+            rule.getActivity().getApplication().setTheme(R.style.DefaultTheme);
+            rule.getActivity().recreate();
+        });
+    }
 
     public static void waitALittle() {
         try {

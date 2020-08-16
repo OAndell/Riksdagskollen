@@ -12,6 +12,9 @@ test_instrumentation_runner('androidx.test.runner.AndroidJUnitRunner')
 
 # clear all previously generated screenshots in your local output directory before creating new ones
 clear_previous_screenshots(true)
+use_timestamp_suffix(false)
+launch_arguments(["debug false"])
+use_adb_root(true)
 
 # For more information about all available options run
 #   fastlane screengrab --help

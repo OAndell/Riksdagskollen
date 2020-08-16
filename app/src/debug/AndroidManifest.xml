@@ -17,5 +17,10 @@
         android:name="android.permission.CHANGE_CONFIGURATION"
         tools:ignore="ProtectedPermissions" />
 
+    <!-- Indicates the use of the clean status bar feature -->
+    <uses-feature android:name="tools.fastlane.screengrab.cleanstatusbar" />
+    <!-- Allows for changing the status bar -->
+    <uses-permission android:name="android.permission.DUMP" />
+
 
 </manifest>
