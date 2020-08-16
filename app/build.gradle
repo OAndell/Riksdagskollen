@@ -9,8 +9,8 @@ buildscript {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 if(getCurrentFlavor() == "play"){
     apply plugin: 'com.google.firebase.crashlytics'
@@ -19,7 +19,7 @@ if(getCurrentFlavor() == "play"){
 
 android {
     compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    buildToolsVersion '29.0.2'
     defaultConfig {
         applicationId "se.oandell.riksdagen"
         minSdkVersion 18
@@ -35,7 +35,9 @@ android {
 
     testOptions {
         unitTests.returnDefaultValues = true
+        animationsDisabled = true
     }
+
     buildTypes {
         debug {
             manifestPlaceholders = [enableCrashReporting:"false"]
@@ -97,9 +99,7 @@ dependencies {
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
-    androidTestImplementation ('tools.fastlane:screengrab:2.0.0@aar') {
-        transitive false
-    }
+    androidTestImplementation 'tools.fastlane:screengrab:2.0.0'
 
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -117,8 +117,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
     //playImplementation "com.google.android.gms:play-services-safetynet:16.0.0"
-    playImplementation 'com.google.firebase:firebase-analytics:17.3.0'
-    playImplementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta03'
+    playImplementation 'com.google.firebase:firebase-analytics:17.5.0'
+    playImplementation 'com.google.firebase:firebase-crashlytics:17.2.1'
 
     implementation 'com.android.volley:volley:1.1.0'
     implementation 'org.jsoup:jsoup:1.11.2'
