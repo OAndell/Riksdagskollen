@@ -142,6 +142,7 @@ public class RiksdagenAPIManager {
                 .appendQueryParameter("doktyp", "ip,bet,kam-ad")
                 .appendQueryParameter("sort", SEARCH_OPTION_DATE)
                 .appendQueryParameter("sortorder", "desc")
+                .appendQueryParameter("webbtv", "1")
                 .appendQueryParameter("utformat", "json")
                 .appendQueryParameter("p", Integer.toString(page))
                 .build().toString();
