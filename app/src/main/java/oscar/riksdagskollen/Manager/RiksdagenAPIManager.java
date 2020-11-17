@@ -37,6 +37,7 @@ import oscar.riksdagskollen.Util.JSONModel.Party;
 import oscar.riksdagskollen.Util.JSONModel.PartyDocument;
 import oscar.riksdagskollen.Util.JSONModel.Protocol;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeInfo;
+import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeInfoList;
 import oscar.riksdagskollen.Util.JSONModel.RepresentativeModels.RepresentativeVoteStatistics;
 import oscar.riksdagskollen.Util.JSONModel.Vote;
 import oscar.riksdagskollen.Util.RiksdagenCallback.DebateAudioSourceCallback;
@@ -366,6 +367,7 @@ public class RiksdagenAPIManager {
                     int hits = Integer.valueOf(response.getJSONObject("personlista").getString("@hits"));
                     Gson gson = new GsonBuilder()
                             .registerTypeAdapter(RepresentativeInfo.class, new RepresentativeInfo.RepresentativeInfoDezerializer())
+                            .registerTypeAdapter(RepresentativeInfoList.class, new RepresentativeInfoList.RepresentativeInfoListDeserializer())
                             .create();
                     // Multiple hits, need to search for correct representative
                     if (hits > 1) {
