@@ -24,10 +24,10 @@ android {
         applicationId "se.oandell.riksdagen"
         minSdkVersion 18
         targetSdkVersion 29
-        versionCode 35
+        versionCode 37
         multiDexEnabled true
 
-        versionName "2.14.3"
+        versionName "2.14.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
