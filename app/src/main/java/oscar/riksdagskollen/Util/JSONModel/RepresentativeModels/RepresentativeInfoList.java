@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -61,9 +62,11 @@ public class RepresentativeInfoList implements Parcelable {
                                                   JsonDeserializationContext context) throws JsonParseException {
 
             if (json instanceof JsonObject) {
-                return new Gson().fromJson(json, RepresentativeInfoList.class);
-            }
-            return new RepresentativeInfoList();
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(RepresentativeInfo.class, new RepresentativeInfo.RepresentativeInfoDezerializer())
+                        .create();
+                return gson.fromJson(json, RepresentativeInfoList.class);
+            } else return new RepresentativeInfoList();
         }
 
     }
