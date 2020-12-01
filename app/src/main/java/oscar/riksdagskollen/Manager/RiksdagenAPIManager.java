@@ -72,7 +72,12 @@ public class RiksdagenAPIManager {
 
     public RiksdagenAPIManager(RiksdagskollenApp app) {
         requestManager = app.getRequestManager();
-        gson = new Gson();
+        gson = new GsonBuilder()
+                .registerTypeAdapter(Debate.class, new Debate.DebateDezerializer())
+                .registerTypeAdapter(RepresentativeInfo.class, new RepresentativeInfo.RepresentativeInfoDezerializer())
+                .registerTypeAdapter(RepresentativeInfoList.class, new RepresentativeInfoList.RepresentativeInfoListDeserializer())
+                .registerTypeAdapter(CurrentNewsLink.class, new CurrentNewsLink.CurrentNewsLinkDeserializer())
+                .create();
     }
 
     public static RiksdagenAPIManager getInstance() {
@@ -113,10 +118,6 @@ public class RiksdagenAPIManager {
                 .appendQueryParameter("p", Integer.toString(page))
                 .build().toString();
 
-        final Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Debate.class, new Debate.DebateDezerializer())
-                .create();
-
         doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(final JSONObject response) {
@@ -153,10 +154,6 @@ public class RiksdagenAPIManager {
             public void onRequestSuccess(final JSONObject response) {
 
                 try {
-                    Gson gson = new GsonBuilder()
-                            .registerTypeAdapter(Debate.class, new Debate.DebateDezerializer())
-                            .create();
-
                     JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
                     PartyDocument[] documents = gson.fromJson(jsonDocuments.toString(), PartyDocument[].class);
                     callback.onDocumentsFetched(Arrays.asList(documents));
@@ -195,9 +192,6 @@ public class RiksdagenAPIManager {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
-                    Gson gson = new GsonBuilder()
-                            .registerTypeAdapter(CurrentNewsLink.class, new CurrentNewsLink.CurrentNewsLinkDeserializer())
-                            .create();
                     JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
 
                     CurrentNews[] news = gson.fromJson(jsonDocuments.toString(), CurrentNews[].class);
@@ -310,9 +304,6 @@ public class RiksdagenAPIManager {
             return doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new JSONRequestCallback() {
                 @Override
                 public void onRequestSuccess(final JSONObject response) {
-                    Gson gson = new GsonBuilder()
-                            .registerTypeAdapter(RepresentativeInfo.class, new RepresentativeInfo.RepresentativeInfoDezerializer())
-                            .create();
                     try {
                         JSONObject jsonDocuments = response.getJSONObject("personlista").getJSONObject("person");
                         Representative representative = gson.fromJson(jsonDocuments.toString(), Representative.class);
@@ -365,10 +356,6 @@ public class RiksdagenAPIManager {
             public void onRequestSuccess(final JSONObject response) {
                 try {
                     int hits = Integer.valueOf(response.getJSONObject("personlista").getString("@hits"));
-                    Gson gson = new GsonBuilder()
-                            .registerTypeAdapter(RepresentativeInfo.class, new RepresentativeInfo.RepresentativeInfoDezerializer())
-                            .registerTypeAdapter(RepresentativeInfoList.class, new RepresentativeInfoList.RepresentativeInfoListDeserializer())
-                            .create();
                     // Multiple hits, need to search for correct representative
                     if (hits > 1) {
                         JSONArray returnedHits = response.getJSONObject("personlista").getJSONArray("person");
@@ -578,9 +565,6 @@ public class RiksdagenAPIManager {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
-                    Gson gson = new GsonBuilder()
-                            .registerTypeAdapter(Debate.class, new Debate.DebateDezerializer())
-                            .create();
                     JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
                     PartyDocument[] documents = gson.fromJson(jsonDocuments.toString(), PartyDocument[].class);
                     callback.onDocumentsFetched(Arrays.asList(documents));
@@ -637,12 +621,7 @@ public class RiksdagenAPIManager {
         doCachedApiGetRequest(subUrl, CacheRequest.CachingPolicy.LONG_TIME_CACHE, new JSONRequestCallback() {
             @Override
             public void onRequestSuccess(final JSONObject response) {
-                final Gson gson = new GsonBuilder()
-                        .registerTypeAdapter(RepresentativeInfo.class, new RepresentativeInfo.RepresentativeInfoDezerializer())
-                        .create();
-
                 // Handle JSON-parsing on async thread to avoid lockup
-
                 final Handler handler = new Handler(Looper.getMainLooper()) {
                     @Override
                     public void handleMessage(Message msg) {
@@ -695,9 +674,6 @@ public class RiksdagenAPIManager {
             doCachedApiGetRequest(subUrl, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new JSONRequestCallback() {
                 @Override
                 public void onRequestSuccess(JSONObject response) {
-                    Gson gson = new GsonBuilder()
-                            .registerTypeAdapter(RepresentativeInfo.class, new RepresentativeInfo.RepresentativeInfoDezerializer())
-                            .create();
                     try {
                         JSONArray jsonDocuments = response.getJSONObject("personlista").getJSONArray("person");
                         Representative[] representatives = gson.fromJson(jsonDocuments.toString(), Representative[].class);
@@ -732,9 +708,6 @@ public class RiksdagenAPIManager {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
-                    Gson gson = new GsonBuilder()
-                            .registerTypeAdapter(Debate.class, new Debate.DebateDezerializer())
-                            .create();
                     JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
                     PartyDocument[] documents = gson.fromJson(jsonDocuments.toString(), PartyDocument[].class);
                     callback.onDocumentsFetched(Arrays.asList(documents));
@@ -762,10 +735,6 @@ public class RiksdagenAPIManager {
                 .appendQueryParameter("utformat", "json")
                 .appendQueryParameter("p", Integer.toString(page))
                 .build().toString();
-
-        final Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Debate.class, new Debate.DebateDezerializer())
-                .create();
 
         doCachedApiGetRequest(subURL, CacheRequest.CachingPolicy.SHORT_TIME_CACHE, new JSONRequestCallback() {
             @Override
@@ -805,9 +774,6 @@ public class RiksdagenAPIManager {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
-                    Gson gson = new GsonBuilder()
-                            .registerTypeAdapter(Debate.class, new Debate.DebateDezerializer())
-                            .create();
                     JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
                     PartyDocument[] documents = gson.fromJson(jsonDocuments.toString(), PartyDocument[].class);
                     callback.onDocumentsFetched(Arrays.asList(documents));
@@ -840,9 +806,6 @@ public class RiksdagenAPIManager {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
-                    Gson gson = new GsonBuilder()
-                            .registerTypeAdapter(Debate.class, new Debate.DebateDezerializer())
-                            .create();
                     JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
                     PartyDocument[] documents = gson.fromJson(jsonDocuments.toString(), PartyDocument[].class);
                     callback.onDocumentsFetched(Arrays.asList(documents));
@@ -873,9 +836,6 @@ public class RiksdagenAPIManager {
             @Override
             public void onRequestSuccess(JSONObject response) {
                 try {
-                    Gson gson = new GsonBuilder()
-                            .registerTypeAdapter(Debate.class, new Debate.DebateDezerializer())
-                            .create();
                     JSONArray jsonDocuments = response.getJSONObject("dokumentlista").getJSONArray("dokument");
                     PartyDocument[] documents = gson.fromJson(jsonDocuments.toString(), PartyDocument[].class);
                     callback.onDocumentsFetched(Arrays.asList(documents));
