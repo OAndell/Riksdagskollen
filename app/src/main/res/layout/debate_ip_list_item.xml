@@ -13,10 +13,7 @@
         card_view:cardBackgroundColor="?attr/cardViewBackgroundColor"
         card_view:cardCornerRadius="3dp"
         card_view:cardElevation="6dp"
-        card_view:cardUseCompatPadding="true"
-        card_view:contentPaddingLeft="8dp"
-        card_view:contentPaddingRight="20dp"
-        card_view:contentPaddingTop="8dp">
+        card_view:cardUseCompatPadding="true">
 
 
         <FrameLayout
@@ -31,6 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
             android:weightSum="20">
 
             <LinearLayout
@@ -43,6 +41,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Interpellationsdebatt"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="8dp"
                     android:textColor="?attr/mainBodyTextColor" />
 
                 <TextView
@@ -51,6 +52,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:text="En titel om den fråga som debatten rör"
                     android:textColor="?attr/mainTitleTextColor"
                     android:textSize="16sp"
@@ -61,7 +64,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="av Jimmy Åkesson (SD)"
-                    android:textColor="?mainBodyTextColor" />
+                    android:textColor="?mainBodyTextColor"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp" />
 
                 <com.google.android.flexbox.FlexboxLayout
                     android:id="@+id/debate_card_parties_holder"
@@ -69,6 +74,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_weight="5"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:orientation="horizontal"
                     card_view:alignContent="center"
                     card_view:justifyContent="center"></com.google.android.flexbox.FlexboxLayout>
@@ -78,7 +85,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
                     android:layout_weight="0.3"
                     android:text="Datum: 2017-08-19"
