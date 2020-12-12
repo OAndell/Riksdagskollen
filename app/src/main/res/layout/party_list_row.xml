@@ -8,9 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        card_view:contentPaddingLeft="8dp"
-        card_view:contentPaddingRight="20dp"
-        card_view:contentPaddingTop="8dp"
         card_view:cardUseCompatPadding="true"
         card_view:cardElevation="6dp"
         card_view:cardBackgroundColor="?attr/cardViewBackgroundColor"
@@ -29,6 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:weightSum="20"
+            android:background="?attr/selectableItemBackground"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -42,6 +40,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="?attr/mainBodyTextColor"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:text="Motion"/>
 
                 <TextView
@@ -51,6 +52,8 @@
                     android:textColor="?attr/mainTitleTextColor"
                     android:textSize="16sp"
                     android:textStyle="bold"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:text="En titel om den fråga som dokumentet rör"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content" />
@@ -60,6 +63,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="av Jimmy Åkesson (SD)"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:textColor="?mainBodyTextColor"
                     />
                 <TextView
@@ -69,6 +74,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:textColor="?mainBodyTextColor"
                     android:textSize="14sp"
                     android:layout_marginBottom="16dp"

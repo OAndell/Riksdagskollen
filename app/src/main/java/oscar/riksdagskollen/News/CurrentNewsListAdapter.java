@@ -162,7 +162,6 @@ public class CurrentNewsListAdapter extends RiksdagenViewHolderAdapter {
         private final TextView date;
         private final TextView imageText;
         private final ImageView image;
-        private final LinearLayout contentLayout;
 
         public NewsViewHolder(View textView) {
             super(textView);
@@ -171,7 +170,6 @@ public class CurrentNewsListAdapter extends RiksdagenViewHolderAdapter {
             date = textView.findViewById(R.id.publicerad);
             imageText = textView.findViewById(R.id.image_text);
             image =  textView.findViewById(R.id.image);
-            contentLayout = textView.findViewById(R.id.news_content_layout);
         }
 
         public void bind(final CurrentNews item, final OnItemClickListener listener, Fragment fragment) {
@@ -204,7 +202,7 @@ public class CurrentNewsListAdapter extends RiksdagenViewHolderAdapter {
                 image.setVisibility(View.GONE);
             }
 
-            contentLayout.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     listener.onItemClick(item);
 
