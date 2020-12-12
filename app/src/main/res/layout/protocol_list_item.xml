@@ -11,10 +11,7 @@
             card_view:cardBackgroundColor="?attr/cardViewBackgroundColor"
         card_view:cardCornerRadius="3dp"
         card_view:cardElevation="6dp"
-        card_view:cardUseCompatPadding="true"
-        card_view:contentPaddingLeft="8dp"
-        card_view:contentPaddingRight="20dp"
-            card_view:contentPaddingTop="4dp">
+        card_view:cardUseCompatPadding="true">
 
 
             <FrameLayout
@@ -28,7 +25,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="?attr/selectableItemBackground">
 
             <TextView
                 android:id="@+id/title"
@@ -36,6 +34,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_marginTop="4dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:text="Protokoll 2017/18:20 Torsdagen den 19 oktober"
                 android:textColor="?mainTitleTextColor"
                 android:textSize="16sp"
@@ -47,6 +47,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:layout_weight="0.3"
                 android:text="Publicerad 2017-08-19"
               android:textColor="?mainBodyTextColor"
