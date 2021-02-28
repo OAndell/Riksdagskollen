@@ -179,10 +179,12 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
     public static class VoteViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView date;
+        private final TextView noResultsTV;
         private final View catColor;
         private final TextView catName;
         final FlexboxLayout yesVoteContainer;
         final FlexboxLayout noVoteContainer;
+        final LinearLayout voteResultContainer;
         Request resultRequest;
         private LinearLayout yesSideContainer;
         private LinearLayout noSideContainer;
@@ -198,6 +200,8 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
             catName = itemView.findViewById(R.id.category_name);
             yesVoteContainer = itemView.findViewById(R.id.vote_yes_icons);
             noVoteContainer = itemView.findViewById(R.id.vote_no_icons);
+            voteResultContainer = itemView.findViewById(R.id.vote_result_container);
+            noResultsTV = itemView.findViewById(R.id.no_vote_results_tv);
 
             noSideContainer = itemView.findViewById(R.id.no_side_container);
             yesSideContainer = itemView.findViewById(R.id.yes_side_container);
@@ -207,6 +211,8 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
 
             title.setText(trimTitle(item.getTitel()));
             date.setText(item.getDatum());
+            voteResultContainer.setVisibility(View.VISIBLE);
+            noResultsTV.setVisibility(View.GONE);
 
             if (item.getVoteResults() != null) {
                 arrangeVotes(item.getVoteResults());
@@ -214,11 +220,17 @@ public class VoteAdapter extends RiksdagenViewHolderAdapter {
 
                 resultRequest = RiksdagskollenApp.getInstance().getRequestManager().getDownloadString("http:" + item.getDokument_url_html(), new StringRequestCallback() {
                     VoteResults results;
+
                     @Override
                     public void onResponse(String response) {
                         results = new VoteResults(response);
-                        item.setVoteResults(results.getVoteResults());
-                        arrangeVotes(results.getVoteResults());
+                        if (!results.getVoteResults().isEmpty()) {
+                            item.setVoteResults(results.getVoteResults());
+                            arrangeVotes(results.getVoteResults());
+                        } else {
+                            noResultsTV.setVisibility(View.VISIBLE);
+                            voteResultContainer.setVisibility(View.GONE);
+                        }
                     }
 
                     @Override

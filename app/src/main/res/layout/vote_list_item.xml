@@ -64,11 +64,19 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/no_vote_results_tv"
+                android:text="Voteringsresultat saknas."
+                android:visibility="gone" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:id="@+id/vote_result_container"
                 android:weightSum="10"
                 android:orientation="horizontal">
 

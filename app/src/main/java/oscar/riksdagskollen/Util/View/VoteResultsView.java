@@ -20,13 +20,16 @@ import oscar.riksdagskollen.Util.Helper.VoteResults;
 
 public class VoteResultsView extends LinearLayout {
 
-    private HorizontalBarChart chart;
+    private final HorizontalBarChart chart;
 
     public VoteResultsView(Context context, VoteResults voteResults) {
         super(context);
         inflate(context, R.layout.vote_result_chart, this);
         chart = findViewById(R.id.vote_result_chart_chart);
-        setupMainGraph(voteResults);
+
+        if (!voteResults.getVoteResults().isEmpty()) {
+            setupMainGraph(voteResults);
+        }
     }
 
 
