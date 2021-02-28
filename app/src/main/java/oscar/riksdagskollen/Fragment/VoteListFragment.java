@@ -245,6 +245,7 @@ public class VoteListFragment extends RiksdagenAutoLoadingListFragment implement
     @Override
     protected void clearItems() {
         voteList.clear();
+        adapter.clear();
     }
 
     @Override
