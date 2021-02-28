@@ -109,13 +109,23 @@ public class VoteActivity extends AppCompatActivity{
 
         if (voteDocument.getVoteResults() != null) {
             // Aldready downloaded results
-            prepareGraphs(new VoteResults(voteDocument.getVoteResults()));
+            if (!voteDocument.getVoteResults().isEmpty()) {
+                prepareGraphs(new VoteResults(voteDocument.getVoteResults()));
+            } else {
+                graphLoaded = true;
+                checkLoading();
+            }
         } else {
             app.getRequestManager().getDownloadString("https:" + voteDocument.getDokument_url_html(), new StringRequestCallback() {
                 @Override
                 public void onResponse(String response) {
                     VoteResults results = new VoteResults(response);
-                    prepareGraphs(new VoteResults(results.getVoteResults()));
+                    if (!results.getVoteResults().isEmpty()) {
+                        prepareGraphs(new VoteResults(results.getVoteResults()));
+                    } else {
+                        graphLoaded = true;
+                        checkLoading();
+                    }
                 }
 
                 @Override
@@ -354,6 +364,7 @@ public class VoteActivity extends AppCompatActivity{
     }
 
     private void prepareGraphs(VoteResults results) {
+
         voteResultChartHolder.addView(new VoteResultsView(context, results));
         //TODO fix a better solution if a party is not in parliament for a vote.
         //TODO this is hardcoded for votes before SD had any seats.
