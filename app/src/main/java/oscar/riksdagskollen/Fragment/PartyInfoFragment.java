@@ -30,7 +30,9 @@ import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.CustomTabs;
 import oscar.riksdagskollen.Util.Helper.WikiPartyInfoExtractor;
 import oscar.riksdagskollen.Util.JSONModel.Party;
+import oscar.riksdagskollen.Util.JSONModel.PollingDataModels.PollingData;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyLeadersCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.PollingDataCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
 
@@ -144,6 +146,22 @@ public class PartyInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 CustomTabs.openTab(getContext(), "https://" + party.getWebsite());
+            }
+        });
+
+
+        //Riksdagskollen API
+        app.getRiksdagskollenAPIManager().getPollingDataForParty(party.getID(), new PollingDataCallback() {
+            @Override
+            public void onFetched(PollingData data) {
+                System.out.println(data.getParty());
+                System.out.println(data.getSource());
+                System.out.println(data.getDataPoints().get(0).getPeriod());
+            }
+
+            @Override
+            public void onFail(VolleyError error) {
+
             }
         });
 
