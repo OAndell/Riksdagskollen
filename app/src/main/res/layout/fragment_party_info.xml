@@ -107,6 +107,50 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="Opinion"
+                    android:textColor="?attr/mainTitleTextColor"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/polling_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="XX%"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/polling_icon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_expand"></ImageView>
+
+                <TextView
+                    android:id="@+id/polling_delta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="-1dp"
+                    android:layout_marginTop="-1dp"
+                    android:gravity="center"
+                    android:text="+0.0"
+                    android:textSize="12sp" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -122,12 +166,15 @@
 
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/leadersLayout"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                app:alignContent="space_around"
+                app:alignContent="space_between"
                 app:alignItems="center"
-                app:flexWrap="wrap"></com.google.android.flexbox.FlexboxLayout>
+                app:flexWrap="wrap">
+
+
+            </com.google.android.flexbox.FlexboxLayout>
 
             <TextView
                 android:layout_width="wrap_content"

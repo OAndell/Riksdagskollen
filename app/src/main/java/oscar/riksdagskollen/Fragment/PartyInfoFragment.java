@@ -13,16 +13,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.google.android.flexbox.FlexboxLayout;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RepresentativeList.data.Representative;
@@ -77,10 +80,12 @@ public class PartyInfoFragment extends Fragment {
         ImageView partyLogoView = view.findViewById(R.id.party_logo);
         partyLogoView.setImageResource(party.getDrawableLogo());
 
-        //Fill view with party leaders
         final TextView partyWikiInfo = view.findViewById(R.id.about_party_wiki);
         final TextView source = view.findViewById(R.id.source_tv);
         final TextView ideologyView = view.findViewById(R.id.ideology);
+        final TextView pollingNumber = view.findViewById(R.id.polling_number);
+        final TextView pollingDelta = view.findViewById(R.id.polling_delta);
+        final ImageView pollingIcon = view.findViewById(R.id.polling_icon);
         leadersLayout = view.findViewById(R.id.leadersLayout);
 
         partyWikiInfo.setText(getCachedWikiInfo(getSummaryKey()));
@@ -112,7 +117,7 @@ public class PartyInfoFragment extends Fragment {
         // Hack to fill the view, since flexboxlayput does not support min-height
 
         for (int i = 0; i < 5; i++) {
-            View portraitView = LayoutInflater.from(getActivity()).inflate(R.layout.intressent_layout_big, leadersLayout, false);
+            View portraitView = LayoutInflater.from(getActivity()).inflate(R.layout.intressent_layout, leadersLayout, false);
             leadersLayout.addView(portraitView);
         }
 
@@ -150,13 +155,38 @@ public class PartyInfoFragment extends Fragment {
         });
 
 
-        //Riksdagskollen API
+        //Riksdagskollen API POC
         app.getRiksdagskollenAPIManager().getPollingDataForParty(party.getID(), new PollingDataCallback() {
             @Override
             public void onFetched(PollingData data) {
-                System.out.println(data.getParty());
-                System.out.println(data.getSource());
-                System.out.println(data.getDataPoints().get(0).getPeriod());
+                String lastData = data.getDataPoints().get(0).getPercent();
+                String previousData = data.getDataPoints().get(1).getPercent();
+                pollingNumber.setText(lastData);
+                try {
+                    NumberFormat format = NumberFormat.getInstance(Locale.US);
+                    double last = format.parse(lastData.replace(",", ".")).doubleValue();
+                    double prev = format.parse(previousData.replace(",", ".")).doubleValue();
+                    double delta = last - prev;
+                    DecimalFormat f = new DecimalFormat("0.00");
+
+
+                    if (delta > 0) {
+                        pollingNumber.setTextColor(getResources().getColor(R.color.yesVoteColor));
+                        pollingIcon.setImageResource(R.drawable.ic_expand_less_black_24dp);
+                        pollingIcon.setColorFilter(getResources().getColor(R.color.yesVoteColor));
+                        pollingDelta.setText("+" + f.format(delta));
+                    } else {
+                        pollingNumber.setTextColor(getResources().getColor(R.color.noVoteColor));
+                        pollingIcon.setImageResource(R.drawable.ic_expand_more_black_24dp);
+                        pollingIcon.setColorFilter(getResources().getColor(R.color.noVoteColor));
+                        pollingDelta.setText(f.format(delta));
+
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                pollingNumber.setText(lastData);
+
             }
 
             @Override
