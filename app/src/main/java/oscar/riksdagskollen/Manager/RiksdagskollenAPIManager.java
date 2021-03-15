@@ -42,7 +42,6 @@ public class RiksdagskollenAPIManager {
         });
     }
 
-
     public void getPollingDataForParty( String partyAbbreviation, final PollingDataCallback callback) {
         String path = PATH_POLLING + "/" + partyAbbreviation;
         requestManager.doCachedGetRequest(path, HOST, CacheRequest.CachingPolicy.MEDIUM_TIME_CACHE, new JSONRequestCallback() {

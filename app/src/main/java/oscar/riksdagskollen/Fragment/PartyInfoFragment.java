@@ -85,7 +85,6 @@ public class PartyInfoFragment extends Fragment {
         final TextView ideologyView = view.findViewById(R.id.ideology);
         final TextView pollingNumber = view.findViewById(R.id.polling_number);
         final TextView pollingDelta = view.findViewById(R.id.polling_delta);
-        final ImageView pollingIcon = view.findViewById(R.id.polling_icon);
         leadersLayout = view.findViewById(R.id.leadersLayout);
 
         partyWikiInfo.setText(getCachedWikiInfo(getSummaryKey()));
@@ -154,13 +153,12 @@ public class PartyInfoFragment extends Fragment {
             }
         });
 
-
         //Riksdagskollen API POC
         app.getRiksdagskollenAPIManager().getPollingDataForParty(party.getID(), new PollingDataCallback() {
             @Override
             public void onFetched(PollingData data) {
-                String lastData = data.getDataPoints().get(0).getPercent();
-                String previousData = data.getDataPoints().get(1).getPercent();
+                String lastData = data.getData().get(0).getPercent();
+                String previousData = data.getData().get(1).getPercent();
                 pollingNumber.setText(lastData);
                 try {
                     NumberFormat format = NumberFormat.getInstance(Locale.US);
@@ -169,24 +167,17 @@ public class PartyInfoFragment extends Fragment {
                     double delta = last - prev;
                     DecimalFormat f = new DecimalFormat("0.00");
 
-
                     if (delta > 0) {
-                        pollingNumber.setTextColor(getResources().getColor(R.color.yesVoteColor));
-                        pollingIcon.setImageResource(R.drawable.ic_expand_less_black_24dp);
-                        pollingIcon.setColorFilter(getResources().getColor(R.color.yesVoteColor));
                         pollingDelta.setText("+" + f.format(delta));
-                    } else {
-                        pollingNumber.setTextColor(getResources().getColor(R.color.noVoteColor));
-                        pollingIcon.setImageResource(R.drawable.ic_expand_more_black_24dp);
-                        pollingIcon.setColorFilter(getResources().getColor(R.color.noVoteColor));
-                        pollingDelta.setText(f.format(delta));
+                        pollingDelta.setTextColor(getResources().getColor(R.color.yesVoteColor));
 
+                    } else {
+                        pollingDelta.setText(f.format(delta));
+                        pollingDelta.setTextColor(getResources().getColor(R.color.noVoteColor));
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                pollingNumber.setText(lastData);
-
             }
 
             @Override

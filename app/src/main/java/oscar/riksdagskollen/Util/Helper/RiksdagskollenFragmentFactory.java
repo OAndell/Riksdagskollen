@@ -1,14 +1,14 @@
 package oscar.riksdagskollen.Util.Helper;
 
-import androidx.fragment.app.Fragment;
-
 import java.lang.ref.SoftReference;
 
+import androidx.fragment.app.Fragment;
 import oscar.riksdagskollen.About.AboutFragment;
 import oscar.riksdagskollen.DebateList.DebateListFragment;
 import oscar.riksdagskollen.Fragment.DecisionsListFragment;
 import oscar.riksdagskollen.Fragment.PartyFragment;
 import oscar.riksdagskollen.Fragment.PartyListFragment;
+import oscar.riksdagskollen.Fragment.PollingFragment;
 import oscar.riksdagskollen.Fragment.ProtocolListFragment;
 import oscar.riksdagskollen.Fragment.SavedDocumentsFragment;
 import oscar.riksdagskollen.Fragment.SearchListFragment;
@@ -31,6 +31,7 @@ public class RiksdagskollenFragmentFactory {
     private SoftReference<SavedDocumentsFragment> savedDocumentsFragment;
     private SoftReference<SearchListFragment> searchFragment;
     private SoftReference<TwitterListFragment> twitterListFragment;
+    private SoftReference<PollingFragment> pollingFragment;
     private SoftReference<PartyFragment> sPartyFragment;
     private SoftReference<PartyFragment> mPartyFragment;
     private SoftReference<PartyFragment> sdPartyFragment;
@@ -126,6 +127,10 @@ public class RiksdagskollenFragmentFactory {
                 if (aboutFragment == null || aboutFragment.get() == null)
                     aboutFragment = new SoftReference<>(AboutFragment.newInstance());
                 return aboutFragment.get();
+            case "POLLING": //TODO find out how to do static variables in kotlin
+                if (pollingFragment == null || pollingFragment.get() == null)
+                    pollingFragment = new SoftReference<>(PollingFragment.newInstance());
+                return pollingFragment.get();
 
             default:
                 return null;

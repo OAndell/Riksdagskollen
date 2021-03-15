@@ -18,6 +18,10 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.navigation.NavigationView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -26,11 +30,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.navigation.NavigationView;
-
 import oscar.riksdagskollen.About.AboutFragment;
 import oscar.riksdagskollen.DebateList.DebateListFragment;
 import oscar.riksdagskollen.Fragment.DecisionsListFragment;
@@ -415,6 +414,11 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragmentFactory.getFragment(TwitterListFragment.SECTION_NAME_TWITTER)).commit();
                 break;
+            case R.id.poll_nav:
+                analyticsManager.logMessage("Opened: " + "POLLING"); //TODO figure out how to do static var in kotlin
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragmentFactory.getFragment("POLLING")).commit();
+                break;
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -426,12 +430,7 @@ public class MainActivity extends AppCompatActivity
         final AlertDialog dialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom)
                 .setTitle("Ge oss feedback")
                 .setView(new GiveFeedbackView(this))
-                .setPositiveButton("Avbryt", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
+                .setPositiveButton("Avbryt", (dialogInterface, i) -> dialogInterface.dismiss())
                 .create();
         dialog.show();
     }
