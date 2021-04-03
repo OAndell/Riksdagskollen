@@ -1,4 +1,4 @@
-package oscar.riksdagskollen.Util.JSONModel.PollingDataModels
+package oscar.riksdagskollen.Util.JSONModel.RiksdagskollenAPI.PollingDataModels
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

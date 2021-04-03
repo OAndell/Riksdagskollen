@@ -123,6 +123,7 @@ dependencies {
 
     implementation 'com.android.volley:volley:1.1.0'
     implementation 'org.jsoup:jsoup:1.11.2'
+    implementation "io.reactivex.rxjava3:rxjava:3.0.11"
     implementation 'com.google.android:flexbox:1.0.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.github.franmontiel:AttributionPresenter:1.0'
