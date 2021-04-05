@@ -1,22 +1,26 @@
 package oscar.riksdagskollen.Fragment
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import com.android.volley.VolleyError
+import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.components.LimitLine
+import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.functions.BiFunction
 import io.reactivex.rxjava3.subjects.PublishSubject
 import oscar.riksdagskollen.R
 import oscar.riksdagskollen.RiksdagskollenApp
+import oscar.riksdagskollen.Util.Enum.CurrentParties
 import oscar.riksdagskollen.Util.JSONModel.RiksdagskollenAPI.PartyDataModels.PartyData
 import oscar.riksdagskollen.Util.JSONModel.RiksdagskollenAPI.PollingDataModels.PollingData
 import oscar.riksdagskollen.Util.RiksdagenCallback.RKAPICallbacks.PartyDataListCallback
@@ -57,7 +61,12 @@ class PollingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val chart = view.findViewById(R.id.polling_chart) as LineChart
+        val lineChart = view.findViewById(R.id.polling_chart) as LineChart
+        val barChart = view.findViewById(R.id.block_chart) as BarChart
+        val buttonBarRight = view.findViewById(R.id.block_chart_right_bar) as LinearLayout
+        val buttonBarLeft = view.findViewById(R.id.block_chart_left_bar) as LinearLayout
+
+
         val pollingDataObservable = PublishSubject.create<Array<PollingData>>();
         val partyDataObservable = PublishSubject.create<Array<PartyData>>();
 
@@ -90,9 +99,8 @@ class PollingFragment : Fragment() {
                     val pollData = it.first
                     val partyData = it.second
 
-
+                    //Line Chart
                     val dataSets: MutableList<ILineDataSet> = ArrayList()
-
                     for (partyPolling in pollData) {
                         val partyInfo = partyData.find { it.abbreviation == partyPolling.party }
                         if (partyInfo != null) {
@@ -101,12 +109,53 @@ class PollingFragment : Fragment() {
                     }
 
                     val lineData = LineData(dataSets)
-                    chart.data = lineData;
-                    chart.setBackgroundColor(Color.parseColor("#FFFFFF"))
-                    chart.xAxis.setValueFormatter { value, axis -> pollData[0].data.reversed()[value.toInt()].period }
-                    chart.xAxis.setLabelCount(4)
-                    chart.invalidate()
+                    lineChart.data = lineData;
+                    lineChart.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                    lineChart.xAxis.setValueFormatter { value, axis -> pollData[0].data.reversed()[value.toInt()].period }
+                    lineChart.xAxis.setLabelCount(4)
+                    lineChart.axisLeft.addLimitLine(createFourPercentLimitLine())
+                    lineChart.axisLeft.setValueFormatter { value, axis -> value.toString() + "%" }
+                    lineChart.axisRight.setValueFormatter { value, axis -> value.toString() + "%" }
+                    lineChart.description.text = "";
+                    lineChart.invalidate()
+
+                    //Bar chart
+                    val valueList: MutableList<Float> = ArrayList()
+                    val entries: MutableList<BarEntry> = ArrayList()
+                    val title = "Title"
+                    //input data
+                    for (i in 0..1) {
+                        valueList.add((0).toFloat())
+                    }
+                    for (i in 0 until valueList.size) {
+                        val barEntry = BarEntry(i.toFloat(), valueList[i])
+                        entries.add(barEntry)
+                    }
+                    val barDataSet = BarDataSet(entries, title)
+                    barDataSet.setColors(intArrayOf(Color.RED, Color.BLUE).asList())
+
+                    val data = BarData(barDataSet)
+                    barChart.data = data
+                    barChart.axisLeft.addLimitLine(createFiftyPercentLimitLine())
+                    populateButtonBar(barChart, buttonBarRight, pollData, 0)
+                    populateButtonBar(barChart, buttonBarLeft, pollData, 1)
+                    barChart.axisLeft.setAxisMinimum(0f);
+                    barChart.axisLeft.setAxisMaximum(100f);
+                    barChart.setBackgroundColor(Color.parseColor("#FFFFFF"))
+
+
+
+                    barChart.invalidate()
+
                 }
+    }
+
+    private fun populateButtonBar(barChart: BarChart, layout: LinearLayout, pollData: Array<PollingData>, barChartIndex: Int) {
+        for (d in pollData) {
+            val partyPercent = resultStringToFloat(d.data[0].percent)
+            val logo = LogoButton(app.baseContext, CurrentParties.getParty(d.party).drawableLogo, partyPercent, barChart, barChartIndex)
+            layout.addView(logo.imageView);
+        }
     }
 
     companion object {
@@ -124,6 +173,28 @@ class PollingFragment : Fragment() {
             dataSet.setColor(Color.parseColor(partyData.color));
             dataSet.lineWidth = 3.toFloat();
             return dataSet;
+        }
+
+        fun createFourPercentLimitLine(): LimitLine {
+            val line = LimitLine(4.toFloat(), "");
+            line.enableDashedLine(10.toFloat(), 5.toFloat(), 0.toFloat())
+            line.lineWidth = 2.toFloat()
+            line.textSize = 18.toFloat()
+            line.labelPosition = LimitLine.LimitLabelPosition.LEFT_TOP
+            return line;
+        }
+
+        fun createFiftyPercentLimitLine(): LimitLine {
+            val line = LimitLine(50.toFloat(), "50%");
+            line.enableDashedLine(10.toFloat(), 5.toFloat(), 0.toFloat())
+            line.lineWidth = 2.toFloat()
+            line.textSize = 18.toFloat()
+            line.labelPosition = LimitLine.LimitLabelPosition.LEFT_TOP
+            return line;
+        }
+
+        fun resultStringToFloat(percent: String): Float {
+            return percent.replace("%", "").replace(",", ".").toFloat()
         }
 
 
@@ -144,4 +215,35 @@ class PollingFragment : Fragment() {
                     }
                 }
     }
+
+    class LogoButton(context: Context, logo: Int, pollingPercent: Float, chart: BarChart, barChartIndex: Int) {
+        var active: Boolean = false;
+        val imageView: ImageView = ImageView(context);
+
+        init {
+            imageView.setImageDrawable(context.resources.getDrawable(logo));
+            imageView.layoutParams = ViewGroup.LayoutParams(80, 200)
+            imageView.setColorFilter(R.color.black);
+            imageView.setOnClickListener {
+                if (!active) {
+
+                    val currentData = chart.barData.getDataSetByIndex(0).getEntryForIndex(barChartIndex).y
+                    chart.barData.getDataSetByIndex(0).getEntryForIndex(barChartIndex).y = currentData + pollingPercent;
+                    chart.invalidate();
+
+                    active = true;
+                    imageView.setColorFilter(null)
+                } else {
+                    val currentData = chart.barData.getDataSetByIndex(0).getEntryForIndex(barChartIndex).y
+                    chart.barData.getDataSetByIndex(0).getEntryForIndex(barChartIndex).y = currentData - pollingPercent;
+                    chart.invalidate();
+                    active = false;
+                    imageView.setColorFilter(R.color.black);
+                }
+            }
+        }
+
+
+    }
 }
+

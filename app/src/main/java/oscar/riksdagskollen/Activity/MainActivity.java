@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity
     private ImageView collapsingLogo;
     private AnalyticsManager analyticsManager;
     private RiksdagskollenFragmentFactory fragmentFactory = new RiksdagskollenFragmentFactory();
+    private int defaultMenuItemIndex = 1;
 
 
     @Override
@@ -102,8 +103,8 @@ public class MainActivity extends AppCompatActivity
         if (savedInstanceState == null) {
             startLauncherTransition();
             // Mark News-fragment as selected at startup
-            onNavigationItemSelected(navigationView.getMenu().getItem(0).getSubMenu().getItem(0));
-            navigationView.getMenu().getItem(0).getSubMenu().getItem(0).setChecked(true);
+            onNavigationItemSelected(navigationView.getMenu().getItem(defaultMenuItemIndex).getSubMenu().getItem(0));
+            navigationView.getMenu().getItem(defaultMenuItemIndex).getSubMenu().getItem(0).setChecked(true);
         } else {
             // Apply theme
             emptyToolbar = false;
@@ -318,7 +319,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         // Ugly hack to prevent News menu item to be checked forever
-        navigationView.getMenu().getItem(0).getSubMenu().getItem(0).setChecked(false);
+        navigationView.getMenu().getItem(defaultMenuItemIndex).getSubMenu().getItem(0).setChecked(false);
 
         switch (id) {
             case R.id.news_nav:

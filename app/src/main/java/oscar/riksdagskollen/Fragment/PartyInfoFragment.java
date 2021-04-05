@@ -93,6 +93,7 @@ public class PartyInfoFragment extends Fragment {
         final TextView pollingNumber = view.findViewById(R.id.polling_number);
         final TextView pollingDelta = view.findViewById(R.id.polling_delta);
         final TextView electionResults = view.findViewById(R.id.election_result);
+        final ImageView indicatorArrow = view.findViewById(R.id.indicator_arrow);
 
         leadersLayout = view.findViewById(R.id.leadersLayout);
 
@@ -208,8 +209,16 @@ public class PartyInfoFragment extends Fragment {
                     pollingDelta.setText(f.format(delta));
                     pollingDelta.setTextColor(getResources().getColor(R.color.noVoteColor));
                 }
-
                 electionResults.setText(partyData.getElectionResult());
+                double electionResult = format.parse(partyData.getElectionResult().replace(",", ".")).doubleValue();
+                if (electionResult > last) {
+                    indicatorArrow.setImageResource(R.drawable.ic_expand_more_black_24dp);
+                    indicatorArrow.setColorFilter(getResources().getColor(R.color.noVoteColor));
+                } else {
+                    indicatorArrow.setImageResource(R.drawable.ic_expand_less_black_24dp);
+                    indicatorArrow.setColorFilter(getResources().getColor(R.color.yesVoteColor));
+                }
+
             } catch (ParseException e) {
                 e.printStackTrace();
             }
