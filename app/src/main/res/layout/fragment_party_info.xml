@@ -127,6 +127,7 @@
                 android:layout_gravity="center_horizontal"
                 app:alignContent="space_between"
                 app:alignItems="center"
+                app:justifyContent="center"
                 app:flexWrap="wrap">
 
 

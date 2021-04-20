@@ -126,7 +126,7 @@ public class PartyInfoFragment extends Fragment {
         // Hack to fill the view, since flexboxlayput does not support min-height
 
         for (int i = 0; i < 5; i++) {
-            View portraitView = LayoutInflater.from(getActivity()).inflate(R.layout.intressent_layout, leadersLayout, false);
+            View portraitView = LayoutInflater.from(getActivity()).inflate(R.layout.intressent_layout_big, leadersLayout, false);
             leadersLayout.addView(portraitView);
         }
 
@@ -252,13 +252,10 @@ public class PartyInfoFragment extends Fragment {
                                 .into(portrait);
                     }
 
-                    portrait.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent repDetailsIntent = new Intent(getContext(), RepresentativeDetailActivity.class);
-                            repDetailsIntent.putExtra("representative", representative);
-                            startActivity(repDetailsIntent);
-                        }
+                    portrait.setOnClickListener(view -> {
+                        Intent repDetailsIntent = new Intent(getContext(), RepresentativeDetailActivity.class);
+                        repDetailsIntent.putExtra("representative", representative);
+                        startActivity(repDetailsIntent);
                     });
                     TextView nameTv = portraitView.findViewById(R.id.intressent_name);
                     nameTv.setText(representative.getTilltalsnamn() + " " + representative.getEfternamn() + "\n" + representative.getDescriptiveRole());

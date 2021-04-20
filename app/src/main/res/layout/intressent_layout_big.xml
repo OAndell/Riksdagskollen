@@ -8,7 +8,7 @@
 
     <oscar.riksdagskollen.Util.View.CircularImageView
         android:id="@+id/intressent_portait"
-        android:layout_width="60dp"
+        android:layout_width="130dp"
         android:layout_height="60dp"
         android:layout_gravity="center" />
 
@@ -19,8 +19,8 @@
         android:gravity="center"
         android:textColor="?attr/mainTitleTextColor"
         android:textSize="11sp"
+        android:layout_marginTop="-10dp"
         android:maxWidth="130dp"
-        android:layout_marginTop="-25dp"
         android:layout_gravity="center"
         android:text="\n" />
 
