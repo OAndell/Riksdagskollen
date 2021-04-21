@@ -29,10 +29,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 const val SECTION_NAME = "polling"
 
@@ -141,22 +137,61 @@ class PollingFragment : Fragment() {
                     barChart.data = data
                     barChart.axisLeft.addLimitLine(createFiftyPercentLimitLine())
                     barChart.description.isEnabled = false
-                    populateButtonBar(barChart, buttonBarRight, pollData, 0, column1)
-                    populateButtonBar(barChart, buttonBarLeft, pollData, 1, column2)
+
+                    val rightBarDefaults = arrayOf("S", "V", "MP", "L", "C")
+                    val leftBarDefaults = arrayOf("M", "SD", "KD")
+
+                    populateButtonBar(barChart, buttonBarRight, pollData, 0, column1, rightBarDefaults)
+                    populateButtonBar(barChart, buttonBarLeft, pollData, 1, column2, leftBarDefaults)
                     barChart.axisLeft.setAxisMinimum(0f)
                     barChart.axisLeft.setAxisMaximum(100f)
+
                     barChart.axisLeft.setDrawGridLines(false)
-                    barChart.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                    barChart.getXAxis().setDrawAxisLine(false);
+                    barChart.getXAxis().setDrawGridLines(false);
+                    barChart.getXAxis().setDrawLabels(false);
+
+                    barChart.getAxisLeft().setDrawLabels(false);
+                    barChart.getAxisLeft().setDrawGridLines(false);
+                    barChart.getAxisLeft().setDrawAxisLine(false);
+                    barChart.getAxisRight().setDrawLabels(false);
+                    barChart.getAxisRight().setDrawGridLines(false);
+                    barChart.getAxisRight().setDrawAxisLine(false);
+
+                    barChart.getLegend().setEnabled(false);
+                    barChart.setDescription(null);
+                    barChart.setTouchEnabled(false);
+
+
+                    //barChart.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                    /*
+                       chart.getXAxis().setDrawAxisLine(false);
+                    chart.getXAxis().setDrawGridLines(false);
+                    chart.getXAxis().setDrawLabels(false);
+
+                    chart.getAxisLeft().setDrawLabels(false);
+                    chart.getAxisLeft().setDrawGridLines(false);
+                    chart.getAxisLeft().setDrawAxisLine(false);
+                    chart.getAxisRight().setDrawLabels(false);
+                    chart.getAxisRight().setDrawGridLines(false);
+                    chart.getAxisRight().setDrawAxisLine(false);
+
+                    chart.getLegend().setEnabled(false);
+                    chart.setDrawValueAboveBar(false);
+                    chart.setFitBars(true);
+                    chart.setDescription(null);
+                    chart.setTouchEnabled(false); //Remove interactivity.
+                     */
                     barChart.invalidate()
 
                 }
     }
 
-    private fun populateButtonBar(barChart: BarChart, layout: LinearLayout, pollData: Array<PollingData>, barChartIndex: Int, partyMap: Map<String, Int>) {
+    private fun populateButtonBar(barChart: BarChart, layout: LinearLayout, pollData: Array<PollingData>, barChartIndex: Int, partyMap: Map<String, Int>, defaultSelected: Array<String>) {
         for (d in pollData) {
             val partyPercent = resultStringToFloat(d.data[0].percent)
             val valueIndex: Int = partyMap.get(d.party)!!;
-            val logo = LogoButton(app.baseContext, CurrentParties.getParty(d.party).drawableLogo, partyPercent, barChart, barChartIndex, valueIndex)
+            val logo = LogoButton(app.baseContext, CurrentParties.getParty(d.party).drawableLogo, partyPercent, barChart, barChartIndex, valueIndex, defaultSelected.contains(d.party))
             layout.addView(logo.imageView);
         }
     }
@@ -191,6 +226,8 @@ class PollingFragment : Fragment() {
         line.enableDashedLine(10f, 5f, 0f)
         line.lineWidth = 2f
         line.textSize = 18f
+        line.textColor = Color.BLACK
+        line.lineColor = Color.BLACK
         line.labelPosition = LimitLine.LimitLabelPosition.LEFT_TOP
         return line;
     }
@@ -218,7 +255,7 @@ class PollingFragment : Fragment() {
                 }
     }
 
-    class LogoButton(context: Context, logo: Int, pollingPercent: Float, chart: BarChart, barChartIndex: Int, valueIndex: Int) {
+    class LogoButton(context: Context, logo: Int, val pollingPercent: Float, val chart: BarChart, val barChartIndex: Int, val valueIndex: Int, val isDefault: Boolean) {
         var active: Boolean = false;
         val imageView: ImageView = ImageView(context);
 
@@ -228,22 +265,32 @@ class PollingFragment : Fragment() {
             imageView.setColorFilter(R.color.black)
             imageView.setOnClickListener {
                 if (!active) {
-                    val column = chart.barData.getDataSetByIndex(0).getEntryForIndex(barChartIndex)
-                    column.yVals.set(valueIndex, pollingPercent);
-                    chart.invalidate()
-                    active = true;
-                    imageView.setColorFilter(null)
+                    add()
                 } else {
-                    val column = chart.barData.getDataSetByIndex(0).getEntryForIndex(barChartIndex)
-                    column.yVals.set(valueIndex, 0f)
-                    chart.invalidate()
-                    active = false;
-                    imageView.setColorFilter(R.color.black);
+                    remove()
                 }
+            }
+
+            if (isDefault) {
+                add();
             }
         }
 
+        private fun add() {
+            val column = chart.barData.getDataSetByIndex(0).getEntryForIndex(barChartIndex)
+            column.yVals.set(valueIndex, pollingPercent);
+            chart.invalidate()
+            active = true;
+            imageView.setColorFilter(null)
+        }
 
+        private fun remove() {
+            val column = chart.barData.getDataSetByIndex(0).getEntryForIndex(barChartIndex)
+            column.yVals.set(valueIndex, 0f)
+            chart.invalidate()
+            active = false;
+            imageView.setColorFilter(R.color.black);
+        }
     }
 }
 
