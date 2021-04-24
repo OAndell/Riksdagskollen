@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Data-användning">
+
+        <SwitchPreference
+            android:title="Datasparläge (experimentellt)"
+            android:defaultValue="false"
+            android:key="data_save_mode"
+            android:summary="Aktivera datasparläget för att begränsa mängden data som appen använder genom att minimera resurser som hämtas. Denna funktion är fortfarande under utveckling och kan därför framkalla oväntat beteende i appen." />
+
+        <ListPreference
+            android:title="Uppdateringsfrekvens"
+            android:summary="Välj hur ofta appen ska leta leta efter nya dokument i bakgrunden för sidor du bevakar. Observera att en hög uppdateringsfrekvens kan leda till att appen förbrukar mer data."
+            android:key="update_freq"
+            android:defaultValue="480"
+            android:entries="@array/update_intervals_entries"
+            android:entryValues="@array/update_intervals_values" />
+
+        <SwitchPreference
+            android:title="Använd endast bakgrundsdata över WiFi"
+            android:defaultValue="false"
+            android:key="only_wifi"
+            android:summary="Aktivera för att endast leta efter nya dokument i bakgrunden när du är ansluten till WiFi för att spara mobil data." />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>
