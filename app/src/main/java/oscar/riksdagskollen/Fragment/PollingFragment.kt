@@ -2,12 +2,15 @@ package oscar.riksdagskollen.Fragment
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.android.volley.VolleyError
 import com.github.mikephil.charting.charts.BarChart
@@ -25,9 +28,6 @@ import oscar.riksdagskollen.Util.JSONModel.RiksdagskollenAPI.PartyDataModels.Par
 import oscar.riksdagskollen.Util.JSONModel.RiksdagskollenAPI.PollingDataModels.PollingData
 import oscar.riksdagskollen.Util.RiksdagenCallback.RKAPICallbacks.PartyDataListCallback
 import oscar.riksdagskollen.Util.RiksdagenCallback.RKAPICallbacks.PollingDataListCallback
-import java.util.*
-import kotlin.collections.ArrayList
-
 
 
 const val SECTION_NAME = "polling"
@@ -50,7 +50,8 @@ class PollingFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
+        (activity as AppCompatActivity?)!!.supportActionBar!!.setTitle("Opinionsmätning")
+
 
         return inflater.inflate(R.layout.fragment_polling, container, false)
     }
@@ -134,9 +135,10 @@ class PollingFragment : Fragment() {
                     barDataSet.setColors(colors)
 
                     val data = BarData(barDataSet)
+                    data.setBarWidth(0.7f);
+
                     barChart.data = data
                     barChart.axisLeft.addLimitLine(createFiftyPercentLimitLine())
-                    barChart.description.isEnabled = false
 
                     val rightBarDefaults = arrayOf("S", "V", "MP", "L", "C")
                     val leftBarDefaults = arrayOf("M", "SD", "KD")
@@ -151,18 +153,18 @@ class PollingFragment : Fragment() {
                     barChart.getXAxis().setDrawGridLines(false);
                     barChart.getXAxis().setDrawLabels(false);
 
-                    barChart.getAxisLeft().setDrawLabels(false);
-                    barChart.getAxisLeft().setDrawGridLines(false);
-                    barChart.getAxisLeft().setDrawAxisLine(false);
+                    barChart.axisLeft.setDrawLabels(false);
+                    barChart.axisLeft.setDrawGridLines(false);
+                    barChart.axisLeft.setDrawAxisLine(false);
                     barChart.getAxisRight().setDrawLabels(false);
                     barChart.getAxisRight().setDrawGridLines(false);
                     barChart.getAxisRight().setDrawAxisLine(false);
 
                     barChart.getLegend().setEnabled(false);
-                    barChart.setDescription(null);
-                    barChart.setTouchEnabled(false);
 
+                    barChart.setTouchEnabled(false)
 
+                    barChart.description.isEnabled = false
                     //barChart.setBackgroundColor(Color.parseColor("#FFFFFF"))
                     /*
                        chart.getXAxis().setDrawAxisLine(false);
@@ -224,11 +226,11 @@ class PollingFragment : Fragment() {
     private fun createFiftyPercentLimitLine(): LimitLine {
         val line = LimitLine(50f, "50%");
         line.enableDashedLine(10f, 5f, 0f)
-        line.lineWidth = 2f
-        line.textSize = 18f
-        line.textColor = Color.BLACK
-        line.lineColor = Color.BLACK
-        line.labelPosition = LimitLine.LimitLabelPosition.LEFT_TOP
+        line.lineWidth = 1f
+        line.textSize = 22f
+        line.textColor = Color.WHITE
+        line.lineColor = Color.WHITE
+        line.labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
         return line;
     }
 
@@ -237,15 +239,6 @@ class PollingFragment : Fragment() {
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PollingFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance() =
                 PollingFragment().apply {
@@ -262,7 +255,7 @@ class PollingFragment : Fragment() {
         init {
             imageView.setImageDrawable(context.resources.getDrawable(logo));
             imageView.layoutParams = ViewGroup.LayoutParams(80, 200)
-            imageView.setColorFilter(R.color.black)
+            imageView.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
             imageView.setOnClickListener {
                 if (!active) {
                     add()
@@ -282,6 +275,10 @@ class PollingFragment : Fragment() {
             chart.invalidate()
             active = true;
             imageView.setColorFilter(null)
+            imageView.scaleX = 1.1f
+            imageView.scaleY = 1.1f
+
+
         }
 
         private fun remove() {
@@ -289,7 +286,10 @@ class PollingFragment : Fragment() {
             column.yVals.set(valueIndex, 0f)
             chart.invalidate()
             active = false;
-            imageView.setColorFilter(R.color.black);
+            imageView.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
+            imageView.scaleX = 1f
+            imageView.scaleY = 1f
+            //imageView.setColorFilter(R.color.black);
         }
     }
 }
