@@ -5,11 +5,14 @@ import android.graphics.Color
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.android.volley.VolleyError
@@ -24,6 +27,7 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 import oscar.riksdagskollen.R
 import oscar.riksdagskollen.RiksdagskollenApp
 import oscar.riksdagskollen.Util.Enum.CurrentParties
+import oscar.riksdagskollen.Util.Helper.CustomTabs
 import oscar.riksdagskollen.Util.JSONModel.RiksdagskollenAPI.PartyDataModels.PartyData
 import oscar.riksdagskollen.Util.JSONModel.RiksdagskollenAPI.PollingDataModels.PollingData
 import oscar.riksdagskollen.Util.RiksdagenCallback.RKAPICallbacks.PartyDataListCallback
@@ -60,6 +64,7 @@ class PollingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val lineChart = view.findViewById(R.id.polling_chart) as LineChart
         val barChart = view.findViewById(R.id.block_chart) as BarChart
+        val sourceTextView = view.findViewById(R.id.polling_source) as TextView
         val buttonBarRight = view.findViewById(R.id.block_chart_right_bar) as LinearLayout
         val buttonBarLeft = view.findViewById(R.id.block_chart_left_bar) as LinearLayout
         val pollingDataObservable = PublishSubject.create<Array<PollingData>>()
@@ -77,11 +82,9 @@ class PollingFragment : Fragment() {
         app.riksdagskollenAPIManager.getPartyData(object : PartyDataListCallback {
             override fun onFetched(data: Array<PartyData>) {
                 partyDataObservable.onNext(data);
-                println(data.get(0).color);
             }
 
-            override fun onFail(error: VolleyError?) {
-            }
+            override fun onFail(error: VolleyError?) {}
 
         });
 
@@ -93,6 +96,8 @@ class PollingFragment : Fragment() {
                 .subscribe {
                     val pollData = it.first
                     val partyData = it.second
+
+                    initSourceTextView(sourceTextView, pollData[0].source);
 
                     //Line Chart
                     val dataSets: MutableList<ILineDataSet> = ArrayList()
@@ -165,25 +170,7 @@ class PollingFragment : Fragment() {
                     barChart.setTouchEnabled(false)
 
                     barChart.description.isEnabled = false
-                    //barChart.setBackgroundColor(Color.parseColor("#FFFFFF"))
-                    /*
-                       chart.getXAxis().setDrawAxisLine(false);
-                    chart.getXAxis().setDrawGridLines(false);
-                    chart.getXAxis().setDrawLabels(false);
 
-                    chart.getAxisLeft().setDrawLabels(false);
-                    chart.getAxisLeft().setDrawGridLines(false);
-                    chart.getAxisLeft().setDrawAxisLine(false);
-                    chart.getAxisRight().setDrawLabels(false);
-                    chart.getAxisRight().setDrawGridLines(false);
-                    chart.getAxisRight().setDrawAxisLine(false);
-
-                    chart.getLegend().setEnabled(false);
-                    chart.setDrawValueAboveBar(false);
-                    chart.setFitBars(true);
-                    chart.setDescription(null);
-                    chart.setTouchEnabled(false); //Remove interactivity.
-                     */
                     barChart.invalidate()
 
                 }
@@ -220,7 +207,7 @@ class PollingFragment : Fragment() {
         line.lineWidth = 2f
         line.textSize = 18f
         line.labelPosition = LimitLine.LimitLabelPosition.LEFT_TOP
-        return line;
+        return line
     }
 
     private fun createFiftyPercentLimitLine(): LimitLine {
@@ -236,6 +223,13 @@ class PollingFragment : Fragment() {
 
     private fun resultStringToFloat(percent: String): Float {
         return percent.replace("%", "").replace(",", ".").toFloat()
+    }
+
+    private fun initSourceTextView(txtView: TextView, url: String) {
+        txtView.setOnClickListener { CustomTabs.openTab(context, url) }
+        val spannableString = SpannableString(txtView.text)
+        spannableString.setSpan(UnderlineSpan(), 0, spannableString.length, 0)
+        txtView.text = spannableString
     }
 
     companion object {
@@ -289,7 +283,6 @@ class PollingFragment : Fragment() {
             imageView.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
             imageView.scaleX = 1f
             imageView.scaleY = 1f
-            //imageView.setColorFilter(R.color.black);
         }
     }
 }

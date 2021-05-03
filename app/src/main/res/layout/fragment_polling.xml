@@ -8,6 +8,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <LinearLayout
@@ -24,18 +25,28 @@
             <com.google.android.flexbox.FlexboxLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_margin="10dp"
                 app:justifyContent="flex_end">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Källa" />
+                    android:text="Källa:"
+                    android:textColor="?attr/mainTitleTextColor"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/polling_source"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="LINK" />
+                    android:layout_marginLeft="4dp"
+                    android:width="200dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="wikipedia.org/wiki/Opinionsundersökningar_inför_"
+                    android:textColor="?attr/mainBodyTextColor"
+                    android:textSize="15sp" />
             </com.google.android.flexbox.FlexboxLayout>
 
             <com.google.android.flexbox.FlexboxLayout
@@ -43,6 +54,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_margin="10dp"
+                android:background="@color/riksdagBlue"
                 app:justifyContent="space_evenly">
 
                 <LinearLayout
