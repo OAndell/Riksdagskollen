@@ -10,10 +10,11 @@ import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import com.android.volley.VolleyError
 import com.github.mikephil.charting.charts.BarChart
@@ -28,6 +29,7 @@ import oscar.riksdagskollen.R
 import oscar.riksdagskollen.RiksdagskollenApp
 import oscar.riksdagskollen.Util.Enum.CurrentParties
 import oscar.riksdagskollen.Util.Helper.CustomTabs
+import oscar.riksdagskollen.Util.JSONModel.Party
 import oscar.riksdagskollen.Util.JSONModel.RiksdagskollenAPI.PartyDataModels.PartyData
 import oscar.riksdagskollen.Util.JSONModel.RiksdagskollenAPI.PollingDataModels.PollingData
 import oscar.riksdagskollen.Util.RiksdagenCallback.RKAPICallbacks.PartyDataListCallback
@@ -109,14 +111,18 @@ class PollingFragment : Fragment() {
                     }
 
                     val lineData = LineData(dataSets)
+                    lineData.setValueTextSize(12f)
                     lineChart.data = lineData;
                     lineChart.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                    lineChart.axisLeft.isEnabled = false
                     lineChart.xAxis.setValueFormatter { value, axis -> pollData[0].data.reversed()[value.toInt()].period }
                     lineChart.xAxis.setLabelCount(4)
-                    lineChart.axisLeft.addLimitLine(createFourPercentLimitLine())
-                    lineChart.axisLeft.setValueFormatter { value, axis -> value.toString() + "%" }
+                    lineChart.axisLeft.setDrawLabels(false)
                     lineChart.axisRight.setValueFormatter { value, axis -> value.toString() + "%" }
-                    lineChart.description.text = "";
+                    lineChart.axisRight.textSize = 12f
+                    lineChart.xAxis.textSize = 12f
+                    lineChart.setPadding(0, 100, 0, 0)
+                    lineChart.description.text = ""
                     lineChart.invalidate()
 
                     //Bar chart
@@ -148,8 +154,8 @@ class PollingFragment : Fragment() {
                     val rightBarDefaults = arrayOf("S", "V", "MP", "L", "C")
                     val leftBarDefaults = arrayOf("M", "SD", "KD")
 
-                    populateButtonBar(barChart, buttonBarRight, pollData, 0, column1, rightBarDefaults)
-                    populateButtonBar(barChart, buttonBarLeft, pollData, 1, column2, leftBarDefaults)
+                    populateButtonBar(barChart, buttonBarRight, buttonBarLeft, pollData, 0, column1, rightBarDefaults)
+                    populateButtonBar(barChart, buttonBarLeft, buttonBarRight, pollData, 1, column2, leftBarDefaults)
                     barChart.axisLeft.setAxisMinimum(0f)
                     barChart.axisLeft.setAxisMaximum(100f)
 
@@ -176,12 +182,25 @@ class PollingFragment : Fragment() {
                 }
     }
 
-    private fun populateButtonBar(barChart: BarChart, layout: LinearLayout, pollData: Array<PollingData>, barChartIndex: Int, partyMap: Map<String, Int>, defaultSelected: Array<String>) {
+    private fun populateButtonBar(barChart: BarChart, layout: LinearLayout, neighbourLayout: LinearLayout, pollData: Array<PollingData>, barChartIndex: Int, partyMap: Map<String, Int>, defaultSelected: Array<String>) {
         for (d in pollData) {
             val partyPercent = resultStringToFloat(d.data[0].percent)
             val valueIndex: Int = partyMap.get(d.party)!!;
-            val logo = LogoButton(app.baseContext, CurrentParties.getParty(d.party).drawableLogo, partyPercent, barChart, barChartIndex, valueIndex, defaultSelected.contains(d.party))
-            layout.addView(logo.imageView);
+            val logo = LogoButton(app.baseContext, CurrentParties.getParty(d.party), partyPercent, barChart, barChartIndex, valueIndex, defaultSelected.contains(d.party))
+            logo.clickListener = {
+                if (!logo.active) {
+                    logo.add()
+                    neighbourLayout.children
+                            .find { (it as? LogoButton)?.id == logo.id }
+                            .also { (it as? LogoButton)?.remove() }
+                } else {
+                    logo.remove()
+                    neighbourLayout.children
+                            .find { (it as? LogoButton)?.id == logo.id }
+                            .also { (it as? LogoButton)?.add() }
+                }
+            }
+            layout.addView(logo);
         }
     }
 
@@ -242,20 +261,18 @@ class PollingFragment : Fragment() {
                 }
     }
 
-    class LogoButton(context: Context, logo: Int, val pollingPercent: Float, val chart: BarChart, val barChartIndex: Int, val valueIndex: Int, val isDefault: Boolean) {
-        var active: Boolean = false;
-        val imageView: ImageView = ImageView(context);
+    class LogoButton(context: Context, party: Party, val pollingPercent: Float, val chart: BarChart, val barChartIndex: Int, val valueIndex: Int, val isDefault: Boolean) : androidx.appcompat.widget.AppCompatImageView(context) {
+        var active: Boolean = false
+        var id = party.id
+
+        var clickListener: (() -> (Unit))? = null
 
         init {
-            imageView.setImageDrawable(context.resources.getDrawable(logo));
-            imageView.layoutParams = ViewGroup.LayoutParams(80, 200)
-            imageView.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
-            imageView.setOnClickListener {
-                if (!active) {
-                    add()
-                } else {
-                    remove()
-                }
+            setImageDrawable(context.resources.getDrawable(party.drawableLogo));
+            layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, 200)
+            colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
+            setOnClickListener {
+                clickListener?.invoke()
             }
 
             if (isDefault) {
@@ -263,26 +280,24 @@ class PollingFragment : Fragment() {
             }
         }
 
-        private fun add() {
+        fun add() {
             val column = chart.barData.getDataSetByIndex(0).getEntryForIndex(barChartIndex)
             column.yVals.set(valueIndex, pollingPercent);
             chart.invalidate()
             active = true;
-            imageView.setColorFilter(null)
-            imageView.scaleX = 1.1f
-            imageView.scaleY = 1.1f
-
-
+            setColorFilter(null)
+            scaleX = 1.1f
+            scaleY = 1.1f
         }
 
-        private fun remove() {
+        fun remove() {
             val column = chart.barData.getDataSetByIndex(0).getEntryForIndex(barChartIndex)
             column.yVals.set(valueIndex, 0f)
             chart.invalidate()
             active = false;
-            imageView.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
-            imageView.scaleX = 1f
-            imageView.scaleY = 1f
+            colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
+            scaleX = 1f
+            scaleY = 1f
         }
     }
 }

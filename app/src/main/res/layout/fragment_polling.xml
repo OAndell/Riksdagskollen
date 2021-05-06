@@ -14,8 +14,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="16dp"
             android:orientation="vertical">
-
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/polling_chart"
@@ -53,7 +53,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_margin="10dp"
                 android:background="@color/riksdagBlue"
                 app:justifyContent="space_evenly">
 
@@ -61,6 +60,8 @@
                     android:id="@+id/block_chart_right_bar"
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:clipToPadding="false"
                     android:orientation="vertical">
 
                 </LinearLayout>
@@ -73,8 +74,10 @@
                 <LinearLayout
                     android:id="@+id/block_chart_left_bar"
                     android:layout_width="40dp"
+                    android:padding="5dp"
+                    android:clipToPadding="false"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"></LinearLayout>
+                    android:orientation="vertical" />
             </com.google.android.flexbox.FlexboxLayout>
 
         </LinearLayout>
