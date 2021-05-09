@@ -29,6 +29,7 @@ import oscar.riksdagskollen.R
 import oscar.riksdagskollen.RiksdagskollenApp
 import oscar.riksdagskollen.Util.Enum.CurrentParties
 import oscar.riksdagskollen.Util.Helper.CustomTabs
+import oscar.riksdagskollen.Util.Helper.DateFormatter
 import oscar.riksdagskollen.Util.JSONModel.Party
 import oscar.riksdagskollen.Util.JSONModel.RiksdagskollenAPI.PartyDataModels.PartyData
 import oscar.riksdagskollen.Util.JSONModel.RiksdagskollenAPI.PollingDataModels.PollingData
@@ -115,12 +116,13 @@ class PollingFragment : Fragment() {
                     lineChart.data = lineData;
                     lineChart.setBackgroundColor(Color.parseColor("#FFFFFF"))
                     lineChart.axisLeft.isEnabled = false
-                    lineChart.xAxis.setValueFormatter { value, axis -> pollData[0].data.reversed()[value.toInt()].period }
+                    lineChart.xAxis.setValueFormatter { value, axis -> DateFormatter.formatShort(pollData[0].data.reversed()[value.toInt()].period) }
                     lineChart.xAxis.setLabelCount(4)
                     lineChart.axisLeft.setDrawLabels(false)
                     lineChart.axisRight.setValueFormatter { value, axis -> value.toString() + "%" }
                     lineChart.axisRight.textSize = 12f
                     lineChart.xAxis.textSize = 12f
+                    lineChart.extraTopOffset = 3f //Prevents top text to be cut off
                     lineChart.setPadding(0, 100, 0, 0)
                     lineChart.description.text = ""
                     lineChart.invalidate()

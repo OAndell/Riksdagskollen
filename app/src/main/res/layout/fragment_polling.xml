@@ -49,6 +49,15 @@
                     android:textSize="15sp" />
             </com.google.android.flexbox.FlexboxLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Möjliga blockkonstellationer"
+                android:textColor="?attr/mainTitleTextColor"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
             <com.google.android.flexbox.FlexboxLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
