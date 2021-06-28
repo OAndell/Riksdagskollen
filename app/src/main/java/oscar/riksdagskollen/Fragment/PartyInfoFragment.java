@@ -14,6 +14,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.google.android.flexbox.FlexboxLayout;
@@ -24,9 +28,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
@@ -92,6 +93,7 @@ public class PartyInfoFragment extends Fragment {
         final TextView ideologyView = view.findViewById(R.id.ideology);
         final TextView pollingNumber = view.findViewById(R.id.polling_number);
         final TextView pollingDelta = view.findViewById(R.id.polling_delta);
+        final TextView pollingDataSource = view.findViewById(R.id.polling_data_source);
         final TextView electionResults = view.findViewById(R.id.election_result);
         final ImageView indicatorArrow = view.findViewById(R.id.indicator_arrow);
 
@@ -194,6 +196,7 @@ public class PartyInfoFragment extends Fragment {
             String lastData = pollData.getData().get(0).getPercent();
             String previousData = pollData.getData().get(1).getPercent();
             pollingNumber.setText(lastData);
+            updatePollingDataSourceTextView(pollData, pollingDataSource);
             try {
                 NumberFormat format = NumberFormat.getInstance(Locale.US);
                 double last = format.parse(lastData.replace(",", ".")).doubleValue();
@@ -223,8 +226,13 @@ public class PartyInfoFragment extends Fragment {
                 e.printStackTrace();
             }
         });
+    }
 
-
+    private void updatePollingDataSourceTextView(PollingData pollingData, TextView sourceTextView) {
+        sourceTextView.setOnClickListener(view -> CustomTabs.openTab(getContext(), pollingData.getSource()));
+        SpannableString spannableString = new SpannableString("Källa: " + pollingData.getSource());
+        spannableString.setSpan(new UnderlineSpan(), 0, spannableString.length(), 0);
+        sourceTextView.setText(spannableString);
     }
 
     private void setupLeaderView() {

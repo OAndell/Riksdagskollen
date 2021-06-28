@@ -106,7 +106,22 @@
 
 
             </LinearLayout>
+
             <include layout="@layout/party_polling_view" />
+
+            <TextView
+                android:id="@+id/polling_data_source"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:maxLines="1"
+                android:maxWidth="150dp"
+                android:ellipsize="end"
+                android:gravity="end"
+                android:textColor="?attr/mainBodyTextColor"
+                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="wrap_content"
