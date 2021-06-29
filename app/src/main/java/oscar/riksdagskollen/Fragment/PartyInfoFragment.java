@@ -241,9 +241,8 @@ public class PartyInfoFragment extends Fragment {
             final Representative tmpRep = leaders.get(i);
             if (getActivity() == null) break;
 
-            final View portraitView = LayoutInflater.from(getActivity()).inflate(R.layout.intressent_layout_big, null);
+            final View portraitView = LayoutInflater.from(getActivity()).inflate(R.layout.intressent_layout_big, leadersLayout, false);
             final ImageView portrait = portraitView.findViewById(R.id.intressent_portait);
-
             leadersLayout.addView(portraitView);
 
             app.getRiksdagenAPIManager().getRepresentative(tmpRep.getTilltalsnamn(), tmpRep.getEfternamn(), party.getID(), tmpRep.getSourceid(), new RepresentativeCallback() {

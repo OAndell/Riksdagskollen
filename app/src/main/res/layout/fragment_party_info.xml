@@ -137,12 +137,12 @@
 
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/leadersLayout"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                app:alignContent="space_between"
-                app:alignItems="center"
-                app:justifyContent="center"
+                app:justifyContent="space_between"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 app:flexWrap="wrap">
 
 

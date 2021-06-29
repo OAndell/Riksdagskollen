@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:minWidth="110dp"
+    android:layout_width="110dp"
     android:padding="5dp"
     android:layout_height="wrap_content">
 
     <oscar.riksdagskollen.Util.View.CircularImageView
         android:id="@+id/intressent_portait"
-        android:layout_width="130dp"
-        android:layout_height="60dp"
+        android:layout_width="120dp"
+        android:layout_height="70dp"
         android:layout_gravity="center" />
 
     <TextView
@@ -18,10 +17,8 @@
         android:id="@+id/intressent_name"
         android:gravity="center"
         android:textColor="?attr/mainTitleTextColor"
-        android:textSize="11sp"
+        android:textSize="12sp"
         android:layout_marginTop="-10dp"
-        android:maxWidth="130dp"
-        android:layout_gravity="center"
-        android:text="\n" />
-
+        android:maxWidth="110dp"
+        android:layout_gravity="center" />
 </LinearLayout>
