@@ -19,6 +19,8 @@ import androidx.fragment.app.Fragment
 import com.android.volley.VolleyError
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
@@ -110,6 +112,7 @@ class PollingFragment : Fragment() {
                             dataSets.add(createPartyDataSet(partyPolling, partyInfo))
                         }
                     }
+                    setupThresholdLimitLine(lineChart)
 
                     val lineData = LineData(dataSets)
                     lineData.setValueTextSize(12f)
@@ -184,11 +187,52 @@ class PollingFragment : Fragment() {
                 }
     }
 
-    private fun populateButtonBar(barChart: BarChart, layout: LinearLayout, neighbourLayout: LinearLayout, pollData: Array<PollingData>, barChartIndex: Int, partyMap: Map<String, Int>, defaultSelected: Array<String>) {
+    private fun setupThresholdLimitLine(chart: LineChart) {
+        val percentLimit = LimitLine(4f)
+        percentLimit.lineWidth = 2f
+        percentLimit.lineColor = Color.BLACK
+        percentLimit.enableDashedLine(10f, 10f, 0f)
+        percentLimit.labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
+        percentLimit.textSize = 14f
+        chart.axisRight.addLimitLine(percentLimit)
+        chart.notifyDataSetChanged()
+
+        chart.legend.setExtra(
+            arrayListOf(
+                LegendEntry(
+                    "4%-spärren",
+                    Legend.LegendForm.LINE,
+                    14f,
+                    3f,
+                    percentLimit.dashPathEffect,
+                    percentLimit.lineColor
+                )
+            )
+        )
+    }
+
+
+    private fun populateButtonBar(
+        barChart: BarChart,
+        layout: LinearLayout,
+        neighbourLayout: LinearLayout,
+        pollData: Array<PollingData>,
+        barChartIndex: Int,
+        partyMap: Map<String, Int>,
+        defaultSelected: Array<String>
+    ) {
         for (d in pollData) {
             val partyPercent = resultStringToFloat(d.data[0].percent)
             val valueIndex: Int = partyMap.get(d.party)!!;
-            val logo = LogoButton(app.baseContext, CurrentParties.getParty(d.party), partyPercent, barChart, barChartIndex, valueIndex, defaultSelected.contains(d.party))
+            val logo = LogoButton(
+                app.baseContext,
+                CurrentParties.getParty(d.party),
+                partyPercent,
+                barChart,
+                barChartIndex,
+                valueIndex,
+                defaultSelected.contains(d.party)
+            )
             logo.clickListener = {
                 if (!logo.active) {
                     logo.add()
