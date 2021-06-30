@@ -24,6 +24,7 @@ public class CachedJSONObjectRequest extends CacheRequest {
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
+
                     e.printStackTrace();
                 }
             }

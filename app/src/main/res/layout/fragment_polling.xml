@@ -1,0 +1,96 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="oscar.riksdagskollen.Fragment.PollingFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:orientation="vertical">
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/polling_chart"
+                android:layout_width="match_parent"
+                android:layout_height="500dp" />
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:justifyContent="flex_end">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Källa:"
+                    android:textColor="?attr/mainTitleTextColor"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/polling_source"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:width="200dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="wikipedia.org/wiki/Opinionsundersökningar_inför_"
+                    android:textColor="?attr/mainBodyTextColor"
+                    android:textSize="15sp" />
+            </com.google.android.flexbox.FlexboxLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Möjliga blockkonstellationer"
+                android:textColor="?attr/mainTitleTextColor"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/riksdagBlue"
+                app:justifyContent="space_evenly">
+
+                <LinearLayout
+                    android:id="@+id/block_chart_right_bar"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:clipToPadding="false"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/block_chart"
+                    android:layout_width="200dp"
+                    android:layout_height="500dp" />
+
+                <LinearLayout
+                    android:id="@+id/block_chart_left_bar"
+                    android:layout_width="40dp"
+                    android:padding="5dp"
+                    android:clipToPadding="false"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </com.google.android.flexbox.FlexboxLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</FrameLayout>

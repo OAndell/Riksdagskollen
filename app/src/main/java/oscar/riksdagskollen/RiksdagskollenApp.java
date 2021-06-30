@@ -19,6 +19,7 @@ import oscar.riksdagskollen.Manager.AnalyticsManager;
 import oscar.riksdagskollen.Manager.RepresentativeManager;
 import oscar.riksdagskollen.Manager.RequestManager;
 import oscar.riksdagskollen.Manager.RiksdagenAPIManager;
+import oscar.riksdagskollen.Manager.RiksdagskollenAPIManager;
 import oscar.riksdagskollen.Manager.SavedDocumentManager;
 import oscar.riksdagskollen.Manager.ThemeManager;
 import oscar.riksdagskollen.Manager.TwitterAPIManager;
@@ -36,6 +37,7 @@ public class RiksdagskollenApp extends MultiDexApplication {
     private static RiksdagskollenApp instance;
     private RequestManager requestManager;
     private RiksdagenAPIManager riksdagenAPIManager;
+    private RiksdagskollenAPIManager riksdagskollenAPIManager;
     private ThemeManager themeManager;
     private AlertManager alertManager;
     private RepresentativeManager representativeManager;
@@ -57,6 +59,8 @@ public class RiksdagskollenApp extends MultiDexApplication {
 
         requestManager = new RequestManager();
         riksdagenAPIManager = new RiksdagenAPIManager(this);
+        riksdagskollenAPIManager = new RiksdagskollenAPIManager(this);
+
         themeManager = new ThemeManager(this);
         alertManager = new AlertManager(this);
         JobManager.create(this).addJobCreator(new AlertJobCreator());
@@ -176,5 +180,9 @@ public class RiksdagskollenApp extends MultiDexApplication {
 
     public TwitterAPIManager getTwitterAPIManager() {
         return twitterAPIManager;
+    }
+
+    public RiksdagskollenAPIManager getRiksdagskollenAPIManager() {
+        return riksdagskollenAPIManager;
     }
 }

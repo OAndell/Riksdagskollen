@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +22,14 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.google.android.flexbox.FlexboxLayout;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Locale;
 
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.subjects.PublishSubject;
 import oscar.riksdagskollen.Activity.RepresentativeDetailActivity;
 import oscar.riksdagskollen.R;
 import oscar.riksdagskollen.RepresentativeList.data.Representative;
@@ -30,7 +37,10 @@ import oscar.riksdagskollen.RiksdagskollenApp;
 import oscar.riksdagskollen.Util.Helper.CustomTabs;
 import oscar.riksdagskollen.Util.Helper.WikiPartyInfoExtractor;
 import oscar.riksdagskollen.Util.JSONModel.Party;
+import oscar.riksdagskollen.Util.JSONModel.RiksdagskollenAPI.PartyDataModels.PartyData;
+import oscar.riksdagskollen.Util.JSONModel.RiksdagskollenAPI.PollingDataModels.PollingData;
 import oscar.riksdagskollen.Util.RiksdagenCallback.PartyLeadersCallback;
+import oscar.riksdagskollen.Util.RiksdagenCallback.RKAPICallbacks;
 import oscar.riksdagskollen.Util.RiksdagenCallback.RepresentativeCallback;
 import oscar.riksdagskollen.Util.RiksdagenCallback.StringRequestCallback;
 
@@ -49,6 +59,9 @@ public class PartyInfoFragment extends Fragment {
     private final Fragment fragment = this;
     private ViewGroup loadingView;
     private final RiksdagskollenApp app = RiksdagskollenApp.getInstance();
+
+    private PublishSubject<PollingData> pollingData$ = PublishSubject.create();
+    private PublishSubject<PartyData> partyData$ = PublishSubject.create();
 
 
     public static PartyInfoFragment newInstance(Party party) {
@@ -75,10 +88,15 @@ public class PartyInfoFragment extends Fragment {
         ImageView partyLogoView = view.findViewById(R.id.party_logo);
         partyLogoView.setImageResource(party.getDrawableLogo());
 
-        //Fill view with party leaders
         final TextView partyWikiInfo = view.findViewById(R.id.about_party_wiki);
         final TextView source = view.findViewById(R.id.source_tv);
         final TextView ideologyView = view.findViewById(R.id.ideology);
+        final TextView pollingNumber = view.findViewById(R.id.polling_number);
+        final TextView pollingDelta = view.findViewById(R.id.polling_delta);
+        final TextView pollingDataSource = view.findViewById(R.id.polling_data_source);
+        final TextView electionResults = view.findViewById(R.id.election_result);
+        final ImageView indicatorArrow = view.findViewById(R.id.indicator_arrow);
+
         leadersLayout = view.findViewById(R.id.leadersLayout);
 
         partyWikiInfo.setText(getCachedWikiInfo(getSummaryKey()));
@@ -147,6 +165,74 @@ public class PartyInfoFragment extends Fragment {
             }
         });
 
+        app.getRiksdagskollenAPIManager().getPartyData(party.getID(), new RKAPICallbacks.PartyDataCallback() {
+            @Override
+            public void onFetched(PartyData data) {
+                partyData$.onNext(data);
+            }
+
+            @Override
+            public void onFail(VolleyError error) {
+
+            }
+        });
+
+        //Riksdagskollen API POC
+        app.getRiksdagskollenAPIManager().getPollingDataForParty(party.getID(), new RKAPICallbacks.PollingDataCallback() {
+            @Override
+            public void onFetched(PollingData data) {
+                pollingData$.onNext(data);
+            }
+
+            @Override
+            public void onFail(VolleyError error) {
+
+            }
+        });
+
+        Observable.combineLatest(pollingData$, partyData$, Pair::new).subscribe((pair) -> {
+            PollingData pollData = pair.first;
+            PartyData partyData = pair.second;
+            String lastData = pollData.getData().get(0).getPercent();
+            String previousData = pollData.getData().get(1).getPercent();
+            pollingNumber.setText(lastData);
+            updatePollingDataSourceTextView(pollData, pollingDataSource);
+            try {
+                NumberFormat format = NumberFormat.getInstance(Locale.US);
+                double last = format.parse(lastData.replace(",", ".")).doubleValue();
+                double prev = format.parse(previousData.replace(",", ".")).doubleValue();
+                double delta = last - prev;
+                DecimalFormat f = new DecimalFormat("0.00");
+
+                if (delta > 0) {
+                    pollingDelta.setText("+" + f.format(delta));
+                    pollingDelta.setTextColor(getResources().getColor(R.color.yesVoteColor));
+
+                } else {
+                    pollingDelta.setText(f.format(delta));
+                    pollingDelta.setTextColor(getResources().getColor(R.color.noVoteColor));
+                }
+                electionResults.setText(partyData.getElectionResult());
+                double electionResult = format.parse(partyData.getElectionResult().replace(",", ".")).doubleValue();
+                if (electionResult > last) {
+                    indicatorArrow.setImageResource(R.drawable.ic_expand_more_black_24dp);
+                    indicatorArrow.setColorFilter(getResources().getColor(R.color.noVoteColor));
+                } else {
+                    indicatorArrow.setImageResource(R.drawable.ic_expand_less_black_24dp);
+                    indicatorArrow.setColorFilter(getResources().getColor(R.color.yesVoteColor));
+                }
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void updatePollingDataSourceTextView(PollingData pollingData, TextView sourceTextView) {
+        sourceTextView.setOnClickListener(view -> CustomTabs.openTab(getContext(), pollingData.getSource()));
+        SpannableString spannableString = new SpannableString("Källa: " + pollingData.getSource());
+        spannableString.setSpan(new UnderlineSpan(), 0, spannableString.length(), 0);
+        sourceTextView.setText(spannableString);
     }
 
     private void setupLeaderView() {
@@ -155,9 +241,8 @@ public class PartyInfoFragment extends Fragment {
             final Representative tmpRep = leaders.get(i);
             if (getActivity() == null) break;
 
-            final View portraitView = LayoutInflater.from(getActivity()).inflate(R.layout.intressent_layout_big, null);
+            final View portraitView = LayoutInflater.from(getActivity()).inflate(R.layout.intressent_layout_big, leadersLayout, false);
             final ImageView portrait = portraitView.findViewById(R.id.intressent_portait);
-
             leadersLayout.addView(portraitView);
 
             app.getRiksdagenAPIManager().getRepresentative(tmpRep.getTilltalsnamn(), tmpRep.getEfternamn(), party.getID(), tmpRep.getSourceid(), new RepresentativeCallback() {
@@ -174,13 +259,10 @@ public class PartyInfoFragment extends Fragment {
                                 .into(portrait);
                     }
 
-                    portrait.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent repDetailsIntent = new Intent(getContext(), RepresentativeDetailActivity.class);
-                            repDetailsIntent.putExtra("representative", representative);
-                            startActivity(repDetailsIntent);
-                        }
+                    portrait.setOnClickListener(view -> {
+                        Intent repDetailsIntent = new Intent(getContext(), RepresentativeDetailActivity.class);
+                        repDetailsIntent.putExtra("representative", representative);
+                        startActivity(repDetailsIntent);
                     });
                     TextView nameTv = portraitView.findViewById(R.id.intressent_name);
                     nameTv.setText(representative.getTilltalsnamn() + " " + representative.getEfternamn() + "\n" + representative.getDescriptiveRole());

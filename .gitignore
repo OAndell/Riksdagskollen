@@ -1,6 +1,6 @@
 *.iml
 .gradle
-/local.properties
+local.properties
 /.idea/workspace.xml
 /.idea/libraries
 .DS_Store
@@ -12,3 +12,6 @@ fabric.properties
 google-services.json
 google_play.json
 /fastlane/report.xml
+*.apk
+*.aab
+output-metadata.json
