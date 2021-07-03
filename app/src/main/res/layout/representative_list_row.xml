@@ -45,7 +45,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
-                    android:text="Mattias Bäckström Johanson "
+                    android:text="Förnamn Efternamn"
                     android:textColor="?attr/mainTitleTextColor"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -70,7 +70,7 @@
                         android:id="@+id/rep_card_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Jag var en gång en sjuksköterska men sen fick jag sparken ojdå. Nu är jag ensamstående mamma."
+                        android:text=""
                         android:textColor="?mainBodyTextColor" />
 
                 </LinearLayout>
@@ -95,7 +95,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="4dp"
-                        android:text="Västra Götalands läns västra"
+                        android:text=""
                         android:textColor="?mainBodyTextColor" />
 
                 </LinearLayout>
@@ -122,7 +122,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="4dp"
-                        android:text="69 år"
+                        android:text=""
                         android:textColor="?mainBodyTextColor" />
                 </LinearLayout>
 
@@ -140,7 +140,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="28dp">
 
                     <oscar.riksdagskollen.Util.View.CircularImageView
                         android:id="@+id/rep_card_portrait"
