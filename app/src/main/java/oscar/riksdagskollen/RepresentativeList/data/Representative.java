@@ -213,9 +213,9 @@ public class Representative implements Parcelable {
     private String getCurrentPartyRole() {
         if (personuppdrag.getUppdrag().size() == 0) return null;
         for (RepresentativeMission mission : personuppdrag.getUppdrag()) {
-            if (mission.getTyp().equals("partiuppdrag") && mission.getTom() == null) {
+            if (mission.getTyp().equals("partiuppdrag") && (mission.getTom() == null || mission.getTom().isEmpty())) {
                 // Status can be "active" or "inactive" etc
-                if (mission.getStatus() != null)
+                if (mission.getStatus() != null && !mission.getStatus().isEmpty())
                     return mission.getStatus() + " " + mission.getRoll_kod();
                 return mission.getRoll_kod();
             }
