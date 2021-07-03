@@ -44,7 +44,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            app:srcCompat="@android:drawable/sym_action_email" />
+            app:srcCompat="@drawable/ic_email" />
 
         <TextView
             android:id="@+id/textView8"

@@ -1,130 +1,146 @@
-package oscar.riksdagskollen.About;
+package oscar.riksdagskollen.About
 
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
-import com.franmontiel.attributionpresenter.AttributionPresenter;
-import com.franmontiel.attributionpresenter.entities.Attribution;
-import com.franmontiel.attributionpresenter.entities.Library;
-import com.franmontiel.attributionpresenter.entities.License;
-
-import oscar.riksdagskollen.R;
-import oscar.riksdagskollen.RiksdagskollenApp;
-import oscar.riksdagskollen.Util.Helper.CustomTabs;
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.franmontiel.attributionpresenter.AttributionPresenter
+import com.franmontiel.attributionpresenter.entities.Attribution
+import com.franmontiel.attributionpresenter.entities.Library
+import com.franmontiel.attributionpresenter.entities.License
+import kotlinx.android.synthetic.main.fragment_about.*
+import oscar.riksdagskollen.R
+import oscar.riksdagskollen.RiksdagskollenApp
+import oscar.riksdagskollen.Util.Helper.CustomTabs
+import oscar.riksdagskollen.Util.Helper.createDeveloperEmailIntent
 
 /**
  * Created by oscar on 2018-06-26.
  */
-
-public class AboutFragment extends Fragment {
-
-    public static final String SECTION_NAME_ABOUT = "about";
-
-
-    private Button licenceButton;
-    public static AboutFragment newInstance(){
-        AboutFragment newInstance = new AboutFragment();
-        return newInstance;
+class AboutFragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        (activity as AppCompatActivity?)!!.supportActionBar!!.setTitle(R.string.about_title)
+        return inflater.inflate(R.layout.fragment_about, null)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val gitHubLink = view.findViewById<TextView>(R.id.github_link)
+        var content = SpannableString(resources.getString(R.string.github))
+        content.setSpan(UnderlineSpan(), 0, content.length, 0)
+        gitHubLink.text = content
+        gitHubLink.setOnClickListener {
+            CustomTabs.openTab(
+                context,
+                resources.getString(R.string.github)
+            )
+        }
+        val twitterLink = view.findViewById<TextView>(R.id.twitter_link)
+        content = SpannableString(twitterLink.text)
+        content.setSpan(UnderlineSpan(), 0, content.length, 0)
+        twitterLink.text = content
+        twitterLink.setOnClickListener {
+            CustomTabs.openTab(
+                context,
+                "https://twitter.com/Riksdagskollen"
+            )
+        }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.about_title);
-        return inflater.inflate(R.layout.fragment_about,null);
-    }
+        val devEmail1Link = view.findViewById<TextView>(R.id.email_dev_1)
+        content = SpannableString(devEmail1Link.text)
+        content.setSpan(UnderlineSpan(), 0, content.length, 0)
+        devEmail1Link.text = content
+        devEmail1Link.setOnClickListener {
+            val emailIntent = createDeveloperEmailIntent(resources.getString(R.string.dev_email_1))
+            context?.startActivity(Intent.createChooser(emailIntent, "Skicka ett mail"))
+        }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        TextView gitHubLink = view.findViewById(R.id.github_link);
-        SpannableString content = new SpannableString(getResources().getString(R.string.github));
-        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-        gitHubLink.setText(content);
-        gitHubLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CustomTabs.openTab(getContext(), getResources().getString(R.string.github));
-            }
-        });
+        val devEmail2Link = view.findViewById<TextView>(R.id.email_dev_2)
+        content = SpannableString(devEmail2Link.text)
+        content.setSpan(UnderlineSpan(), 0, content.length, 0)
+        devEmail2Link.text = content
+        devEmail2Link.setOnClickListener {
+            val emailIntent = createDeveloperEmailIntent(resources.getString(R.string.dev_email_2))
+            context?.startActivity(Intent.createChooser(emailIntent, "Skicka ett mail"))
+        }
 
-        TextView twitterLink = view.findViewById(R.id.twitter_link);
-        content = new SpannableString(twitterLink.getText());
-        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-        twitterLink.setText(content);
-        twitterLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CustomTabs.openTab(getContext(), "https://twitter.com/Riksdagskollen");
-            }
-        });
-        
-        final AttributionPresenter attributionPresenter = new AttributionPresenter.Builder(getContext())
-                .addAttributions(
-                        Library.GSON)
-                .addAttributions(
-                        new Attribution.Builder("jsoup: Java HTML Parser")
-                                .addCopyrightNotice("Copyright Jonathan Hedley 2009 - 2017")
-                                .addLicense(License.MIT)
-                                .setWebsite("https://jsoup.org/")
-                                .build(),
-                        new Attribution.Builder("Volley")
-                                .addLicense(License.APACHE)
-                                .addCopyrightNotice("Copyright 2011 Google")
-                                .setWebsite("https://github.com/google/volley")
-                                .build(),
-                        new Attribution.Builder("FlexboxLayout")
-                                .addCopyrightNotice("Copyright 2016 Google")
-                                .addLicense(License.APACHE)
-                                .setWebsite("https://github.com/google/flexbox-layout")
-                                .build(),
-                        new Attribution.Builder("MPAndroidChart")
-                                .addCopyrightNotice("Copyright 2018 Philipp Jahoda")
-                                .addLicense(License.APACHE)
-                                .setWebsite("https://github.com/PhilJay/MPAndroidChart")
-                                .build(),
-                        new Attribution.Builder("AttributionPresenter")
-                                .addCopyrightNotice("Copyright 2017 Francisco José Montiel Navarro")
-                                .addLicense(License.APACHE)
-                                .setWebsite("https://github.com/franmontiel/AttributionPresenter")
-                                .build(),
-                        new Attribution.Builder("Android-Job")
-                                .addCopyrightNotice("Copyright (c) 2007-2017 by Evernote Corporation, All rights reserved.")
-                                .addLicense(License.APACHE)
-                                .setWebsite("https://github.com/evernote/android-job")
-                                .build()
-                )
-                .build();
+        val contactLink = view.findViewById<TextView>(R.id.riksdagen_website)
+        content = SpannableString(contactLink.text)
+        content.setSpan(UnderlineSpan(), 0, content.length, 0)
+        contactLink.text = content
+        contactLink.setOnClickListener {
+            CustomTabs.openTab(
+                context,
+                getString(R.string.riksdagen_contact)
+            )
+        }
 
-
-        licenceButton = view.findViewById(R.id.show_licenses_button);
-        licenceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attributionPresenter.showDialog("Programvara som hjälpt till att skapa Riksdagskollen");
-            }
-        });
+        val attributionPresenter = AttributionPresenter.Builder(context)
+            .addAttributions(
+                Library.GSON
+            )
+            .addAttributions(
+                Attribution.Builder("jsoup: Java HTML Parser")
+                    .addCopyrightNotice("Copyright Jonathan Hedley 2009 - 2017")
+                    .addLicense(License.MIT)
+                    .setWebsite("https://jsoup.org/")
+                    .build(),
+                Attribution.Builder("Volley")
+                    .addLicense(License.APACHE)
+                    .addCopyrightNotice("Copyright 2011 Google")
+                    .setWebsite("https://github.com/google/volley")
+                    .build(),
+                Attribution.Builder("FlexboxLayout")
+                    .addCopyrightNotice("Copyright 2016 Google")
+                    .addLicense(License.APACHE)
+                    .setWebsite("https://github.com/google/flexbox-layout")
+                    .build(),
+                Attribution.Builder("MPAndroidChart")
+                    .addCopyrightNotice("Copyright 2018 Philipp Jahoda")
+                    .addLicense(License.APACHE)
+                    .setWebsite("https://github.com/PhilJay/MPAndroidChart")
+                    .build(),
+                Attribution.Builder("AttributionPresenter")
+                    .addCopyrightNotice("Copyright 2017 Francisco José Montiel Navarro")
+                    .addLicense(License.APACHE)
+                    .setWebsite("https://github.com/franmontiel/AttributionPresenter")
+                    .build(),
+                Attribution.Builder("Android-Job")
+                    .addCopyrightNotice("Copyright (c) 2007-2017 by Evernote Corporation, All rights reserved.")
+                    .addLicense(License.APACHE)
+                    .setWebsite("https://github.com/evernote/android-job")
+                    .build()
+            )
+            .build()
+        show_licenses_button.setOnClickListener { attributionPresenter.showDialog("Programvara som hjälpt till att skapa Riksdagskollen") }
         try {
-            Context context = RiksdagskollenApp.getInstance();
-            PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            String version = pInfo.versionName;
-            TextView versionView = view.findViewById(R.id.version);
-            versionView.setText("Version " + version);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            val context: Context = RiksdagskollenApp.getInstance()
+            val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+            val version = pInfo.versionName
+            val versionView = view.findViewById<TextView>(R.id.version)
+            versionView.text = "Version $version"
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+    }
+
+    companion object {
+        const val SECTION_NAME_ABOUT = "about"
+
+        @JvmStatic
+        fun newInstance(): AboutFragment {
+            return AboutFragment()
         }
     }
 }

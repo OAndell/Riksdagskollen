@@ -35,8 +35,10 @@
     <string name="vote_absent">Frånvarande</string>
     <string name="vote_partyvotes_title">"Röstfördelning:"</string>
     <string name="about_title">Om Riksdagskollen</string>
-    <string name="about_body">Riksdagskollen är en android-applikation utvecklad av två studenter för att hålla koll på vad som händer i vår riksdag. All källkod finns tillgänglig på GitHub. Har du några idéer? Bidra gärna!\n\nSamtliga dokument och bilder är hämtade från riksdagens egna API: data.riksdagen.se</string>
+    <string name="about_body">Riksdagskollen är en android-applikation utvecklad av Gustav Aaro och Oscar Andell för att hålla koll på vad som händer i vår riksdag. All källkod finns tillgänglig på GitHub. Har du några idéer? Bidra gärna!\n\nSamtliga dokument och bilder är hämtade från riksdagens egna API: data.riksdagen.se</string>
+    <string name="contact_information">Alla nyheter, parti-dokument, kammarprotokoll och information om ledamöter, voteringar och debatter tillhandahålls av Riksdagen. För frågor kring dessa typer av innehåll som visas i appen, vänligen kontakta Riksdagen. För frågor, buggrapporter, funktionsförfrågningar eller annat som rör appen, kontakta någon av utvecklarna nedan.</string>
     <string name="github">https://github.com/OAndell/Riksdagskollen</string>
+    <string name="riksdagen_contact">https://riksdagen.se/sv/Kontakt/</string>
     <string name="view_reply_button">Denna fråga har besvarats: Läs svar</string>
     <string name="no_reply_tip">Denna fråga har ännu inte besvarats. Klicka på klockan i menyn om du vill få en notis när ett svar publiceras.</string>
     <string name="rep_feed_tab_name">Ledamotsflöde</string>
@@ -61,6 +63,9 @@
     <string name="v_website">www.vansterpartiet.se</string>
     <string name="l_website">www.liberalerna.se</string>
     <string name="kd_website">www.kristdemokraterna.se</string>
+
+    <string name="dev_email_1">oscar@andell.eu</string>
+    <string name="dev_email_2">gustav.aaro@gmail.com</string>
 
     <string name="s_ideology">Demokratisk socialism, Socialdemokrati, Tredje vägens politik, Feminism</string>
     <string name="m_ideology">Liberalkonservatism, Marknadsliberalism</string>
