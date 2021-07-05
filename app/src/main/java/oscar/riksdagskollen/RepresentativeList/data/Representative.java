@@ -250,7 +250,10 @@ public class Representative implements Parcelable {
     public String getDescriptiveRole() {
         if (roleIsVIP()) return status;
         if (getCurrentPartyRole() != null) return getCurrentPartyRole();
-        else if (getStatus() != null) return status;
+        /* Commenting this line below since the API have started setting "status" to
+        "Tjänstgörande riksdagsledamot" for every representative. Use getCurrentOrMostRecentRole()
+        for more detailed roles instead.*/
+            //else if (getStatus() != null) return status;
         else return getCurrentOrMostRecentRole();
     }
 
