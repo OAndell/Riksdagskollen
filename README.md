@@ -1,4 +1,6 @@
 
+## This reposotory is no longer maintained. 
+
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-sv.png"
     alt="Ladda ned Riksdagskollen på Fdroid"
     height="80">](https://f-droid.org/packages/se.oandell.riksdagen)
