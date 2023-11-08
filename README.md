@@ -1,6 +1,9 @@
 
 ## This reposotory is no longer maintained. 
 
+Due to limited time and not being able to keep up with breaking changes in the api, in the current state the app is no longer 100% functional. 
+
+
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-sv.png"
     alt="Ladda ned Riksdagskollen på Fdroid"
     height="80">](https://f-droid.org/packages/se.oandell.riksdagen)
